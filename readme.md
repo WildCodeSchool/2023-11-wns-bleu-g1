@@ -1,4 +1,6 @@
 <h1 align="center">Nom du projet</h1>
+<h2 align="center">Groupe 1 aka "Le fond de la class"</h2>
+<br>
 
 <p align="center">
   <img alt="Github top language" src="https://img.shields.io/github/languages/top/WildCodeSchool/2023-11-wns-bleu-g1?color=56BEB8">
