@@ -1,5 +1,5 @@
 <h1 align="center">Nom du projet</h1>
-<h2 align="center">Groupe 1 aka "Le fond de la class"</h2>
+<h2 align="center">Groupe 1 aka "Le fond de la classe"</h2>
 <br>
 
 <p align="center">
