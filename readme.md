@@ -9,8 +9,6 @@
 
   <img alt="Repository size" src="https://img.shields.io/github/repo-size/WildCodeSchool/2023-11-wns-bleu-g1?color=56BEB8">
 
-  <img alt="License" src="https://img.shields.io/github/license//WildCodeSchool/2023-11-wns-bleu-g1?color=56BEB8">
-
   <img alt="Github issues" src="https://img.shields.io/github/issues/WildCodeSchool/2023-11-wns-bleu-g1?color=56BEB8" />
 
   <!-- <img alt="Github forks" src="https://img.shields.io/github/forks/WildCodeSchool/2023-11-wns-bleu-g1?color=56BEB8" /> -->
@@ -25,7 +23,6 @@
   <a href="#rocket-technologies">Technologies</a> &#xa0; | &#xa0;
   <a href="#white_check_mark-requirements">Requirements</a> &#xa0; | &#xa0;
   <a href="#checkered_flag-starting">Starting</a> &#xa0; | &#xa0;
-  <a href="#memo-license">License</a> &#xa0; | &#xa0;
   <a href="#authors">Authors</a>
 </p>
 ## :dart: About
@@ -57,9 +54,6 @@ Before starting :checkered_flag:, you need to have [Git](https://git-scm.com) an
 installation details
 ```
 
-## :memo: License
-
-licence
 
 ## :busts_in_silhouette: Authors
 
