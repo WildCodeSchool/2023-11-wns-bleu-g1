@@ -50,4 +50,3 @@ liste des auteurs
 &#xa0;
 
 <a href="#top">Back to top</a>
->>>>>>> Stashed changes
