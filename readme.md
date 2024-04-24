@@ -59,6 +59,12 @@ installation details
 
 liste des auteurs
 
+<a href="https://github.com/AlexandreHamm" style="display: flex; align-items: center; margin: 3px 0"> - <img src="https://avatars.githubusercontent.com/u/81152973?v=4" alt="AlexandreHamm-avatar" style="height: 25px; margin: 0 2px; border-radius: 50%"/>AlexandreHamm </a>
+<a href="https://github.com/Rsemakdji" style="display: flex; align-items: center; margin: 3px 0"> - <img src="https://avatars.githubusercontent.com/u/77302746?v=4" alt="Rsemakdji-avatar" style="height: 25px; margin: 0 2px; border-radius: 50%"/>Rsemakdji </a>
+<a href="https://github.com/ThomMarchand" style="display: flex; align-items: center; margin: 3px 0"> - <img src="https://avatars.githubusercontent.com/u/115934120?v=4" alt="ThomMarchand-avatar" style="height: 25px; margin: 0 2px; border-radius: 50%"/>ThomMarchand </a>
+<a href="https://github.com/zNeosx" style="display: flex; align-items: center; margin: 3px 0"> - <img src="https://avatars.githubusercontent.com/u/74994806?v=4" alt="zNeosx-avatar" style="height: 25px; margin: 0 2px; border-radius: 50%"/>zNeosx </a>
+<a href="https://github.com/Pouish85" style="display: flex; align-items: center; margin: 3px 0"> - <img src="https://avatars.githubusercontent.com/u/60059601?v=4" alt="Pouish85-avatar" style="height: 25px; margin: 0 2px; border-radius: 50%"/>Pouish85 </a>
+
 &#xa0;
 
 <a href="#top">Back to top</a>
