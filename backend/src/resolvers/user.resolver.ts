@@ -5,38 +5,29 @@ import { GraphQLError } from "graphql";
 export default class UserResolver {
   @Query(() => [User])
   async users() {
-    try {
-      // SELECT * FROM user;
-      const users = await User.find();
+    // SELECT * FROM User;
+    const users = await User.find();
 
-      return users;
-    } catch (e) {
-      console.log(e);
-    }
+    return users;
   }
 
   @Mutation(() => User)
   async createUser(@Arg("data", { validate: true }) data: UserInput) {
-    try {
-      if (!data.email) {
-        throw new GraphQLError("email is missing but required");
-      }
-
-      const userAlreadyExist = await User.findOneBy({ email: data.email });
-
-      if (userAlreadyExist) {
-        throw new GraphQLError(`user: ${data.email} already exist`);
-      }
-
-      const newUser = new User();
-
-      Object.assign(newUser, data);
-
-      console.log(newUser);
-
-      return data;
-    } catch (e) {
-      console.log(e);
+    if (!data.email) {
+      throw new GraphQLError("email is missing but required");
     }
+
+    // SELECT * FROM User WHERE email=data.email
+    const userAlreadyExist = await User.findOneBy({ email: data.email });
+
+    if (userAlreadyExist) {
+      throw new GraphQLError(`user: ${data.email} already exist`);
+    }
+
+    const newUser = new User();
+
+    Object.assign(newUser, data);
+
+    return await newUser.save();
   }
 }

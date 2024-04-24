@@ -4,7 +4,8 @@
   "description": "a REPLIT-like",
   "main": "./src/index.ts",
   "scripts": {
-    "dev": "ts-node-dev ./src/index.ts"
+    "dev": "ts-node-dev ./src/index.ts",
+    "resetDb": "ts-node-dev ./src/resetDb"
   },
   "dependencies": {
     "@apollo/server": "^4.10.0",

@@ -2,7 +2,7 @@ import { IsEmail } from "class-validator";
 import { Field, InputType, ObjectType } from "type-graphql";
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-// @Entity()
+@Entity()
 @ObjectType()
 export default class User extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
