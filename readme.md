@@ -20,6 +20,7 @@
 
 <p align="center">
   <a href="#dart-about">About</a> &#xa0; | &#xa0; 
+  <a href="#construction-standardization">Standardization</a> &#xa0; | &#xa0; 
   <a href="#sparkles-features">Features</a> &#xa0; | &#xa0;
   <a href="#rocket-technologies">Technologies</a> &#xa0; | &#xa0;
   <a href="#white_check_mark-requirements">Requirements</a> &#xa0; | &#xa0;
@@ -31,6 +32,20 @@
 Projet de fin d'année de la formation CDA de l'école Wild Code School.
 
 sujet:
+
+## :construction: standardization
+
+Start the ticket title with a gitmoji corresponding to the branch (feature = :sparkles:, bug = :bug:, ...)
+
+- https://gitmoji.dev/
+
+Naming branch:
+
+- feature/$nom-de-la-branch
+- hotfix/$nom-de-la-branch
+- bug/$nom-de-la-branch
+
+In the comment area of the ticket, copy/paste the PR URL.
 
 ## :sparkles: Features
 
@@ -50,38 +65,33 @@ Before starting :checkered_flag:, you need to have [Git](https://git-scm.com) an
 
 ## :checkered_flag: Starting
 
-## 🎉 Backend
+## 🎉 To launch the project
 
-After cloning the repo, use the npm i command to install the dependencies. Consider copying/pasting the .env.example file and renaming it to .env
-
-```bash
-npm install
-```
-
-## Frontend
-
-Access the frontend folder if you haven't already done so :
+If you are new to the project, cloning the repo and go to backend folder:
 
 ```bash
-cd frontend/
+cd backend
 ```
 
-Installing dependencies :
+consider copying/pasting the .env.example file and renaming it to .env
+
+go back to root folder:
 
 ```bash
-npm install
+cd ..
 ```
 
-To launch the project
+to launch the container enter the command (-d option launch the container in the background):
 
 ```bash
-npm run dev
+docker compose up -d
 ```
 
-## :memo: License
+If you already have the project on your machine
 
-licence
-=======
+```bash
+docker compose up -d
+```
 
 ## :busts_in_silhouette: Authors
 

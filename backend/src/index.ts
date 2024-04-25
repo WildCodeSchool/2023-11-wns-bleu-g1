@@ -4,12 +4,15 @@ import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHt
 import express from "express";
 import http from "http";
 import cors from "cors";
+import env from "./env";
 
 import schema from "./schema";
 import db from "./db";
 
 const app = express();
 const httpServer = http.createServer(app);
+
+const { SERVER_PORT: port, CORS_ALLOWED_ORIGINS: corsAllowed } = env;
 
 const main = async () => {
   const server = new ApolloServer({
@@ -22,21 +25,17 @@ const main = async () => {
   await server.start();
 
   app.use(
-    "/graphql",
+    "/",
     cors<cors.CorsRequest>({
-      origin: [
-        "https://www.your-app.example",
-        "https://studio.apollographql.com",
-      ],
+      credentials: true,
+      origin: corsAllowed.split(","),
     }),
     express.json(),
     expressMiddleware(server)
   );
 
-  await new Promise<void>((resolve) =>
-    httpServer.listen({ port: 4000 }, resolve)
-  );
-  console.log(`🚀 Server ready at http://localhost:4000/graphql`);
+  await new Promise<void>((resolve) => httpServer.listen(port, resolve));
+  console.log(`🚀 Server ready at http://localhost:${port}`);
 };
 
 main();
