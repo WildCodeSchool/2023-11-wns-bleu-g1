@@ -1,0 +1,4 @@
+cd frontend
+npm run prepare
+npx prettier --check
+npm run lint
