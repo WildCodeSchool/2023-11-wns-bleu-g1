@@ -58,6 +58,31 @@ After cloning the repo, use the npm i command to install the dependencies. Consi
 npm install
 ```
 
+## Frontend
+
+Access the frontend folder if you haven't already done so :
+
+```bash
+cd frontend/
+```
+
+Installing dependencies :
+
+```bash
+npm install
+```
+
+To launch the project
+
+```bash
+npm run dev
+```
+
+## :memo: License
+
+licence
+=======
+
 ## :busts_in_silhouette: Authors
 
 liste des auteurs
