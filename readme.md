@@ -41,7 +41,7 @@ sujet:
 
 The following tools were used in this project:
 
--   [Nom](lien)
+-   [Npm](lien)
 
 ## :white_check_mark: Requirements
 
