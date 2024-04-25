@@ -80,8 +80,7 @@ npm run dev
 
 ## :memo: License
 
-licence
-=======
+# licence
 
 ## :busts_in_silhouette: Authors
 
