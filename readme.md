@@ -50,8 +50,12 @@ Before starting :checkered_flag:, you need to have [Git](https://git-scm.com) an
 
 ## :checkered_flag: Starting
 
+## 🎉 Backend
+
+After cloning the repo, use the npm i command to install the dependencies. Consider copying/pasting the .env.example file and renaming it to .env
+
 ```bash
-installation details
+npm install
 ```
 
 ## Frontend
