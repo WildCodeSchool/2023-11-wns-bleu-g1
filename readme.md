@@ -1,6 +1,7 @@
 <h1 align="center">Nom du projet</h1>
 
 ---
+
 <p align="center">
   <a href="#dart-about">About</a> &#xa0; | &#xa0; 
   <a href="#sparkles-features">Features</a> &#xa0; | &#xa0;
@@ -26,10 +27,9 @@ sujet:
 
 The following tools were used in this project:
 
--   [Nom](lien)
+- [Nom](lien)
 
 ## :white_check_mark: Requirements
-
 
 Before starting :checkered_flag:, you need to have [Git](https://git-scm.com) and [Node](https://nodejs.org/en/) installed.
 
@@ -37,6 +37,26 @@ Before starting :checkered_flag:, you need to have [Git](https://git-scm.com) an
 
 ```bash
 installation details
+```
+
+## Frontend
+
+Access the frontend folder if you haven't already done so :
+
+```bash
+cd frontend/
+```
+
+Installing dependencies :
+
+```bash
+npm install
+```
+
+To launch the project
+
+```bash
+npm run dev
 ```
 
 ## :memo: License
@@ -50,4 +70,5 @@ liste des auteurs
 &#xa0;
 
 <a href="#top">Back to top</a>
->>>>>>> Stashed changes
+
+> > > > > > > Stashed changes
