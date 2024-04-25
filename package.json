@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "a REPLIT-like",
   "scripts": {
-    "db": "docker-compose up db"
+    "db": "docker-compose up db",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.0.11"
   }
 }
