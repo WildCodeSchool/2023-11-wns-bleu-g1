@@ -6,9 +6,19 @@ services:
       POSTGRES_PASSWORD: postgres
       PGUSER: postgres
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
+      test: ['CMD-SHELL', 'pg_isready']
       interval: 2s
       timeout: 2s
       retries: 10
     ports:
       - 5432:5432
+  frontend:
+    stop_grace_period: 0s
+    build: frontend
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend/src:/app/src

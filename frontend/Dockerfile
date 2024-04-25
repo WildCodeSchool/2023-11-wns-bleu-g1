@@ -5,9 +5,10 @@ COPY package*.json ./
 RUN npm i
 COPY src ./src
 COPY public ./public
-COPY .env ./.env
 COPY tsconfig.json ./tsconfig.json
 COPY next-env.d.ts ./next-env.d.ts
+COPY *.config.ts ./
 COPY *.config.js ./
+COPY postcss.config.mjs ./
 
 CMD npm run dev
