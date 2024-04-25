@@ -1,4 +1,4 @@
 cd frontend
 npm run prepare
-npx prettier --check
+npx prettier --write .
 npm run lint
