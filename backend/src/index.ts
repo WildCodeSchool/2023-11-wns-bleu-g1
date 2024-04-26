@@ -31,7 +31,7 @@ const main = async () => {
       origin: corsAllowed.split(","),
     }),
     express.json(),
-    expressMiddleware(server)
+    expressMiddleware(server),
   );
 
   await new Promise<void>((resolve) => httpServer.listen(port, resolve));

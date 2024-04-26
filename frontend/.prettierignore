@@ -6,3 +6,7 @@ npm-debug.log
 # Next.js Build Output
 .next
 build
+
+
+package.json
+.husky/pre-commit

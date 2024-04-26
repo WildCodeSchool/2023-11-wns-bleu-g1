@@ -1,0 +1,8 @@
+cd frontend
+npm run prepare
+npx prettier --write .
+npm run lint
+cd ..
+cd backend
+npm run prepare
+npx prettier --write .
