@@ -1,8 +1,10 @@
 cd frontend
 npm run prepare
-npx prettier --write .
 npm run lint
+npm run format
+npm run check
 cd ..
 cd backend
 npm run prepare
-npx prettier --write .
+npm run format
+npm run check
