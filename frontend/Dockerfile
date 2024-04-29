@@ -10,5 +10,6 @@ COPY next-env.d.ts ./next-env.d.ts
 COPY *.config.ts ./
 COPY *.config.js ./
 COPY postcss.config.mjs ./
+COPY components.json ./
 
 CMD npm run dev
