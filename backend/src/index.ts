@@ -15,27 +15,27 @@ const httpServer = http.createServer(app);
 const { SERVER_PORT: port, CORS_ALLOWED_ORIGINS: corsAllowed } = env;
 
 const main = async () => {
-  const server = new ApolloServer({
-    schema,
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-  });
+	const server = new ApolloServer({
+		schema,
+		plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+	});
 
-  await db.initialize();
+	await db.initialize();
 
-  await server.start();
+	await server.start();
 
-  app.use(
-    "/",
-    cors<cors.CorsRequest>({
-      credentials: true,
-      origin: corsAllowed.split(","),
-    }),
-    express.json(),
-    expressMiddleware(server),
-  );
+	app.use(
+		"/",
+		cors<cors.CorsRequest>({
+			credentials: true,
+			origin: corsAllowed.split(","),
+		}),
+		express.json(),
+		expressMiddleware(server)
+	);
 
-  await new Promise<void>((resolve) => httpServer.listen(port, resolve));
-  console.log(`🚀 Server ready at http://localhost:${port}`);
+	await new Promise<void>((resolve) => httpServer.listen(port, resolve));
+	console.log(`🚀 Server ready at http://localhost:${port}`);
 };
 
 main();
