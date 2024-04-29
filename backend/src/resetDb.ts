@@ -4,23 +4,23 @@ import User from "./entities/user";
 const cleanDb = async () => {
   const runner = db.createQueryRunner();
 
-  await runner.query("SET session_replication_role = 'replica'")
+  await runner.query("SET session_replication_role = 'replica'");
 
   await Promise.all(
     db.entityMetadatas.map((entity: any) => {
-      runner.query(`ALTER TABLE "${entity.tableName}" DISABLE TRIGGER ALL`)
-    })
-  )
+      runner.query(`ALTER TABLE "${entity.tableName}" DISABLE TRIGGER ALL`);
+    }),
+  );
 
   await Promise.all(
     db.entityMetadatas.map((entity: any) => {
-      runner.query(`DROP TABLE IF EXISTS "${entity.tableName}" CASCADE`)
-    })
-  )
+      runner.query(`DROP TABLE IF EXISTS "${entity.tableName}" CASCADE`);
+    }),
+  );
 
   await runner.query("SET session_replication_role = 'origin'");
 
-  await db.synchronize()
+  await db.synchronize();
 };
 
 const main = async () => {
@@ -30,7 +30,7 @@ const main = async () => {
 
   const user = await User.create({ email: "test@test.test" }).save();
 
-  await db.destroy()
+  await db.destroy();
 
   console.log(`${user.email} created`);
 };
