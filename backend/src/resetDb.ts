@@ -26,9 +26,9 @@ const cleanDb = async () => {
 const main = async () => {
   await db.initialize();
 
-  await cleanDb();
+  // await cleanDb();
 
-  const user = await User.create({ email: "test@test.test" }).save();
+  const user = await User.create({ email: "test@test.test", password:"Test123456!" }).save();
 
   await db.destroy();
 

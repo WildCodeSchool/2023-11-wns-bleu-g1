@@ -8,4 +8,6 @@ export default load({
   DB_NAME: String,
   CORS_ALLOWED_ORIGINS: String,
   SERVER_PORT: Number,
+  JWT_PRIVATE_KEY: String,
+  NODE_ENV: String
 });
