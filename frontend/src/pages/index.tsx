@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Inter } from "next/font/google";
 import { Button } from "@/components/ui/button";
 import Topbar from "@/components/elements/Topbar";
@@ -31,7 +32,7 @@ export default function Home() {
 				<p className="text-md pt-6 text-justify text-gray-500">
 					Créer, exécuter et partager du code avec la communauté. Avec Wild Code
 					Online, vous avez la possibilité d’intéragir avec les codes des autres
-					utilisateurs. Sauvegarder et télécharger voos fichiers de code pour
+					utilisateurs. Sauvegarder et télécharger vos fichiers de code pour
 					pouvoir les utiliser sur d’autres projets
 				</p>
 				<div className="flex w-full flex-col items-center justify-center pt-6">
@@ -49,16 +50,24 @@ export default function Home() {
 						</Button>
 					</a>
 				</div>
-				<img
-					src="./landing1.png"
-					alt="Example code of a javascript function returning 'Welcome on board'"
-					className="mt-6 rounded-md border-2 border-primary"
-				/>
-				<img
-					src="./landing2.png"
-					alt="Return of the example code above saying 'Welcome on board'"
-					className="my-6 rounded-md border-2 border-primary"
-				/>
+				<div className="flex flex-col relative w-full h-40 md:h-80 lg:h-96 my-6">
+					<Image
+						src="/landing1.png"
+						alt="Example code of a javascript function returning 'Welcome on board'"
+						layout="fill"
+						objectFit="cover"
+						className="rounded-md border-2 border-primary"
+					/>
+				</div>
+				<div className="flex flex-col relative w-full h-40 md:h-80 lg:h-96 my-6 ">
+					<Image
+						src="/landing2.png"
+						alt="Return of the example code above saying 'Welcome on board'"
+						layout="fill"
+						objectFit="cover"
+						className="rounded-md border-2 border-primary"
+					/>
+				</div>
 			</div>
 		</main>
 	);
