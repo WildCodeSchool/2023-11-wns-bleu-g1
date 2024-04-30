@@ -19,7 +19,7 @@ export const authChecker: AuthChecker<Context> = async (
 		return false;
 	}
 
-	const decoded = await jwt.verify(token, env.JWT_PRIVATE_KEY);
+	const decoded = (await jwt.verify(token, env.JWT_PRIVATE_KEY)) as any;
 
 	if (!decoded?.userId) {
 		return false;

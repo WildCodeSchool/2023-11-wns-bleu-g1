@@ -61,9 +61,11 @@ export class NewUserInput {
 
 @InputType()
 export class SigninInput {
+	@IsEmail()
 	@Field()
 	email: string;
 
+	@IsStrongPassword()
 	@Field()
 	password: string;
 }
