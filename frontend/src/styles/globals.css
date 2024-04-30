@@ -6,6 +6,7 @@
 	:root {
 		--background: 0 0% 100%;
 		--topbar-background: 323 87% 57%;
+		--background-primary: 240 100% 73%;
 		--foreground: 240 10% 3.9%;
 		--card: 0 0% 100%;
 		--card-foreground: 240 10% 3.9%;
@@ -31,8 +32,10 @@
 	.dark {
 		--background: 240 24% 15%;
 		--topbar-background: 323 87% 57%;
+		--background: 20 14.3% 4.1%;
+		--background-primary: 240 24% 15%;
 		--foreground: 0 0% 95%;
-		--card: 24 9.8% 10%;
+		--card: 250 9.8% 10%;
 		--card-foreground: 0 0% 95%;
 		--popover: 0 0% 9%;
 		--popover-foreground: 0 0% 95%;
@@ -44,19 +47,20 @@
 		--muted-foreground: 240 5% 64.9%;
 		--accent: 12 6.5% 15.1%;
 		--accent-foreground: 0 0% 98%;
-		--destructive: 0 62.8% 30.6%;
+		--destructive: 0 80% 40%;
 		--destructive-foreground: 0 85.7% 97.3%;
 		--border: 240 3.7% 15.9%;
 		--input: 240 3.7% 15.9%;
 		--ring: 311 76% 47%;
+    --terminal-background: 0 0% 12%;
 	}
 }
 
 @layer utilities {
-	/* * {
+	* {
 		@apply border-border;
-	} */
+	}
 	body {
-		@apply bg-background text-foreground;
+		@apply bg-background-primary text-foreground;
 	}
 }

@@ -15,7 +15,8 @@ const config = {
 			padding: "2rem",
 			screens: {
 				sm: "640px",
-				md: "768px",
+				md: "768px",  
+				lg: "1000px",
 				"2xl": "1400px",
 			},
 		},
@@ -26,7 +27,10 @@ const config = {
 				terminalbackground: "hsl(var(--terminal-background))",
 				input: "hsl(var(--input))",
 				ring: "hsl(var(--ring))",
-				background: "hsl(var(--background))",
+				background: {
+					DEFAULT: "hsl(var(--background))",
+					primary: "hsl(var(--background-primary))",
+				},
 				foreground: "hsl(var(--foreground))",
 				primary: {
 					DEFAULT: "hsl(var(--primary))",
