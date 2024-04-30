@@ -31,9 +31,14 @@ const formSchema = z.object({
 		.max(50, {
 			message: "Le pseudo doit contenir au plus 50 caractères.",
 		}),
-	email: z.string().email({
-		message: "Adresse email invalide.",
-	}),
+	email: z
+		.string()
+		.min(1, {
+			message: "L'adresse email est requise.",
+		})
+		.email({
+			message: "Adresse email invalide.",
+		}),
 	password: z.string().min(3, {
 		message: "Le mot de passe doit contenir au moins 3 caractères.",
 	}),
@@ -41,7 +46,6 @@ const formSchema = z.object({
 
 const SignUpPage = () => {
 	const form = useForm<z.infer<typeof formSchema>>({
-		mode: "onBlur",
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			pseudo: "",
