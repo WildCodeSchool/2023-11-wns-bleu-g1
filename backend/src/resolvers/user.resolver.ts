@@ -37,6 +37,7 @@ export default class UserResolver {
 
 	@Mutation(() => String)
 	async signin(@Arg("data") data: SigninInput, @Ctx() ctx: Context) {
+		// SELECT * FROM User WHERE email=data.email
 		const user = await User.findOneBy({ email: data.email });
 
 		if (!user) {
@@ -64,5 +65,12 @@ export default class UserResolver {
 		});
 
 		return token;
+	}
+
+	@Mutation(() => String)
+	async logout(@Ctx() ctx: Context) {
+		ctx.res.clearCookie("token");
+
+		return "ok";
 	}
 }
