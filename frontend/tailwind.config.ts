@@ -14,6 +14,8 @@ const config = {
 			center: true,
 			padding: "2rem",
 			screens: {
+				"sm": "640px",
+				"md": "768px",
 				"2xl": "1400px",
 			},
 		},
@@ -21,6 +23,7 @@ const config = {
 			colors: {
 				border: "hsl(var(--border))",
 				topbarbackground: "hsl(var(--topbar-background))",
+				terminalbackground: "hsl(var(--terminal-background))",
 				input: "hsl(var(--input))",
 				ring: "hsl(var(--ring))",
 				background: "hsl(var(--background))",
