@@ -36,7 +36,7 @@ export default class User extends BaseEntity {
 	@Field()
 	email: string;
 
-	@Column({ nullable: true })
+	@Column()
 	@Field()
 	pseudo: string;
 
@@ -51,7 +51,7 @@ export class NewUserInput {
 	email: string;
 
 	@Length(2, 20)
-	@Field({ nullable: true })
+	@Field()
 	pseudo: string;
 
 	@IsStrongPassword()

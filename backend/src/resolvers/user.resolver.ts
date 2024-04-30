@@ -18,14 +18,30 @@ export default class UserResolver {
 	@Mutation(() => User)
 	async createUser(@Arg("data", { validate: true }) data: NewUserInput) {
 		if (!data.email) {
-			throw new GraphQLError("email is missing but required");
+			throw new GraphQLError("email is missing but require");
+		}
+
+		if (!data.pseudo) {
+			throw new GraphQLError("pseudo is missing but require");
+		}
+
+		if (!data.password) {
+			throw new GraphQLError("password is missing but require");
 		}
 
 		// SELECT * FROM User WHERE email=data.email
 		const userAlreadyExist = await User.findOneBy({ email: data.email });
+		// SELECT * FROM User WHERE pseudo=data.pseudo
+		const pseudoAlreadyExist = await User.findOneBy({
+			pseudo: data.pseudo.toLocaleLowerCase(),
+		});
 
 		if (userAlreadyExist) {
 			throw new GraphQLError(`user: ${data.email} already exist`);
+		}
+
+		if (pseudoAlreadyExist) {
+			throw new GraphQLError(`pseudo: ${data.pseudo} is already taken`);
 		}
 
 		const newUser = new User();
