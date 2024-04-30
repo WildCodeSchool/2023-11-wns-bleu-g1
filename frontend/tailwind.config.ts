@@ -15,7 +15,7 @@ const config = {
 			padding: "2rem",
 			screens: {
 				sm: "640px",
-				md: "768px",  
+				md: "768px",
 				lg: "1000px",
 				"2xl": "1400px",
 			},
