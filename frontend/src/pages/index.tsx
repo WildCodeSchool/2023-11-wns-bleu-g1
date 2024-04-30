@@ -50,7 +50,7 @@ export default function Home() {
 						</Button>
 					</a>
 				</div>
-				<div className="flex flex-col relative w-full h-40 md:h-80 lg:h-96 my-6">
+				<div className="relative my-6 flex h-40 w-full flex-col md:h-80 lg:h-96">
 					<Image
 						src="/landing1.png"
 						alt="Example code of a javascript function returning 'Welcome on board'"
@@ -59,7 +59,7 @@ export default function Home() {
 						className="rounded-md border-2 border-primary"
 					/>
 				</div>
-				<div className="flex flex-col relative w-full h-40 md:h-80 lg:h-96 my-6 ">
+				<div className="relative my-6 flex h-40 w-full flex-col md:h-80 lg:h-96 ">
 					<Image
 						src="/landing2.png"
 						alt="Return of the example code above saying 'Welcome on board'"

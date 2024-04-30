@@ -28,8 +28,8 @@ const buttonVariants = cva(
 			border: {
 				default: "border-none transition duration-700 ease-in-out",
 				true: "border transition duration-700 ease-in-out",
-				false: "border-none transition duration-700 ease-in-out"
-			}
+				false: "border-none transition duration-700 ease-in-out",
+			},
 		},
 		defaultVariants: {
 			variant: "default",
@@ -45,7 +45,7 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-	({ className, variant, size, border,  asChild = false, ...props }, ref) => {
+	({ className, variant, size, border, asChild = false, ...props }, ref) => {
 		const Comp = asChild ? Slot : "button";
 		return (
 			<Comp
