@@ -30,7 +30,7 @@ export default function Home() {
 					<h1 className="pb-6 text-center text-4xl font-bold md:pt-10 md:text-8xl">
 						Wild Code <span className="text-primary">Online</span>
 					</h1>
-					<p className="text-md pt-6 text-justify text-gray-500 md:px-4 md:py-10 md:text-xl">
+					<p className="text-md pt-6 text-justify dark:text-gray-500 text-white md:px-4 md:py-10 md:text-xl">
 						Créer, exécuter et partager du code avec la communauté. Avec Wild
 						Code Online, vous avez la possibilité d’intéragir avec les codes des
 						autres utilisateurs. Sauvegarder et télécharger vos fichiers de code
