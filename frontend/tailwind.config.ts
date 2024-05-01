@@ -20,6 +20,9 @@ const config = {
 		extend: {
 			colors: {
 				border: "hsl(var(--border))",
+				topbarbackground: "hsl(var(--topbar-background))",
+				darkterminalbackground: "hsl(var(--dark-terminal-background))",
+				lightterminalbackground: "hsl(var(--light-terminal-background))",
 				input: "hsl(var(--input))",
 				ring: "hsl(var(--ring))",
 				background: {
