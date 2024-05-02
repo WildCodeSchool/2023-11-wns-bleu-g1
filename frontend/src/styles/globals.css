@@ -22,7 +22,8 @@
 		--destructive: 0 84.2% 60.2%;
 		--destructive-foreground: 0 0% 98%;
 		--border: 240 5.9% 90%;
-		--input: 240 5.9% 90%;
+		/*--input: 240 5.9% 90%;*/
+		--input: 0, 3%, 87%;
 		--ring: 311 76% 47%;
 		--radius: 0.5rem;
 		--dark-terminal-background: 0 0% 12%;
@@ -48,7 +49,8 @@
 		--destructive: 0 80% 40%;
 		--destructive-foreground: 0 85.7% 97.3%;
 		--border: 240 3.7% 15.9%;
-		--input: 240 3.7% 15.9%;
+		/*--input: 240 3.7% 15.9%;*/
+		--input: 0 0% 12%;
 		--ring: 311 76% 47%;
 		--dark-terminal-background: 0 0% 12%;
 	}
@@ -72,7 +74,8 @@
 		--destructive: 0 84.2% 60.2%;
 		--destructive-foreground: 0 0% 98%;
 		--border: 240 5.9% 90%;
-		--input: 240 5.9% 90%;
+		/*--input: 240 5.9% 90%;*/
+		--input: 0, 3%, 87%;
 		--ring: 311 76% 47%;
 		--radius: 0.5rem;
 		--light-terminal-background: 0, 3%, 87%;
@@ -138,4 +141,14 @@
 	/*color: transparent;*/
 	background: transparent;
 	/*caret-color: white; !* Or choose your favorite color *!*/
+}
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: hsl(var(--input)) !important;
+	/*color: #000000 !important;*/
+}
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color:  hsl(var(--input)) !important;
 }

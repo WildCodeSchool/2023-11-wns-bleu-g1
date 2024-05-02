@@ -106,6 +106,7 @@ function CodingPage() {
 						id="codingArea"
 						className="relative min-h-80 md:min-h-[50vh] md:min-w-[45%] ml-2 md:ml-0"
 					>
+						{/*TODO: limit terminal row max length */}
 						<Textarea
 							className="left-0 z-10 caret-white bg-transparent text-transparent leading-[20pt] text-[15pt] resize-none"
 							placeholder="Commencez a coder ici..."
@@ -122,12 +123,12 @@ function CodingPage() {
 							}}
 						/>
 						<pre
-							className="left-0 z-0 text-[15pt] w-[calc(100%-32px)] min-h-[33vh] md:h-[500px] font-mono border-none absolute top-0 bg-lightterminalbackground dark:bg-darkterminalbackground rounded-md leading-[20pt] overflow-auto"
+							className="left-0 z-0 text-[15pt] w-[calc(100%-32px)] min-h-[33vh] md:h-[500px] font-mono border-none absolute top-0 rounded-md leading-[20pt] overflow-auto bg-input text-black dark:text-white"
 							id="highlightedCodingContent"
 							aria-hidden="true"
 						>
 							<code
-								className="language-js text-[15pt] leading-[20pt] font-mono"
+								className="language-js text-[15pt] leading-[20pt] font-mono bg-input text-black dark:text-white"
 								id="highlighting-content"
 							></code>
 						</pre>
@@ -152,7 +153,7 @@ function CodingPage() {
 					>
 						<Textarea
 							readOnly={true}
-							className="left-0 leading-[20pt] text-[15pt] ml-4 mt-4 md:mt-3 p-2.5"
+							className="left-0 leading-[20pt] text-[15pt] ml-4 mt-4 md:mt-3 p-2.5 bg-input"
 							value={showResult}
 						/>
 					</div>
