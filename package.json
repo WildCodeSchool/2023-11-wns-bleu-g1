@@ -4,5 +4,8 @@
   "description": "a REPLIT-like",
   "scripts": {
     "db": "docker-compose up db"
+  },
+  "dependencies": {
+    "@types/react": "^18.3.1"
   }
 }
