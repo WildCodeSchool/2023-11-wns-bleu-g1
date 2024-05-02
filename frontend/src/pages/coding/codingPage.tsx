@@ -85,8 +85,11 @@ function CodingPage() {
 	};
 
 	return (
-		<main className="min-h-[100vh]">
-			<div className="">
+		<main
+			className={`flex min-h-screen flex-col items-center justify-center overflow-scroll md:min-h-[100vh] md:w-full`}
+		>
+			{/*<Topbar />*/}
+			<div className="container mx-auto">
 				<div id="coddingTopInfo" className="flex w-full relative border-b">
 					<h1 className="flex flex-1 justify-start align-middle items-center pl-4">
 						Nom du projet
@@ -153,7 +156,7 @@ function CodingPage() {
 					>
 						<Textarea
 							readOnly={true}
-							className="left-0 leading-[20pt] text-[15pt] ml-4 mt-4 md:mt-3 p-2.5 bg-input"
+							className="left-0 leading-[20pt] text-[15pt] ml-4 mt-4 md:mt-3 p-2.5 bg-input resize-none"
 							value={showResult}
 						/>
 					</div>
