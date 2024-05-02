@@ -57,6 +57,9 @@ export class NewUserInput {
 	@IsStrongPassword()
 	@Field()
 	password: string;
+
+	@Field({ nullable: true })
+	role: UserRole;
 }
 
 @InputType()

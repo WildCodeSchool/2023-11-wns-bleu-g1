@@ -4,7 +4,6 @@ export default gql`
 	query Users {
 		users {
 			email
-			id
 			pseudo
 			role
 		}
