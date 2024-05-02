@@ -19,9 +19,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useSignUpMutation } from "@/graphql/generated/schema";
+import { cn } from "@/lib/utils";
 import { ApolloError } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertCircle, BadgeCheck } from "lucide-react";
+import {
+	AlertCircle,
+	BadgeCheck,
+	CheckCircleIcon,
+	Lock,
+	XCircleIcon,
+} from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -53,6 +60,7 @@ const formSchema = z.object({
 const SignUpPage = () => {
 	const router = useRouter();
 
+	const [passwordInputFocused, setPasswordInputFocused] = useState(false);
 	const [errorMessageFormatted, setErrorMessageFormatted] = useState("");
 
 	const [signUpMutation, signUpMutationResult] = useSignUpMutation({
@@ -78,6 +86,40 @@ const SignUpPage = () => {
 			password: "",
 		},
 	});
+
+	const password = form.watch("password");
+	const messageKOClassName = "";
+	const messageOKClassName = "text-success-200";
+
+	const messages: Array<{
+		classname: { KO: string; OK: string };
+		regex: boolean | null;
+		message: string;
+	}> = [
+		{
+			classname: { KO: messageKOClassName, OK: messageOKClassName },
+			regex: !password || password?.length < 8,
+			message: "Contenir au moins 8 caractères",
+		},
+		{
+			classname: { KO: messageKOClassName, OK: messageOKClassName },
+			regex: !password || !/[A-Z]/.test(password),
+			message: "Contenir au moins une lettre majuscule.",
+		},
+		{
+			classname: { KO: messageKOClassName, OK: messageOKClassName },
+			regex: !password || !/[a-z]/.test(password),
+			message: "Contenir au moins une lettre minuscule.",
+		},
+		{
+			classname: { KO: messageKOClassName, OK: messageOKClassName },
+			regex: !password || !/[0-9]/.test(password),
+			message: "Contenir au moins un chiffre.",
+		},
+	];
+
+	const isPasswordValid = !messages.filter((message) => message.regex !== false)
+		.length;
 
 	function onSubmit(values: z.infer<typeof formSchema>) {
 		signUpMutation({
@@ -146,10 +188,50 @@ const SignUpPage = () => {
 											<Input
 												placeholder="********"
 												type="password"
+												className={cn(
+													"peer",
+													isPasswordValid &&
+														"focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-success-200"
+												)}
+												onFocus={(e: React.FocusEvent<HTMLInputElement>) => {
+													setPasswordInputFocused(true);
+												}}
 												{...field}
 											/>
 										</FormControl>
 										<FormMessage />
+										<Alert
+											variant={
+												isPasswordValid ? "success-light" : "error-light"
+											}
+											className="hidden peer-focus:block"
+										>
+											<Lock className="h-4 w-4 mt-1" />
+											<AlertTitle className="font-semibold text-lg">
+												Le mot de passe doit :
+											</AlertTitle>
+											<AlertDescription>
+												{messages.length > 0 &&
+													messages.map((message, index) => (
+														<p
+															key={index}
+															className={cn(
+																"text-md flex gap-2",
+																message.regex
+																	? message.classname.KO
+																	: message.classname.OK
+															)}
+														>
+															{!message.regex ? (
+																<CheckCircleIcon className="h-4 w-4 mt-1" />
+															) : (
+																<XCircleIcon className="h-4 w-4 mt-1" />
+															)}
+															{message.message}
+														</p>
+													))}
+											</AlertDescription>
+										</Alert>
 									</FormItem>
 								)}
 							/>
@@ -159,9 +241,8 @@ const SignUpPage = () => {
 									<AlertCircle className="h-4 w-4" />
 									<AlertTitle>Erreur</AlertTitle>
 									<AlertDescription>
-										{errorMessageFormatted}
-										{/* Une erreur est survenue lors de l&apos;inscription. Veuillez
-										réessayer. */}
+										Une erreur est survenue lors de l&apos;inscription. Veuillez
+										réessayer.
 									</AlertDescription>
 								</Alert>
 							)}
@@ -186,7 +267,9 @@ const SignUpPage = () => {
 							<Button
 								type="submit"
 								isLoading={signUpMutationResult.loading}
-								disabled={signUpMutationResult.data ? true : false}
+								disabled={
+									signUpMutationResult.data ? true : false || !isPasswordValid
+								}
 							>
 								S&apos;inscrire
 							</Button>
