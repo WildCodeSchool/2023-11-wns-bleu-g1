@@ -1,7 +1,7 @@
 import db from "./db";
 import User from "./entities/user";
 
-const cleanDb = async () => {
+export const cleanDb = async () => {
 	const runner = db.createQueryRunner();
 
 	await runner.query("SET session_replication_role = 'replica'");
@@ -28,10 +28,15 @@ const main = async () => {
 
 	await cleanDb();
 
-	const user = await User.create({
+	const user = new User();
+
+	Object.assign(user, {
 		email: "test@test.test",
 		password: "Test123456!",
-	}).save();
+		pseudo: "Test",
+	});
+
+	await user.save();
 
 	await db.destroy();
 
