@@ -28,6 +28,7 @@
 		--radius: 0.5rem;
 		--dark-terminal-background: 0 0% 12%;
 		--light-terminal-background: 0, 3%, 87%;
+		--terminal-text-color: 0 0% 0%;
 	}
 
 	.dark {
@@ -53,6 +54,7 @@
 		--input: 0 0% 12%;
 		--ring: 311 76% 47%;
 		--dark-terminal-background: 0 0% 12%;
+		--terminal-text-color: 0 0% 100%;
 	}
 	.light {
 		--background: 0 0% 100%;
@@ -79,6 +81,7 @@
 		--ring: 311 76% 47%;
 		--radius: 0.5rem;
 		--light-terminal-background: 0, 3%, 87%;
+		--terminal-text-color: 0 0% 0%;
 	}
 }
 
@@ -150,5 +153,11 @@ pre[class*="language-"] {
 
 code[class*="language-"],
 pre[class*="language-"] {
-	color: hsl(var(--input)) !important;
+	color: hsl(var(--terminal-text-color)) !important;
+}
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #f8f8f2;
+	text-shadow: none !important;
 }

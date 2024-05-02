@@ -23,6 +23,7 @@ const config = {
 				topbarbackground: "hsl(var(--topbar-background))",
 				// darkterminalbackground: "hsl(var(--dark-terminal-background))",
 				// lightterminalbackground: "hsl(var(--light-terminal-background))",
+				terminaltextcolor: "hsl(var(--terminal-text-color))",
 				input: "hsl(var(--input))",
 				ring: "hsl(var(--ring))",
 				background: {

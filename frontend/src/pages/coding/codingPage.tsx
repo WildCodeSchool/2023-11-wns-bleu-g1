@@ -126,12 +126,12 @@ function CodingPage() {
 							}}
 						/>
 						<pre
-							className="left-0 z-0 text-[15pt] w-[calc(100%-32px)] min-h-[33vh] md:h-[500px] font-mono border-none absolute top-0 rounded-md leading-[20pt] overflow-auto bg-input text-black dark:text-white"
+							className="left-0 z-0 text-[15pt] w-[calc(100%-32px)] min-h-[33vh] md:h-[500px] font-mono border-none absolute top-0 rounded-md leading-[20pt] overflow-auto bg-input"
 							id="highlightedCodingContent"
 							aria-hidden="true"
 						>
 							<code
-								className="language-js text-[15pt] leading-[20pt] font-mono bg-input text-black dark:text-white"
+								className="language-js text-[15pt] leading-[20pt] font-mono bg-input"
 								id="highlighting-content"
 							></code>
 						</pre>
