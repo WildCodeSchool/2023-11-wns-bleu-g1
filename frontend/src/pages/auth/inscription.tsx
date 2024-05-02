@@ -1,4 +1,4 @@
-import LogoImg from "@/components/logo-svg";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -18,7 +18,13 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useSignUpMutation } from "@/graphql/generated/schema";
+import { ApolloError } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AlertCircle, BadgeCheck } from "lucide-react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -45,6 +51,25 @@ const formSchema = z.object({
 });
 
 const SignUpPage = () => {
+	const router = useRouter();
+
+	const [errorMessageFormatted, setErrorMessageFormatted] = useState("");
+
+	const [signUpMutation, signUpMutationResult] = useSignUpMutation({
+		onCompleted: () => {
+			router.push("/auth/connexion");
+		},
+		onError: (err: ApolloError) => {
+			console.error(err);
+			// const [errorExtensions]: any =
+			// 	err.graphQLErrors[0].extensions["validationErrors"];
+			// console.error(errorExtensions.constraints.isStrongPassword);
+			// if (errorExtensions.constraints.isStrongPassword) {
+			// 	setErrorMessageFormatted("Mot de passe");
+			// }
+		},
+	});
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -55,13 +80,28 @@ const SignUpPage = () => {
 	});
 
 	function onSubmit(values: z.infer<typeof formSchema>) {
-		console.log(values);
+		signUpMutation({
+			variables: {
+				data: {
+					email: values.email,
+					pseudo: values.pseudo,
+					password: values.password,
+				},
+			},
+		});
 	}
 
 	return (
 		<div className="container mx-auto w-full min-h-screen py-8 space-y-6 md:space-y-10">
-			<LogoImg width={150} height={100} className="mx-auto" />
-			<Card className="h-fit sm:w-[350px] xl:w-[350px] m-auto">
+			<Image
+				src="/logo.svg"
+				alt="Wild Code Online Logo"
+				className="mx-auto"
+				width={150}
+				height={100}
+				priority
+			/>
+			<Card className="h-fit sm:w-[350px] xl:w-[400px] m-auto">
 				<CardHeader>
 					<CardTitle>Inscription</CardTitle>
 					<CardDescription>Enregistrez vos informations ici.</CardDescription>
@@ -113,12 +153,43 @@ const SignUpPage = () => {
 									</FormItem>
 								)}
 							/>
+
+							{signUpMutationResult.error && (
+								<Alert variant="error">
+									<AlertCircle className="h-4 w-4" />
+									<AlertTitle>Erreur</AlertTitle>
+									<AlertDescription>
+										{errorMessageFormatted}
+										{/* Une erreur est survenue lors de l&apos;inscription. Veuillez
+										réessayer. */}
+									</AlertDescription>
+								</Alert>
+							)}
+							{signUpMutationResult.data && (
+								<Alert variant="success">
+									<BadgeCheck className="h-4 w-4" />
+									<AlertTitle>Inscription Réussie</AlertTitle>
+									<AlertDescription>
+										Vous allez être redirigé vers la page de connexion.
+									</AlertDescription>
+								</Alert>
+							)}
 						</CardContent>
 						<CardFooter className="justify-between">
-							<Button type="button" variant={"outline"}>
+							<Button
+								type="button"
+								variant={"outline"}
+								disabled={signUpMutationResult.loading}
+							>
 								Annuler
 							</Button>
-							<Button type="submit">S&apos;inscrire</Button>
+							<Button
+								type="submit"
+								isLoading={signUpMutationResult.loading}
+								disabled={signUpMutationResult.data ? true : false}
+							>
+								S&apos;inscrire
+							</Button>
 						</CardFooter>
 					</form>
 				</Form>
