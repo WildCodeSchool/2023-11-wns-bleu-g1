@@ -150,5 +150,5 @@ pre[class*="language-"] {
 
 code[class*="language-"],
 pre[class*="language-"] {
-	color:  hsl(var(--input)) !important;
+	color: hsl(var(--input)) !important;
 }
