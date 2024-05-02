@@ -6,7 +6,7 @@
 	:root {
 		--background: 0 0% 100%;
 		--topbar-background: 323 87% 57%;
-		--background-primary: 240 100% 73%;
+		--background-primary: 0 0% 95%;
 		--foreground: 240 10% 3.9%;
 		--card: 0 0% 100%;
 		--card-foreground: 240 10% 3.9%;
@@ -56,7 +56,7 @@
 	.light {
 		--background: 0 0% 100%;
 		--topbar-background: 323 87% 57%;
-		--background-primary: 240 100% 73%;
+		--background-primary: 0 0% 95%;
 		--foreground: 240 10% 3.9%;
 		--card: 0 0% 100%;
 		--card-foreground: 240 10% 3.9%;
