@@ -9,6 +9,9 @@ import Prism from "prismjs";
 function CodingPage() {
 	const [isTopOfPage, setIsTopOfPage] = useState<boolean>(true);
 	const [input, setInput] = useState("");
+	const [code, setCode] = useState("");
+	const [showResult, setShowResult] = useState("");
+	const [count, setCount] = useState(0);
 	useEffect(() => {
 		const handleScroll = () => {
 			if (window.scrollY === 0) {
@@ -63,10 +66,26 @@ function CodingPage() {
 			update(element.value); // Update text to include indent
 		}
 	}
+	const runCode = () => {
+		if (count < 50) {
+			try {
+				const result = eval(code);
+				console.log("result: ", result);
+				setShowResult(result);
+				setCount(count + 1);
+			} catch (error) {
+				console.error(error);
+				setShowResult("Error: " + error.message);
+			}
+		} else {
+			setShowResult(
+				"Vous avez atteint la limite de 50 exécutions. Pour ne plus avoir de limites, passer premium!"
+			);
+		}
+	};
 
 	return (
 		<main className="min-h-[100vh]">
-			{/*<Topbar isTopOfPage={isTopOfPage} />*/}
 			<div className="">
 				<div id="coddingTopInfo" className="flex w-full relative border-b">
 					<h1 className="flex flex-1 justify-start align-middle items-center pl-4">
@@ -94,6 +113,7 @@ function CodingPage() {
 							onChange={(e) => {
 								update(e.target.value);
 								sync_scroll(e.target);
+								setCode(e.target.value);
 							}}
 							onScroll={(e) => sync_scroll(e.target)}
 							spellCheck="false"
@@ -117,10 +137,11 @@ function CodingPage() {
 						<Button
 							size={"sm"}
 							className="flex md:justify-center md:items-center md:content-center md:align-middle mt-4 mb-4 w-20 ml-2 md:mr-0"
+							onClick={runCode}
 						>
 							Exécuter
 						</Button>
-						<p className="flex items-center">0/50</p>
+						<p className="flex items-center">{count}/50</p>
 						<p className="flex items-center">
 							Pour ne plus avoir de limites, passer premium!
 						</p>
@@ -131,18 +152,12 @@ function CodingPage() {
 					>
 						<Textarea
 							readOnly={true}
-							className="left-0 leading-[20pt] text-[15pt] ml-4 mt-4 md:mt-3"
+							className="left-0 leading-[20pt] text-[15pt] ml-4 mt-4 md:mt-3 p-2.5"
+							value={showResult}
 						/>
 					</div>
 				</div>
 			</div>
-			{/*<div>*/}
-			{/*	<Textarea id="editing" onChange={(e) => update(e.target.value)} spellCheck="false"/>*/}
-			{/*	<pre className="language-javascript" id="highlighting" aria-hidden="true">*/}
-			{/*		<code className="language-js" id="highlighting-content"></code>*/}
-			{/*	</pre>*/}
-			{/*	<PrismLoader />*/}
-			{/*</div>*/}
 		</main>
 	);
 }
