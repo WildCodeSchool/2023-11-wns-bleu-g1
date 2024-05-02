@@ -24,41 +24,44 @@ function CodingPage() {
 	console.log(input);
 	function update(text) {
 		let result_element = document.querySelector("#highlighting-content");
-		if(text[text.length-1] == "\n") { // If the last character is a newline character
+		if (text[text.length - 1] == "\n") {
+			// If the last character is a newline character
 			text += " "; // Add a placeholder space character to the final line
-		  }
+		}
 		// Update code
-		result_element.innerHTML = text.replace(new RegExp("&", "g"), "&").replace(new RegExp("<", "g"), "<");
+		result_element.innerHTML = text
+			.replace(new RegExp("&", "g"), "&")
+			.replace(new RegExp("<", "g"), "<");
 		// Syntax Highlight
 		Prism.highlightElement(result_element);
 	}
 	function sync_scroll(element) {
-	  /* Scroll result to scroll coords of event - sync with textarea */
-	  let result_element = document.querySelector("#highlightedCodingContent");
-	  // Check if result_element is not null
-	  if (result_element) {
-		// Get and set x and y
-		result_element.scrollTop = element.scrollTop;
-		console.log("top: ", result_element.scrollTop)
+		/* Scroll result to scroll coords of event - sync with textarea */
+		let result_element = document.querySelector("#highlightedCodingContent");
+		// Check if result_element is not null
+		if (result_element) {
+			// Get and set x and y
+			result_element.scrollTop = element.scrollTop;
+			console.log("top: ", result_element.scrollTop);
 
-		result_element.scrollLeft = element.scrollLeft;
-		console.log("left: ", result_element.scrollLeft)
-	  }
+			result_element.scrollLeft = element.scrollLeft;
+			console.log("left: ", result_element.scrollLeft);
+		}
 	}
 	function check_tab(element, event) {
-	  let code = element.value;
-	  if(event.key == "Tab") {
-		/* Tab key pressed */
-		event.preventDefault(); // stop normal
-		let before_tab = code.slice(0, element.selectionStart); // text before tab
-		let after_tab = code.slice(element.selectionEnd, element.value.length); // text after tab
-		let cursor_pos = element.selectionEnd + 1; // where cursor moves after tab - moving forward by 1 char to after tab
-		element.value = before_tab + "\t" + after_tab; // add tab char
-		// move cursor
-		element.selectionStart = cursor_pos;
-		element.selectionEnd = cursor_pos;
-		update(element.value); // Update text to include indent
-	  }
+		let code = element.value;
+		if (event.key == "Tab") {
+			/* Tab key pressed */
+			event.preventDefault(); // stop normal
+			let before_tab = code.slice(0, element.selectionStart); // text before tab
+			let after_tab = code.slice(element.selectionEnd, element.value.length); // text after tab
+			let cursor_pos = element.selectionEnd + 1; // where cursor moves after tab - moving forward by 1 char to after tab
+			element.value = before_tab + "\t" + after_tab; // add tab char
+			// move cursor
+			element.selectionStart = cursor_pos;
+			element.selectionEnd = cursor_pos;
+			update(element.value); // Update text to include indent
+		}
 	}
 
 	return (
@@ -69,8 +72,7 @@ function CodingPage() {
 					<h1 className="flex flex-1 justify-start align-middle items-center pl-4">
 						Nom du projet
 					</h1>
-					<div
-						className="relative my-6 mr-4 flex h-10 w-12 rounded-md md:h-14 justify-end align-bottom items-end">
+					<div className="relative my-6 mr-4 flex h-10 w-12 rounded-md md:h-14 justify-end align-bottom items-end">
 						<Image
 							src="/Javascript_logo.png"
 							alt="logo javascript"
@@ -91,11 +93,13 @@ function CodingPage() {
 							id="codingInput"
 							onChange={(e) => {
 								update(e.target.value);
-								sync_scroll(e.target)
+								sync_scroll(e.target);
 							}}
 							onScroll={(e) => sync_scroll(e.target)}
 							spellCheck="false"
-							onKeyDown={(e) => {check_tab(e.target, event);}}
+							onKeyDown={(e) => {
+								check_tab(e.target, event);
+							}}
 						/>
 						<pre
 							className="left-0 z-0 text-[15pt] w-[calc(100%-32px)] min-h-[33vh] md:h-[500px] font-mono border-none absolute top-0 bg-lightterminalbackground dark:bg-darkterminalbackground rounded-md leading-[20pt] overflow-auto"
@@ -125,7 +129,10 @@ function CodingPage() {
 						id="resultArea"
 						className="relative min-h-80 md:min-h-[50vh] md:min-w-[45%] flex "
 					>
-						<Textarea readOnly={true} className="left-0 leading-[20pt] text-[15pt] ml-4 mt-4 md:mt-3" />
+						<Textarea
+							readOnly={true}
+							className="left-0 leading-[20pt] text-[15pt] ml-4 mt-4 md:mt-3"
+						/>
 					</div>
 				</div>
 			</div>
