@@ -25,7 +25,7 @@ export default function Home() {
 			className={`flex min-h-screen flex-col items-center justify-center overflow-scroll md:min-h-[100vh] md:w-full ${inter.className}`}
 		>
 			<Topbar isTopOfPage={isTopOfPage} />
-			<div className="mt-32 flex flex-col w-[80vw] md:min-h-[70vh] md:flex-row md:space-x-4">
+			<div className="container mx-auto mt-32 flex flex-col w-[80vw] md:min-h-[70vh] md:flex-row md:space-x-4">
 				<div className="flex flex-col md:relative md:w-2/3">
 					<h1 className="pb-6 text-center text-4xl font-bold md:pt-10 md:text-8xl">
 						Wild Code <span className="text-primary">Online</span>
