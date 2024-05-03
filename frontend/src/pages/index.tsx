@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { Button } from "@/components/ui/button";
 import Topbar from "@/components/elements/Topbar";
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -37,8 +38,12 @@ export default function Home() {
 						pour pouvoir les utiliser sur d’autres projets
 					</p>
 					<div className="space-x-4 lg:space-x-8 text-center sm:text-start">
-						<Button>Commencer à coder</Button>
-						<Button variant={"secondary"}>En savoir plus</Button>
+						<Link href={"/auth/connexion"} className="text-primary hover:underline">
+							<Button>Commencer à coder</Button>
+						</Link>
+						<Link href={"/auth/connexion"} className="text-primary hover:underline">
+							<Button variant={"secondary"}>En savoir plus</Button>
+						</Link>
 					</div>
 				</div>
 				<div className="flex flex-col sm:w-2/5 justify-center">
