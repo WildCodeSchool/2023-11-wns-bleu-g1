@@ -38,10 +38,16 @@ export default function Home() {
 						pour pouvoir les utiliser sur d’autres projets
 					</p>
 					<div className="space-x-4 lg:space-x-8 text-center sm:text-start">
-						<Link href={"/auth/connexion"} className="text-primary hover:underline">
+						<Link
+							href={"/auth/connexion"}
+							className="text-primary hover:underline"
+						>
 							<Button>Commencer à coder</Button>
 						</Link>
-						<Link href={"/auth/connexion"} className="text-primary hover:underline">
+						<Link
+							href={"/auth/connexion"}
+							className="text-primary hover:underline"
+						>
 							<Button variant={"secondary"}>En savoir plus</Button>
 						</Link>
 					</div>
