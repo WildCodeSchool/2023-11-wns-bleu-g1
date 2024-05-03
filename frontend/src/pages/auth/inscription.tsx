@@ -61,9 +61,6 @@ const formSchema = z.object({
 const SignUpPage = () => {
 	const router = useRouter();
 
-	const [passwordInputFocused, setPasswordInputFocused] = useState(false);
-	const [errorMessageFormatted, setErrorMessageFormatted] = useState("");
-
 	const [signUpMutation, signUpMutationResult] = useSignUpMutation({
 		onCompleted: () => {
 			router.push("/auth/connexion");
@@ -129,7 +126,7 @@ const SignUpPage = () => {
 	}
 
 	return (
-		<div className="container mx-auto w-full min-h-screen py-8 space-y-6 md:space-y-10">
+		<div className="container mx-auto w-full min-h-screen py-10 space-y-6 md:space-y-10">
 			<Link href={"/"}>
 				<Image
 					src="/logo.svg"
@@ -142,8 +139,10 @@ const SignUpPage = () => {
 			</Link>
 			<Card className="h-fit sm:w-[350px] xl:w-[400px] m-auto">
 				<CardHeader>
-					<CardTitle>Inscription</CardTitle>
-					<CardDescription>Enregistrez vos informations ici.</CardDescription>
+					<CardTitle>Rejoignez-nous !</CardTitle>
+					<CardDescription>
+						Inscrivez-vous pour devenir un membre.
+					</CardDescription>
 				</CardHeader>
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(onSubmit)}>
@@ -190,9 +189,6 @@ const SignUpPage = () => {
 													isPasswordValid &&
 														"focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-success-200"
 												)}
-												onFocus={(e: React.FocusEvent<HTMLInputElement>) => {
-													setPasswordInputFocused(true);
-												}}
 												{...field}
 											/>
 										</FormControl>
@@ -269,7 +265,7 @@ const SignUpPage = () => {
 									href="/auth/connexion"
 									className={"text-primary hover:underline"}
 								>
-									Je me connecte
+									Connectez-vous
 								</Link>
 							</span>
 						</CardFooter>
