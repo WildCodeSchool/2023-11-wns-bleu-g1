@@ -62,12 +62,21 @@ const formSchema = z.object({
 const SignUpPage = () => {
 	const router = useRouter();
 
+	const defaultErrorMessage =
+		"Une erreur est survenue lors de l'inscription. Veuillez réessayer.";
+	const [errorMessage, setErrorMessage] = useState<string>(defaultErrorMessage);
+
 	const [signUpMutation, signUpMutationResult] = useSignUpMutation({
 		onCompleted: () => {
 			router.push("/auth/connexion");
 		},
 		onError: (err: ApolloError) => {
 			console.error(err);
+			if (err.message.includes("already exist")) {
+				setErrorMessage("Cette adresse email est déjà utilisée.");
+				return;
+			}
+			setErrorMessage(defaultErrorMessage);
 		},
 	});
 
@@ -226,8 +235,7 @@ const SignUpPage = () => {
 									<AlertCircle className="h-4 w-4" />
 									<AlertTitle className="font-bold">Erreur</AlertTitle>
 									<AlertDescription className="font-semibold">
-										Une erreur est survenue lors de l&apos;inscription. Veuillez
-										réessayer.
+										{errorMessage}
 									</AlertDescription>
 								</Alert>
 							)}

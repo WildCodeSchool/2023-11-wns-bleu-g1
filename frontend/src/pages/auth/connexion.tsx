@@ -1,4 +1,5 @@
 import LogoImg from "@/components/logo-svg";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -17,9 +18,14 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useSignInMutation } from "@/graphql/generated/schema";
+import { ApolloError } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AlertCircle, BadgeCheck } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Logo from "@/components/elements/Logo";
@@ -39,6 +45,30 @@ const formSchema = z.object({
 });
 
 const SignInPage = () => {
+	const router = useRouter();
+
+	const defaultErrorMessage =
+		"Une erreur est survenue lors de l'inscription. Veuillez réessayer.";
+	const [errorMessage, setErrorMessage] = useState<string>(defaultErrorMessage);
+
+	const [signInMutation, signInMutationResult] = useSignInMutation({
+		onCompleted: (data) => {
+			localStorage.setItem("token", data.signin);
+			router.push("/");
+		},
+		onError: (err: ApolloError) => {
+			console.error(err);
+			if (err.message.includes("not register")) {
+				setErrorMessage("Aucun n'est lié à cette adresse email.");
+				return;
+			}
+			if (err.message.includes("invalid password")) {
+				setErrorMessage("Les identifiants sont incorrects.");
+				return;
+			}
+			setErrorMessage(defaultErrorMessage);
+		},
+	});
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -49,6 +79,14 @@ const SignInPage = () => {
 
 	function onSubmit(values: z.infer<typeof formSchema>) {
 		console.log(values);
+		signInMutation({
+			variables: {
+				data: {
+					email: values.email,
+					password: values.password,
+				},
+			},
+		});
 	}
 
 	return (
@@ -98,6 +136,24 @@ const SignInPage = () => {
 									</FormItem>
 								)}
 							/>
+							{signInMutationResult.error && (
+								<Alert variant="error">
+									<AlertCircle className="h-4 w-4" />
+									<AlertTitle className="font-bold">Erreur</AlertTitle>
+									<AlertDescription className="font-semibold">
+										{errorMessage}
+									</AlertDescription>
+								</Alert>
+							)}
+							{signInMutationResult.data && (
+								<Alert variant="success">
+									<BadgeCheck className="h-4 w-4" />
+									<AlertTitle>Connexion Réussie</AlertTitle>
+									<AlertDescription className="font-semibold">
+										Vous allez être redirigé vers votre tableau de bord.
+									</AlertDescription>
+								</Alert>
+							)}
 						</CardContent>
 						<CardFooter className="flex-col gap-4">
 							<Button type="submit" className="w-full">
