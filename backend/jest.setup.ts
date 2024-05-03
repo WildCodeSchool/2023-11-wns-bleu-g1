@@ -8,10 +8,15 @@ export let schema: GraphQLSchema;
 
 export async function execute(
 	operation: ASTNode,
-	variableValues?: Maybe<{
-		readonly [variable: string]: unknown;
-	}>,
-	contextValue = {}
+	{
+		variableValues,
+		contextValue = {},
+	}: {
+		variableValues?: Maybe<{
+			readonly [variable: string]: unknown;
+		}>;
+		contextValue?: object;
+	}
 ) {
 	return await graphql({
 		schema,
