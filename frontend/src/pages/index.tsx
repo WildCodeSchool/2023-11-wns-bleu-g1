@@ -23,10 +23,10 @@ export default function Home() {
 	}, []);
 	return (
 		<main
-			className={`flex min-h-screen flex-col items-center justify-center overflow-scroll md:min-h-[100vh] md:w-full ${inter.className}`}
+			className={`flex min-h-screen flex-col items-center justify-center ${inter.className}`}
 		>
 			<Topbar isTopOfPage={isTopOfPage} />
-			<div className="container pt-32 sm:flex sm:items-center sm:gap-4">
+			<div className="container pt-32 sm:flex sm:items-center sm:gap-4 px-2">
 				<div className="space-y-6 flex-1">
 					<h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl text-center sm:text-start font-bold">
 						Wild Code <span className="text-primary">Online</span>
