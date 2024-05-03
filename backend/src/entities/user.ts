@@ -1,5 +1,5 @@
 import { hash } from "argon2";
-import { IsEmail, IsStrongPassword, Length } from "class-validator";
+import { IsEmail, IsStrongPassword, Length, Matches } from "class-validator";
 import { Field, InputType, ObjectType } from "type-graphql";
 import {
 	BaseEntity,
@@ -54,7 +54,9 @@ export class NewUserInput {
 	@Field()
 	pseudo: string;
 
-	@IsStrongPassword()
+	@Matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/, {
+		message: "Password too weak",
+	})
 	@Field()
 	password: string;
 }
@@ -65,7 +67,6 @@ export class SigninInput {
 	@Field()
 	email: string;
 
-	@IsStrongPassword()
 	@Field()
 	password: string;
 }
