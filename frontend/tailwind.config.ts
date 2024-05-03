@@ -59,6 +59,18 @@ const config = {
 					DEFAULT: "hsl(var(--destructive))",
 					foreground: "hsl(var(--destructive-foreground))",
 				},
+				error: {
+					DEFAULT: "hsl(var(--error))",
+					200: "hsl(var(--error-200))",
+					300: "hsl(var(--error-300))",
+					foreground: "hsl(var(--error-foreground))",
+				},
+				success: {
+					DEFAULT: "hsl(var(--success))",
+					200: "hsl(var(--success-200))",
+					300: "hsl(var(--success-300))",
+					foreground: "hsl(var(--success-foreground))",
+				},
 				muted: {
 					DEFAULT: "hsl(var(--muted))",
 					foreground: "hsl(var(--muted-foreground))",
