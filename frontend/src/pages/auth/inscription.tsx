@@ -30,6 +30,7 @@ import {
 	XCircleIcon,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -69,12 +70,6 @@ const SignUpPage = () => {
 		},
 		onError: (err: ApolloError) => {
 			console.error(err);
-			// const [errorExtensions]: any =
-			// 	err.graphQLErrors[0].extensions["validationErrors"];
-			// console.error(errorExtensions.constraints.isStrongPassword);
-			// if (errorExtensions.constraints.isStrongPassword) {
-			// 	setErrorMessageFormatted("Mot de passe");
-			// }
 		},
 	});
 
@@ -89,7 +84,7 @@ const SignUpPage = () => {
 
 	const password = form.watch("password");
 	const messageKOClassName = "";
-	const messageOKClassName = "text-success-200";
+	const messageOKClassName = "text-green-700 dark:text-green-800";
 
 	const messages: Array<{
 		classname: { KO: string; OK: string };
@@ -135,14 +130,16 @@ const SignUpPage = () => {
 
 	return (
 		<div className="container mx-auto w-full min-h-screen py-8 space-y-6 md:space-y-10">
-			<Image
-				src="/logo.svg"
-				alt="Wild Code Online Logo"
-				className="mx-auto"
-				width={150}
-				height={100}
-				priority
-			/>
+			<Link href={"/"}>
+				<Image
+					src="/logo.svg"
+					alt="Wild Code Online Logo"
+					className="mx-auto"
+					width={150}
+					height={100}
+					priority
+				/>
+			</Link>
 			<Card className="h-fit sm:w-[350px] xl:w-[400px] m-auto">
 				<CardHeader>
 					<CardTitle>Inscription</CardTitle>
@@ -201,13 +198,11 @@ const SignUpPage = () => {
 										</FormControl>
 										<FormMessage />
 										<Alert
-											variant={
-												isPasswordValid ? "success-light" : "error-light"
-											}
+											variant={isPasswordValid ? "success" : "error"}
 											className="hidden peer-focus:block"
 										>
 											<Lock className="h-4 w-4 mt-1" />
-											<AlertTitle className="font-semibold text-lg">
+											<AlertTitle className="font-bold text-lg">
 												Le mot de passe doit :
 											</AlertTitle>
 											<AlertDescription>
@@ -216,7 +211,7 @@ const SignUpPage = () => {
 														<p
 															key={index}
 															className={cn(
-																"text-md flex gap-2",
+																"text-md font-semibold flex gap-2",
 																message.regex
 																	? message.classname.KO
 																	: message.classname.OK
@@ -239,8 +234,8 @@ const SignUpPage = () => {
 							{signUpMutationResult.error && (
 								<Alert variant="error">
 									<AlertCircle className="h-4 w-4" />
-									<AlertTitle>Erreur</AlertTitle>
-									<AlertDescription>
+									<AlertTitle className="font-bold">Erreur</AlertTitle>
+									<AlertDescription className="font-semibold">
 										Une erreur est survenue lors de l&apos;inscription. Veuillez
 										réessayer.
 									</AlertDescription>
@@ -250,29 +245,33 @@ const SignUpPage = () => {
 								<Alert variant="success">
 									<BadgeCheck className="h-4 w-4" />
 									<AlertTitle>Inscription Réussie</AlertTitle>
-									<AlertDescription>
+									<AlertDescription className="font-semibold">
 										Vous allez être redirigé vers la page de connexion.
 									</AlertDescription>
 								</Alert>
 							)}
 						</CardContent>
-						<CardFooter className="justify-between">
-							<Button
-								type="button"
-								variant={"outline"}
-								disabled={signUpMutationResult.loading}
-							>
-								Annuler
-							</Button>
+						<CardFooter className="flex-col gap-4">
 							<Button
 								type="submit"
 								isLoading={signUpMutationResult.loading}
 								disabled={
 									signUpMutationResult.data ? true : false || !isPasswordValid
 								}
+								className="w-full"
 							>
 								S&apos;inscrire
 							</Button>
+
+							<span className="text-sm">
+								Déjà inscrit ?{" "}
+								<Link
+									href="/auth/connexion"
+									className={"text-primary hover:underline"}
+								>
+									Je me connecte
+								</Link>
+							</span>
 						</CardFooter>
 					</form>
 				</Form>

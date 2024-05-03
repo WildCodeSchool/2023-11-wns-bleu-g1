@@ -5,7 +5,7 @@
 @layer base {
 	:root {
 		--background: 0 0% 100%;
-		--background-primary: 240 100% 73%;
+		--background-primary: 0 0% 95%;
 		--foreground: 240 10% 3.9%;
 		--card: 0 0% 100%;
 		--card-foreground: 240 10% 3.9%;
@@ -68,5 +68,8 @@
 	}
 	body {
 		@apply bg-background-primary text-foreground;
+	}
+	a {
+		@apply transition-all duration-300 ease-in;
 	}
 }
