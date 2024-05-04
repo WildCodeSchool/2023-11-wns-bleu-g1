@@ -53,8 +53,7 @@ const SignInPage = () => {
 
 	const [signInMutation, signInMutationResult] = useSignInMutation({
 		onCompleted: (data) => {
-			localStorage.setItem("token", data.signin);
-			router.push("/");
+			router.push("/tableau-de-bord");
 		},
 		onError: (err: ApolloError) => {
 			console.error(err);
