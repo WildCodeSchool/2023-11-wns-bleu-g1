@@ -30,7 +30,6 @@
 		--success-300: 170 84% 26%;
 		--success-foreground: 0 0% 98%;
 		--border: 240 5.9% 90%;
-		/*--input: 240 5.9% 90%;*/
 		--input: 0, 3%, 87%;
 		--ring: 311 76% 47%;
 		--radius: 0.5rem;
@@ -63,7 +62,6 @@
 		--success-300: 170 84% 26%;
 		--success-foreground: 0 85.7% 97.3%;
 		--border: 240 3.7% 15.9%;
-		/*--input: 240 3.7% 15.9%;*/
 		--input: 0 0% 12%;
 		--ring: 311 76% 47%;
 		--terminal-background: 0 0% 12%;
@@ -90,7 +88,6 @@
 		--destructive: 0 84.2% 60.2%;
 		--destructive-foreground: 0 0% 98%;
 		--border: 240 5.9% 90%;
-		/*--input: 240 5.9% 90%;*/
 		--input: 0, 3%, 87%;
 		--ring: 311 76% 47%;
 		--radius: 0.5rem;
@@ -98,7 +95,50 @@
 		--dark-terminal-background: 0 0% 12%;
 		--terminal-text-color: 0 0% 0%;
 	}
+
+	#codingInput,
+	#highlightedCodingContent {
+		margin: 10px;
+		padding: 10px;
+		overflow: auto;
+	}
+
+	#codingInput,
+	#highlightedCodingContent,
+	#highlightedCodingContent * {
+		font-size: 15pt;
+		line-height: 20pt;
+		tab-size: 2;
+		word-wrap: break-word;
+	}
+
+	#highlightedCodingContent,
+	#highlightedCodingContent * {
+		word-wrap: break-word;
+		white-space: pre-wrap;
+	}
+
+	#codingInput {
+		background: transparent;
+	}
+
+	:not(pre) > code[class*="language-"],
+	pre[class*="language-"] {
+		background: hsl(var(--input)) !important;
+	}
+
+	code[class*="language-"],
+	pre[class*="language-"] {
+		color: hsl(var(--terminal-text-color)) !important;
+	}
+
+	code[class*="language-"],
+	pre[class*="language-"] {
+		color: #f8f8f2;
+		text-shadow: none !important;
+	}
 }
+
 
 @layer utilities {
 	* {
@@ -110,83 +150,4 @@
 	a {
 		@apply transition-all duration-300 ease-in;
 	}
-}
-
-#editing,
-#highlighting,
-#codingInput,
-#highlightedCodingContent {
-	/*codingInput highlightedCodingContent*/
-	/*	!* Both elements need the same text and space styling so they are directly on top of each other *!*/
-	margin: 10px;
-	padding: 10px;
-	overflow: auto;
-	/*white-space: nowrap;*/
-	/*	border: 0;*/
-	/*	width: calc(100% - 32px);*/
-	/*	height: 500px;*/
-}
-
-#editing,
-#highlighting,
-#highlighting *,
-#codingInput,
-#highlightedCodingContent,
-#highlightedCodingContent * {
-	/*codingInput highlightedCodingContent*/
-	/*  !* Also add text styles to highlighting tokens *!*/
-	font-size: 15pt;
-	/*  font-family: monospace;*/
-	line-height: 20pt;
-	tab-size: 2;
-	word-wrap: break-word;
-}
-/*#highlightedCodingContent {*/
-/*	overflow: auto;*/
-/*	white-space: break-spaces;*/
-/*}*/
-
-#highlightedCodingContent,
-#highlightedCodingContent * {
-	word-wrap: break-word;
-	white-space: pre-wrap;
-}
-
-/*#highlighting-content {*/
-/*white-space: inherit;*/
-/*}*/
-/*#editing, #highlighting, #codingInput, #highlightedCodingContent { !*codingInput highlightedCodingContent*!*/
-/*  !*position: absolute;*!*/
-/*  !*top: 0;*!*/
-/*  !*left: 0;*!*/
-/*}*/
-/*#editing, #codingInput { !*codingInput*!*/
-/*  z-index: 1;*/
-/*}*/
-
-/*#highlighting, #highlightedCodingContent { !*highlightedCodingContent*!*/
-/*  z-index: 0;*/
-/*}*/
-#editing,
-#codingInput {
-	/*codingInput*/
-	/*color: transparent;*/
-	background: transparent;
-	/*caret-color: white; !* Or choose your favorite color *!*/
-}
-:not(pre) > code[class*="language-"],
-pre[class*="language-"] {
-	background: hsl(var(--input)) !important;
-	/*color: #000000 !important;*/
-}
-
-code[class*="language-"],
-pre[class*="language-"] {
-	color: hsl(var(--terminal-text-color)) !important;
-}
-
-code[class*="language-"],
-pre[class*="language-"] {
-	color: #f8f8f2;
-	text-shadow: none !important;
 }

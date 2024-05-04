@@ -1,25 +1,25 @@
 const nextJest = require("next/jest");
 
 const createJestConfig = nextJest({
-	dir: ".",
+  dir: ".",
 });
 
 const esModules = [
-	"other_modules_bases_on_your_needs",
-	"query-string",
-	"decode-uri-component",
-	"split-on-first",
-	"filter-obj",
+  "other_modules_bases_on_your_needs",
+  "query-string",
+  "decode-uri-component",
+  "split-on-first",
+  "filter-obj",
 ];
 const customJestConfig = {
-	setupFilesAfterEnv: ["<rootDir>jest.setup.ts"],
-	testEnvironment: "jsdom",
-	testMatch: ["**/__tests__/**/*.test.ts+(x)"],
+  setupFilesAfterEnv: ["<rootDir>jest.setup.ts"],
+  testEnvironment: "jsdom",
+  testMatch: ["**/__tests__/**/*.test.ts+(x)"],
 };
 
 module.exports = async () => ({
-	...(await createJestConfig(customJestConfig)()),
-	transformIgnorePatterns: esModules.length
-		? [`/node_modules/(?!${esModules.join("|")})`]
-		: [],
+  ...(await createJestConfig(customJestConfig)()),
+  transformIgnorePatterns: esModules.length
+    ? [`/node_modules/(?!${esModules.join("|")})`]
+    : [],
 });

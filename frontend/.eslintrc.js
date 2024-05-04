@@ -1,6 +1,10 @@
 module.exports = {
-	extends: ["next"],
-	rules: {
-		// Add custom ESLint rules here
-	},
+  extends: ["next"],
+  rules: {
+    "quotes": ["error", "double"],
+    "semi": ["error", "always"],
+    "no-unused-vars": "error",
+    "indent": ["error", 2],
+    "comma-dangle": ["error", "always-multiline"],
+  },
 };
