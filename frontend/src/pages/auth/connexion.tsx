@@ -51,7 +51,7 @@ const SignInPage = () => {
 	}
 
 	return (
-		<div className="container mx-auto w-full min-h-screen py-10 space-y-6 md:space-y-10">
+		<div className="container mx-auto w-full min-h-screen py-10 space-y-10 md:space-y-20 flex flex-col justify-center">
 			<Link href={"/"}>
 				<Image
 					src="/logo.svg"
@@ -64,8 +64,8 @@ const SignInPage = () => {
 			</Link>
 			<Card className="h-fit sm:w-[350px] xl:w-[350px] m-auto">
 				<CardHeader>
-					<CardTitle>Content de vous revoir !</CardTitle>
-					<CardDescription>
+					<CardTitle className="text-center">Content de vous revoir !</CardTitle>
+					<CardDescription className="text-center">
 						Connectez-vous pour accéder à votre compte.
 					</CardDescription>
 				</CardHeader>
