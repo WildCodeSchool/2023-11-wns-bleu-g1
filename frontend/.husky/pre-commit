@@ -8,5 +8,3 @@ cd backend
 npm run prepare
 npx prettier --write .
 npx prettier --check .
-git add .
-git commit --amend --no-edit --no-verify

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-// import Topbar from "@/components/elements/Topbar";
+import Topbar from "@/components/elements/Topbar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import PrismLoader from "@/components/prism-loader";
+import { Separator } from "@/components/ui/separator"
 import Prism from "prismjs";
 
 function CodingPage() {
@@ -88,9 +89,9 @@ function CodingPage() {
 		<main
 			className={`flex min-h-screen flex-col items-center justify-center overflow-scroll md:min-h-[100vh] md:w-full`}
 		>
-			{/*<Topbar />*/}
+			<Topbar isTopOfPage={isTopOfPage} />
 			<div className="container mx-auto">
-				<div id="coddingTopInfo" className="flex w-full relative border-b">
+				<div id="coddingTopInfo" className="flex w-full relative">
 					<h1 className="flex flex-1 justify-start align-middle items-center pl-4">
 						Nom du projet
 					</h1>
@@ -104,6 +105,7 @@ function CodingPage() {
 						/>
 					</div>
 				</div>
+				<Separator />
 				<div id="codingContent" className="flex flex-col md:flex-row w-full">
 					<div
 						id="codingArea"

@@ -5,7 +5,8 @@
 @layer base {
 	:root {
 		--background: 0 0% 100%;
-		--background-primary: 240 100% 73%;
+		--topbar-background: 323 87% 57%;
+		--background-primary: 0 0% 95%;
 		--foreground: 240 10% 3.9%;
 		--card: 0 0% 100%;
 		--card-foreground: 240 10% 3.9%;
@@ -21,18 +22,26 @@
 		--accent-foreground: 240 5.9% 10%;
 		--destructive: 0 84.2% 60.2%;
 		--destructive-foreground: 0 0% 98%;
+		--error: 354 71% 64%;
+		--error-200: 354 55% 48%;
+		--error-300: 354 71% 32%;
+		--success: 170 78% 80%;
+		--success-200: 170 79% 39%;
+		--success-300: 170 84% 26%;
+		--success-foreground: 0 0% 98%;
 		--border: 240 5.9% 90%;
 		/*--input: 240 5.9% 90%;*/
 		--input: 0, 3%, 87%;
 		--ring: 311 76% 47%;
 		--radius: 0.5rem;
 		--dark-terminal-background: 0 0% 12%;
-		--light-terminal-background: 0, 3%, 87%;
+		--terminal-background: 0, 3%, 87%;
 		--terminal-text-color: 0 0% 0%;
 	}
 
 	.dark {
 		--background: 20 14.3% 4.1%;
+		--topbar-background: 323 87% 57%;
 		--background-primary: 240 24% 15%;
 		--foreground: 0 0% 95%;
 		--card: 250 9.8% 10%;
@@ -49,10 +58,15 @@
 		--accent-foreground: 0 0% 98%;
 		--destructive: 0 80% 40%;
 		--destructive-foreground: 0 85.7% 97.3%;
+		--success: 170 78% 80%;
+		--success-200: 170 79% 39%;
+		--success-300: 170 84% 26%;
+		--success-foreground: 0 85.7% 97.3%;
 		--border: 240 3.7% 15.9%;
 		/*--input: 240 3.7% 15.9%;*/
 		--input: 0 0% 12%;
 		--ring: 311 76% 47%;
+		--terminal-background: 0 0% 12%;
 		--dark-terminal-background: 0 0% 12%;
 		--terminal-text-color: 0 0% 100%;
 	}
@@ -80,7 +94,8 @@
 		--input: 0, 3%, 87%;
 		--ring: 311 76% 47%;
 		--radius: 0.5rem;
-		--light-terminal-background: 0, 3%, 87%;
+		--terminal-background: 0, 3%, 87%;
+		--dark-terminal-background: 0 0% 12%;
 		--terminal-text-color: 0 0% 0%;
 	}
 }
@@ -91,6 +106,9 @@
 	}
 	body {
 		@apply bg-background-primary text-foreground;
+	}
+	a {
+		@apply transition-all duration-300 ease-in;
 	}
 }
 
