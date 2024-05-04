@@ -9,7 +9,6 @@ import Prism from "prismjs";
 
 function CodingPage() {
 	const [isTopOfPage, setIsTopOfPage] = useState<boolean>(true);
-	const [input, setInput] = useState("");
 	const [code, setCode] = useState("");
 	const [showResult, setShowResult] = useState("");
 	const [count, setCount] = useState(0);
@@ -25,7 +24,6 @@ function CodingPage() {
 		window.addEventListener("scroll", handleScroll);
 		return () => window.removeEventListener("scroll", handleScroll);
 	}, []);
-	console.log(input);
 	function update(text) {
 		let result_element = document.querySelector("#highlighting-content");
 		if (text[text.length - 1] == "\n") {
@@ -113,7 +111,7 @@ function CodingPage() {
 					>
 						{/*TODO: limit terminal row max length */}
 						<Textarea
-							className="left-0 z-10 caret-white bg-transparent text-transparent leading-[20pt] text-[15pt] resize-none"
+							className="left-0 z-10 caret-white bg-transparent text-transparent leading-[20pt] text-[15pt] resize-none "
 							placeholder="Commencez a coder ici..."
 							id="codingInput"
 							onChange={(e) => {
