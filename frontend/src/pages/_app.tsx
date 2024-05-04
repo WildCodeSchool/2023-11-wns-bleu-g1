@@ -8,6 +8,7 @@ const client = new ApolloClient({
 	cache: new InMemoryCache({
 		addTypename: false,
 	}),
+	credentials: "include",
 });
 
 export default function App({ Component, pageProps }: AppProps) {
