@@ -22,6 +22,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import Logo from "@/components/elements/Logo";
 
 const formSchema = z.object({
 	email: z
@@ -52,15 +53,8 @@ const SignInPage = () => {
 
 	return (
 		<div className="container mx-auto w-full min-h-screen py-10 space-y-6 md:space-y-10">
-			<Link href={"/"}>
-				<Image
-					src="/logo.svg"
-					alt="Wild Code Online Logo"
-					className="mx-auto"
-					width={150}
-					height={100}
-					priority
-				/>
+			<Link href={"/"} className="flex w-full justify-center">
+				<Logo width={150} height={100} />
 			</Link>
 			<Card className="h-fit sm:w-[350px] xl:w-[350px] m-auto">
 				<CardHeader>
