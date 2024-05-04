@@ -4,7 +4,7 @@ import Topbar from "@/components/elements/Topbar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import PrismLoader from "@/components/prism-loader";
-import { Separator } from "@/components/ui/separator"
+import { Separator } from "@/components/ui/separator";
 import Prism from "prismjs";
 
 function CodingPage() {
