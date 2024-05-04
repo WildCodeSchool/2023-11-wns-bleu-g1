@@ -141,15 +141,15 @@
 	tab-size: 2;
 	word-wrap: break-word;
 }
-#highlightedCodingContent {
-	overflow: auto;
-	white-space: nowrap;
-}
+/*#highlightedCodingContent {*/
+/*	overflow: auto;*/
+/*	white-space: break-spaces;*/
+/*}*/
 
 #highlightedCodingContent,
 #highlightedCodingContent * {
 	word-wrap: break-word;
-	white-space: inherit;
+	white-space: pre-wrap;
 }
 
 /*#highlighting-content {*/
