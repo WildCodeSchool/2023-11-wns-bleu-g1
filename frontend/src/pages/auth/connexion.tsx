@@ -64,7 +64,9 @@ const SignInPage = () => {
 			</Link>
 			<Card className="h-fit sm:w-[350px] xl:w-[350px] m-auto">
 				<CardHeader>
-					<CardTitle className="text-center">Content de vous revoir !</CardTitle>
+					<CardTitle className="text-center">
+						Content de vous revoir !
+					</CardTitle>
 					<CardDescription className="text-center">
 						Connectez-vous pour accéder à votre compte.
 					</CardDescription>
