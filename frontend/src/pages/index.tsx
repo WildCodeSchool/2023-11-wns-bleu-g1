@@ -34,9 +34,9 @@ export default function Home() {
 						</h1>
 						<p className="text-center text-black dark:text-muted-foreground sm:text-start lg:text-lg sm:max-w-sm">
 							Créer, exécuter et partager du code avec la communauté. Avec Wild
-							Code Online, vous avez la possibilité d’intéragir avec les codes des
-							autres utilisateurs. Sauvegarder et télécharger vos fichiers de code
-							pour pouvoir les utiliser sur d’autres projets
+							Code Online, vous avez la possibilité d’intéragir avec les codes
+							des autres utilisateurs. Sauvegarder et télécharger vos fichiers
+							de code pour pouvoir les utiliser sur d’autres projets
 						</p>
 						<div className="space-x-4 lg:space-x-8 text-center sm:text-start">
 							<Link
@@ -54,8 +54,7 @@ export default function Home() {
 						</div>
 					</div>
 					<div className="flex flex-col sm:w-2/5 justify-center">
-						<div
-							className="relative my-6 flex min-h-40 w-full flex-col rounded-md bg-terminalbackground md:h-48">
+						<div className="relative my-6 flex min-h-40 w-full flex-col rounded-md bg-terminalbackground md:h-48">
 							<Image
 								src="/landing1.png"
 								alt="Example code of a javascript function returning 'Welcome on board'"
@@ -64,8 +63,7 @@ export default function Home() {
 								className="rounded-md border-2 border-primary"
 							/>
 						</div>
-						<div
-							className="relative my-6 flex min-h-40 md:h-48 w-full flex-col rounded-md bg-terminalbackground ">
+						<div className="relative my-6 flex min-h-40 md:h-48 w-full flex-col rounded-md bg-terminalbackground ">
 							<Image
 								src="/landing2.png"
 								alt="Return of the example code above saying 'Welcome on board'"
