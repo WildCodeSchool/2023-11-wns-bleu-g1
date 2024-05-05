@@ -126,7 +126,7 @@ const SignUpPage = () => {
 	}
 
 	return (
-		<div className="container mx-auto w-full min-h-screen py-10 space-y-6 md:space-y-10">
+		<div className="container mx-auto w-full min-h-screen py-10 space-y-10 md:space-y-20 flex flex-col justify-center">
 			<Link href={"/"}>
 				<Image
 					src="/logo.svg"
@@ -139,8 +139,8 @@ const SignUpPage = () => {
 			</Link>
 			<Card className="h-fit sm:w-[350px] xl:w-[400px] m-auto">
 				<CardHeader>
-					<CardTitle>Rejoignez-nous !</CardTitle>
-					<CardDescription>
+					<CardTitle className="text-center">Rejoignez-nous !</CardTitle>
+					<CardDescription className="text-center">
 						Inscrivez-vous pour devenir un membre.
 					</CardDescription>
 				</CardHeader>
