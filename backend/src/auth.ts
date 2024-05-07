@@ -9,9 +9,9 @@ export const authChecker: AuthChecker<Context> = async (
 	{ context },
 	roles: string[] = []
 ) => {
-	const { headers } = context.req;
+	const { headers = {} } = context.req ?? {};
 	const tokenInCookie = cookie.parse(headers.cookie ?? "").token;
-	const tokenInAuthHeaders = headers.authorization?.split("")[1];
+	const tokenInAuthHeaders = headers.authorization?.split(" ")[1];
 
 	const token = tokenInAuthHeaders ?? tokenInCookie;
 

@@ -1,12 +1,15 @@
-import { Arg, Ctx, Mutation, Query } from "type-graphql";
+import { Arg, Authorized, Ctx, Mutation, Query } from "type-graphql";
 import User, { NewUserInput, SigninInput } from "../entities/user";
 import { GraphQLError } from "graphql";
 import { verify } from "argon2";
 import jwt from "jsonwebtoken";
+
 import env from "../env";
 import { Context } from "../interfaces/auth";
+import { UserRole } from "../entities/user";
 
 export default class UserResolver {
+	@Authorized([UserRole.ADMIN])
 	@Query(() => [User])
 	async users() {
 		// SELECT * FROM User;
