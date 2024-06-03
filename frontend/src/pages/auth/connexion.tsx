@@ -58,8 +58,10 @@ const SignInPage = () => {
 			</Link>
 			<Card className="h-fit sm:w-[350px] xl:w-[350px] m-auto">
 				<CardHeader>
-					<CardTitle>Content de vous revoir !</CardTitle>
-					<CardDescription>
+					<CardTitle className="text-center">
+						Content de vous revoir !
+					</CardTitle>
+					<CardDescription className="text-center">
 						Connectez-vous pour accéder à votre compte.
 					</CardDescription>
 				</CardHeader>

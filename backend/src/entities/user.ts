@@ -59,6 +59,9 @@ export class NewUserInput {
 	})
 	@Field()
 	password: string;
+
+	@Field({ nullable: true })
+	role: UserRole;
 }
 
 @InputType()

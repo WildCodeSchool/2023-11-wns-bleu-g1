@@ -133,8 +133,8 @@ const SignUpPage = () => {
 			</Link>
 			<Card className="h-fit sm:w-[350px] xl:w-[400px] m-auto">
 				<CardHeader>
-					<CardTitle>Rejoignez-nous !</CardTitle>
-					<CardDescription>
+					<CardTitle className="text-center">Rejoignez-nous !</CardTitle>
+					<CardDescription className="text-center">
 						Inscrivez-vous pour devenir un membre.
 					</CardDescription>
 				</CardHeader>
