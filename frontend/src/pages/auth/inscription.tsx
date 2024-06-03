@@ -110,8 +110,8 @@ const SignUpPage = () => {
 		},
 		{
 			classname: { KO: messageKOClassName, OK: messageOKClassName },
-			regex: !password || !/[a-z]/.test(password),
-			message: "Contenir au moins une lettre minuscule.",
+			regex: !password || !/[@./#&+-_\\,;:!^(){}]/.test(password),
+			message: "Contenir au moins un caractère spécial",
 		},
 		{
 			classname: { KO: messageKOClassName, OK: messageOKClassName },
