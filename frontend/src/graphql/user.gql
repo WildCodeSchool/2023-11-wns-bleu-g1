@@ -17,3 +17,7 @@ mutation SignUp($data: NewUserInput!) {
 mutation SignIn($data: SigninInput!) {
 	signin(data: $data)
 }
+
+mutation Logout {
+	logout
+}
