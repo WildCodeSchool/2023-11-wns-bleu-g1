@@ -77,7 +77,6 @@ const SignInPage = () => {
 	});
 
 	function onSubmit(values: z.infer<typeof formSchema>) {
-		console.log(values);
 		signInMutation({
 			variables: {
 				data: {
