@@ -29,12 +29,11 @@ import {
   Lock,
   XCircleIcon,
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import Logo from "@/components/elements/Logo";
 
 const formSchema = z.object({
   pseudo: z
@@ -125,22 +124,15 @@ const SignUpPage = () => {
     });
   }
 
-  return (
-    <div className="container mx-auto w-full min-h-screen py-10 space-y-6 md:space-y-10">
-      <Link href={"/"}>
-        <Image
-          src="/logo.svg"
-          alt="Wild Code Online Logo"
-          className="mx-auto"
-          width={150}
-          height={100}
-          priority
-        />
-      </Link>
-      <Card className="h-fit sm:w-[350px] xl:w-[400px] m-auto">
-        <CardHeader>
-          <CardTitle>Rejoignez-nous !</CardTitle>
-          <CardDescription>
+	return (
+		<div className="container mx-auto w-full min-h-screen py-10 space-y-6 md:space-y-10">
+			<Link href={"/"} className="flex w-full justify-center">
+				<Logo width={150} height={100} />
+			</Link>
+			<Card className="h-fit sm:w-[350px] xl:w-[400px] m-auto">
+				<CardHeader>
+					<CardTitle className="text-center">Rejoignez-nous !</CardTitle>
+					<CardDescription className="text-center">
 						Inscrivez-vous pour devenir un membre.
           </CardDescription>
         </CardHeader>
