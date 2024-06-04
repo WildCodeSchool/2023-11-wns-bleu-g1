@@ -1,4 +1,3 @@
-import LogoImg from "@/components/logo-svg";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,13 +21,13 @@ import { useSignInMutation } from "@/graphql/generated/schema";
 import { ApolloError } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle, BadgeCheck } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Logo from "@/components/elements/Logo";
+import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
 	email: z
@@ -46,6 +45,7 @@ const formSchema = z.object({
 
 const SignInPage = () => {
 	const router = useRouter();
+	const { toast } = useToast();
 
 	const defaultErrorMessage =
 		"Une erreur est survenue lors de l'inscription. Veuillez réessayer.";
@@ -53,6 +53,11 @@ const SignInPage = () => {
 
 	const [signInMutation, signInMutationResult] = useSignInMutation({
 		onCompleted: (data) => {
+			toast({
+				icon: <BadgeCheck className="h-5 w-5" />,
+				title: "Connexion réussie",
+				className: "text-success",
+			});
 			router.push("/tableau-de-bord");
 		},
 		onError: (err: ApolloError) => {
@@ -140,15 +145,6 @@ const SignInPage = () => {
 									<AlertTitle className="font-bold">Erreur</AlertTitle>
 									<AlertDescription className="font-semibold">
 										{errorMessage}
-									</AlertDescription>
-								</Alert>
-							)}
-							{signInMutationResult.data && (
-								<Alert variant="success">
-									<BadgeCheck className="h-4 w-4" />
-									<AlertTitle>Connexion Réussie</AlertTitle>
-									<AlertDescription className="font-semibold">
-										Vous allez être redirigé vers votre tableau de bord.
 									</AlertDescription>
 								</Alert>
 							)}

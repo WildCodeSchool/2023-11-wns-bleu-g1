@@ -34,6 +34,9 @@
 		--ring: 311 76% 47%;
 		--radius: 0.5rem;
 		--terminal-background: 0 0% 12%;
+		--warning: 33 82% 76%;
+		--warning-200: 33 82% 60%;
+		--warning-300: 33 82% 44%;
 	}
 
 	.dark {

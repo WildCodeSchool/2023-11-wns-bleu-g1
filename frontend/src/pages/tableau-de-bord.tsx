@@ -1,7 +1,8 @@
+import AuthLayout from "@/components/elements/auth-layout";
 import React from "react";
 
 const DashboardPage = () => {
-	return <div>Tableau de bord</div>;
+	return <AuthLayout>Tableau de bord</AuthLayout>;
 };
 
 export default DashboardPage;

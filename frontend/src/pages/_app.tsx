@@ -1,4 +1,5 @@
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
 import "@/styles/globals.css";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import type { AppProps } from "next/app";
@@ -22,6 +23,7 @@ export default function App({ Component, pageProps }: AppProps) {
 				disableTransitionOnChange
 			>
 				<Component {...pageProps} />
+				<Toaster />
 			</ThemeProvider>
 		</ApolloProvider>
 	);
