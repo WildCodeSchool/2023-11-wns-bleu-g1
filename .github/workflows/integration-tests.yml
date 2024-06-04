@@ -21,6 +21,6 @@ jobs:
       - name: Install deps
         run: npm ci
       - name: Start test DB
-        run: npm run testDB:wait
+        run: npm run testDb:wait
       - name: Run tests
         run: npm test
