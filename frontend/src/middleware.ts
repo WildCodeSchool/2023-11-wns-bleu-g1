@@ -11,23 +11,22 @@ export async function middleware(request: NextRequest) {
 
 	if (request.nextUrl.pathname.startsWith("/auth")) {
 		if (token) {
-			try {
-				const { payload } = await jwtVerify(token, JWT_PRIVATE_KEY);
-				if (payload.userId)
-					return NextResponse.redirect(
-						new URL("/tableau-de-bord", request.url)
-					);
-			} catch (e) {}
-		} else {
-			return NextResponse.next();
+			return NextResponse.redirect(new URL("/tableau-de-bord", request.url));
 		}
+		return NextResponse.next();
+	}
+
+	if (request.nextUrl.pathname === "/") {
+		if (!token) return NextResponse.next();
+		return NextResponse.redirect(new URL("/tableau-de-bord", request.url));
 	}
 
 	if (token) {
-		try {
-			const { payload } = await jwtVerify(token, JWT_PRIVATE_KEY);
-			if (payload.userId) return NextResponse.next();
-		} catch (e) {}
+		if (request.nextUrl.pathname === "/") {
+			return NextResponse.redirect(new URL("/tableau-de-bord", request.url));
+		}
+
+		return NextResponse.next();
 	}
 
 	return NextResponse.redirect(new URL("/auth/connexion", request.url));
@@ -35,5 +34,5 @@ export async function middleware(request: NextRequest) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-	matcher: ["/tableau-de-bord", "/auth/:path*"],
+	matcher: ["/", "/tableau-de-bord", "/auth/:path*"],
 };
