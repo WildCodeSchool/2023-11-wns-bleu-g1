@@ -56,6 +56,12 @@ const config = {
 					300: "hsl(var(--error-300))",
 					foreground: "hsl(var(--error-foreground))",
 				},
+				warning: {
+					DEFAULT: "hsl(var(--warning))",
+					200: "hsl(var(--warning-200))",
+					300: "hsl(var(--warning-300))",
+					foreground: "hsl(var(--warning-foreground))",
+				},
 				success: {
 					DEFAULT: "hsl(var(--success))",
 					200: "hsl(var(--success-200))",
