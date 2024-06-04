@@ -71,7 +71,7 @@ const SignUpPage = () => {
 		onCompleted: () => {
 			toast({
 				icon: <BadgeCheck className="h-5 w-5" />,
-				title: "Connexion réussie",
+				title: "Inscription réussie",
 				className: "text-success",
 			});
 			router.push("/auth/connexion");
