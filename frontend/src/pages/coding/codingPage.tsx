@@ -40,7 +40,7 @@ const CodingPage = () => {
     Prism.highlightElement(result_element);
   };
 
-  const syncScroll = (element) => {
+  const syncScroll = (element: HTMLTextAreaElement) => {
     /* Scroll result to scroll coords of event - sync with textarea */
     const result_element = document.querySelector("#highlightedCodingContent");
     // Check if result_element is not null
@@ -51,19 +51,19 @@ const CodingPage = () => {
     }
   };
 
-  const checkTab = (e) => {
-    const code = e.target.value;
+  const checkTab = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    const code = e.currentTarget.value;
     if (e.key == "Tab") {
       /* Tab key pressed */
       e.preventDefault(); // stop normal
-      const before_tab = code.slice(0, e.target.selectionStart); // text before tab
-      const after_tab = code.slice(e.target.selectionEnd, e.target.value.length); // text after tab
-      const cursor_pos = e.target.selectionEnd + 1; // where cursor moves after tab - moving forward by 1 char to after tab
-      e.target.value = before_tab + "\t" + after_tab; // add tab char
+      const before_tab = code.slice(0, e.currentTarget.selectionStart); // text before tab
+      const after_tab = code.slice(e.currentTarget.selectionEnd, e.currentTarget.value.length); // text after tab
+      const cursor_pos = e.currentTarget.selectionEnd + 1; // where cursor moves after tab - moving forward by 1 char to after tab
+      e.currentTarget.value = before_tab + "\t" + after_tab; // add tab char
       // move cursor
-      e.target.selectionStart = cursor_pos;
-      e.target.selectionEnd = cursor_pos;
-      update(e.target.value); // Update text to include indent
+      e.currentTarget.selectionStart = cursor_pos;
+      e.currentTarget.selectionEnd = cursor_pos;
+      update(e.currentTarget.value); // Update text to include indent
     }
   };
 
@@ -121,7 +121,7 @@ const CodingPage = () => {
                 syncScroll(e.target);
                 setCode(e.target.value);
               }}
-              onScroll={(e) => syncScroll(e.target)}
+              onScroll={(e) => syncScroll(e.currentTarget)}
               spellCheck="false"
               onKeyDown={checkTab}
             />
