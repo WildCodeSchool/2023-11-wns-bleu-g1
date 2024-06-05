@@ -11,7 +11,10 @@ import {
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { BadgeCheck, Crown, FolderOpen, LogOut, User } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useLogoutMutation } from "@/graphql/generated/schema";
+import {
+	useGetUserProfileQuery,
+	useLogoutMutation,
+} from "@/graphql/generated/schema";
 import { useRouter } from "next/router";
 import { useToast } from "../ui/use-toast";
 import Link from "next/link";
@@ -19,6 +22,8 @@ import Link from "next/link";
 const AuthHeader = () => {
 	const router = useRouter();
 	const { toast } = useToast();
+
+	const getUserProfileQuery = useGetUserProfileQuery();
 
 	const [logoutMutation, logoutMutationResult] = useLogoutMutation({
 		onCompleted: () => {
@@ -40,6 +45,9 @@ const AuthHeader = () => {
 	const handleLogout = async () => {
 		await logoutMutation();
 	};
+
+	const profile = getUserProfileQuery?.data?.getUserProfile || null;
+
 	return (
 		<header className="py-4">
 			<nav className="container flex items-center justify-between">
@@ -51,11 +59,13 @@ const AuthHeader = () => {
 					<DropdownMenuTrigger>
 						<Avatar>
 							<AvatarImage src="https://github.com/shadcn.png" />
-							<AvatarFallback>CN</AvatarFallback>
+							<AvatarFallback>
+								{profile?.pseudo[0].toUpperCase()}
+							</AvatarFallback>
 						</Avatar>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent>
-						<DropdownMenuLabel>Name</DropdownMenuLabel>
+						<DropdownMenuLabel>{profile?.pseudo}</DropdownMenuLabel>
 						<DropdownMenuSeparator />
 						<DropdownMenuItem className={itemsClassName}>
 							<User className={iconsClassName} />
