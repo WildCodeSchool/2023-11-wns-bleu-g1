@@ -90,6 +90,7 @@ export const UsersDocument = gql`
 		}
 	}
 `;
+
 /**
  * __useUsersQuery__
  *
@@ -114,7 +115,6 @@ export function useUsersQuery(
 		options
 	);
 }
-
 export function useUsersLazyQuery(
 	baseOptions?: Apollo.LazyQueryHookOptions<UsersQuery, UsersQueryVariables>
 ) {
@@ -124,7 +124,6 @@ export function useUsersLazyQuery(
 		options
 	);
 }
-
 export type UsersQueryHookResult = ReturnType<typeof useUsersQuery>;
 export type UsersLazyQueryHookResult = ReturnType<typeof useUsersLazyQuery>;
 export type UsersQueryResult = Apollo.QueryResult<
@@ -145,6 +144,7 @@ export type SignUpMutationFn = Apollo.MutationFunction<
 	SignUpMutation,
 	SignUpMutationVariables
 >;
+
 /**
  * __useSignUpMutation__
  *

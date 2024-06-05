@@ -28,4 +28,5 @@ const Topbar = ({ isTopOfPage }: TopbarProps) => {
 		</div>
 	);
 };
+
 export default Topbar;
