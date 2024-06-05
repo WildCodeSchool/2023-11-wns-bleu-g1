@@ -3,9 +3,11 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Logo from "@/components/elements/Logo";
+
 type TopbarProps = {
 	isTopOfPage: boolean;
 };
+
 const Topbar = ({ isTopOfPage }: TopbarProps) => {
 	const topbarBackground = isTopOfPage
 		? "bg-topbarbackground/[33%]"
@@ -26,5 +28,4 @@ const Topbar = ({ isTopOfPage }: TopbarProps) => {
 		</div>
 	);
 };
-
 export default Topbar;
