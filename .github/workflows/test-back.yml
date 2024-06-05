@@ -61,7 +61,7 @@ jobs:
         run: npx playwright install --with-deps
       - name: Create .env file
         run: |
-          echo "JWT_PRIVATE_KEY=${{ secrets.JWT_PRIVATE_KEY }}" > .env
+          echo "JWT_PRIVATE_KEY=${{ secrets.JWT_PRIVATE_KEY }}" > ./test-e2e/.env
       - name: Start app
         run: npm run app:start
       - name: Run Playwright tests
