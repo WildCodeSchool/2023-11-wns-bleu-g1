@@ -18,6 +18,16 @@ export default class UserResolver {
 		return users;
 	}
 
+	@Authorized([UserRole.VISITOR])
+	@Query(() => User)
+	async getUserProfile(@Ctx() ctx: Context) {
+		if (!ctx.currentUser) throw new GraphQLError("you need to be logged in!");
+		return User.findOneOrFail({
+			where: { id: ctx.currentUser.id },
+			select: ["id", "pseudo", "email", "role"],
+		});
+	}
+
 	@Mutation(() => User)
 	async createUser(@Arg("data", { validate: true }) data: NewUserInput) {
 		if (!data.email) {
