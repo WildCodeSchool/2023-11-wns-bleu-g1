@@ -26,8 +26,8 @@ const CodingPage = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const update = (text) => {
-    const result_element = document.querySelector("#highlighting-content");
+  const update = (text: string) => {
+    const result_element = document.querySelector("#highlighting-content") as HTMLElement;
     if (text[text.length - 1] == "\n") {
       // If the last character is a newline character
       text += " "; // Add a placeholder space character to the final line
@@ -47,10 +47,7 @@ const CodingPage = () => {
     if (result_element) {
       // Get and set x and y
       result_element.scrollTop = element.scrollTop;
-      console.log("top: ", result_element.scrollTop);
-
       result_element.scrollLeft = element.scrollLeft;
-      console.log("left: ", result_element.scrollLeft);
     }
   };
 
@@ -77,7 +74,7 @@ const CodingPage = () => {
         console.log("result: ", result);
         setShowResult(result);
         setCount(count + 1);
-      } catch (error) {
+      } catch (error: any) {
         console.error(error);
         setShowResult("Error: " + error.message);
       }
