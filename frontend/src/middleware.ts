@@ -1,6 +1,6 @@
+import { jwtVerify } from "jose";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { jwtVerify } from "jose";
 
 const JWT_PRIVATE_KEY = new TextEncoder().encode(
 	process.env.JWT_PRIVATE_KEY || ""
@@ -11,22 +11,38 @@ export async function middleware(request: NextRequest) {
 
 	if (request.nextUrl.pathname.startsWith("/auth")) {
 		if (token) {
-			return NextResponse.redirect(new URL("/tableau-de-bord", request.url));
+			try {
+				const { payload } = await jwtVerify(token, JWT_PRIVATE_KEY);
+				if (payload.userId)
+					return NextResponse.redirect(
+						new URL("/tableau-de-bord", request.url)
+					);
+			} catch (e) {}
 		}
 		return NextResponse.next();
 	}
 
 	if (request.nextUrl.pathname === "/") {
 		if (!token) return NextResponse.next();
-		return NextResponse.redirect(new URL("/tableau-de-bord", request.url));
+		try {
+			const { payload } = await jwtVerify(token, JWT_PRIVATE_KEY);
+			if (payload.userId)
+				return NextResponse.redirect(new URL("/tableau-de-bord", request.url));
+		} catch (e) {}
 	}
 
 	if (token) {
-		if (request.nextUrl.pathname === "/") {
-			return NextResponse.redirect(new URL("/tableau-de-bord", request.url));
-		}
+		try {
+			const { payload } = await jwtVerify(token, JWT_PRIVATE_KEY);
+			if (payload.userId)
+				if (request.nextUrl.pathname === "/") {
+					return NextResponse.redirect(
+						new URL("/tableau-de-bord", request.url)
+					);
+				}
 
-		return NextResponse.next();
+			return NextResponse.next();
+		} catch (e) {}
 	}
 
 	return NextResponse.redirect(new URL("/auth/connexion", request.url));
