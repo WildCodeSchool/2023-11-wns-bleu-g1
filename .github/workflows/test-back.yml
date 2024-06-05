@@ -24,53 +24,53 @@ jobs:
         run: npm run testDb:wait
       - name: Run tests
         run: npm test
-#  seems to have a problem e2e-test
-#  e2e-test:
-#    needs: integration-tests
-#    runs-on: ubuntu-latest
-#    defaults:
-#      run:
-#        working-directory: ./test-e2e
-#    steps:
-#      - name: Get the code
-#        uses: actions/checkout@v4
-#      - name: Layers cache
-#        uses: satackey/action-docker-layer-caching@v0.0.11
-#        continue-on-error: true
-#      - name: Install nodeJS
-#        uses: actions/setup-node@v4
-#        with:
-#          node-version: 20
-#      - name: Install deps
-#        run: npm ci
-#      - name: Install backend deps
-#        run: cd ../backend && npm ci
-#      - name: Store Playwright's Version
-#        run: |
-#          PLAYWRIGHT_VERSION=$(npm ls @playwright/test | grep @playwright | sed 's/.*@//')
-#          echo "Playwright's Version: $PLAYWRIGHT_VERSION"
-#          echo "PLAYWRIGHT_VERSION=$PLAYWRIGHT_VERSION" >> $GITHUB_ENV
-#      - name: Cache Playwright Browsers for Playwright's Version
-#        id: cache-playwright-browsers
-#        uses: actions/cache@v3
-#        with:
-#          path: ~/.cache/ms-playwright
-#          key: playwright-browsers-${{ env.PLAYWRIGHT_VERSION }}
-#      - name: Setup Playwright
-#        if: steps.cache-playwright-browsers.outputs.cache-hit != 'true'
-#        run: npx playwright install --with-deps
-#      - name: Create .env file with secret
-#        run: |
-#          echo "JWT_PRIVATE_KEY=\"${{ secrets.JWT_PRIVATE_KEY }}\"" > .env
-#          echo "JWT_PRIVATE_KEY=\"${{ secrets.JWT_PRIVATE_KEY }}\""
-#      - name: Start app
-#        run: npm run app:start
-#      - name: Run Playwright tests
-#        run: npm run test
-#      - name: Store Artifacts from Failed Tests
-#        if: failure()
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: test-results
-#          path: test-results/
-#          retention-days: 7
+  e2e-test:
+    needs: integration-tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./test-e2e
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v4
+      - name: Layers cache
+        uses: satackey/action-docker-layer-caching@v0.0.11
+        continue-on-error: true
+      - name: Install nodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install deps
+        run: npm ci
+      - name: Install backend deps
+        run: cd ../backend && npm ci
+      - name: Store Playwright's Version
+        run: |
+          PLAYWRIGHT_VERSION=$(npm ls @playwright/test | grep @playwright | sed 's/.*@//')
+          echo "Playwright's Version: $PLAYWRIGHT_VERSION"
+          echo "PLAYWRIGHT_VERSION=$PLAYWRIGHT_VERSION" >> $GITHUB_ENV
+      - name: Cache Playwright Browsers for Playwright's Version
+        id: cache-playwright-browsers
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-browsers-${{ env.PLAYWRIGHT_VERSION }}
+      - name: Setup Playwright
+        if: steps.cache-playwright-browsers.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps
+      - name: Make envfiles
+        run: |
+          cp .env.example .env
+          cd ../backend/ && cp .env.example .env
+          cd ../frontend/ && cp .env.example .env
+      - name: Start app
+        run: npm run app:start
+      - name: Run Playwright tests
+        run: npm run test
+      - name: Store Artifacts from Failed Tests
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results
+          path: test-results/
+          retention-days: 7
