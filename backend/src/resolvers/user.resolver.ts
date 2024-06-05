@@ -14,6 +14,7 @@ export default class UserResolver {
 	async users() {
 		// SELECT * FROM User;
 		const users = await User.find();
+
 		return users;
 	}
 

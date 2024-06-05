@@ -12,7 +12,9 @@ export const authChecker: AuthChecker<Context> = async (
 	const { headers = {} } = context.req ?? {};
 	const tokenInCookie = cookie.parse(headers.cookie ?? "").token;
 	const tokenInAuthHeaders = headers.authorization?.split(" ")[1];
+
 	const token = tokenInAuthHeaders ?? tokenInCookie;
+
 	if (typeof token !== "string") {
 		return false;
 	}
