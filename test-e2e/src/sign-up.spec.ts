@@ -7,7 +7,7 @@ test.beforeAll(connect);
 test.beforeEach(clearDb);
 test.afterAll(disconnect);
 
-test.only('can render signup page', async ({ page }) => {
+test('can render signup page', async ({ page }) => {
   await page.goto('/auth/inscription');
   await expect(
     page.getByRole('heading', { name: 'Rejoignez-nous !' })
