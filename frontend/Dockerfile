@@ -7,8 +7,7 @@ COPY src ./src
 COPY public ./public
 COPY tsconfig.json ./tsconfig.json
 COPY next-env.d.ts ./next-env.d.ts
-# Had to remove the .env copy because it was causing the e2e tests to fail need to find a better way to handle this
-#COPY .env ./.env
+COPY .env ./.env
 COPY *.config.ts ./
 COPY *.config.js ./
 COPY postcss.config.mjs ./postcss.config.mjs
