@@ -146,7 +146,7 @@ const SignUpPage = () => {
 								name="pseudo"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Pseudo</FormLabel>
+										<FormLabel data-testid="label-pseudo">Pseudo</FormLabel>
 										<FormControl>
 											<Input placeholder="Pseudo" {...field} />
 										</FormControl>
@@ -160,7 +160,7 @@ const SignUpPage = () => {
 								name="email"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Email</FormLabel>
+										<FormLabel data-testid="label-email">Email</FormLabel>
 										<FormControl>
 											<Input placeholder="john.doe@gmail.com" {...field} />
 										</FormControl>
