@@ -59,7 +59,7 @@ jobs:
         if: steps.cache-playwright-browsers.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps
       - name: Create .env file with secret
-        run: echo "JWT_PRIVATE_KEY=${{ secrets.JWT_PRIVATE_KEY }}" > .env
+        run: echo "JWT_PRIVATE_KEY=${{ secrets.JWT_PRIVATE_KEY }}" > ./test-e2e/.env
       - name: Start app
         run: npm run app:start
       - name: Run Playwright tests
