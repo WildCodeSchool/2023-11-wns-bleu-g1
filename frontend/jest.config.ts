@@ -10,6 +10,7 @@ const esModules = [
 	"decode-uri-component",
 	"split-on-first",
 	"filter-obj",
+	"(?!@ngrx|(?!deck.gl)|ng-dynamic)",
 ];
 const customJestConfig = {
 	setupFilesAfterEnv: ["<rootDir>jest.setup.ts"],

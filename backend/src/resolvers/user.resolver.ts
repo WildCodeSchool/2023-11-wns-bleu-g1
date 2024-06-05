@@ -72,6 +72,8 @@ export default class UserResolver {
 		const token = jwt.sign(
 			{
 				userId: user.id,
+				pseudo: user.pseudo,
+				email: user.email,
 			},
 			env.JWT_PRIVATE_KEY,
 			{ expiresIn: "30d" }
