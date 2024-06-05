@@ -15,6 +15,8 @@ export const authChecker: AuthChecker<Context> = async (
 
 	const token = tokenInAuthHeaders ?? tokenInCookie;
 
+	console.log("backend token :>> ", token);
+
 	if (typeof token !== "string") {
 		return false;
 	}

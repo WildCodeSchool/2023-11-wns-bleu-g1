@@ -1,4 +1,4 @@
-import LogoImg from "@/components/logo-svg";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -17,12 +17,17 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useSignInMutation } from "@/graphql/generated/schema";
+import { ApolloError } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Image from "next/image";
+import { AlertCircle, BadgeCheck } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Logo from "@/components/elements/Logo";
+import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
 	email: z
@@ -39,6 +44,35 @@ const formSchema = z.object({
 });
 
 const SignInPage = () => {
+	const router = useRouter();
+	const { toast } = useToast();
+
+	const defaultErrorMessage =
+		"Une erreur est survenue lors de l'inscription. Veuillez réessayer.";
+	const [errorMessage, setErrorMessage] = useState<string>(defaultErrorMessage);
+
+	const [signInMutation, signInMutationResult] = useSignInMutation({
+		onCompleted: (data) => {
+			toast({
+				icon: <BadgeCheck className="h-5 w-5" />,
+				title: "Connexion réussie",
+				className: "text-success",
+			});
+			router.push("/tableau-de-bord");
+		},
+		onError: (err: ApolloError) => {
+			console.error(err);
+			if (err.message.includes("not register")) {
+				setErrorMessage("Aucun n'est lié à cette adresse email.");
+				return;
+			}
+			if (err.message.includes("invalid password")) {
+				setErrorMessage("Les identifiants sont incorrects.");
+				return;
+			}
+			setErrorMessage(defaultErrorMessage);
+		},
+	});
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -48,7 +82,14 @@ const SignInPage = () => {
 	});
 
 	function onSubmit(values: z.infer<typeof formSchema>) {
-		console.log(values);
+		signInMutation({
+			variables: {
+				data: {
+					email: values.email,
+					password: values.password,
+				},
+			},
+		});
 	}
 
 	return (
@@ -98,6 +139,15 @@ const SignInPage = () => {
 									</FormItem>
 								)}
 							/>
+							{signInMutationResult.error && (
+								<Alert variant="error">
+									<AlertCircle className="h-4 w-4" />
+									<AlertTitle className="font-bold">Erreur</AlertTitle>
+									<AlertDescription className="font-semibold">
+										{errorMessage}
+									</AlertDescription>
+								</Alert>
+							)}
 						</CardContent>
 						<CardFooter className="flex-col gap-4">
 							<Button type="submit" className="w-full">

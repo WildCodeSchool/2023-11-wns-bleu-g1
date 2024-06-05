@@ -29,13 +29,13 @@ import {
 	Lock,
 	XCircleIcon,
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Logo from "@/components/elements/Logo";
+import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
 	pseudo: z
@@ -61,13 +61,28 @@ const formSchema = z.object({
 
 const SignUpPage = () => {
 	const router = useRouter();
+	const { toast } = useToast();
+
+	const defaultErrorMessage =
+		"Une erreur est survenue lors de l'inscription. Veuillez réessayer.";
+	const [errorMessage, setErrorMessage] = useState<string>(defaultErrorMessage);
 
 	const [signUpMutation, signUpMutationResult] = useSignUpMutation({
 		onCompleted: () => {
+			toast({
+				icon: <BadgeCheck className="h-5 w-5" />,
+				title: "Inscription réussie",
+				className: "text-success",
+			});
 			router.push("/auth/connexion");
 		},
 		onError: (err: ApolloError) => {
 			console.error(err);
+			if (err.message.includes("already exist")) {
+				setErrorMessage("Cette adresse email est déjà utilisée.");
+				return;
+			}
+			setErrorMessage(defaultErrorMessage);
 		},
 	});
 
@@ -101,8 +116,8 @@ const SignUpPage = () => {
 		},
 		{
 			classname: { KO: messageKOClassName, OK: messageOKClassName },
-			regex: !password || !/[a-z]/.test(password),
-			message: "Contenir au moins une lettre minuscule.",
+			regex: !password || !/[@./#&+-_\\,;:!^(){}]/.test(password),
+			message: "Contenir au moins un caractère spécial",
 		},
 		{
 			classname: { KO: messageKOClassName, OK: messageOKClassName },
@@ -226,17 +241,7 @@ const SignUpPage = () => {
 									<AlertCircle className="h-4 w-4" />
 									<AlertTitle className="font-bold">Erreur</AlertTitle>
 									<AlertDescription className="font-semibold">
-										Une erreur est survenue lors de l&apos;inscription. Veuillez
-										réessayer.
-									</AlertDescription>
-								</Alert>
-							)}
-							{signUpMutationResult.data && (
-								<Alert variant="success">
-									<BadgeCheck className="h-4 w-4" />
-									<AlertTitle>Inscription Réussie</AlertTitle>
-									<AlertDescription className="font-semibold">
-										Vous allez être redirigé vers la page de connexion.
+										{errorMessage}
 									</AlertDescription>
 								</Alert>
 							)}

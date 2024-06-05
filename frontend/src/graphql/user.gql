@@ -13,3 +13,11 @@ mutation SignUp($data: NewUserInput!) {
 		role
 	}
 }
+
+mutation SignIn($data: SigninInput!) {
+	signin(data: $data)
+}
+
+mutation Logout {
+	logout
+}
