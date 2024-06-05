@@ -20,38 +20,31 @@ export type Scalars = {
 	Int: number;
 	Float: number;
 };
-
 export type Mutation = {
 	__typename?: "Mutation";
 	createUser: User;
 	logout: Scalars["String"];
 	signin: Scalars["String"];
 };
-
 export type MutationCreateUserArgs = {
 	data: NewUserInput;
 };
-
 export type MutationSigninArgs = {
 	data: SigninInput;
 };
-
 export type NewUserInput = {
 	email: Scalars["String"];
 	password: Scalars["String"];
 	pseudo: Scalars["String"];
 };
-
 export type Query = {
 	__typename?: "Query";
 	users: Array<User>;
 };
-
 export type SigninInput = {
 	email: Scalars["String"];
 	password: Scalars["String"];
 };
-
 export type User = {
 	__typename?: "User";
 	email: Scalars["String"];
@@ -59,18 +52,14 @@ export type User = {
 	pseudo: Scalars["String"];
 	role: Scalars["String"];
 };
-
 export type UsersQueryVariables = Exact<{ [key: string]: never }>;
-
 export type UsersQuery = {
 	__typename?: "Query";
 	users: Array<{ __typename?: "User"; email: string; id: string }>;
 };
-
 export type SignUpMutationVariables = Exact<{
 	data: NewUserInput;
 }>;
-
 export type SignUpMutation = {
 	__typename?: "Mutation";
 	createUser: {
@@ -81,7 +70,6 @@ export type SignUpMutation = {
 		role: string;
 	};
 };
-
 export const UsersDocument = gql`
 	query Users {
 		users {
@@ -90,7 +78,6 @@ export const UsersDocument = gql`
 		}
 	}
 `;
-
 /**
  * __useUsersQuery__
  *
@@ -107,22 +94,22 @@ export const UsersDocument = gql`
  * });
  */
 export function useUsersQuery(
-  baseOptions?: Apollo.QueryHookOptions<UsersQuery, UsersQueryVariables>
+	baseOptions?: Apollo.QueryHookOptions<UsersQuery, UsersQueryVariables>
 ) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<UsersQuery, UsersQueryVariables>(
-    UsersDocument,
-    options
-  );
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useQuery<UsersQuery, UsersQueryVariables>(
+		UsersDocument,
+		options
+	);
 }
 export function useUsersLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<UsersQuery, UsersQueryVariables>
+	baseOptions?: Apollo.LazyQueryHookOptions<UsersQuery, UsersQueryVariables>
 ) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<UsersQuery, UsersQueryVariables>(
-    UsersDocument,
-    options
-  );
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useLazyQuery<UsersQuery, UsersQueryVariables>(
+		UsersDocument,
+		options
+	);
 }
 export type UsersQueryHookResult = ReturnType<typeof useUsersQuery>;
 export type UsersLazyQueryHookResult = ReturnType<typeof useUsersLazyQuery>;
@@ -144,7 +131,6 @@ export type SignUpMutationFn = Apollo.MutationFunction<
 	SignUpMutation,
 	SignUpMutationVariables
 >;
-
 /**
  * __useSignUpMutation__
  *
@@ -163,16 +149,16 @@ export type SignUpMutationFn = Apollo.MutationFunction<
  * });
  */
 export function useSignUpMutation(
-  baseOptions?: Apollo.MutationHookOptions<
+	baseOptions?: Apollo.MutationHookOptions<
 		SignUpMutation,
 		SignUpMutationVariables
 	>
 ) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<SignUpMutation, SignUpMutationVariables>(
-    SignUpDocument,
-    options
-  );
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useMutation<SignUpMutation, SignUpMutationVariables>(
+		SignUpDocument,
+		options
+	);
 }
 export type SignUpMutationHookResult = ReturnType<typeof useSignUpMutation>;
 export type SignUpMutationResult = Apollo.MutationResult<SignUpMutation>;

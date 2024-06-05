@@ -1,12 +1,11 @@
 import React from "react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Logo from "@/components/elements/Logo";
-
 type TopbarProps = {
 	isTopOfPage: boolean;
 };
-
 const Topbar = ({ isTopOfPage }: TopbarProps) => {
 	const topbarBackground = isTopOfPage
 		? "bg-topbarbackground/[33%]"
@@ -21,11 +20,11 @@ const Topbar = ({ isTopOfPage }: TopbarProps) => {
 				<Link href={"/auth/connexion"} className="text-primary hover:underline">
 					<Button border={border} className={`${border}`}>
 						Se connecter
-          </Button>
-        </Link>
-      </div>
-    </div>
-  );
+					</Button>
+				</Link>
+			</div>
+		</div>
+	);
 };
 
 export default Topbar;
