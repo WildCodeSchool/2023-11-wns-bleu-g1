@@ -7,11 +7,12 @@ import PrismLoader from "@/components/prism-loader";
 import { Separator } from "@/components/ui/separator";
 import Prism from "prismjs";
 
-function CodingPage() {
+const CodingPage = () => {
   const [isTopOfPage, setIsTopOfPage] = useState<boolean>(true);
   const [code, setCode] = useState("");
   const [showResult, setShowResult] = useState("");
   const [count, setCount] = useState(0);
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY === 0) {
@@ -24,8 +25,9 @@ function CodingPage() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-  function update(text) {
-    let result_element = document.querySelector("#highlighting-content");
+
+  const update = (text) => {
+    const result_element = document.querySelector("#highlighting-content");
     if (text[text.length - 1] == "\n") {
       // If the last character is a newline character
       text += " "; // Add a placeholder space character to the final line
@@ -36,10 +38,11 @@ function CodingPage() {
       .replace(new RegExp("<", "g"), "<");
     // Syntax Highlight
     Prism.highlightElement(result_element);
-  }
-  function sync_scroll(element) {
+  };
+
+  const sync_scroll = (element) => {
     /* Scroll result to scroll coords of event - sync with textarea */
-    let result_element = document.querySelector("#highlightedCodingContent");
+    const result_element = document.querySelector("#highlightedCodingContent");
     // Check if result_element is not null
     if (result_element) {
       // Get and set x and y
@@ -49,22 +52,24 @@ function CodingPage() {
       result_element.scrollLeft = element.scrollLeft;
       console.log("left: ", result_element.scrollLeft);
     }
-  }
-  function check_tab(element, event) {
-    let code = element.value;
-    if (event.key == "Tab") {
+  };
+
+  const check_tab = (e) => {
+    const code = e.target.value;
+    if (e.key == "Tab") {
       /* Tab key pressed */
-      event.preventDefault(); // stop normal
-      let before_tab = code.slice(0, element.selectionStart); // text before tab
-      let after_tab = code.slice(element.selectionEnd, element.value.length); // text after tab
-      let cursor_pos = element.selectionEnd + 1; // where cursor moves after tab - moving forward by 1 char to after tab
-      element.value = before_tab + "\t" + after_tab; // add tab char
+      e.preventDefault(); // stop normal
+      const before_tab = code.slice(0, e.target.selectionStart); // text before tab
+      const after_tab = code.slice(e.target.selectionEnd, e.target.value.length); // text after tab
+      const cursor_pos = e.target.selectionEnd + 1; // where cursor moves after tab - moving forward by 1 char to after tab
+      e.target.value = before_tab + "\t" + after_tab; // add tab char
       // move cursor
-      element.selectionStart = cursor_pos;
-      element.selectionEnd = cursor_pos;
-      update(element.value); // Update text to include indent
+      e.target.selectionStart = cursor_pos;
+      e.target.selectionEnd = cursor_pos;
+      update(e.target.value); // Update text to include indent
     }
-  }
+  };
+
   const runCode = () => {
     if (count < 50) {
       try {
@@ -121,9 +126,7 @@ function CodingPage() {
               }}
               onScroll={(e) => sync_scroll(e.target)}
               spellCheck="false"
-              onKeyDown={(e) => {
-                check_tab(e.target, event);
-              }}
+              onKeyDown={check_tab}
             />
             <pre
               className="left-0 z-0 text-[15pt] w-[calc(100%-32px)] min-h-[33vh] md:h-[500px] font-mono border-none absolute top-0 rounded-md leading-[20pt] overflow-auto bg-input"
@@ -164,6 +167,6 @@ function CodingPage() {
       </div>
     </main>
   );
-}
+};
 
 export default CodingPage;
