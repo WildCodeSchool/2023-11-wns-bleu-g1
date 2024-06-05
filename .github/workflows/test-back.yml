@@ -60,7 +60,7 @@ jobs:
         run: npx playwright install --with-deps
       - name: Create .env file with secret
         run: |
-          echo "JWT_PRIVATE_KEY=\"${{ secrets.JWT_PRIVATE_KEY }}\"" > /backend/.env
+          echo "JWT_PRIVATE_KEY=\"${{ secrets.JWT_PRIVATE_KEY }}\"" > .env
           echo "JWT_PRIVATE_KEY=\"${{ secrets.JWT_PRIVATE_KEY }}\""
       - name: Start app
         run: npm run app:start
