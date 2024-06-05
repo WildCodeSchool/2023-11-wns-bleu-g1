@@ -30,10 +30,12 @@
 		--success-300: 170 84% 26%;
 		--success-foreground: 0 0% 98%;
 		--border: 240 5.9% 90%;
-		--input: 240 5.9% 90%;
+		--input: 0, 3%, 87%;
 		--ring: 311 76% 47%;
 		--radius: 0.5rem;
-		--terminal-background: 0 0% 12%;
+		--dark-terminal-background: 0 0% 12%;
+		--terminal-background: 0, 3%, 87%;
+		--terminal-text-color: 0 0% 0%;;
 		--warning: 33 82% 76%;
 		--warning-200: 33 82% 60%;
 		--warning-300: 33 82% 44%;
@@ -63,14 +65,16 @@
 		--success-300: 170 84% 26%;
 		--success-foreground: 0 85.7% 97.3%;
 		--border: 240 3.7% 15.9%;
-		--input: 240 3.7% 15.9%;
+		--input: 0 0% 12%;
 		--ring: 311 76% 47%;
 		--terminal-background: 0 0% 12%;
+		--dark-terminal-background: 0 0% 12%;
+		--terminal-text-color: 0 0% 100%;
 	}
 	.light {
 		--background: 0 0% 100%;
 		--topbar-background: 323 87% 57%;
-		--background-primary: 0 0% 95%;
+		--background-primary: 240 100% 73%;
 		--foreground: 240 10% 3.9%;
 		--card: 0 0% 100%;
 		--card-foreground: 240 10% 3.9%;
@@ -87,12 +91,57 @@
 		--destructive: 0 84.2% 60.2%;
 		--destructive-foreground: 0 0% 98%;
 		--border: 240 5.9% 90%;
-		--input: 240 5.9% 90%;
+		--input: 0, 3%, 87%;
 		--ring: 311 76% 47%;
 		--radius: 0.5rem;
-		--terminal-background: 0 0% 12%;
+		--terminal-background: 0, 3%, 87%;
+		--dark-terminal-background: 0 0% 12%;
+		--terminal-text-color: 0 0% 0%;
+	}
+
+	#codingInput,
+	#highlightedCodingContent {
+		margin: 10px;
+		padding: 10px;
+		overflow: auto;
+	}
+
+	#codingInput,
+	#highlightedCodingContent,
+	#highlightedCodingContent * {
+		font-size: 15pt;
+		line-height: 20pt;
+		tab-size: 2;
+		word-wrap: break-word;
+	}
+
+	#highlightedCodingContent,
+	#highlightedCodingContent * {
+		word-wrap: break-word;
+		white-space: pre-wrap;
+	}
+
+	#codingInput {
+		background: transparent;
+	}
+
+	:not(pre) > code[class*="language-"],
+	pre[class*="language-"] {
+		background: hsl(var(--input)) !important;
+	}
+
+	code[class*="language-"],
+	pre[class*="language-"] {
+		color: hsl(var(--terminal-text-color)) !important;
+	}
+
+	code[class*="language-"],
+	pre[class*="language-"] {
+		color: #f8f8f2;
+		text-shadow: none !important;
 	}
 }
+
 
 @layer utilities {
 	* {
