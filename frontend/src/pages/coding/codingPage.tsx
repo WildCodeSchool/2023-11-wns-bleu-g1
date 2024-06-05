@@ -40,7 +40,7 @@ const CodingPage = () => {
     Prism.highlightElement(result_element);
   };
 
-  const sync_scroll = (element) => {
+  const syncScroll = (element) => {
     /* Scroll result to scroll coords of event - sync with textarea */
     const result_element = document.querySelector("#highlightedCodingContent");
     // Check if result_element is not null
@@ -51,7 +51,7 @@ const CodingPage = () => {
     }
   };
 
-  const check_tab = (e) => {
+  const checkTab = (e) => {
     const code = e.target.value;
     if (e.key == "Tab") {
       /* Tab key pressed */
@@ -118,12 +118,12 @@ const CodingPage = () => {
               id="codingInput"
               onChange={(e) => {
                 update(e.target.value);
-                sync_scroll(e.target);
+                syncScroll(e.target);
                 setCode(e.target.value);
               }}
-              onScroll={(e) => sync_scroll(e.target)}
+              onScroll={(e) => syncScroll(e.target)}
               spellCheck="false"
-              onKeyDown={check_tab}
+              onKeyDown={checkTab}
             />
             <pre
               className="left-0 z-0 text-[15pt] w-[calc(100%-32px)] min-h-[33vh] md:h-[500px] font-mono border-none absolute top-0 rounded-md leading-[20pt] overflow-auto bg-input"
