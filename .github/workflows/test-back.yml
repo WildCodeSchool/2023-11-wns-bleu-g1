@@ -103,6 +103,6 @@ jobs:
           push: true
           context: "{{defaultContext}}:backend"
           file: "Dockerfile.production"
-          tags: ${{ inputs.image_name }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/wildCodeOnline-backend:latest
           cache-from: type=gha
           cache-to: type=gha, mode=max
