@@ -24,14 +24,10 @@ export default class Project extends BaseEntity {
 	@Field()
 	isPublic: boolean;
 
-	@CreateDateColumn({ type: "timestamp", default: () => "NOW()" })
+	@CreateDateColumn()
 	createdAt: Date;
 
-	@UpdateDateColumn({
-		type: "timestamp",
-		default: () => "NOW()",
-		onUpdate: "NOW()",
-	})
+	@UpdateDateColumn()
 	updatedAt: Date;
 }
 

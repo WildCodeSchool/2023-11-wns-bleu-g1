@@ -23,21 +23,13 @@ export default class Code extends BaseEntity {
 	@Field()
 	isReported: boolean;
 
-	@CreateDateColumn({ type: "timestamp", default: () => "NOW()" })
+	@CreateDateColumn()
 	createdAt: Date;
 
-	@UpdateDateColumn({
-		type: "timestamp",
-		default: () => "NOW()",
-		onUpdate: "NOW()",
-	})
+	@UpdateDateColumn()
 	updatedAt: Date;
 
-	@UpdateDateColumn({
-		type: "timestamp",
-		default: () => "NOW()",
-		onUpdate: "NOW()",
-	})
+	@UpdateDateColumn()
 	reportedAt: Date;
 }
 
