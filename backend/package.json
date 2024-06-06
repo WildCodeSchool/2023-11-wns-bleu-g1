@@ -11,7 +11,8 @@
 		"prepare": "cd .. && husky frontend/.husky",
 		"testDb:wait": "docker compose -f docker-compose.integration-tests.yml up testDB --wait",
 		"test": "jest",
-		"lint": "eslint . --ext .ts"
+		"lint": "eslint . --ext .ts",
+		"build": "tsc"
 	},
 	"dependencies": {
 		"@apollo/server": "^4.10.0",
