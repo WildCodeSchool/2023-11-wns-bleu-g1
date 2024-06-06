@@ -5,7 +5,6 @@ import { MockedProvider } from "@apollo/client/testing";
 import mockRouter from "next-router-mock";
 
 describe("button", () => {
-
 	it("renders correctly", () => {
 		const view = render(
 			<Button onClick={() => alert("Bon toutou")}>Click Me !</Button>

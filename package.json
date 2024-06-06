@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "description": "a REPLIT-like",
   "scripts": {
-    "db": "docker-compose up db"
+    "db": "docker-compose up db",
+    "start": "docker compose up",
+    "stop": "docker compose down",
+    "dev": "docker compose up -d"
   },
   "dependencies": {
-    "@types/react": "^18.3.1"
+    "prismjs": "^1.29.0"
   }
 }
