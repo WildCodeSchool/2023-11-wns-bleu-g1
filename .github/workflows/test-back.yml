@@ -97,9 +97,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-      - name: Make envfiles
-        run: |
-          cd backend/ && cp .env.example .env
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
