@@ -17,7 +17,6 @@ export default class UserResolver {
 
 		return users;
 	}
-	// test
 
 	@Authorized([UserRole.VISITOR])
 	@Query(() => User)
