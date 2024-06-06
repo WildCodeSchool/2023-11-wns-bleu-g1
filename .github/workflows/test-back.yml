@@ -102,7 +102,7 @@ jobs:
         with:
           push: true
           context: "{{defaultContext}}:backend"
-#          file: Dockerfile
+          file: "Dockerfile.production"
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/wild-code-online-backend:latest
-#          cache-from: type=gha
-#          cache-to: type=gha,mode=max
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
