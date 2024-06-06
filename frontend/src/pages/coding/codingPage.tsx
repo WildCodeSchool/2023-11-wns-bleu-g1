@@ -159,7 +159,6 @@ const CodingPage = () => {
               className="left-0 leading-[20pt] text-[15pt] ml-4 mt-4 md:mt-3 p-2.5 bg-input resize-none"
               value={showResult}
             />
-            <p>test</p>
           </div>
         </div>
       </div>
