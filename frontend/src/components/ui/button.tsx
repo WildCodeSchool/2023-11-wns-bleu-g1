@@ -26,6 +26,11 @@ const buttonVariants = cva(
 				lg: "h-11 rounded-md px-8",
 				icon: "h-10 w-10",
 			},
+			border: {
+				default: "border-none transition duration-700 ease-in-out",
+				true: "border transition duration-700 ease-in-out",
+				false: "border-none transition duration-700 ease-in-out",
+			},
 		},
 		defaultVariants: {
 			variant: "default",
@@ -42,7 +47,10 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-	({ className, variant, size, asChild = false, isLoading, ...props }, ref) => {
+	(
+		{ className, variant, size, asChild = false, isLoading, border, ...props },
+		ref
+	) => {
 		const Comp = asChild ? Slot : "button";
 
 		if (isLoading) {
@@ -55,7 +63,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
 		return (
 			<Comp
-				className={cn(buttonVariants({ variant, size, className }))}
+				className={cn(buttonVariants({ variant, size, border, className }))}
 				ref={ref}
 				{...props}
 			/>

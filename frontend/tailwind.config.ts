@@ -12,14 +12,26 @@ const config = {
 	theme: {
 		container: {
 			center: true,
-			padding: "2rem",
+			padding: {
+				DEFAULT: "1.5rem",
+				sm: "2rem",
+				lg: "4rem",
+				xl: "5rem",
+				"2xl": "6rem",
+			},
 			screens: {
+				sm: "640px",
+				md: "768px",
 				lg: "1000px",
+				"2xl": "1200px",
 			},
 		},
 		extend: {
 			colors: {
 				border: "hsl(var(--border))",
+				topbarbackground: "hsl(var(--topbar-background))",
+				terminalbackground: "hsl(var(--terminal-background))",
+         darkterminalbackground: "hsl(var(--dark-terminal-background))",
 				input: "hsl(var(--input))",
 				ring: "hsl(var(--ring))",
 				background: {
@@ -38,6 +50,24 @@ const config = {
 				destructive: {
 					DEFAULT: "hsl(var(--destructive))",
 					foreground: "hsl(var(--destructive-foreground))",
+				},
+				error: {
+					DEFAULT: "hsl(var(--error))",
+					200: "hsl(var(--error-200))",
+					300: "hsl(var(--error-300))",
+					foreground: "hsl(var(--error-foreground))",
+				},
+				warning: {
+					DEFAULT: "hsl(var(--warning))",
+					200: "hsl(var(--warning-200))",
+					300: "hsl(var(--warning-300))",
+					foreground: "hsl(var(--warning-foreground))",
+				},
+				success: {
+					DEFAULT: "hsl(var(--success))",
+					200: "hsl(var(--success-200))",
+					300: "hsl(var(--success-300))",
+					foreground: "hsl(var(--success-foreground))",
 				},
 				muted: {
 					DEFAULT: "hsl(var(--muted))",

@@ -4,3 +4,20 @@ query Users {
 		id
 	}
 }
+
+mutation SignUp($data: NewUserInput!) {
+	createUser(data: $data) {
+		email
+		id
+		pseudo
+		role
+	}
+}
+
+mutation SignIn($data: SigninInput!) {
+	signin(data: $data)
+}
+
+mutation Logout {
+	logout
+}
