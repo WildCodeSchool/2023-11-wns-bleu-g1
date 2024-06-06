@@ -67,7 +67,7 @@ export default function Profile() {
 						<span
 							className={`flex justify-center items-center rounded-full bg-foreground text-background text-white min-w-[50px] min-h-[50px]`}
 						>
-							58
+							68
 						</span>
 						Commentaires
 					</p>
