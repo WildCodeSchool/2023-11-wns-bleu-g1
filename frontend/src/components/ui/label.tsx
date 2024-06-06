@@ -11,19 +11,12 @@ const labelVariants = cva(
 const Label = React.forwardRef<
 	React.ElementRef<typeof LabelPrimitive.Root>,
 	React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> &
-<<<<<<< HEAD
-		VariantProps<typeof labelVariants>
-=======
 		VariantProps<typeof labelVariants> & { "data-testid"?: string }
->>>>>>> master
 >(({ className, ...props }, ref) => (
 	<LabelPrimitive.Root
 		ref={ref}
 		className={cn(labelVariants(), className)}
-<<<<<<< HEAD
-=======
 		data-testid={props["data-testid"]}
->>>>>>> master
 		{...props}
 	/>
 ));
