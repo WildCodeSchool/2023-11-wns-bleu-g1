@@ -101,5 +101,5 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          context: "{{defaultContext}}"
+          context: "{{defaultContext}}/backend"
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/wild-code-online-backend:latest
