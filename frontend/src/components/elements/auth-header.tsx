@@ -18,6 +18,7 @@ import {
 import { useRouter } from "next/router";
 import { useToast } from "../ui/use-toast";
 import Link from "next/link";
+import { buttonVariants } from "../ui/button";
 
 const AuthHeader = () => {
 	const router = useRouter();
@@ -48,48 +49,59 @@ const AuthHeader = () => {
 
 	const profile = getUserProfileQuery?.data?.getUserProfile || null;
 
+	const onCodingPage = router.pathname === "/coding/codingPage";
 	return (
-		<header className="py-4">
+		<header className="py-4 bg-topbarbackground/[33%]">
 			<nav className="container flex items-center justify-between">
 				<Link href="/">
 					<Logo />
 				</Link>
 
-				<DropdownMenu>
-					<DropdownMenuTrigger>
-						<Avatar>
-							<AvatarImage src="https://github.com/shadcn.png" />
-							<AvatarFallback>
-								{profile?.pseudo[0].toUpperCase()}
-							</AvatarFallback>
-						</Avatar>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent>
-						<DropdownMenuLabel>{profile?.pseudo}</DropdownMenuLabel>
-						<DropdownMenuSeparator />
-						<DropdownMenuItem className={itemsClassName}>
-							<User className={iconsClassName} />
-							Mon profil
-						</DropdownMenuItem>
-						<DropdownMenuItem className={itemsClassName}>
-							<FolderOpen className={iconsClassName} />
-							Mes projets
-						</DropdownMenuItem>
-						<DropdownMenuItem
-							className={cn(itemsClassName, "text-warning focus:text-warning")}
-						>
-							<Crown className={iconsClassName} />
-							Passer Premium
-						</DropdownMenuItem>
-						<DropdownMenuItem
-							className={cn(itemsClassName, "text-error focus:text-error")}
-							onClick={handleLogout}
-						>
-							<LogOut className={iconsClassName} />
-							Déconnexion
-						</DropdownMenuItem>
-					</DropdownMenuContent>
-				</DropdownMenu>
+				<div className="inline-flex gap-6">
+					{!onCodingPage ? (
+						<Link href={"/coding/codingPage"} className={buttonVariants()}>
+							Nouveau projet
+						</Link>
+					) : null}
+					<DropdownMenu>
+						<DropdownMenuTrigger>
+							<Avatar>
+								<AvatarImage src="https://github.com/shadcn.png" />
+								<AvatarFallback>
+									{profile?.pseudo[0].toUpperCase()}
+								</AvatarFallback>
+							</Avatar>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent>
+							<DropdownMenuLabel>{profile?.pseudo}</DropdownMenuLabel>
+							<DropdownMenuSeparator />
+							<DropdownMenuItem className={itemsClassName}>
+								<User className={iconsClassName} />
+								Mon profil
+							</DropdownMenuItem>
+							<DropdownMenuItem className={itemsClassName}>
+								<FolderOpen className={iconsClassName} />
+								Mes projets
+							</DropdownMenuItem>
+							<DropdownMenuItem
+								className={cn(
+									itemsClassName,
+									"text-warning focus:text-warning"
+								)}
+							>
+								<Crown className={iconsClassName} />
+								Passer Premium
+							</DropdownMenuItem>
+							<DropdownMenuItem
+								className={cn(itemsClassName, "text-error focus:text-error")}
+								onClick={handleLogout}
+							>
+								<LogOut className={iconsClassName} />
+								Déconnexion
+							</DropdownMenuItem>
+						</DropdownMenuContent>
+					</DropdownMenu>
+				</div>
 			</nav>
 		</header>
 	);
