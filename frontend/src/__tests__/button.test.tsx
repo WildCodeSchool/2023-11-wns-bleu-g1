@@ -1,6 +1,8 @@
 import { describe, it } from "@jest/globals";
 import { render, screen } from "@testing-library/react";
 import { Button } from "@/components/ui/button";
+import { MockedProvider } from "@apollo/client/testing";
+import mockRouter from "next-router-mock";
 
 describe("button", () => {
 	it("renders correctly", () => {
