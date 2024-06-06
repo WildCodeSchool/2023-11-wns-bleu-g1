@@ -102,5 +102,5 @@ jobs:
         with:
           push: true
           context: "{{defaultContext}}:backend"
-          file: ./backend/Dockerfile
+          file: /backend/Dockerfile
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/wild-code-online-backend:latest
