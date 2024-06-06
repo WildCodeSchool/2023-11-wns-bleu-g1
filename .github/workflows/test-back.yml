@@ -98,8 +98,9 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
       - name: Build and push
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           push: true
-          context: "{{defaultContext}}/backend"
+          context: "{{defaultContext}}:backend"
+          file: ./backend/Dockerfile
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/wild-code-online-backend:latest
