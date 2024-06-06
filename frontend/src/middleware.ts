@@ -50,5 +50,5 @@ export async function middleware(request: NextRequest) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-	matcher: ["/", "/tableau-de-bord", "/auth/:path*"],
+	matcher: ["/", "/tableau-de-bord", "/auth/:path*", "/profile"],
 };

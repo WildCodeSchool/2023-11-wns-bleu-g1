@@ -1,50 +1,25 @@
-import Image from "next/image";
-import { Inter } from "next/font/google";
-// import { Button } from "@/components/ui/button";
-
-const inter = Inter({ subsets: ["latin"] });
+import AuthLayout from "@/components/elements/auth-layout";
+import PageLoader from "@/components/elements/page-loader";
+import UserHeadCard from "@/components/elements/user-head-card";
+import { useGetUserProfileQuery } from "@/graphql/generated/schema";
 
 export default function Profile() {
-	return (
-		<main
-			className={`flex min-h-screen flex-col items-center justify-between py-24 px-16 ${inter.className}`}
-		>
-			<header className={`flex gap-5 w-full max-w-3xl items-center`}>
-				<div className={`overflow-hidden rounded-full border`}>
-					<Image
-						// className={``}
-						src={
-							"user exists" == true
-								? "image du profil"
-								: "/profile_placeholder.jpg"
-						}
-						alt="Profile picture"
-						width={90}
-						height={90}
-					/>
-				</div>
-				<div
-					className={`max-w-[60%] text-ellipsis overflow-hidden flex flex-col gap-2`}
-				>
-					<h3 className={`text-4xl text-center`}>
-						{"user exists" == true
-							? "nom de l'utilisateur"
-							: "Utilisateur introuvable"}
-					</h3>
-					{/* BADGE == COMPOSANT {{ A FAIRE }} */}
-					<p
-						className={`text-center rounded-full bg-destructive text-xs py-1`}
-						title={
-							"user exists" == true ? "role de l'utilisateur" : "Flex Master"
-						}
-					>
-						{"user exists" == true ? "role de l'utilisateur" : "Flex Master"}
-					</p>
-				</div>
-			</header>
+	const getUserProfileQuery = useGetUserProfileQuery();
 
-			<section className={`flex flex-col gap-5 w-full max-w-3xl text-xl`}>
-				<div
+	if (getUserProfileQuery.loading) return <PageLoader />;
+	if (getUserProfileQuery.error) console.error(getUserProfileQuery.error);
+
+	const profile = getUserProfileQuery?.data?.getUserProfile || null;
+
+	return (
+		<AuthLayout
+		>
+			{/* <div className={`flex gap-5 w-full max-w-3xl items-center`}> */}
+				<UserHeadCard profile={profile} />
+			{/* </div> */}
+
+			<section className={`flex flex-col gap-5 w-full max-w-3xl text-xl md:justify-center`}>
+				{/* <div
 					className={`flex flex-col gap-6 border-b-2 border-foreground pb-8`}
 				>
 					<p className={`flex gap-5 items-center`}>
@@ -71,9 +46,9 @@ export default function Profile() {
 						</span>
 						Commentaires
 					</p>
-				</div>
+				</div> */}
 
-				<div className={`flex flex-col gap-4 min-h-[150px]`}>
+				<div className={`flex flex-col gap-4 min-h-[150px] py-8 border-t-2 border-foreground md:border-none`}>
 					<h3 className={`text-center mb-4`}>Bests projects</h3>
 
 					<div className={`flex gap-5 text-base`}>
@@ -129,6 +104,6 @@ export default function Profile() {
 					</div>
 				</div>
 			</section>
-		</main>
+		</AuthLayout>
 	);
 }
