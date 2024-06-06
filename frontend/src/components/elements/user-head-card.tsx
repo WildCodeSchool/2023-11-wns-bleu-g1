@@ -9,7 +9,7 @@ interface Props {
 const UserHeadCard = ({ profile }: Props) => {
 	if (!profile) return null;
 	return (
-		<div className="flex flex-col sm:flex-row sm:items-center sm:justify-around gap-6">
+		<div className="flex flex-col sm:flex-row sm:items-center sm:justify-around gap-8 pb-8">
 			<div className="flex justify-center gap-6">
 				<Avatar className="w-24 h-24">
 					<AvatarImage src="https://github.com/shadcn.png" />

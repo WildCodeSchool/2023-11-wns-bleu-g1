@@ -6,7 +6,7 @@ import mockRouter from "next-router-mock";
 
 describe("button", () => {
 	it("renders correctly", () => {
-		const view = render(
+			const view = render(
 			<Button onClick={() => alert("Bon toutou")}>Click Me !</Button>
 		);
 		expect(view.baseElement).toMatchSnapshot();

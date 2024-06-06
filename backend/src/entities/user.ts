@@ -1,4 +1,5 @@
 import { hash } from "argon2";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IsEmail, IsStrongPassword, Length, Matches } from "class-validator";
 import { Field, InputType, ObjectType } from "type-graphql";
 import {
