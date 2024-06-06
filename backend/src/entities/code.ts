@@ -4,9 +4,13 @@ import {
 	Column,
 	CreateDateColumn,
 	Entity,
+	ManyToOne,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from "typeorm";
+
+import Language from "./language";
+import Project from "./project";
 
 @Entity()
 @ObjectType()
@@ -31,6 +35,12 @@ export default class Code extends BaseEntity {
 
 	@UpdateDateColumn()
 	reportedAt: Date;
+
+	@ManyToOne(() => Language, (language) => language.code)
+	language: Language;
+
+	@ManyToOne(() => Project, (project) => project.code, { onDelete: "CASCADE" })
+	project: Project;
 }
 
 @InputType()

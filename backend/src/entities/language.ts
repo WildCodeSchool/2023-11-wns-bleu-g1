@@ -1,10 +1,18 @@
 import { Length } from "class-validator";
 import { Field, InputType, ObjectType } from "type-graphql";
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+	BaseEntity,
+	Column,
+	Entity,
+	OneToMany,
+	PrimaryGeneratedColumn,
+} from "typeorm";
+
+import Code from "./code";
 
 @Entity()
 @ObjectType()
-export default class Langage extends BaseEntity {
+export default class Language extends BaseEntity {
 	@PrimaryGeneratedColumn("uuid")
 	@Field()
 	id: string;
@@ -12,16 +20,16 @@ export default class Langage extends BaseEntity {
 	@Column({ default: "JavaScript", length: 15 })
 	@Field()
 	name: string;
+
+	@OneToMany(() => Code, (code) => code.language)
+	code: Code[];
 }
 
 @InputType()
-export class LangageInput {
+export class LanguageInput {
 	@Field()
 	@Length(2, 15, {
 		message: "le nom du langage doit êtres compris entre 2 et 15 caractères",
 	})
 	name: string;
 }
-
-// 1 langage peut avoir +ieurs code 1, n
-// 1 code peut avoir 1 langage 1,1

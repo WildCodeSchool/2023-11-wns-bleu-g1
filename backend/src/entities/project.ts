@@ -5,9 +5,11 @@ import {
 	Column,
 	CreateDateColumn,
 	Entity,
+	OneToMany,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from "typeorm";
+import Code from "./code";
 
 @Entity()
 @ObjectType()
@@ -29,6 +31,9 @@ export default class Project extends BaseEntity {
 
 	@UpdateDateColumn()
 	updatedAt: Date;
+
+	@OneToMany(() => Code, (code) => code.project, { cascade: true })
+	code: Code[];
 }
 
 @InputType()

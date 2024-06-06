@@ -1,8 +1,9 @@
-import { Code, DataSource } from "typeorm";
+import { DataSource } from "typeorm";
 import env from "./env";
 import User from "./entities/user";
 import Project from "./entities/project";
-import Langage from "./entities/langage";
+import Language from "./entities/language";
+import Code from "./entities/code";
 
 const db = new DataSource({
 	type: "postgres",
@@ -11,7 +12,7 @@ const db = new DataSource({
 	database: env.DB_NAME,
 	host: env.DB_HOST,
 	port: env.DB_PORT,
-	entities: [User, Project, Langage, Code],
+	entities: [User, Project, Language, Code],
 	synchronize: true,
 	logging: env.NODE_ENV !== "test",
 });
