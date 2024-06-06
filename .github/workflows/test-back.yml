@@ -2,8 +2,6 @@ name: 'test-back'
 
 on:
   pull_request:
-    paths:
-      - 'backend/**'
 
 jobs:
   integration-tests:
