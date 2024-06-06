@@ -1,5 +1,5 @@
 import db from "./db";
-import User from "./entities/user";
+import User, { UserRole } from "./entities/user";
 
 export const cleanDb = async () => {
 	const runner = db.createQueryRunner();
@@ -37,6 +37,16 @@ const main = async () => {
 	});
 
 	await user.save();
+	const admin = new User();
+
+	Object.assign(admin, {
+		email: "admin@gmail.com",
+		password: "Admin@123",
+		pseudo: "Admin",
+		role: UserRole.ADMIN,
+	});
+
+	await admin.save();
 
 	await db.destroy();
 

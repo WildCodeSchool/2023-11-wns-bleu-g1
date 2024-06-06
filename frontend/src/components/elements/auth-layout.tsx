@@ -5,7 +5,7 @@ const AuthLayout = ({ children }: PropsWithChildren) => {
 	return (
 		<>
 			<AuthHeader />
-			{children}
+			<section className="container">{children}</section>
 		</>
 	);
 };

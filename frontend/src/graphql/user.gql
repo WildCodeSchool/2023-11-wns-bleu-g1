@@ -21,3 +21,12 @@ mutation SignIn($data: SigninInput!) {
 mutation Logout {
 	logout
 }
+
+query GetUserProfile {
+	getUserProfile {
+		email
+		id
+		pseudo
+		role
+	}
+}
