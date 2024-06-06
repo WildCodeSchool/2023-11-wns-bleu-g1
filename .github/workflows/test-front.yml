@@ -2,10 +2,13 @@ name: "test-front"
 
 on:
   pull_request:
+  workflow_call:
+
 
 jobs:
   test-client:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' }}
     defaults:
       run:
         working-directory: ./frontend
@@ -20,3 +23,9 @@ jobs:
         run: npm ci
       - name: Run tests
         run: npm test
+  build-and-push-frontend:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_call' }}
+    steps:
+      - name: Set up Qemu
+        uses: docker/setup-qemu-action@v3
