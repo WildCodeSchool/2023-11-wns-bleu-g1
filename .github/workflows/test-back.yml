@@ -2,16 +2,16 @@ name: 'test-back'
 
 on:
   pull_request:
-  workflow_call:
-    inputs:
-      image_name:
-        type: string
-        required: true
-    secrets:
-      DOCKERHUB_USERNAME:
-        required: true
-      DOCKERHUB_PASSWORD:
-        required: true
+#  workflow_call:
+#    inputs:
+#      image_name:
+#        type: string
+#        required: true
+#    secrets:
+#      DOCKERHUB_USERNAME:
+#        required: true
+#      DOCKERHUB_PASSWORD:
+#        required: true
 
 jobs:
   integration-tests:
