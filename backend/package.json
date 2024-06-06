@@ -10,7 +10,8 @@
 		"check": "prettier --check \"**/*.{ts,tsx,js,jsx,md,mdx,css,yaml,yml}\"",
 		"prepare": "cd .. && husky frontend/.husky",
 		"testDb:wait": "docker compose -f docker-compose.integration-tests.yml up testDB --wait",
-		"test": "jest"
+		"test": "jest",
+		"build": "tsc"
 	},
 	"dependencies": {
 		"@apollo/server": "^4.10.0",
