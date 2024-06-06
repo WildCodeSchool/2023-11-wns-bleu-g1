@@ -15,10 +15,13 @@ export default class Langage extends BaseEntity {
 }
 
 @InputType()
-export class NewLangageInput {
+export class LangageInput {
 	@Field()
 	@Length(2, 15, {
 		message: "le nom du langage doit êtres compris entre 2 et 15 caractères",
 	})
 	name: string;
 }
+
+// 1 langage peut avoir +ieurs code 1, n
+// 1 code peut avoir 1 langage 1,1

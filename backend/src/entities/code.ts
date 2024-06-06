@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, InputType, ObjectType } from "type-graphql";
 import {
 	BaseEntity,
 	Column,
@@ -39,4 +39,10 @@ export default class Code extends BaseEntity {
 		onUpdate: "NOW()",
 	})
 	reportedAt: Date;
+}
+
+@InputType()
+export class CodeInput {
+	@Field()
+	content: string;
 }
