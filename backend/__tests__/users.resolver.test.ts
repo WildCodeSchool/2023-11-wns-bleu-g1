@@ -6,6 +6,7 @@ import getUsers from "./operations/getUsers";
 
 describe("users resolver", () => {
 	it("can get a list of users", async () => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const user1: any = new User();
 		const user2 = new User();
 
@@ -22,6 +23,7 @@ describe("users resolver", () => {
 		}).save();
 
 		const jwt = await getAdminContext();
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const res: any = await execute(getUsers, { contextValue: jwt });
 
 		expect(res).toMatchInlineSnapshot(`
@@ -50,6 +52,7 @@ describe("users resolver", () => {
 	});
 
 	it("can create a user", async () => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const res: any = await execute(createUser, {
 			variableValues: {
 				data: {

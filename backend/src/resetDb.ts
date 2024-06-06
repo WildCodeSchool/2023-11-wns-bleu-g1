@@ -7,12 +7,14 @@ export const cleanDb = async () => {
 	await runner.query("SET session_replication_role = 'replica'");
 
 	await Promise.all(
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		db.entityMetadatas.map((entity: any) => {
 			runner.query(`ALTER TABLE "${entity.tableName}" DISABLE TRIGGER ALL`);
 		})
 	);
 
 	await Promise.all(
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		db.entityMetadatas.map((entity: any) => {
 			runner.query(`DROP TABLE IF EXISTS "${entity.tableName}" CASCADE`);
 		})

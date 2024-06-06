@@ -5,7 +5,7 @@ const AuthLayout = ({ children }: PropsWithChildren) => {
 	return (
 		<>
 			<AuthHeader />
-			<section className="container">{children}</section>
+			<section className="container py-8">{children}</section>
 		</>
 	);
 };
