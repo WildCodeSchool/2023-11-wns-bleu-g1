@@ -49,7 +49,7 @@ export default function Profile() {
 				>
 					<p className={`flex gap-5 items-center`}>
 						<span
-							className={`flex justify-center items-center rounded-full bg-foreground text-background text-white min-w-[50px] min-h-[50px]`}
+							className={`flex justify-center items-center rounded-full bg-blue-400 text-background min-w-[50px] min-h-[50px]`}
 						>
 							58
 						</span>
@@ -57,7 +57,7 @@ export default function Profile() {
 					</p>
 					<p className={`flex gap-5 items-center`}>
 						<span
-							className={`flex justify-center items-center rounded-full bg-foreground text-background text-white min-w-[50px] min-h-[50px]`}
+							className={`flex justify-center items-center rounded-full bg-blue-400 text-background min-w-[50px] min-h-[50px]`}
 						>
 							125
 						</span>
@@ -65,7 +65,7 @@ export default function Profile() {
 					</p>
 					<p className={`flex gap-5 items-center`}>
 						<span
-							className={`flex justify-center items-center rounded-full bg-foreground text-background text-white min-w-[50px] min-h-[50px]`}
+							className={`flex justify-center items-center rounded-full bg-blue-400 text-background min-w-[50px] min-h-[50px]`}
 						>
 							68
 						</span>
@@ -78,7 +78,7 @@ export default function Profile() {
 
 					<div className={`flex gap-5 text-base`}>
 						<p
-							className={`flex items-center bg-foreground text-background min-w-[65%] px-3 rounded-xl`}
+							className={`flex items-center bg-gray-400 text-background min-w-[65%] px-3 rounded-xl`}
 						>
 							Hack the NASA
 						</p>
@@ -91,7 +91,7 @@ export default function Profile() {
 
 					<div className={`flex gap-5 text-base`}>
 						<p
-							className={`flex items-center bg-foreground text-background min-w-[65%] px-3 rounded-xl`}
+							className={`flex items-center bg-gray-400 text-background min-w-[65%] px-3 rounded-xl`}
 						>
 							Elon is afraid
 						</p>
@@ -104,7 +104,7 @@ export default function Profile() {
 
 					<div className={`flex gap-5 text-base`}>
 						<p
-							className={`flex items-center bg-foreground text-background min-w-[65%] px-3 rounded-xl`}
+							className={`flex items-center bg-gray-400 text-background min-w-[65%] px-3 rounded-xl`}
 						>
 							Youtube unlimited
 						</p>
@@ -117,7 +117,7 @@ export default function Profile() {
 
 					<div className={`flex gap-5 text-base`}>
 						<p
-							className={`flex items-center bg-foreground text-background min-w-[65%] px-3 rounded-xl`}
+							className={`flex items-center bg-gray-400 text-background min-w-[65%] px-3 rounded-xl`}
 						>
 							REACT Marios Bros.
 						</p>
