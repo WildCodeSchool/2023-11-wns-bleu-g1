@@ -1,4 +1,4 @@
-import { DataSource } from "typeorm";
+import { Code, DataSource } from "typeorm";
 import env from "./env";
 import User from "./entities/user";
 import Project from "./entities/project";
@@ -11,7 +11,7 @@ const db = new DataSource({
 	database: env.DB_NAME,
 	host: env.DB_HOST,
 	port: env.DB_PORT,
-	entities: [User, Project, Langage],
+	entities: [User, Project, Langage, Code],
 	synchronize: true,
 	logging: env.NODE_ENV !== "test",
 });
