@@ -3,11 +3,9 @@ name: "test-front"
 on:
   pull_request:
 
-
 jobs:
   test-client:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'pull_request' }}
     defaults:
       run:
         working-directory: ./frontend
@@ -35,12 +33,14 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Create .env file
+        run: cp frontend/.env.example frontend/.env
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
           push: true
-          context: "{{defaultContext}}:frontend"
-          file: "Dockerfile.production"
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/wild-code-online-front:latest
+          context: "./frontend"
+          file: "frontend/Dockerfile.production"
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/wild-code-online-frontend:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
