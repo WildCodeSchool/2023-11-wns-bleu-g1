@@ -1,4 +1,4 @@
-import { Arg, Mutation, Query } from "type-graphql";
+import { Query } from "type-graphql";
 
 import Code from "../entities/code";
 
@@ -12,7 +12,4 @@ export default class CodeResolver {
 
 		return codes;
 	}
-
-	// @Mutation(() => Code)
-	// async saveCode(@Arg("data", {validate: true}) data: )
 }
