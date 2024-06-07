@@ -9,7 +9,7 @@ import {
 	DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { BadgeCheck, Crown, FolderOpen, LogOut, User } from "lucide-react";
+import { BadgeCheck, Crown, LogOut, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
 	useGetUserProfileQuery,
@@ -77,11 +77,7 @@ const AuthHeader = () => {
 							<DropdownMenuSeparator />
 							<DropdownMenuItem className={itemsClassName}>
 								<User className={iconsClassName} />
-								Mon profil
-							</DropdownMenuItem>
-							<DropdownMenuItem className={itemsClassName}>
-								<FolderOpen className={iconsClassName} />
-								Mes projets
+								<Link href={"/tableau-de-bord"}>Mon profil</Link>
 							</DropdownMenuItem>
 							<DropdownMenuItem
 								className={cn(
