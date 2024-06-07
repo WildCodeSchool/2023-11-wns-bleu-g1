@@ -80,7 +80,7 @@ const CodingPage = () => {
 
 	return (
 		<AuthLayout>
-			<div className="min-h-screen">
+			<div>
 				<div id="coddingTopInfo" className="flex w-full relative">
 					<h1 className="flex flex-1 justify-start align-middle items-center pl-4">
 						Nom du projet
