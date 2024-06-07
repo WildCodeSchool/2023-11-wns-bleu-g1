@@ -36,10 +36,12 @@ export default class Code extends BaseEntity {
 	@UpdateDateColumn()
 	reportedAt: Date;
 
-	@ManyToOne(() => Language, (language) => language.code)
+	@ManyToOne(() => Language, (language) => language.codes)
+	@Field(() => Language)
 	language: Language;
 
-	@ManyToOne(() => Project, (project) => project.code, { onDelete: "CASCADE" })
+	@ManyToOne(() => Project, (project) => project.codes, { onDelete: "CASCADE" })
+	@Field(() => Project)
 	project: Project;
 }
 

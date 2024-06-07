@@ -21,8 +21,9 @@ export default class Language extends BaseEntity {
 	@Field()
 	name: string;
 
-	@OneToMany(() => Code, (code) => code.language)
-	code: Code[];
+	@OneToMany(() => Code, (code) => code.language, { cascade: true })
+	@Field(() => [Code])
+	codes: Code[];
 }
 
 @InputType()

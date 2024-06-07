@@ -1,0 +1,29 @@
+mutation CreateProject($data: NewProjectInput!) {
+	createProject(data: $data) {
+		title
+		user {
+			pseudo
+			role
+			id
+			email
+		}
+		id
+		isPublic
+	}
+}
+
+query GetMyProjects {
+	getMyProjects {
+		title
+		isPublic
+		createdAt
+		updatedAt
+		user {
+			pseudo
+			role
+			id
+			email
+		}
+		id
+	}
+}

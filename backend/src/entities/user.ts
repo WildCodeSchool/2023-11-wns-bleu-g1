@@ -1,14 +1,15 @@
 import { hash } from "argon2";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { IsEmail, IsStrongPassword, Length, Matches } from "class-validator";
+import { IsEmail, Length, Matches } from "class-validator";
 import { Field, InputType, ObjectType } from "type-graphql";
 import {
 	BaseEntity,
 	BeforeInsert,
 	Column,
 	Entity,
+	OneToMany,
 	PrimaryGeneratedColumn,
 } from "typeorm";
+import Project from "./project";
 
 export enum UserRole {
 	ADMIN = "admin",
@@ -43,6 +44,9 @@ export default class User extends BaseEntity {
 
 	@Column()
 	hashedPassword: string;
+
+	@OneToMany(() => Project, (project) => project.user, { cascade: true })
+	projects: Project[];
 }
 
 @InputType()
