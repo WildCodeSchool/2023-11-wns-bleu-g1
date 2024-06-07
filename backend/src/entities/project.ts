@@ -5,11 +5,13 @@ import {
 	Column,
 	CreateDateColumn,
 	Entity,
+	ManyToOne,
 	OneToMany,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from "typeorm";
 import Code from "./code";
+import User from "./user";
 
 @Entity()
 @ObjectType()
@@ -27,13 +29,20 @@ export default class Project extends BaseEntity {
 	isPublic: boolean;
 
 	@CreateDateColumn()
+	@Field()
 	createdAt: Date;
 
 	@UpdateDateColumn()
+	@Field()
 	updatedAt: Date;
 
 	@OneToMany(() => Code, (code) => code.project, { cascade: true })
-	code: Code[];
+	@Field(() => [Code])
+	codes: Code[];
+
+	@ManyToOne(() => User, (user) => user.projects, { onDelete: "CASCADE" })
+	@Field(() => User)
+	user: User;
 }
 
 @InputType()

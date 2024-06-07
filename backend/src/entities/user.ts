@@ -6,8 +6,10 @@ import {
 	BeforeInsert,
 	Column,
 	Entity,
+	OneToMany,
 	PrimaryGeneratedColumn,
 } from "typeorm";
+import Project from "./project";
 
 export enum UserRole {
 	ADMIN = "admin",
@@ -42,6 +44,9 @@ export default class User extends BaseEntity {
 
 	@Column()
 	hashedPassword: string;
+
+	@OneToMany(() => Project, (project) => project.user, { cascade: true })
+	projects: Project[];
 }
 
 @InputType()
