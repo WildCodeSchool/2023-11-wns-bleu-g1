@@ -38,8 +38,8 @@ services:
   nginx:
     image: nginx:1.21.3
     depends_on:
-      - server
-      - client
+      - backend
+      - frontend
     restart: always
     ports:
       - ${GATEWAY_PORT:-8000}:80
