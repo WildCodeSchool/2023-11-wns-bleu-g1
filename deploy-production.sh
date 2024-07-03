@@ -1,5 +1,4 @@
 #!/bin/sh
-git fetch origin && git reset --hard origin/master && git clean -f -d && \
-docker compose -f docker-compose.production.yml down && \
-docker compose -f docker-compose.production.yml pull && \
-docker compose -f docker-compose.production.yml --env-file .env.production up -d;
+echo "PORT=$PORT"
+git fetch origin && git reset --hard origin/master && git clean -f -d
+GATEWAY_PORT=$PORT docker-compose -f docker-compose.production.yml up --build -d
