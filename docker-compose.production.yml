@@ -26,23 +26,28 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    image: fond2laclasse/wild-code-online-backend
+    build: ./backend
 
   frontend:
     environment:
       JWT_PRIVATE_KEY: ${JWT_PRIVATE_KEY:-default}
     stop_grace_period: 0s
     env_file: frontend/.env
-    image: fond2laclasse/wild-code-online-frontend
+    build: ./frontend
 
-  gateway:
+  nginx:
+    image: nginx:1.21.3
+    depends_on:
+      - server
+      - client
     restart: always
-    stop_grace_period: 0s
-    build:
-      context: gateway
-      dockerfile: Dockerfile.production
     ports:
-      - ${GATEWAY_PORT-80}:80
+      - ${GATEWAY_PORT:-8000}:80
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - web-client-build:/web-client-build
+      - ./logs:/var/log/nginx
 
 volumes:
   prodDB:
+  web-client-build:
