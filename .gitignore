@@ -1,2 +1,4 @@
 #JetBtains IDE
 /.idea/
+.env.production
+.env.staging
