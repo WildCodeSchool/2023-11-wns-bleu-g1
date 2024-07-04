@@ -6,7 +6,8 @@
     "db": "docker-compose up db",
     "start": "docker compose up",
     "stop": "docker compose down",
-    "dev": "docker compose up -d"
+    "dev": "docker compose up -d",
+    "prod": "docker-compose -f docker-compose.production.yml --env-file .env.production up --build"
   },
   "dependencies": {
     "prismjs": "^1.29.0"
