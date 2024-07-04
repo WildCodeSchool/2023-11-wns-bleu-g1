@@ -2,3 +2,5 @@
 /.idea/
 .env.production
 .env.staging
+
+./logs

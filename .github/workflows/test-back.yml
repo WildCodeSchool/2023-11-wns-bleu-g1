@@ -1,9 +1,9 @@
-name: 'test-back'
+name: "test-back"
 
 on:
   pull_request:
     paths:
-      - 'backend/**'
+      - "backend/**"
 
 jobs:
   linting-backend:
@@ -92,7 +92,7 @@ jobs:
           name: test-results
           path: test-results/
           retention-days: 7
-  build-and-push-frontend:
+  build-and-push-backend:
     needs: e2e-test
     runs-on: ubuntu-latest
     steps:
