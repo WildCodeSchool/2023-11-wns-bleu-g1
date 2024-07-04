@@ -37,19 +37,14 @@ services:
     env_file: frontend/.env
     image: fond2laclasse/wild-code-online-frontend:latest
 
-  nginx:
-    image: nginx:1.21.3
-    depends_on:
-      - backend
-      - frontend
+  gateway:
     restart: always
+    stop_grace_period: 0s
+    build:
+      context: gateway
+      dockerfile: Dockerfile.production
     ports:
-      - ${GATEWAY_PORT:-8000}:80
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-      - web-client-build:/web-client-build
-      - ./logs:/var/log/nginx
+      - ${GATEWAY_PORT-80}:80
 
 volumes:
   prodDB:
-  web-client-build:
