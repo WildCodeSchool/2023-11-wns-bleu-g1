@@ -4,6 +4,9 @@ on:
   pull_request:
     paths:
       - 'frontend/**'
+    types:
+      - closed
+
 
 jobs:
   linting-frontend:
@@ -39,7 +42,7 @@ jobs:
       - name: Run tests
         run: npm test
   build-and-push-frontend:
-    if: ${{ github.event.pull_request.merged }}
+    if: github.event.pull_request.merged == true
     needs: test-client
     runs-on: ubuntu-latest
     steps:
