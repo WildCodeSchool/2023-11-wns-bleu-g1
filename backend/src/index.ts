@@ -37,7 +37,7 @@ const main = async () => {
 	);
 
 	await new Promise<void>((resolve) => httpServer.listen(port, resolve));
-	console.log(`🚀 Server ready at http://localhost:${port}`);
+	console.log(`🚀 Hey, server ready at http://localhost:${port}`);
 };
 
 main();
