@@ -39,7 +39,7 @@ jobs:
       - name: Run tests
         run: npm test
   build-and-push-frontend:
-    if: github.event.pull_request.merged == true
+    if: ${{ github.event.pull_request.merged }}
     needs: test-client
     runs-on: ubuntu-latest
     steps:
