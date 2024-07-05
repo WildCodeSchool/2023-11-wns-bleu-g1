@@ -93,7 +93,7 @@ jobs:
           path: test-results/
           retention-days: 7
   build-and-push-backend:
-    if: ${{ github.event.pull_request.merged }}
+    if: github.event.pull_request.merged == true
     needs: e2e-test
     runs-on: ubuntu-latest
     steps:
