@@ -55,7 +55,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          context: "{{defaultContext}}:frontend"
+          context: "{{defaultContext}}:staging-frontend"
           file: "Dockerfile.production"
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/wild-code-online-frontend:latest
           cache-from: type=gha
