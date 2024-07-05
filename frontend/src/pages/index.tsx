@@ -31,7 +31,7 @@ export default function Home() {
 					<div className="space-y-6 flex-1">
 						<h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl text-center sm:text-start font-bold">
 							Wild Code{" "}
-							<span className="text-primary">Online /\__STAGING__/\</span>
+							<span className="text-primary">Online \/\__STAGING__/\/</span>
 						</h1>
 						<p className="text-center text-black dark:text-muted-foreground sm:text-start lg:text-lg sm:max-w-sm">
 							Créer, exécuter et partager du code avec la communauté. Avec Wild
