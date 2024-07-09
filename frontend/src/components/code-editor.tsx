@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import Topbar from "@/components/elements/Topbar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import PrismLoader from "@/components/prism-loader";
-import { Separator } from "@/components/ui/separator";
 import Prism from "prismjs";
-import AuthLayout from "@/components/elements/auth-layout";
 
-const CodingPage = () => {
-	const [code, setCode] = useState("");
+export default function CodeEditor() {
+    const [code, setCode] = useState("");
 	const [showResult, setShowResult] = useState("");
 	const [count, setCount] = useState(0);
 
@@ -78,25 +74,8 @@ const CodingPage = () => {
 		}
 	};
 
-	return (
-		<AuthLayout>
-			<div>
-				<div id="coddingTopInfo" className="flex w-full relative">
-					<h1 className="flex flex-1 justify-start align-middle items-center pl-4">
-						Nom du projet
-					</h1>
-					<div className="relative my-6 mr-4 flex h-10 w-12 rounded-md md:h-14 justify-end align-bottom items-end">
-						<Image
-							src="/Javascript_logo.png"
-							alt="logo javascript"
-							layout="fill"
-							objectFit="contain"
-							className="justify-end align-bottom items-end"
-						/>
-					</div>
-				</div>
-				<Separator />
-				<div id="codingContent" className="flex flex-col md:flex-row w-full">
+    return (
+        <div id="codingContent" className="flex flex-col md:flex-row w-full">
 					<div
 						id="codingArea"
 						className="relative min-h-80 md:min-h-[50vh] md:min-w-[45%] ml-2 md:ml-0"
@@ -133,7 +112,7 @@ const CodingPage = () => {
 							className="flex md:justify-center md:items-center md:content-center md:align-middle mt-4 mb-4 w-20 ml-2 md:mr-0"
 							onClick={runCode}
 						>
-							Exécutez
+							Exécuter
 						</Button>
 						{/* @Todo: Remettre le compte à 50 en dehors des tests */}
 						<p className="flex items-center">{count}/10</p>
@@ -152,9 +131,5 @@ const CodingPage = () => {
 						/>
 					</div>
 				</div>
-			</div>
-		</AuthLayout>
-	);
-};
-
-export default CodingPage;
+    )
+}

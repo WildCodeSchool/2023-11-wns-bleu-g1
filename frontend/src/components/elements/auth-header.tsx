@@ -88,9 +88,13 @@ const AuthHeader = () => {
 									itemsClassName,
 									"text-warning focus:text-warning"
 								)}
+
+								asChild 
 							>
-								<Crown className={iconsClassName} />
-								Passer Premium
+								<Link href={"/premium"}>
+									<Crown className={iconsClassName} />
+									Passer Premium
+								</Link>
 							</DropdownMenuItem>
 							<DropdownMenuItem
 								className={cn(itemsClassName, "text-error focus:text-error")}
