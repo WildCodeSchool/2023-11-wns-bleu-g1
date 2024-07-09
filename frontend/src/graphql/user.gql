@@ -5,6 +5,10 @@ query Users {
 	}
 }
 
+query GetExecutionCounter {
+	getExecutionCounter
+}
+
 mutation SignUp($data: NewUserInput!) {
 	createUser(data: $data) {
 		email
@@ -29,4 +33,8 @@ query GetUserProfile {
 		pseudo
 		role
 	}
+}
+
+mutation IncrementeExecutionCounter($counter: ExecutionCounterInput!) {
+	incrementeExecutionCounter(counter: $counter)
 }

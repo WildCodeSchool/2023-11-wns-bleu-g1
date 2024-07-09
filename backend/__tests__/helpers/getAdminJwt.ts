@@ -14,7 +14,7 @@ export default async function getAdminJwt() {
 
 	await admin.save();
 
-	const JWT = await jwt.sign({ userId: admin.id }, env.JWT_PRIVATE_KEY);
+	const JWT = jwt.sign({ userId: admin.id }, env.JWT_PRIVATE_KEY);
 
 	console.log(JWT);
 

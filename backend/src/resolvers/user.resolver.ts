@@ -1,5 +1,9 @@
 import { Arg, Authorized, Ctx, Mutation, Query } from "type-graphql";
-import User, { NewUserInput, SigninInput } from "../entities/user";
+import User, {
+	ExecutionCounterInput,
+	NewUserInput,
+	SigninInput,
+} from "../entities/user";
 import { GraphQLError } from "graphql";
 import { verify } from "argon2";
 import jwt from "jsonwebtoken";
@@ -26,6 +30,15 @@ export default class UserResolver {
 			where: { id: ctx.currentUser.id },
 			select: ["id", "pseudo", "email", "role"],
 		});
+	}
+
+	@Authorized([UserRole.VISITOR])
+	@Query(() => Number)
+	async getExecutionCounter(@Ctx() { currentUser }: Context) {
+		const user = await User.findOneByOrFail({ id: currentUser?.id });
+
+		console.log(user);
+		return currentUser?.executionCounter;
 	}
 
 	@Mutation(() => User)
@@ -103,5 +116,23 @@ export default class UserResolver {
 		ctx.res.clearCookie("token");
 
 		return "ok";
+	}
+
+	@Authorized([UserRole.VISITOR])
+	@Mutation(() => Number)
+	async incrementeExecutionCounter(
+		@Arg("counter") counter: ExecutionCounterInput,
+		@Ctx() { currentUser }: Context
+	) {
+		const user = await User.findOneByOrFail({ id: currentUser?.id });
+
+		user.executionCounter =
+			counter.executionCounter === 10
+				? counter.executionCounter
+				: counter.executionCounter + 1;
+
+		await user.save();
+
+		return user.executionCounter;
 	}
 }
