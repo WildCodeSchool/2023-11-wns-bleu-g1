@@ -133,7 +133,7 @@ const CodingPage = () => {
 							className="flex md:justify-center md:items-center md:content-center md:align-middle mt-4 mb-4 w-20 ml-2 md:mr-0"
 							onClick={runCode}
 						>
-							Exécutez
+							Exécuter
 						</Button>
 						{/* @Todo: Remettre le compte à 50 en dehors des tests */}
 						<p className="flex items-center">{count}/10</p>
