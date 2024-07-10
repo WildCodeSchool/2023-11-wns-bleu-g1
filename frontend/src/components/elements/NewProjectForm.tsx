@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input"
 import {AlertDialogCancel} from "@/components/ui/alert-dialog";
 import { Checkbox } from "@/components/ui/checkbox"
-import {Select, SelectContent, SelectItem, SelectTrigger} from "@/components/ui/select";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import React from "react";
 import {useGetLanguagesQuery} from "@/graphql/generated/schema";
 
@@ -43,7 +43,6 @@ export default function NewProjectForm() {
 
   const languages = getLanguagesQuery.data?.getLanguages || [];
 
-console.log("langue :", languages)
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
     console.log({ values });
   };
@@ -69,10 +68,11 @@ console.log("langue :", languages)
               name="projectLanguage"
               render={({field}) => (
                   <FormItem className="flex">
+                    <FormLabel className="mr-2 content-center">Langage</FormLabel>
                     <Select onValueChange={field.onChange}>
-                      <FormLabel className="mr-2 content-center">Langage</FormLabel>
                     <FormControl>
                       <SelectTrigger className="w-[240px]">
+                          <SelectValue />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
