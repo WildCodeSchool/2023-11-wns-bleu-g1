@@ -29,6 +29,12 @@ export type ExecutionCounterInput = {
   executionCounter: Scalars['Float'];
 };
 
+export type CodeInput = {
+  content: Scalars['String'];
+  language?: InputMaybe<Scalars['String']>;
+  project: Scalars['String'];
+};
+
 export type Language = {
   __typename?: 'Language';
   codes: Array<Code>;
@@ -38,6 +44,7 @@ export type Language = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createCode: Code;
   createLanguage: Array<Language>;
   createProject: Project;
   createUser: User;
@@ -46,6 +53,11 @@ export type Mutation = {
   logout: Scalars['String'];
   signin: Scalars['String'];
   updateLanguage: Array<Language>;
+};
+
+
+export type MutationCreateCodeArgs = {
+  data: CodeInput;
 };
 
 
@@ -145,6 +157,18 @@ export type GetLanguagesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetLanguagesQuery = { __typename?: 'Query', getLanguages: Array<{ __typename?: 'Language', id: string, name: string }> };
 
+export type CreateCodeMutationVariables = Exact<{
+  data: CodeInput;
+}>;
+
+
+export type CreateCodeMutation = { __typename?: 'Mutation', createCode: { __typename?: 'Code', id: string, content: string, isReported: boolean } };
+
+export type GetCodesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCodesQuery = { __typename?: 'Query', getCodes: Array<{ __typename?: 'Code', id: string, isReported: boolean, content: string, language: { __typename?: 'Language', id: string, name: string } }> };
+
 export type MutationMutationVariables = Exact<{
   data: NewProjectInput;
 }>;
@@ -157,7 +181,7 @@ export type CreateProjectMutationVariables = Exact<{
 }>;
 
 
-export type CreateProjectMutation = { __typename?: 'Mutation', createProject: { __typename?: 'Project', title: string, id: string, isPublic: boolean, user: { __typename?: 'User', pseudo: string, role: string, id: string, email: string } } };
+export type CreateProjectMutation = { __typename?: 'Mutation', createProject: { __typename?: 'Project', title: string, id: string, isPublic: boolean, user: { __typename?: 'User', pseudo: string, role: string, id: string } } };
 
 export type GetMyProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -241,6 +265,81 @@ export function useGetLanguagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GetLanguagesQueryHookResult = ReturnType<typeof useGetLanguagesQuery>;
 export type GetLanguagesLazyQueryHookResult = ReturnType<typeof useGetLanguagesLazyQuery>;
 export type GetLanguagesQueryResult = Apollo.QueryResult<GetLanguagesQuery, GetLanguagesQueryVariables>;
+export const CreateCodeDocument = gql`
+    mutation CreateCode($data: CodeInput!) {
+  createCode(data: $data) {
+    id
+    content
+    isReported
+  }
+}
+    `;
+export type CreateCodeMutationFn = Apollo.MutationFunction<CreateCodeMutation, CreateCodeMutationVariables>;
+
+/**
+ * __useCreateCodeMutation__
+ *
+ * To run a mutation, you first call `useCreateCodeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCodeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCodeMutation, { data, loading, error }] = useCreateCodeMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateCodeMutation(baseOptions?: Apollo.MutationHookOptions<CreateCodeMutation, CreateCodeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCodeMutation, CreateCodeMutationVariables>(CreateCodeDocument, options);
+      }
+export type CreateCodeMutationHookResult = ReturnType<typeof useCreateCodeMutation>;
+export type CreateCodeMutationResult = Apollo.MutationResult<CreateCodeMutation>;
+export type CreateCodeMutationOptions = Apollo.BaseMutationOptions<CreateCodeMutation, CreateCodeMutationVariables>;
+export const GetCodesDocument = gql`
+    query getCodes {
+  getCodes {
+    id
+    isReported
+    content
+    language {
+      id
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetCodesQuery__
+ *
+ * To run a query within a React component, call `useGetCodesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCodesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCodesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCodesQuery(baseOptions?: Apollo.QueryHookOptions<GetCodesQuery, GetCodesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCodesQuery, GetCodesQueryVariables>(GetCodesDocument, options);
+      }
+export function useGetCodesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCodesQuery, GetCodesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCodesQuery, GetCodesQueryVariables>(GetCodesDocument, options);
+        }
+export type GetCodesQueryHookResult = ReturnType<typeof useGetCodesQuery>;
+export type GetCodesLazyQueryHookResult = ReturnType<typeof useGetCodesLazyQuery>;
+export type GetCodesQueryResult = Apollo.QueryResult<GetCodesQuery, GetCodesQueryVariables>;
 export const MutationDocument = gql`
     mutation Mutation($data: NewProjectInput!) {
   createProject(data: $data) {
@@ -294,7 +393,6 @@ export const CreateProjectDocument = gql`
       pseudo
       role
       id
-      email
     }
     id
     isPublic
@@ -575,6 +673,7 @@ export function useGetUserProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type GetUserProfileQueryHookResult = ReturnType<typeof useGetUserProfileQuery>;
 export type GetUserProfileLazyQueryHookResult = ReturnType<typeof useGetUserProfileLazyQuery>;
 export type GetUserProfileQueryResult = Apollo.QueryResult<GetUserProfileQuery, GetUserProfileQueryVariables>;
+
 export const IncrementExecutionCounterDocument = gql`
     mutation IncrementExecutionCounter($counter: ExecutionCounterInput!) {
   incrementExecutionCounter(counter: $counter)

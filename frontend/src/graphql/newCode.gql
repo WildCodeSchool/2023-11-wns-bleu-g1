@@ -1,0 +1,19 @@
+mutation CreateCode($data: CodeInput!) {
+  createCode(data: $data) {
+    id
+    content
+    isReported
+  }
+}
+
+query getCodes {
+  getCodes {
+    id
+    isReported
+    content
+    language {
+      id
+      name
+    }
+  }
+}

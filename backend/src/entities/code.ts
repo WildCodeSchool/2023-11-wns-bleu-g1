@@ -19,7 +19,7 @@ export default class Code extends BaseEntity {
 	@Field()
 	id: string;
 
-	@Column({ default: ""})
+	@Column({ nullable: true, default: ""})
 	@Field()
 	content: string;
 
@@ -49,4 +49,10 @@ export default class Code extends BaseEntity {
 export class CodeInput {
 	@Field()
 	content: string;
+
+	@Field({nullable: true})
+	language: string;
+
+	@Field()
+	project: string;
 }

@@ -15,45 +15,130 @@ import {AlertDialogCancel} from "@/components/ui/alert-dialog";
 import { Checkbox } from "@/components/ui/checkbox"
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import React from "react";
-import {useGetLanguagesQuery} from "@/graphql/generated/schema";
+import {
+    useCreateCodeMutation,
+    useCreateProjectMutation,
+    useGetLanguagesQuery,
+    GetMyProjectsDocument
+} from "@/graphql/generated/schema";
+import {gql} from "@apollo/client";
+import {useRouter} from "next/navigation";
 
 
 
 const formSchema = z.object({
-  projectName: z.string().min(2, {
+  title: z.string().min(2, {
     message: "Le nom du projet doit contenir au moins 2 caractères.",
   }),
-    projectLanguage: z.string().min(2, {
+    language: z.string().min(2, {
         message: "Le langage du projet doit être spécifié.",
     }),
     isPublic: z.boolean(),
 })
 
 export default function NewProjectForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      projectName: "",
-      projectLanguage: "",
-      isPublic: false
+
+    const getLanguagesQuery = useGetLanguagesQuery();
+    const languages = getLanguagesQuery.data?.getLanguages || [];
+    const router = useRouter();
+
+    // console.log("lang: ", languages);
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            isPublic: false
+        },
+    })
+
+    const [addCode, addCodeResult] = useCreateCodeMutation({
+    onCompleted: () => {
+        console.log("Code created");
     },
-  })
+    refetchQueries: [
+        {
+            query: gql`
+                query getCodes {
+                    getCodes {
+                        id
+                        isReported
+                        content
+                        language {
+                            id
+                            name
+                        }
+                    }
+                }
+            `
+        },
+    ],
+    onError: (error) => {
+        console.log("addCode error: ", error);
+    }
+});
 
-  const getLanguagesQuery = useGetLanguagesQuery();
 
-  const languages = getLanguagesQuery.data?.getLanguages || [];
+    const [addProject, addProjectResult] = useCreateProjectMutation({
+        onCompleted: () => {
+            console.log("Project created");
+        },
+        refetchQueries: [
+            GetMyProjectsDocument,
+        ],
+        onError: (error) => {
+            console.log(error);
+        }
+    });
 
-  const handleSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log({ values });
-  };
+    if (addProjectResult.loading) return <div>Loading...</div>;
+    if (addProjectResult.error) return <p>Project: Une erreur est survenue: {addProjectResult.error.message}</p>;
+    if (addCodeResult.loading) return <div>Loading...</div>;
+    if (addCodeResult.error) return <p>Code: Une erreur est survenue: {addCodeResult.error.message}</p>;
+
+
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        // console.log("userId")
+        // console.log("languageID: ", values.language)
+        console.log("values: ", values)
+        const languageId = values.language
+
+        const response = await addProject({
+            variables: {
+                data: {
+                    title: values.title,
+                    isPublic: values.isPublic,
+                }
+            }
+        })
+
+        const projectId = response.data?.createProject.id;
+
+
+        if(projectId && languageId) {
+            console.log("projectId and languageId are defined")
+            await addCode({
+                variables: {
+                    data: {
+                        content: " ",
+                        language: languageId,
+                        project: projectId
+                    }
+                }
+            });
+            //redirect to the project page
+            router.push(`/coding/codingPage/${projectId}`)
+        } else {
+            console.log("pojectId or languageId is undefined")
+        }
+    }
+
 
   return (
       <>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
               control={form.control}
-              name="projectName"
+              name="title"
               render={({field}) => (
                   <FormItem className="space-y-4">
                     <FormControl>
@@ -65,7 +150,7 @@ export default function NewProjectForm() {
             <div className="flex justify-end">
               <FormField
               control={form.control}
-              name="projectLanguage"
+              name="language"
               render={({field}) => (
                   <FormItem className="flex">
                     <FormLabel className="mr-2 content-center">Langage</FormLabel>

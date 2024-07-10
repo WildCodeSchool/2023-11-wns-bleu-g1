@@ -9,7 +9,7 @@ export default class ProjectResolver {
 	async getProjects() {
 		// SELECT * FROM Project;
 		const projects = await Project.find({
-			relations: { codes: true, user: true },
+			relations: { codes: { language: true }, user: true},
 		});
 
 		return projects;
