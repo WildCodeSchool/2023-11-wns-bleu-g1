@@ -17,3 +17,16 @@ query getCodes {
     }
   }
 }
+query GetCodeforAProjectId($project: String!) {
+  getCode(project: $project) {
+    id
+    content
+    language {
+      name
+    }
+    project {
+      title
+      id
+    }
+  }
+}

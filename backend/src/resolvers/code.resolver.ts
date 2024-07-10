@@ -15,6 +15,17 @@ export default class CodeResolver {
 		return codes;
 	}
 
+	// find a code for a projectid
+	@Query(() => [Code])
+	async getCode(@Arg("project") project: string) {
+		const code = await Code.find({
+			where: { project: { id: project } },
+			relations: { language: true, project: true },
+		});
+
+		return code;
+	}
+
 	// Create new code
 	@Mutation(() => Code)
 	async createCode(@Arg("data", { validate: true }) data: CodeInput) {
@@ -24,5 +35,17 @@ export default class CodeResolver {
 
 
 		return await code.save();
+	}
+
+	// update code content
+	@Mutation(() => Code)
+	async updateCode(@Arg("id") id: string, @Arg("data", { validate: true }) data: CodeInput) {
+		const code = await Code.findOne({where: {id}});
+		if (!code) {
+			throw new Error("Code not found!");
+		}
+		code.content = data.content;
+		return await code.save();
+
 	}
 }

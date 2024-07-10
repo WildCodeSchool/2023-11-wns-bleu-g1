@@ -125,7 +125,7 @@ export default function NewProjectForm() {
                 }
             });
             //redirect to the project page
-            router.push(`/coding/codingPage/${projectId}`)
+            router.push(`/coding/${projectId}`)
         } else {
             console.log("pojectId or languageId is undefined")
         }

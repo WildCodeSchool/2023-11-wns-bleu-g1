@@ -122,18 +122,30 @@ export type Project = {
 
 export type Query = {
   __typename?: 'Query';
+  getCode: Array<Code>;
   getCodes: Array<Code>;
   getExecutionCounter: User;
   getLanguage: Array<Language>;
   getLanguages: Array<Language>;
   getMyProjects: Array<Project>;
+  getProject: Array<Project>;
   getProjects: Array<Project>;
   getUserProfile: User;
   users: Array<User>;
 };
 
 
+export type QueryGetCodeArgs = {
+  project: Scalars['String'];
+};
+
+
 export type QueryGetLanguageArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryGetProjectArgs = {
   id: Scalars['String'];
 };
 
@@ -169,6 +181,13 @@ export type GetCodesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCodesQuery = { __typename?: 'Query', getCodes: Array<{ __typename?: 'Code', id: string, isReported: boolean, content: string, language: { __typename?: 'Language', id: string, name: string } }> };
 
+export type GetCodeforAProjectIdQueryVariables = Exact<{
+  project: Scalars['String'];
+}>;
+
+
+export type GetCodeforAProjectIdQuery = { __typename?: 'Query', getCode: Array<{ __typename?: 'Code', id: string, content: string, language: { __typename?: 'Language', name: string }, project: { __typename?: 'Project', title: string, id: string } }> };
+
 export type MutationMutationVariables = Exact<{
   data: NewProjectInput;
 }>;
@@ -187,6 +206,13 @@ export type GetMyProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetMyProjectsQuery = { __typename?: 'Query', getMyProjects: Array<{ __typename?: 'Project', title: string, isPublic: boolean, createdAt: any, updatedAt: any, id: string, user: { __typename?: 'User', pseudo: string, role: string, id: string, email: string } }> };
+
+export type GetProjectByIdQueryVariables = Exact<{
+  getProjectId: Scalars['String'];
+}>;
+
+
+export type GetProjectByIdQuery = { __typename?: 'Query', getProject: Array<{ __typename?: 'Project', id: string, title: string, isPublic: boolean, codes: Array<{ __typename?: 'Code', content: string, language: { __typename?: 'Language', name: string, id: string } }> }> };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -340,6 +366,49 @@ export function useGetCodesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 export type GetCodesQueryHookResult = ReturnType<typeof useGetCodesQuery>;
 export type GetCodesLazyQueryHookResult = ReturnType<typeof useGetCodesLazyQuery>;
 export type GetCodesQueryResult = Apollo.QueryResult<GetCodesQuery, GetCodesQueryVariables>;
+export const GetCodeforAProjectIdDocument = gql`
+    query GetCodeforAProjectId($project: String!) {
+  getCode(project: $project) {
+    id
+    content
+    language {
+      name
+    }
+    project {
+      title
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetCodeforAProjectIdQuery__
+ *
+ * To run a query within a React component, call `useGetCodeforAProjectIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCodeforAProjectIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCodeforAProjectIdQuery({
+ *   variables: {
+ *      project: // value for 'project'
+ *   },
+ * });
+ */
+export function useGetCodeforAProjectIdQuery(baseOptions: Apollo.QueryHookOptions<GetCodeforAProjectIdQuery, GetCodeforAProjectIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCodeforAProjectIdQuery, GetCodeforAProjectIdQueryVariables>(GetCodeforAProjectIdDocument, options);
+      }
+export function useGetCodeforAProjectIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCodeforAProjectIdQuery, GetCodeforAProjectIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCodeforAProjectIdQuery, GetCodeforAProjectIdQueryVariables>(GetCodeforAProjectIdDocument, options);
+        }
+export type GetCodeforAProjectIdQueryHookResult = ReturnType<typeof useGetCodeforAProjectIdQuery>;
+export type GetCodeforAProjectIdLazyQueryHookResult = ReturnType<typeof useGetCodeforAProjectIdLazyQuery>;
+export type GetCodeforAProjectIdQueryResult = Apollo.QueryResult<GetCodeforAProjectIdQuery, GetCodeforAProjectIdQueryVariables>;
 export const MutationDocument = gql`
     mutation Mutation($data: NewProjectInput!) {
   createProject(data: $data) {
@@ -469,6 +538,50 @@ export function useGetMyProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type GetMyProjectsQueryHookResult = ReturnType<typeof useGetMyProjectsQuery>;
 export type GetMyProjectsLazyQueryHookResult = ReturnType<typeof useGetMyProjectsLazyQuery>;
 export type GetMyProjectsQueryResult = Apollo.QueryResult<GetMyProjectsQuery, GetMyProjectsQueryVariables>;
+export const GetProjectByIdDocument = gql`
+    query GetProjectById($getProjectId: String!) {
+  getProject(id: $getProjectId) {
+    id
+    title
+    isPublic
+    codes {
+      content
+      language {
+        name
+        id
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetProjectByIdQuery__
+ *
+ * To run a query within a React component, call `useGetProjectByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectByIdQuery({
+ *   variables: {
+ *      getProjectId: // value for 'getProjectId'
+ *   },
+ * });
+ */
+export function useGetProjectByIdQuery(baseOptions: Apollo.QueryHookOptions<GetProjectByIdQuery, GetProjectByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProjectByIdQuery, GetProjectByIdQueryVariables>(GetProjectByIdDocument, options);
+      }
+export function useGetProjectByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProjectByIdQuery, GetProjectByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProjectByIdQuery, GetProjectByIdQueryVariables>(GetProjectByIdDocument, options);
+        }
+export type GetProjectByIdQueryHookResult = ReturnType<typeof useGetProjectByIdQuery>;
+export type GetProjectByIdLazyQueryHookResult = ReturnType<typeof useGetProjectByIdLazyQuery>;
+export type GetProjectByIdQueryResult = Apollo.QueryResult<GetProjectByIdQuery, GetProjectByIdQueryVariables>;
 export const UsersDocument = gql`
     query Users {
   users {

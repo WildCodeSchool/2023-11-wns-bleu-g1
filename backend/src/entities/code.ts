@@ -36,6 +36,7 @@ export default class Code extends BaseEntity {
 	@UpdateDateColumn({ nullable: true })
 	reportedAt: Date;
 
+	// WARNING: is this really many to one or one to one for a language??
 	@ManyToOne(() => Language, (language) => language.codes)
 	@Field(() => Language)
 	language: Language;
