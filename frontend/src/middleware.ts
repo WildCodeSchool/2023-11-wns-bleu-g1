@@ -14,9 +14,7 @@ export async function middleware(request: NextRequest) {
 			try {
 				const { payload } = await jwtVerify(token, JWT_PRIVATE_KEY);
 				if (payload.userId)
-					return NextResponse.redirect(
-						new URL("/tableau-de-bord", request.url)
-					);
+					return NextResponse.redirect(new URL("/profile", request.url));
 			} catch (e) {}
 		}
 		return NextResponse.next();
@@ -27,7 +25,7 @@ export async function middleware(request: NextRequest) {
 		try {
 			const { payload } = await jwtVerify(token, JWT_PRIVATE_KEY);
 			if (payload.userId)
-				return NextResponse.redirect(new URL("/tableau-de-bord", request.url));
+				return NextResponse.redirect(new URL("/profile", request.url));
 		} catch (e) {}
 	}
 
@@ -36,9 +34,7 @@ export async function middleware(request: NextRequest) {
 			const { payload } = await jwtVerify(token, JWT_PRIVATE_KEY);
 			if (payload.userId)
 				if (request.nextUrl.pathname === "/") {
-					return NextResponse.redirect(
-						new URL("/tableau-de-bord", request.url)
-					);
+					return NextResponse.redirect(new URL("/profile", request.url));
 				}
 
 			return NextResponse.next();
@@ -50,5 +46,5 @@ export async function middleware(request: NextRequest) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-	matcher: ["/", "/tableau-de-bord", "/auth/:path*", "/coding/codingPage", "/profile"],
+	matcher: ["/", "/auth/:path*", "/coding/codingPage", "/profile"],
 };
