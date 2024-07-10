@@ -46,7 +46,12 @@ export default class User extends BaseEntity {
 	hashedPassword: string;
 
 	@Column({ default: 0 })
+	@Field()
 	executionCounter: number;
+
+	@Column({ default: false })
+	@Field()
+	isPremium: boolean;
 
 	@OneToMany(() => Project, (project) => project.user, { cascade: true })
 	projects: Project[];
@@ -70,6 +75,9 @@ export class NewUserInput {
 
 	@Field({ nullable: true })
 	role: UserRole;
+
+	@Field({ nullable: true })
+	isPremium: boolean;
 }
 
 @InputType()

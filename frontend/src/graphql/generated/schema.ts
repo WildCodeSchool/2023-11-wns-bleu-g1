@@ -72,6 +72,7 @@ export type NewProjectInput = {
 
 export type NewUserInput = {
   email: Scalars['String'];
+  isPremium?: InputMaybe<Scalars['Boolean']>;
   password: Scalars['String'];
   pseudo: Scalars['String'];
   role?: InputMaybe<Scalars['String']>;
@@ -91,7 +92,7 @@ export type Project = {
 export type Query = {
   __typename?: 'Query';
   getCodes: Array<Code>;
-  getExecutionCounter: Scalars['String'];
+  getExecutionCounter: User;
   getMyProjects: Array<Project>;
   getProjects: Array<Project>;
   getUserProfile: User;
@@ -106,7 +107,9 @@ export type SigninInput = {
 export type User = {
   __typename?: 'User';
   email: Scalars['String'];
+  executionCounter: Scalars['Float'];
   id: Scalars['String'];
+  isPremium: Scalars['Boolean'];
   pseudo: Scalars['String'];
   role: Scalars['String'];
 };
@@ -131,7 +134,7 @@ export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'Us
 export type GetExecutionCounterQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetExecutionCounterQuery = { __typename?: 'Query', getExecutionCounter: string };
+export type GetExecutionCounterQuery = { __typename?: 'Query', getExecutionCounter: { __typename?: 'User', executionCounter: number, isPremium: boolean } };
 
 export type SignUpMutationVariables = Exact<{
   data: NewUserInput;
@@ -287,7 +290,10 @@ export type UsersLazyQueryHookResult = ReturnType<typeof useUsersLazyQuery>;
 export type UsersQueryResult = Apollo.QueryResult<UsersQuery, UsersQueryVariables>;
 export const GetExecutionCounterDocument = gql`
     query GetExecutionCounter {
-  getExecutionCounter
+  getExecutionCounter {
+    executionCounter
+    isPremium
+  }
 }
     `;
 

@@ -6,7 +6,10 @@ query Users {
 }
 
 query GetExecutionCounter {
-	getExecutionCounter
+	getExecutionCounter {
+		executionCounter
+		isPremium
+	}
 }
 
 mutation SignUp($data: NewUserInput!) {

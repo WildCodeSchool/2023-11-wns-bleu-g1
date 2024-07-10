@@ -14,21 +14,22 @@ import {
 
 const CodingPage = () => {
 	const { loading } = useGetExecutionCounterQuery({
-		onCompleted({ getExecutionCounter }) {
-			setCount(parseInt(getExecutionCounter));
-			console.log(getExecutionCounter);
+		onCompleted({ getExecutionCounter: { executionCounter, isPremium } }) {
+			setIsPremium(isPremium);
+			setCount(executionCounter);
 		},
 	});
 
 	const [incrementCounter] = useIncrementeExecutionCounterMutation({
-		onCompleted(data) {
-			setCount(data.incrementeExecutionCounter);
+		onCompleted({ incrementeExecutionCounter }) {
+			setCount(incrementeExecutionCounter);
 		},
 	});
 
 	const [code, setCode] = useState("");
 	const [showResult, setShowResult] = useState("");
 	const [count, setCount] = useState(0);
+	const [isPremium, setIsPremium] = useState<boolean>();
 
 	const update = (text: string) => {
 		const result_element = document.querySelector(
@@ -83,7 +84,7 @@ const CodingPage = () => {
 
 	const runCode = () => {
 		// @Todo: Remettre le compte à 50 en dehors des tests
-		if (count < 10) {
+		if (count < 10 || isPremium) {
 			incrementCounter({ variables: { counter: { executionCounter: count } } });
 
 			try {
@@ -97,10 +98,6 @@ const CodingPage = () => {
 
 				setShowResult("Error: " + error.message);
 			}
-		} else {
-			setShowResult(
-				"Vous avez atteint la limite de 10 exécutions. Pour ne plus avoir de limites, passer premium!"
-			);
 		}
 	};
 
@@ -155,7 +152,7 @@ const CodingPage = () => {
 					</div>
 					{!loading && (
 						<div className="flex flex-row-reverse md:flex-col w-full justify-center text-center align-center md:items-center px-4 md:px-0">
-							{count < 10 && (
+							{(count < 10 || isPremium) && (
 								<Button
 									size={"sm"}
 									className="flex md:justify-center md:items-center md:content-center md:align-middle mt-4 mb-4 w-20 ml-2 md:mr-0"
@@ -165,10 +162,16 @@ const CodingPage = () => {
 								</Button>
 							)}
 							{/* @Todo: Remettre le compte à 50 en dehors des tests */}
-							<p className="flex items-center">{count}/10</p>
-							<p className="flex items-center">
-								Pour ne plus avoir de limites, passer premium!
-							</p>
+							{!isPremium && (
+								<>
+									<p className="flex items-center">{count}/10</p>
+									<p className="flex items-center select-none">
+										{count === 10 &&
+											"Vous avez atteint la limite de 10 exécutions. "}
+										Pour ne plus avoir de limites, passer premium!
+									</p>
+								</>
+							)}
 						</div>
 					)}
 					<div

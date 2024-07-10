@@ -13,7 +13,7 @@ import { Context } from "../interfaces/auth";
 import { UserRole } from "../entities/user";
 
 export default class UserResolver {
-	@Authorized([UserRole.ADMIN])
+	@Authorized([UserRole.VISITOR])
 	@Query(() => [User])
 	async users() {
 		// SELECT * FROM User;
@@ -33,12 +33,14 @@ export default class UserResolver {
 	}
 
 	@Authorized([UserRole.VISITOR])
-	@Query(() => Number)
+	@Query(() => User)
 	async getExecutionCounter(@Ctx() { currentUser }: Context) {
-		const user = await User.findOneByOrFail({ id: currentUser?.id });
+		const user = await User.findOneOrFail({
+			where: { id: currentUser?.id },
+			select: ["isPremium", "executionCounter"],
+		});
 
-		console.log(user);
-		return currentUser?.executionCounter;
+		return user;
 	}
 
 	@Mutation(() => User)
