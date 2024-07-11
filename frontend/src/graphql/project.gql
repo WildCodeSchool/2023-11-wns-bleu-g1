@@ -5,6 +5,7 @@ mutation CreateProject($data: NewProjectInput!) {
 			pseudo
 			role
 			id
+			email
 		}
 		id
 		isPublic

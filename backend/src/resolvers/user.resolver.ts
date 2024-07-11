@@ -13,7 +13,7 @@ import { Context } from "../interfaces/auth";
 import { UserRole } from "../entities/user";
 
 export default class UserResolver {
-	// @Authorized([UserRole.ADMIN])
+	@Authorized([UserRole.ADMIN])
 	@Query(() => [User])
 	async users() {
 		// SELECT * FROM User;
