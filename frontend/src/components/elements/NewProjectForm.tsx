@@ -42,7 +42,6 @@ export default function NewProjectForm() {
     const languages = getLanguagesQuery.data?.getLanguages || [];
     const router = useRouter();
 
-    // console.log("lang: ", languages);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -96,9 +95,6 @@ export default function NewProjectForm() {
 
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        // console.log("userId")
-        // console.log("languageID: ", values.language)
-        console.log("values: ", values)
         const languageId = values.language
 
         const response = await addProject({
@@ -114,7 +110,6 @@ export default function NewProjectForm() {
 
 
         if(projectId && languageId) {
-            console.log("projectId and languageId are defined")
             await addCode({
                 variables: {
                     data: {
@@ -126,8 +121,6 @@ export default function NewProjectForm() {
             });
             //redirect to the project page
             router.push(`/coding/${projectId}`)
-        } else {
-            console.log("pojectId or languageId is undefined")
         }
     }
 

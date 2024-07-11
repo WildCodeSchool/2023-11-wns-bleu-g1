@@ -30,13 +30,9 @@ const CodingPage = () => {
 	const codeIdForThisProject = getCodeforAProjectIdQuery.data?.getCode[0]?.id;
 	const thisCode = getCode.data?.getCodes.find((code) => code.id === codeIdForThisProject);
 	const thisCodeId = thisCode?.id;
-
 	const [code, setCode] = useState("");
 	const [showResult, setShowResult] = useState("");
 	const [count, setCount] = useState(0);
-
-	console.log("thisCode?.content: ", thisCode?.content);
-	console.log("code: ", code);
 
 	useEffect(() => {
 		async function setCodeOnMount() {
@@ -45,19 +41,17 @@ const CodingPage = () => {
 		  if (thisCode?.content && thisCode.content !== "" && result_element_on_mount) {
 			  result_element_on_mount.innerHTML = thisCode?.content;
 			  coding_input_on_mount.innerHTML = thisCode?.content;
+			  Prism.highlightElement(result_element_on_mount)
 			await setCode(thisCode?.content);
 		  }
 		}
-
-		setCodeOnMount(); // Call the function immediately on component mount
-		// ... (rest of your useEffect logic)
+		setCodeOnMount();
 	  }, [thisCode?.content]);
 
 	const update = (text: string) => {
 		const result_element = document.querySelector(
 			"#highlighting-content"
 		) as HTMLElement;
-		console.log("result_element: ", result_element);
 		if (text[text.length - 1] == "\n") {
 			// If the last character is a newline character
 			text += " "; // Add a placeholder space character to the final line
@@ -67,7 +61,6 @@ const CodingPage = () => {
 			.replace(new RegExp("&", "g"), "&")
 			.replace(new RegExp("<", "g"), "<");
 		// Syntax Highlight
-		console.log("new text: ", text);
 		Prism.highlightElement(result_element);
 	};
 
@@ -110,7 +103,6 @@ const CodingPage = () => {
 		}
 	});
 	async function saveCode()  {
-		console.log("save code");
 		if (!thisCodeId) {
 			console.error("No code id found!");
 			return;
