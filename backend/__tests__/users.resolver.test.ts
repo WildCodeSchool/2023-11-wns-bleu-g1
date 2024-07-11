@@ -5,6 +5,7 @@ import getAdminContext from "./helpers/getAdminContext";
 import getUsers from "./operations/getUsers";
 import getVisitorContext from "./helpers/getVisitorContext";
 import getExecutionCounter from "./operations/getExecutionCounter";
+import incrementExecutionCounter from "./operations/incrementExecutionCounter";
 
 describe("users resolver", () => {
 	it("can get a list of users", async () => {
@@ -80,11 +81,9 @@ describe("users resolver", () => {
 `);
 	});
 
-	describe("if user can execute some code with permissions", () => {
+	describe("if user can execute some code with visitor permissions", () => {
 		it("can get executionOunter and isPremium field with visitor authorize", async () => {
 			const jwt = await getVisitorContext();
-
-			console.log(jwt);
 
 			const res = await execute(getExecutionCounter, {
 				contextValue: jwt,
@@ -104,6 +103,58 @@ describe("users resolver", () => {
 			expect(res.data?.getExecutionCounter).toHaveProperty("isPremium");
 		});
 
+		it("can increment executionCounter field for 1 more with visitor authorize", async () => {
+			const jwt = await getVisitorContext();
+
+			const res = await execute(incrementExecutionCounter, {
+				contextValue: jwt,
+				variableValues: {
+					counter: {
+						executionCounter: 1,
+					},
+				},
+			});
+
+			expect(res).toMatchInlineSnapshot(`
+{
+  "data": {
+    "incrementeExecutionCounter": 2,
+  },
+}
+`);
+			expect(res.data?.incrementeExecutionCounter).toBe(2);
+
+			expect(res.data?.incrementeExecutionCounter).not.toBe(-1);
+			expect(res.data?.incrementeExecutionCounter).not.toBe(3);
+		});
+
+		it("can't increment executeCounter field more than 10", async () => {
+			const jwt = await getVisitorContext();
+
+			const res = await execute(incrementExecutionCounter, {
+				contextValue: jwt,
+				variableValues: {
+					counter: {
+						executionCounter: 10,
+					},
+				},
+			});
+
+			expect(res).toMatchInlineSnapshot(`
+{
+  "data": {
+    "incrementeExecutionCounter": 10,
+  },
+}
+`);
+			expect(res.data?.incrementeExecutionCounter).toBe(10);
+
+			expect(res.data?.incrementeExecutionCounter).not.toBe(11);
+			expect(res.data?.incrementeExecutionCounter).not.toBe(9);
+		});
+	});
+
+	describe("if user can execute some code with admin permissions", () => {
 		it("can get executionOunter and isPremium field with admin authorize", async () => {
 			const jwt = await getAdminContext();
 
@@ -121,6 +172,57 @@ describe("users resolver", () => {
 `);
 			expect(res.data?.getExecutionCounter).toHaveProperty("executionCounter");
 			expect(res.data?.getExecutionCounter).toHaveProperty("isPremium");
+		});
+
+		it("can increment executionCounter field for 1 more with visitor authorize", async () => {
+			const jwt = await getAdminContext();
+
+			const res = await execute(incrementExecutionCounter, {
+				contextValue: jwt,
+				variableValues: {
+					counter: {
+						executionCounter: 1,
+					},
+				},
+			});
+
+			expect(res).toMatchInlineSnapshot(`
+{
+  "data": {
+    "incrementeExecutionCounter": 2,
+  },
+}
+`);
+			expect(res.data?.incrementeExecutionCounter).toBe(2);
+
+			expect(res.data?.incrementeExecutionCounter).not.toBe(-1);
+			expect(res.data?.incrementeExecutionCounter).not.toBe(3);
+		});
+
+		it("can't increment executeCounter field more than 10", async () => {
+			const jwt = await getAdminContext();
+
+			const res = await execute(incrementExecutionCounter, {
+				contextValue: jwt,
+				variableValues: {
+					counter: {
+						executionCounter: 10,
+					},
+				},
+			});
+
+			expect(res).toMatchInlineSnapshot(`
+{
+  "data": {
+    "incrementeExecutionCounter": 10,
+  },
+}
+`);
+
+			expect(res.data?.incrementeExecutionCounter).toBe(10);
+
+			expect(res.data?.incrementeExecutionCounter).not.toBe(11);
+			expect(res.data?.incrementeExecutionCounter).not.toBe(9);
 		});
 	});
 });
