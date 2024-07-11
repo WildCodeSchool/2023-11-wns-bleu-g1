@@ -1,7 +1,7 @@
 import AuthLayout from "@/components/elements/auth-layout";
+import NotFoundAlert from "@/components/elements/not-found-alert";
 import PageLoader from "@/components/elements/page-loader";
 import UserHeadCard from "@/components/elements/user-head-card";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { buttonVariants } from "@/components/ui/button";
 import {
 	Card,
@@ -14,7 +14,6 @@ import {
 	useGetMyProjectsQuery,
 	useGetUserProfileQuery,
 } from "@/graphql/generated/schema";
-import { MessageCircleWarning, Terminal } from "lucide-react";
 import Link from "next/link";
 
 const ProfilPage = () => {
@@ -58,14 +57,11 @@ const ProfilPage = () => {
 						))}
 					</div>
 				) : (
-					<Alert>
-						<MessageCircleWarning className="h-4 w-4" />
-						<AlertTitle>Vous n&apos;avez pas encore de projet</AlertTitle>
-						<AlertDescription>
-							Vous pouvez en créer un en cliquant sur le bouton &quot;Nouveau
-							projet&quot;
-						</AlertDescription>
-					</Alert>
+					<NotFoundAlert
+						title="Vous n'avez pas encore de projet"
+						description='Vous pouvez en créer un en cliquant sur le bouton "Nouveau
+							projet"'
+					/>
 				)}
 			</div>
 		</AuthLayout>
