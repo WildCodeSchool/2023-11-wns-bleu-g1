@@ -29,16 +29,30 @@ query GetMyProjects {
 }
 
 query GetProjectById($getProjectId: String!) {
-  getProject(id: $getProjectId) {
-    id
-    title
-    isPublic
-    codes {
-      content
-      language {
-        name
-        id
-      }
-    }
-  }
+	getProject(id: $getProjectId) {
+		id
+		title
+		isPublic
+		codes {
+			content
+			language {
+				name
+				id
+			}
+		}
+	}
+}
+
+query GetPublicsProjects($limit: Float!, $offset: Float!) {
+	getPublicsProjects(limit: $limit, offset: $offset) {
+		isPublic
+		updatedAt
+		title
+		user {
+			pseudo
+			id
+		}
+		createdAt
+		id
+	}
 }

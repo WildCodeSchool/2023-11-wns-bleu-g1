@@ -4,7 +4,7 @@ import Project, { NewProjectInput } from "../entities/project";
 import { Context } from "../interfaces/auth";
 import { GraphQLError } from "graphql";
 import DataSource from "../db";
-import {UserRole} from "../entities/user";
+import { UserRole } from "../entities/user";
 
 export default class ProjectResolver {
 	private projectRepository = DataSource.getRepository(Project);
@@ -13,7 +13,7 @@ export default class ProjectResolver {
 	async getProjects() {
 		// SELECT * FROM Project;
 		const projects = await Project.find({
-			relations: { codes: { language: true }, user: true},
+			relations: { codes: { language: true }, user: true },
 		});
 
 		return projects;
@@ -32,13 +32,31 @@ export default class ProjectResolver {
 		return projects;
 	}
 
+	@Authorized()
+	@Query(() => [Project])
+	async getPublicsProjects(
+		@Ctx() ctx: Context,
+		@Arg("limit", { defaultValue: 12 }) limit: number,
+		@Arg("offset", { defaultValue: 0 }) offset: number
+	) {
+		if (!ctx.currentUser) throw new GraphQLError("you need to be logged in!");
+
+		const projects = await Project.find({
+			where: { isPublic: true },
+			relations: { codes: true, user: true },
+			order: { createdAt: "DESC" },
+			take: limit,
+			skip: offset,
+		});
+
+		return projects;
+	}
+
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Query(() => [Project])
 	async getProject(@Arg("id") id: string) {
-
 		return this.projectRepository.findOneOrFail({ where: { id } });
 	}
-
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Mutation(() => Project)
