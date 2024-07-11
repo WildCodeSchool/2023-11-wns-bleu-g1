@@ -32,7 +32,7 @@ export default class UserResolver {
 		});
 	}
 
-	@Authorized([UserRole.VISITOR])
+	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Query(() => User)
 	async getExecutionCounter(@Ctx() { currentUser }: Context) {
 		const user = await User.findOneOrFail({

@@ -3,6 +3,8 @@ import User, { UserRole } from "../src/entities/user";
 import createUser from "./operations/createUser";
 import getAdminContext from "./helpers/getAdminContext";
 import getUsers from "./operations/getUsers";
+import getVisitorContext from "./helpers/getVisitorContext";
+import getExecutionCounter from "./operations/getExecutionCounter";
 
 describe("users resolver", () => {
 	it("can get a list of users", async () => {
@@ -76,5 +78,49 @@ describe("users resolver", () => {
   },
 }
 `);
+	});
+
+	describe("if user can execute some code with permissions", () => {
+		it("can get executionOunter and isPremium field with visitor authorize", async () => {
+			const jwt = await getVisitorContext();
+
+			console.log(jwt);
+
+			const res = await execute(getExecutionCounter, {
+				contextValue: jwt,
+			});
+
+			expect(res).toMatchInlineSnapshot(`
+{
+  "data": {
+    "getExecutionCounter": {
+      "executionCounter": 1,
+      "isPremium": true,
+    },
+  },
+}
+`);
+			expect(res.data?.getExecutionCounter).toHaveProperty("executionCounter");
+			expect(res.data?.getExecutionCounter).toHaveProperty("isPremium");
+		});
+
+		it("can get executionOunter and isPremium field with admin authorize", async () => {
+			const jwt = await getAdminContext();
+
+			const res = await execute(getExecutionCounter, { contextValue: jwt });
+
+			expect(res).toMatchInlineSnapshot(`
+{
+  "data": {
+    "getExecutionCounter": {
+      "executionCounter": 0,
+      "isPremium": false,
+    },
+  },
+}
+`);
+			expect(res.data?.getExecutionCounter).toHaveProperty("executionCounter");
+			expect(res.data?.getExecutionCounter).toHaveProperty("isPremium");
+		});
 	});
 });
