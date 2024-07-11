@@ -39,13 +39,15 @@ export default class CodeResolver {
 
 	// update code content
 	@Mutation(() => Code)
-	async updateCode(@Arg("id") id: string, @Arg("data", { validate: true }) data: CodeInput) {
+	async updateCode(
+		@Arg("id") id: string,
+		@Arg("content", { nullable: true }) content: string
+	) {
 		const code = await Code.findOne({where: {id}});
 		if (!code) {
 			throw new Error("Code not found!");
 		}
-		code.content = data.content;
+		if (content != null) code.content = content;
 		return await code.save();
-
 	}
 }

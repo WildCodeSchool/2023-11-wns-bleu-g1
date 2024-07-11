@@ -30,3 +30,10 @@ query GetCodeforAProjectId($project: String!) {
     }
   }
 }
+
+mutation UpdateCode($updateCodeId: String!, $content: String) {
+  updateCode(id: $updateCodeId, content: $content) {
+    content
+    id
+  }
+}

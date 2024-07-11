@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import Topbar from "@/components/elements/Topbar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import PrismLoader from "@/components/prism-loader";
@@ -8,13 +7,16 @@ import { Separator } from "@/components/ui/separator";
 import Prism from "prismjs";
 import AuthLayout from "@/components/elements/auth-layout";
 import {useRouter} from "next/router";
-import {useGetCodeforAProjectIdQuery, useGetCodesQuery, useGetMyProjectsQuery} from "@/graphql/generated/schema";
+import {
+	useGetCodeforAProjectIdQuery,
+	useGetCodesQuery,
+	useGetMyProjectsQuery,
+	useUpdateCodeMutation
+} from "@/graphql/generated/schema";
 
 
 const CodingPage = () => {
-	const [code, setCode] = useState("");
-	const [showResult, setShowResult] = useState("");
-	const [count, setCount] = useState(0);
+	const getCode = useGetCodesQuery()
     const router = useRouter();
     const { id } = router.query;
 	const getMyProjectsQuery = useGetMyProjectsQuery();
@@ -23,25 +25,34 @@ const CodingPage = () => {
 			project: id as string,
 		},
 	});
-	const getCode = useGetCodesQuery()
 
 	const project = getMyProjectsQuery.data?.getMyProjects.find((project) => project.id === id);
 	const codeIdForThisProject = getCodeforAProjectIdQuery.data?.getCode[0]?.id;
 	const thisCode = getCode.data?.getCodes.find((code) => code.id === codeIdForThisProject);
+	const thisCodeId = thisCode?.id;
 
-    console.log("sur la page projet avec id: ", id, router.query);
-	console.log("nom du project: ", project?.title);
-	console.log("code for project: ", getCodeforAProjectIdQuery.data?.getCode[0]?.id);
-	console.log("this code: ", thisCode);
+	const [code, setCode] = useState("");
+	const [showResult, setShowResult] = useState("");
+	const [count, setCount] = useState(0);
+
 	console.log("thisCode?.content: ", thisCode?.content);
-	const testText = "Azertyuiop";
+	console.log("code: ", code);
 
 	useEffect(() => {
-		if (thisCode?.content && thisCode.content !== "") {
-			setCode(thisCode.content);
-			update(thisCode.content);
+		async function setCodeOnMount() {
+			const result_element_on_mount = document.querySelector("#highlighting-content");
+			const coding_input_on_mount = document.querySelector("#codingInput") as HTMLTextAreaElement;
+		  if (thisCode?.content && thisCode.content !== "" && result_element_on_mount) {
+			  result_element_on_mount.innerHTML = thisCode?.content;
+			  coding_input_on_mount.innerHTML = thisCode?.content;
+			await setCode(thisCode?.content);
+		  }
 		}
-	}, [thisCode?.content])
+
+		setCodeOnMount(); // Call the function immediately on component mount
+		// ... (rest of your useEffect logic)
+	  }, [thisCode?.content]);
+
 	const update = (text: string) => {
 		const result_element = document.querySelector(
 			"#highlighting-content"
@@ -56,6 +67,7 @@ const CodingPage = () => {
 			.replace(new RegExp("&", "g"), "&")
 			.replace(new RegExp("<", "g"), "<");
 		// Syntax Highlight
+		console.log("new text: ", text);
 		Prism.highlightElement(result_element);
 	};
 
@@ -89,6 +101,27 @@ const CodingPage = () => {
 		}
 	};
 
+	const [updateCode] = useUpdateCodeMutation({
+		onCompleted: () => {
+			console.log("Code updated!");
+		},
+		onError: (error) => {
+			console.error(error);
+		}
+	});
+	async function saveCode()  {
+		console.log("save code");
+		if (!thisCodeId) {
+			console.error("No code id found!");
+			return;
+		}
+		await updateCode({
+			variables: {
+				updateCodeId: thisCodeId,
+				content: code,
+			}
+		})
+	}
 	const runCode = () => {
 		// @Todo: Remettre le compte à 50 en dehors des tests
 		if (count < 10) {
@@ -134,7 +167,7 @@ const CodingPage = () => {
 						{/*TODO: limit terminal row max length */}
 						<Textarea
 							className="left-0 z-10 caret-white bg-transparent text-transparent leading-[20pt] text-[15pt] resize-none "
-							placeholder={thisCode?.content === "" ? "Commencez a coder ici..." : thisCode?.content}
+							placeholder={thisCode?.content === "" ? "Commencez a coder ici..." : ""}
 							id="codingInput"
 							onChange={(e) => {
 								update(e.target.value);
@@ -181,6 +214,15 @@ const CodingPage = () => {
 							value={showResult}
 						/>
 					</div>
+				</div>
+				<div className="container mx-auto flex justify-end">
+					<Button
+						size={"sm"}
+						className="flex md:justify-center md:items-center md:content-center md:align-middle mt-4 mb-4 w-20 ml-2 md:mr-0"
+						onClick={saveCode}
+					>
+						Enregistrer
+					</Button>
 				</div>
 			</div>
 		</AuthLayout>

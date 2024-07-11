@@ -52,6 +52,7 @@ export type Mutation = {
   incrementExecutionCounter: Scalars['Float'];
   logout: Scalars['String'];
   signin: Scalars['String'];
+  updateCode: Code;
   updateLanguage: Array<Language>;
 };
 
@@ -88,6 +89,12 @@ export type MutationDeleteLanguageArgs = {
 
 export type MutationSigninArgs = {
   data: SigninInput;
+};
+
+
+export type MutationUpdateCodeArgs = {
+  content?: InputMaybe<Scalars['String']>;
+  id: Scalars['String'];
 };
 
 
@@ -187,6 +194,14 @@ export type GetCodeforAProjectIdQueryVariables = Exact<{
 
 
 export type GetCodeforAProjectIdQuery = { __typename?: 'Query', getCode: Array<{ __typename?: 'Code', id: string, content: string, language: { __typename?: 'Language', name: string }, project: { __typename?: 'Project', title: string, id: string } }> };
+
+export type UpdateCodeMutationVariables = Exact<{
+  updateCodeId: Scalars['String'];
+  content?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type UpdateCodeMutation = { __typename?: 'Mutation', updateCode: { __typename?: 'Code', content: string, id: string } };
 
 export type MutationMutationVariables = Exact<{
   data: NewProjectInput;
@@ -409,6 +424,41 @@ export function useGetCodeforAProjectIdLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type GetCodeforAProjectIdQueryHookResult = ReturnType<typeof useGetCodeforAProjectIdQuery>;
 export type GetCodeforAProjectIdLazyQueryHookResult = ReturnType<typeof useGetCodeforAProjectIdLazyQuery>;
 export type GetCodeforAProjectIdQueryResult = Apollo.QueryResult<GetCodeforAProjectIdQuery, GetCodeforAProjectIdQueryVariables>;
+export const UpdateCodeDocument = gql`
+    mutation UpdateCode($updateCodeId: String!, $content: String) {
+  updateCode(id: $updateCodeId, content: $content) {
+    content
+    id
+  }
+}
+    `;
+export type UpdateCodeMutationFn = Apollo.MutationFunction<UpdateCodeMutation, UpdateCodeMutationVariables>;
+
+/**
+ * __useUpdateCodeMutation__
+ *
+ * To run a mutation, you first call `useUpdateCodeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCodeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCodeMutation, { data, loading, error }] = useUpdateCodeMutation({
+ *   variables: {
+ *      updateCodeId: // value for 'updateCodeId'
+ *      content: // value for 'content'
+ *   },
+ * });
+ */
+export function useUpdateCodeMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCodeMutation, UpdateCodeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateCodeMutation, UpdateCodeMutationVariables>(UpdateCodeDocument, options);
+      }
+export type UpdateCodeMutationHookResult = ReturnType<typeof useUpdateCodeMutation>;
+export type UpdateCodeMutationResult = Apollo.MutationResult<UpdateCodeMutation>;
+export type UpdateCodeMutationOptions = Apollo.BaseMutationOptions<UpdateCodeMutation, UpdateCodeMutationVariables>;
 export const MutationDocument = gql`
     mutation Mutation($data: NewProjectInput!) {
   createProject(data: $data) {
