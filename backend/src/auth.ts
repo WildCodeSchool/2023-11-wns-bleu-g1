@@ -15,15 +15,12 @@ export const authChecker: AuthChecker<Context> = async (
 
 	const token = tokenInAuthHeaders ?? tokenInCookie;
 
-	console.log("backend token :>> ", token);
-
 	if (typeof token !== "string") {
 		return false;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const decoded = (await jwt.verify(token, env.JWT_PRIVATE_KEY)) as any;
-
 	if (!decoded?.userId) {
 		return false;
 	}
