@@ -35,6 +35,10 @@ export default class UserResolver {
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Query(() => User)
 	async getExecutionCounter(@Ctx() { currentUser }: Context) {
+		if (!currentUser) {
+			throw new GraphQLError("you need to be logged in!");
+		}
+
 		const user = await User.findOneOrFail({
 			where: { id: currentUser?.id },
 			select: ["isPremium", "executionCounter"],
@@ -120,7 +124,7 @@ export default class UserResolver {
 		return "ok";
 	}
 
-	@Authorized([UserRole.VISITOR])
+	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Mutation(() => Number)
 	async incrementeExecutionCounter(
 		@Arg("counter") counter: ExecutionCounterInput,

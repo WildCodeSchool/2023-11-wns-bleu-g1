@@ -84,9 +84,13 @@ const CodingPage = () => {
 
 	const runCode = () => {
 		// @Todo: Remettre le compte à 50 en dehors des tests
-		if (count < 10 || isPremium) {
-			incrementCounter({ variables: { counter: { executionCounter: count } } });
-
+		if (count < 10) {
+			if (!isPremium) {
+				incrementCounter({
+					variables: { counter: { executionCounter: count } },
+				});
+			}
+			console.log(count);
 			try {
 				const result = eval(code);
 
