@@ -27,3 +27,17 @@ query GetMyProjects {
 		id
 	}
 }
+
+query GetPublicsProjects($limit: Float!, $offset: Float!) {
+	getPublicsProjects(limit: $limit, offset: $offset) {
+		isPublic
+		updatedAt
+		title
+		user {
+			pseudo
+			id
+		}
+		createdAt
+		id
+	}
+}

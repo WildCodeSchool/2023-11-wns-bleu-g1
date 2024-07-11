@@ -29,6 +29,26 @@ export default class ProjectResolver {
 	}
 
 	@Authorized()
+	@Query(() => [Project])
+	async getPublicsProjects(
+		@Ctx() ctx: Context,
+		@Arg("limit", { defaultValue: 12 }) limit: number,
+		@Arg("offset", { defaultValue: 0 }) offset: number
+	) {
+		if (!ctx.currentUser) throw new GraphQLError("you need to be logged in!");
+
+		const projects = await Project.find({
+			where: { isPublic: true },
+			relations: { codes: true, user: true },
+			order: { createdAt: "DESC" },
+			take: limit,
+			skip: offset,
+		});
+
+		return projects;
+	}
+
+	@Authorized()
 	@Mutation(() => Project)
 	async createProject(
 		@Arg("data", { validate: true }) data: NewProjectInput,
