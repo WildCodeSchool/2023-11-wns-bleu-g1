@@ -73,7 +73,6 @@ const AuthHeader = () => {
 						<DropdownMenuContent>
 							<DropdownMenuLabel>{profile?.pseudo}</DropdownMenuLabel>
 							<DropdownMenuSeparator />
-							{/* // TODO: i just add lint to dashboard, style needs to be fixed*/}
 							<DropdownMenuItem className={itemsClassName} asChild>
 								<Link href={`/profile`}>
 									<User className="{iconsClassName}"/>

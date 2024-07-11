@@ -8,12 +8,13 @@ import {
 } from "@/components/ui/alert-dialog"
 
 import NewProjectFrom from "@/components/elements/NewProjectForm";
+import {buttonVariants} from "@/components/ui/button";
 
 
 const NewProjectPopup = () => {
     return (
         <AlertDialog>
-          <AlertDialogTrigger>Nouveau projet</AlertDialogTrigger>
+          <AlertDialogTrigger className={buttonVariants()}>Nouveau projet</AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>Quel nom souhaitez-vous donner a votre projet?</AlertDialogTitle>
