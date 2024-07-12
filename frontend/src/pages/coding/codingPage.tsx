@@ -138,7 +138,7 @@ const CodingPage = () => {
 						{/* @Todo: Remettre le compte à 50 en dehors des tests */}
 						<p className="flex items-center">{count}/10</p>
 						<p className="flex items-center">
-							Pour ne plus avoir de limites, passer premium!
+							Pour ne plus avoir de limites, passez premium!
 						</p>
 					</div>
 					<div
