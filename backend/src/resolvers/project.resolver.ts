@@ -21,12 +21,19 @@ export default class ProjectResolver {
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Query(() => [Project])
-	async getMyProjects(@Ctx() ctx: Context) {
+	async getMyProjects(
+		@Ctx() ctx: Context,
+		@Arg("limit", { defaultValue: 12 }) limit: number,
+		@Arg("offset", { defaultValue: 0 }) offset: number
+	) {
 		if (!ctx.currentUser) throw new GraphQLError("you need to be logged in!");
 		// SELECT * FROM Project WHERE user=ctx.currentUser;
 		const projects = await Project.find({
 			where: { user: ctx.currentUser },
 			relations: { codes: true, user: true },
+			order: { createdAt: "DESC" },
+			take: limit,
+			skip: offset,
 		});
 
 		return projects;
