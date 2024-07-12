@@ -89,6 +89,12 @@ export type Query = {
 };
 
 
+export type QueryGetMyProjectsArgs = {
+  limit?: Scalars['Float'];
+  offset?: Scalars['Float'];
+};
+
+
 export type QueryGetPublicsProjectsArgs = {
   limit?: Scalars['Float'];
   offset?: Scalars['Float'];
@@ -114,10 +120,13 @@ export type CreateProjectMutationVariables = Exact<{
 
 export type CreateProjectMutation = { __typename?: 'Mutation', createProject: { __typename?: 'Project', title: string, id: string, isPublic: boolean, user: { __typename?: 'User', pseudo: string, role: string, id: string, email: string } } };
 
-export type GetMyProjectsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetMyProjectsQueryVariables = Exact<{
+  limit: Scalars['Float'];
+  offset: Scalars['Float'];
+}>;
 
 
-export type GetMyProjectsQuery = { __typename?: 'Query', getMyProjects: Array<{ __typename?: 'Project', title: string, isPublic: boolean, createdAt: any, updatedAt: any, id: string, user: { __typename?: 'User', pseudo: string, role: string, id: string, email: string } }> };
+export type GetMyProjectsQuery = { __typename?: 'Query', getMyProjects: Array<{ __typename?: 'Project', id: string, title: string, isPublic: boolean, createdAt: any }> };
 
 export type GetPublicsProjectsQueryVariables = Exact<{
   limit: Scalars['Float'];
@@ -199,19 +208,12 @@ export type CreateProjectMutationHookResult = ReturnType<typeof useCreateProject
 export type CreateProjectMutationResult = Apollo.MutationResult<CreateProjectMutation>;
 export type CreateProjectMutationOptions = Apollo.BaseMutationOptions<CreateProjectMutation, CreateProjectMutationVariables>;
 export const GetMyProjectsDocument = gql`
-    query GetMyProjects {
-  getMyProjects {
+    query GetMyProjects($limit: Float!, $offset: Float!) {
+  getMyProjects(limit: $limit, offset: $offset) {
+    id
     title
     isPublic
     createdAt
-    updatedAt
-    user {
-      pseudo
-      role
-      id
-      email
-    }
-    id
   }
 }
     `;
@@ -228,10 +230,12 @@ export const GetMyProjectsDocument = gql`
  * @example
  * const { data, loading, error } = useGetMyProjectsQuery({
  *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
  *   },
  * });
  */
-export function useGetMyProjectsQuery(baseOptions?: Apollo.QueryHookOptions<GetMyProjectsQuery, GetMyProjectsQueryVariables>) {
+export function useGetMyProjectsQuery(baseOptions: Apollo.QueryHookOptions<GetMyProjectsQuery, GetMyProjectsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetMyProjectsQuery, GetMyProjectsQueryVariables>(GetMyProjectsDocument, options);
       }
