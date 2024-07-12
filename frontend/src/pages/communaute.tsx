@@ -1,19 +1,11 @@
+import CustomPagination from "@/components/custom-pagination";
 import AuthLayout from "@/components/elements/auth-layout";
+import NotFoundAlert from "@/components/elements/not-found-alert";
 import PageLoader from "@/components/elements/page-loader";
+import ProjectCard from "@/components/elements/project-card";
 import { Separator } from "@/components/ui/separator";
 import { useGetPublicsProjectsQuery } from "@/graphql/generated/schema";
-import React, { useState } from "react";
-import NotFoundAlert from "@/components/elements/not-found-alert";
-import { Button, buttonVariants } from "@/components/ui/button";
-import {
-	Card,
-	CardHeader,
-	CardTitle,
-	CardDescription,
-	CardContent,
-} from "@/components/ui/card";
-import Link from "next/link";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useState } from "react";
 
 const CommunautePage = () => {
 	const [page, setPage] = useState(0);
@@ -36,19 +28,6 @@ const CommunautePage = () => {
 	}
 	const publicsProjects = getPublicProjectsQuery.data?.getPublicsProjects || [];
 
-	const handlePreviousPage = () => {
-		if (page > 0) setPage(page - 1);
-	};
-
-	const handleNextPage = () => {
-		if (publicsProjects.length === limit) setPage(page + 1);
-		getPublicProjectsQuery.fetchMore({
-			variables: {
-				offset: publicsProjects.length,
-			},
-		});
-	};
-
 	return (
 		<AuthLayout>
 			<div className="space-y-0.5">
@@ -63,48 +42,21 @@ const CommunautePage = () => {
 				<div>
 					<div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
 						{publicsProjects.map((project) => (
-							<Card key={project.id}>
-								<CardHeader>
-									<CardTitle>{project.title}</CardTitle>
-									<CardDescription>
-										Crée le{" "}
-										{new Date(project.createdAt).toLocaleString("fr-FR", {
-											year: "numeric",
-											month: "long",
-											day: "numeric",
-										})}{" "}
-										par {project.user.pseudo}
-									</CardDescription>
-								</CardHeader>
-								<CardContent>
-									<Link href={"#"} className={buttonVariants()}>
-										Voir le projet
-									</Link>
-								</CardContent>
-							</Card>
+							<ProjectCard
+								key={project.id}
+								project={project}
+								onProfilePage={false}
+							/>
 						))}
 					</div>
 					{/* PAGINATION */}
-					<div className="w-full flex items-center justify-between px-24 py-2 my-6">
-						<Button
-							variant={"ghost"}
-							className="gap-1 w-fit pl-2.5"
-							disabled={page === 0}
-							onClick={handlePreviousPage}
-						>
-							<ChevronLeft className="h-4 w-4 mt-1" />
-							Précédent
-						</Button>
-						<Button
-							variant={"ghost"}
-							className="gap-1 w-fit pr-2.5"
-							disabled={publicsProjects.length < limit}
-							onClick={handleNextPage}
-						>
-							Suivant
-							<ChevronRight className="h-4 w-4 mt-1" />
-						</Button>
-					</div>
+					<CustomPagination
+						page={page}
+						setPage={setPage}
+						limit={limit}
+						dataLength={publicsProjects.length}
+						query={getPublicProjectsQuery}
+					/>
 				</div>
 			) : (
 				<NotFoundAlert
