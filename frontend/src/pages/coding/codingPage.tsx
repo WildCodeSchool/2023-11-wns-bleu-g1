@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Topbar from "@/components/elements/Topbar";
 import { Button } from "@/components/ui/button";
@@ -90,7 +90,7 @@ const CodingPage = () => {
 					variables: { counter: { executionCounter: count } },
 				});
 			}
-			console.log(count);
+
 			try {
 				const result = eval(code);
 
@@ -159,6 +159,7 @@ const CodingPage = () => {
 							{(count < 10 || isPremium) && (
 								<Button
 									size={"sm"}
+									data-testId="exec-btn"
 									className="flex md:justify-center md:items-center md:content-center md:align-middle mt-4 mb-4 w-20 ml-2 md:mr-0"
 									onClick={runCode}
 								>
@@ -168,8 +169,13 @@ const CodingPage = () => {
 							{/* @Todo: Remettre le compte à 50 en dehors des tests */}
 							{!isPremium && (
 								<>
-									<p className="flex items-center">{count}/10</p>
-									<p className="flex items-center select-none">
+									<p data-testId="counter" className="flex items-center">
+										{count}/10
+									</p>
+									<p
+										data-testId="not-premium"
+										className="flex items-center select-none"
+									>
 										{count === 10 &&
 											"Vous avez atteint la limite de 10 exécutions. "}
 										Pour ne plus avoir de limites, passer premium!
