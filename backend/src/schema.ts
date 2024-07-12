@@ -7,4 +7,5 @@ import ProjectResolver from "./resolvers/project.resolver";
 export default buildSchemaSync({
 	resolvers: [UserResolver, CodeResolver, ProjectResolver],
 	authChecker,
+	validate: true,
 });
