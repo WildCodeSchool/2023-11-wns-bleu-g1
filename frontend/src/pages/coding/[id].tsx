@@ -137,7 +137,7 @@ const CodingPage = () => {
 		<AuthLayout>
 			<div>
 				<div id="coddingTopInfo" className="flex w-full relative">
-					<h1 className="flex flex-1 justify-start align-middle items-center pl-4">
+					<h1 className="flex flex-1 justify-start align-middle items-center pl-4 font-bold text-xl">
 						{project?.title}
 					</h1>
 					<div className="relative my-6 mr-4 flex h-10 w-12 rounded-md md:h-14 justify-end align-bottom items-end">
@@ -207,7 +207,7 @@ const CodingPage = () => {
 						/>
 					</div>
 				</div>
-				<div className="container mx-auto flex justify-end">
+				<div className="container mx-auto flex justify-end md:pt-12">
 					<Button
 						size={"sm"}
 						className="flex md:justify-center md:items-center md:content-center md:align-middle mt-4 mb-4 w-20 ml-2 md:mr-0"
