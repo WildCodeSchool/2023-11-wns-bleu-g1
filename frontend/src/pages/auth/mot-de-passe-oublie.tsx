@@ -39,36 +39,29 @@ const formSchema = z.object({
 		.email({
 			message: "L'adresse email est invalide.",
 		}),
-	password: z.string().min(1, {
-		message: "Le mot de passe est requis.",
-	}),
 });
 
-const SignInPage = () => {
+const ForgotPassword = () => {
 	const router = useRouter();
 	const { toast } = useToast();
 
 	const defaultErrorMessage =
-		"Une erreur est survenue lors de l'inscription. Veuillez réessayer.";
+		"Une erreur est survenue. Veuillez réessayer.";
 	const [errorMessage, setErrorMessage] = useState<string>(defaultErrorMessage);
 
-	const [signInMutation, signInMutationResult] = useSignInMutation({
+	const [forgotPasswordMutation, forgotPasswordMutationResult] = useForgotPasswordMutation({
 		onCompleted: (data) => {
 			toast({
 				icon: <BadgeCheck className="h-5 w-5" />,
-				title: "Connexion réussie",
+				title: "Un email vient de vous être envoyé.",
 				className: "text-success",
 			});
-			router.push("/tableau-de-bord");
+			router.push("/auth/connexion");
 		},
 		onError: (err: ApolloError) => {
 			console.error(err);
 			if (err.message.includes("not register")) {
-				setErrorMessage("Aucun n'est lié à cette adresse email.");
-				return;
-			}
-			if (err.message.includes("invalid password")) {
-				setErrorMessage("Les identifiants sont incorrects.");
+				setErrorMessage("Aucun utilisateur à cette adresse email.");
 				return;
 			}
 			setErrorMessage(defaultErrorMessage);
@@ -78,16 +71,14 @@ const SignInPage = () => {
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			email: "",
-			password: "",
 		},
 	});
 
 	function onSubmit(values: z.infer<typeof formSchema>) {
-		signInMutation({
+		forgotPasswordMutation({
 			variables: {
 				data: {
 					email: values.email,
-					password: values.password,
 				},
 			},
 		});
@@ -123,27 +114,7 @@ const SignInPage = () => {
 									</FormItem>
 								)}
 							/>
-							<FormField
-								control={form.control}
-								name="password"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Mot de passe*</FormLabel>
-										<FormControl>
-											<Input
-												placeholder="********"
-												type="password"
-												{...field}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-							<Link href={`/auth/mot-de-passe-oublie`} className="text-primary text-sm hover:underline">
-								Mot de passe oublié ?
-							</Link>
-							{signInMutationResult.error && (
+							{forgotPasswordMutationResult.error && (
 								<Alert variant="error">
 									<AlertCircle className="h-4 w-4" />
 									<AlertTitle className="font-bold">Erreur</AlertTitle>
@@ -174,4 +145,4 @@ const SignInPage = () => {
 	);
 };
 
-export default SignInPage;
+export default ForgotPassword;

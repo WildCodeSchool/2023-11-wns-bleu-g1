@@ -12,7 +12,7 @@ import {
 import {
 	useGetMyProjectsQuery,
 	useGetUserProfileQuery,
-} from "@/graphql/generated/schema";
+} from "@/graphql/generated.old/schema";
 import Link from "next/link";
 
 const DashboardPage = () => {

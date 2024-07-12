@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 import {
 	useGetUserProfileQuery,
 	useLogoutMutation,
-} from "@/graphql/generated/schema";
+} from "@/graphql/generated.old/schema";
 import { useRouter } from "next/router";
 import { useToast } from "../ui/use-toast";
 import Link from "next/link";
@@ -88,7 +88,6 @@ const AuthHeader = () => {
 									itemsClassName,
 									"text-warning focus:text-warning"
 								)}
-
 								asChild 
 							>
 								<Link href={"/premium"}>

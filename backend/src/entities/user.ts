@@ -45,6 +45,9 @@ export default class User extends BaseEntity {
 	@Column()
 	hashedPassword: string;
 
+	@Column({ nullable: true })
+	resetPasswordToken: string;
+
 	@OneToMany(() => Project, (project) => project.user, { cascade: true })
 	projects: Project[];
 }
@@ -67,6 +70,18 @@ export class NewUserInput {
 
 	@Field({ nullable: true })
 	role: UserRole;
+}
+
+@InputType()
+export class ChangePasswordInput {
+	@Matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/, {
+		message: "Password too weak",
+	})
+	@Field()
+	password: string;
+
+	@Field()
+	resetPasswordToken: string;
 }
 
 @InputType()
