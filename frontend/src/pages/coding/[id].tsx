@@ -19,14 +19,14 @@ const CodingPage = () => {
 	const getCode = useGetCodesQuery()
     const router = useRouter();
     const { id } = router.query;
-	const getMyProjectsQuery = useGetMyProjectsQuery();
+	const {data} = useGetMyProjectsQuery();
 	const getCodeforAProjectIdQuery = useGetCodeforAProjectIdQuery({
 		variables: {
 			project: id as string,
 		},
 	});
 
-	const project = getMyProjectsQuery.data?.getMyProjects.find((project) => project.id === id);
+	const project = data?.getMyProjects.find((project) => project.id === id);
 	const codeIdForThisProject = getCodeforAProjectIdQuery.data?.getCode[0]?.id;
 	const thisCode = getCode.data?.getCodes.find((code) => code.id === codeIdForThisProject);
 	const thisCodeId = thisCode?.id;

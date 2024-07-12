@@ -19,9 +19,9 @@ import {
     useCreateCodeMutation,
     useCreateProjectMutation,
     useGetLanguagesQuery,
-    GetMyProjectsDocument
+    GetMyProjectsDocument,
+    GetCodesDocument
 } from "@/graphql/generated/schema";
-import {gql} from "@apollo/client";
 import {useRouter} from "next/navigation";
 
 
@@ -38,8 +38,8 @@ const formSchema = z.object({
 
 export default function NewProjectForm() {
 
-    const getLanguagesQuery = useGetLanguagesQuery();
-    const languages = getLanguagesQuery.data?.getLanguages || [];
+    const {data} = useGetLanguagesQuery();
+    const languages = data?.getLanguages || [];
     const router = useRouter();
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -53,25 +53,9 @@ export default function NewProjectForm() {
     onCompleted: () => {
         console.log("Code created");
     },
-    refetchQueries: [
-        {
-            query: gql`
-                query getCodes {
-                    getCodes {
-                        id
-                        isReported
-                        content
-                        language {
-                            id
-                            name
-                        }
-                    }
-                }
-            `
-        },
-    ],
+    refetchQueries: [GetCodesDocument],
     onError: (error) => {
-        console.log("addCode error: ", error);
+        console.error("addCode error: ", error);
     }
 });
 
@@ -84,7 +68,7 @@ export default function NewProjectForm() {
             GetMyProjectsDocument,
         ],
         onError: (error) => {
-            console.log(error);
+            console.error(error);
         }
     });
 

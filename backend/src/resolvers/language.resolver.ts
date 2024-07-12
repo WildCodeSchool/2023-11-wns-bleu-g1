@@ -1,8 +1,10 @@
-import {Arg, Mutation, Query, Resolver} from "type-graphql";
+import {Arg, Authorized, Mutation, Query, Resolver} from "type-graphql";
 
 import Language from "../entities/language";
 
 import DataSource from "../db";
+import {UserRole} from "../entities/user";
+import {GraphQLError} from "graphql";
 
 @Resolver(Language)
 
@@ -13,6 +15,7 @@ export default class LanguageResolver {
 
     // get all languages
     @Query(() => [Language])
+    @Authorized([UserRole.VISITOR, UserRole.ADMIN])
     async getLanguages() {
 
         return this.languageRepository.find();
@@ -20,13 +23,15 @@ export default class LanguageResolver {
 
     // get language by id
     @Query(() => [Language])
+    @Authorized([UserRole.VISITOR, UserRole.ADMIN])
     async getLanguage(@Arg("id") id: string) {
 
-        return this.languageRepository.findOne({ where: { id } });
+        return this.languageRepository.findOneOrFail({ where: { id } });
     }
 
     // create a new language
     @Mutation(() => [Language])
+    @Authorized([UserRole.ADMIN])
     async createLanguage(
         @Arg("name") name: string
     ) {
@@ -39,13 +44,14 @@ export default class LanguageResolver {
 
     // update a language
     @Mutation(() => [Language])
+    @Authorized([UserRole.ADMIN])
     async updateLanguage(
         @Arg("id") id: string,
         @Arg("name") name: string
     ) {
-        const language = await this.languageRepository.findOne({ where: { id } });
+        const language = await this.languageRepository.findOneOrFail({ where: { id } });
 
-        if (!language) throw new Error("language not found!");
+        if (!language) throw new GraphQLError("language not found!");
 
         language.name = name;
 
@@ -54,12 +60,13 @@ export default class LanguageResolver {
 
     // delete a language
     @Mutation(() => Boolean)
+    @Authorized([UserRole.ADMIN])
     async deleteLanguage(
         @Arg("id") id: string
     ) {
-        const language = await this.languageRepository.findOne({ where: { id } });
+        const language = await this.languageRepository.findOneOrFail({ where: { id } });
 
-        if (!language) throw new Error("language not found!");
+        if (!language) throw new GraphQLError("language not found!");
 
         await this.languageRepository.remove(language);
 

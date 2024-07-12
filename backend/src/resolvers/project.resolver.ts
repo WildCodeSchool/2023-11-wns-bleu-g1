@@ -4,10 +4,12 @@ import Project, { NewProjectInput } from "../entities/project";
 import { Context } from "../interfaces/auth";
 import { GraphQLError } from "graphql";
 import DataSource from "../db";
+import {UserRole} from "../entities/user";
 
 export default class ProjectResolver {
 	private projectRepository = DataSource.getRepository(Project);
 	@Query(() => [Project])
+	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	async getProjects() {
 		// SELECT * FROM Project;
 		const projects = await Project.find({
@@ -17,7 +19,7 @@ export default class ProjectResolver {
 		return projects;
 	}
 
-	@Authorized()
+	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Query(() => [Project])
 	async getMyProjects(@Ctx() ctx: Context) {
 		if (!ctx.currentUser) throw new GraphQLError("you need to be logged in!");
@@ -31,15 +33,15 @@ export default class ProjectResolver {
 	}
 
 	// get project by project id
-	@Authorized()
+	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Query(() => [Project])
 	async getProject(@Arg("id") id: string) {
 
-		return this.projectRepository.findOne({ where: { id } });
+		return this.projectRepository.findOneOrFail({ where: { id } });
 	}
 
 
-	@Authorized()
+	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Mutation(() => Project)
 	async createProject(
 		@Arg("data", { validate: true }) data: NewProjectInput,
