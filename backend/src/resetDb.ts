@@ -39,6 +39,7 @@ const main = async () => {
 		email: "test@test.test",
 		password: "Test123456!",
 		pseudo: "Test",
+		isPremium: true,
 	});
 
 	await user.save();

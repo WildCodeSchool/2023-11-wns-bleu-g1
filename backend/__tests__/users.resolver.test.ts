@@ -174,7 +174,7 @@ describe("users resolver", () => {
 			expect(res.data?.getExecutionCounter).toHaveProperty("isPremium");
 		});
 
-		it("can increment executionCounter field for 1 more with visitor authorize", async () => {
+		it("can increment executionCounter field for 1 more with admin authorize", async () => {
 			const jwt = await getAdminContext();
 
 			const res = await execute(incrementExecutionCounter, {
