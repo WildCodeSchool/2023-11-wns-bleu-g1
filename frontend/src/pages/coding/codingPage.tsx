@@ -8,33 +8,30 @@ import { Separator } from "@/components/ui/separator";
 import Prism from "prismjs";
 import AuthLayout from "@/components/elements/auth-layout";
 import {
+	GetExecutionCounterDocument,
 	useGetExecutionCounterQuery,
-	useIncrementeExecutionCounterMutation,
+	useIncrementExecutionCounterMutation,
 } from "@/graphql/generated/schema";
 
 const CodingPage = () => {
 	const { data, loading } = useGetExecutionCounterQuery({
-		onCompleted({ getExecutionCounter: { executionCounter } }) {
-			setCount(executionCounter);
-		},
 		onError: (e) => {
 			console.error("useGetExecutionCounterQuery =>", e);
 		},
 	});
-	const [incrementCounter] = useIncrementeExecutionCounterMutation({
-		onCompleted: ({ incrementeExecutionCounter }) => {
-			setCount(incrementeExecutionCounter);
-		},
+
+	const [incrementCounter] = useIncrementExecutionCounterMutation({
+		refetchQueries: [GetExecutionCounterDocument],
 		onError: (e) => {
 			console.error("useIncrementeExecutionCounterMutation =>", e);
 		},
 	});
 
-	const isPremium = data?.getExecutionCounter.isPremium;
+	const isPremium = data && data.getExecutionCounter.isPremium;
+	const count = data ? data.getExecutionCounter.executionCounter : 0;
 
 	const [code, setCode] = useState("");
 	const [showResult, setShowResult] = useState("");
-	const [count, setCount] = useState(0);
 
 	const update = (text: string) => {
 		const result_element = document.querySelector(
@@ -91,6 +88,7 @@ const CodingPage = () => {
 		// @Todo: Remettre le compte à 50 en dehors des tests
 		if (count < 10) {
 			if (!isPremium) {
+				// console.log(count);
 				incrementCounter({
 					variables: { counter: { executionCounter: count } },
 				});
@@ -206,8 +204,3 @@ const CodingPage = () => {
 };
 
 export default CodingPage;
-
-// const toto = () => {
-// 	return "prout";
-// };
-// toto();
