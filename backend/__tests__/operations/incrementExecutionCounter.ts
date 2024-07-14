@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 
 export default gql`
-	mutation IncrementeExecutionCounter($counter: ExecutionCounterInput!) {
-		incrementeExecutionCounter(counter: $counter)
+	mutation IncrementExecutionCounter($counter: ExecutionCounterInput!) {
+		incrementExecutionCounter(counter: $counter)
 	}
 `;
