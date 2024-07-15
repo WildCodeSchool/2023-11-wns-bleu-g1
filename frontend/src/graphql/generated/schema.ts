@@ -95,8 +95,21 @@ export type Query = {
   getExecutionCounter: User;
   getMyProjects: Array<Project>;
   getProjects: Array<Project>;
+  getPublicsProjects: Array<Project>;
   getUserProfile: User;
   users: Array<User>;
+};
+
+
+export type QueryGetMyProjectsArgs = {
+  limit?: Scalars['Float'];
+  offset?: Scalars['Float'];
+};
+
+
+export type QueryGetPublicsProjectsArgs = {
+  limit?: Scalars['Float'];
+  offset?: Scalars['Float'];
 };
 
 export type SigninInput = {
@@ -121,10 +134,21 @@ export type CreateProjectMutationVariables = Exact<{
 
 export type CreateProjectMutation = { __typename?: 'Mutation', createProject: { __typename?: 'Project', title: string, id: string, isPublic: boolean, user: { __typename?: 'User', pseudo: string, role: string, id: string, email: string } } };
 
-export type GetMyProjectsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetMyProjectsQueryVariables = Exact<{
+  limit: Scalars['Float'];
+  offset: Scalars['Float'];
+}>;
 
 
-export type GetMyProjectsQuery = { __typename?: 'Query', getMyProjects: Array<{ __typename?: 'Project', title: string, isPublic: boolean, createdAt: any, updatedAt: any, id: string, user: { __typename?: 'User', pseudo: string, role: string, id: string, email: string } }> };
+export type GetMyProjectsQuery = { __typename?: 'Query', getMyProjects: Array<{ __typename?: 'Project', id: string, title: string, isPublic: boolean, createdAt: any }> };
+
+export type GetPublicsProjectsQueryVariables = Exact<{
+  limit: Scalars['Float'];
+  offset: Scalars['Float'];
+}>;
+
+
+export type GetPublicsProjectsQuery = { __typename?: 'Query', getPublicsProjects: Array<{ __typename?: 'Project', isPublic: boolean, updatedAt: any, title: string, createdAt: any, id: string, user: { __typename?: 'User', pseudo: string, id: string } }> };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -210,19 +234,12 @@ export type CreateProjectMutationHookResult = ReturnType<typeof useCreateProject
 export type CreateProjectMutationResult = Apollo.MutationResult<CreateProjectMutation>;
 export type CreateProjectMutationOptions = Apollo.BaseMutationOptions<CreateProjectMutation, CreateProjectMutationVariables>;
 export const GetMyProjectsDocument = gql`
-    query GetMyProjects {
-  getMyProjects {
+    query GetMyProjects($limit: Float!, $offset: Float!) {
+  getMyProjects(limit: $limit, offset: $offset) {
+    id
     title
     isPublic
     createdAt
-    updatedAt
-    user {
-      pseudo
-      role
-      id
-      email
-    }
-    id
   }
 }
     `;
@@ -239,10 +256,12 @@ export const GetMyProjectsDocument = gql`
  * @example
  * const { data, loading, error } = useGetMyProjectsQuery({
  *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
  *   },
  * });
  */
-export function useGetMyProjectsQuery(baseOptions?: Apollo.QueryHookOptions<GetMyProjectsQuery, GetMyProjectsQueryVariables>) {
+export function useGetMyProjectsQuery(baseOptions: Apollo.QueryHookOptions<GetMyProjectsQuery, GetMyProjectsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetMyProjectsQuery, GetMyProjectsQueryVariables>(GetMyProjectsDocument, options);
       }
@@ -253,6 +272,50 @@ export function useGetMyProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type GetMyProjectsQueryHookResult = ReturnType<typeof useGetMyProjectsQuery>;
 export type GetMyProjectsLazyQueryHookResult = ReturnType<typeof useGetMyProjectsLazyQuery>;
 export type GetMyProjectsQueryResult = Apollo.QueryResult<GetMyProjectsQuery, GetMyProjectsQueryVariables>;
+export const GetPublicsProjectsDocument = gql`
+    query GetPublicsProjects($limit: Float!, $offset: Float!) {
+  getPublicsProjects(limit: $limit, offset: $offset) {
+    isPublic
+    updatedAt
+    title
+    user {
+      pseudo
+      id
+    }
+    createdAt
+    id
+  }
+}
+    `;
+
+/**
+ * __useGetPublicsProjectsQuery__
+ *
+ * To run a query within a React component, call `useGetPublicsProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPublicsProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPublicsProjectsQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetPublicsProjectsQuery(baseOptions: Apollo.QueryHookOptions<GetPublicsProjectsQuery, GetPublicsProjectsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPublicsProjectsQuery, GetPublicsProjectsQueryVariables>(GetPublicsProjectsDocument, options);
+      }
+export function useGetPublicsProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPublicsProjectsQuery, GetPublicsProjectsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPublicsProjectsQuery, GetPublicsProjectsQueryVariables>(GetPublicsProjectsDocument, options);
+        }
+export type GetPublicsProjectsQueryHookResult = ReturnType<typeof useGetPublicsProjectsQuery>;
+export type GetPublicsProjectsLazyQueryHookResult = ReturnType<typeof useGetPublicsProjectsLazyQuery>;
+export type GetPublicsProjectsQueryResult = Apollo.QueryResult<GetPublicsProjectsQuery, GetPublicsProjectsQueryVariables>;
 export const UsersDocument = gql`
     query Users {
   users {

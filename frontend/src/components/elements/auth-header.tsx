@@ -81,9 +81,11 @@ const AuthHeader = () => {
 									Mon profil
 								</Link>
 							</DropdownMenuItem>
-							<DropdownMenuItem className={itemsClassName}>
-								<FolderOpen className={iconsClassName} />
-								Projets publics
+							<DropdownMenuItem className={itemsClassName} asChild>
+								<Link href={"/communaute"}>
+									<FolderOpen className={iconsClassName} />
+									Communauté
+								</Link>
 							</DropdownMenuItem>
 							<DropdownMenuItem
 								className={cn(

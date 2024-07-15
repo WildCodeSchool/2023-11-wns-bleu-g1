@@ -12,18 +12,25 @@ mutation CreateProject($data: NewProjectInput!) {
 	}
 }
 
-query GetMyProjects {
-	getMyProjects {
+query GetMyProjects($limit: Float!, $offset: Float!) {
+	getMyProjects(limit: $limit, offset: $offset) {
+		id
 		title
 		isPublic
 		createdAt
+	}
+}
+
+query GetPublicsProjects($limit: Float!, $offset: Float!) {
+	getPublicsProjects(limit: $limit, offset: $offset) {
+		isPublic
 		updatedAt
+		title
 		user {
 			pseudo
-			role
 			id
-			email
 		}
+		createdAt
 		id
 	}
 }

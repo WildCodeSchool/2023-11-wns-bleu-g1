@@ -74,11 +74,13 @@ const main = async () => {
 	const project1 = Project.create({
 		title: "Project 1",
 		user: flexMaster,
+		isPublic: true,
 	});
 
 	const project2 = Project.create({
 		title: "Project 2",
 		user: flexMaster,
+		isPublic: true,
 	});
 
 	await project1.save();
@@ -101,6 +103,22 @@ const main = async () => {
 
 	await javascriptCode.save();
 	await javascriptCode2.save();
+
+	for (let i = 1; i <= 20; i++) {
+		const project = Project.create({
+			title: `Project ${i}`,
+			user: flexMaster,
+			isPublic: true,
+		});
+		await project.save();
+
+		const code = Code.create({
+			content: `console.log('Hello World from Project ${i}')`,
+			language: javascript,
+			project: project,
+		});
+		await code.save();
+	}
 
 	await db.destroy();
 
