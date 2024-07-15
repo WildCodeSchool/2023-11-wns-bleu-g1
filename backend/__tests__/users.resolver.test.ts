@@ -99,8 +99,6 @@ describe("users resolver", () => {
   },
 }
 `);
-			expect(res.data?.getExecutionCounter).toHaveProperty("executionCounter");
-			expect(res.data?.getExecutionCounter).toHaveProperty("isPremium");
 		});
 
 		it("can increment executionCounter field for 1 more with visitor authorize", async () => {
@@ -118,14 +116,10 @@ describe("users resolver", () => {
 			expect(res).toMatchInlineSnapshot(`
 {
   "data": {
-    "incrementeExecutionCounter": 2,
+    "incrementExecutionCounter": 2,
   },
 }
 `);
-			expect(res.data?.incrementeExecutionCounter).toBe(2);
-
-			expect(res.data?.incrementeExecutionCounter).not.toBe(-1);
-			expect(res.data?.incrementeExecutionCounter).not.toBe(3);
 		});
 
 		it("can't increment executeCounter field more than 10", async () => {
@@ -143,14 +137,10 @@ describe("users resolver", () => {
 			expect(res).toMatchInlineSnapshot(`
 {
   "data": {
-    "incrementeExecutionCounter": 10,
+    "incrementExecutionCounter": 10,
   },
 }
 `);
-			expect(res.data?.incrementeExecutionCounter).toBe(10);
-
-			expect(res.data?.incrementeExecutionCounter).not.toBe(11);
-			expect(res.data?.incrementeExecutionCounter).not.toBe(9);
 		});
 	});
 
@@ -170,11 +160,9 @@ describe("users resolver", () => {
   },
 }
 `);
-			expect(res.data?.getExecutionCounter).toHaveProperty("executionCounter");
-			expect(res.data?.getExecutionCounter).toHaveProperty("isPremium");
 		});
 
-		it("can increment executionCounter field for 1 more with visitor authorize", async () => {
+		it("can increment executionCounter field for 1 more with admin authorize", async () => {
 			const jwt = await getAdminContext();
 
 			const res = await execute(incrementExecutionCounter, {
@@ -189,14 +177,10 @@ describe("users resolver", () => {
 			expect(res).toMatchInlineSnapshot(`
 {
   "data": {
-    "incrementeExecutionCounter": 2,
+    "incrementExecutionCounter": 2,
   },
 }
 `);
-			expect(res.data?.incrementeExecutionCounter).toBe(2);
-
-			expect(res.data?.incrementeExecutionCounter).not.toBe(-1);
-			expect(res.data?.incrementeExecutionCounter).not.toBe(3);
 		});
 
 		it("can't increment executeCounter field more than 10", async () => {
@@ -214,15 +198,10 @@ describe("users resolver", () => {
 			expect(res).toMatchInlineSnapshot(`
 {
   "data": {
-    "incrementeExecutionCounter": 10,
+    "incrementExecutionCounter": 10,
   },
 }
 `);
-
-			expect(res.data?.incrementeExecutionCounter).toBe(10);
-
-			expect(res.data?.incrementeExecutionCounter).not.toBe(11);
-			expect(res.data?.incrementeExecutionCounter).not.toBe(9);
 		});
 	});
 });

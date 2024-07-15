@@ -3,13 +3,11 @@ name: "test-front"
 on:
   pull_request:
     paths:
-      - 'frontend/**'
-    types:
-      - closed
-
+      - "frontend/**"
+    # types:
+    #   - closed
 
 jobs:
-
   linting-frontend:
     name: Linting frontend
     runs-on: ubuntu-latest

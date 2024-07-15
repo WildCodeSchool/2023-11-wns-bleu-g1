@@ -14,7 +14,6 @@ import {
 	getPremiumExecutionMock,
 	getPremiumProfileMock,
 	getVisitorProfileMock,
-	incrementeExecutionCounter,
 } from "./executionCode.mock";
 import CodingPage from "@/pages/coding/codingPage";
 
@@ -23,30 +22,27 @@ describe("what increment count for code execution work", () => {
 
 	const renderExecutionCounter = (mocks: any[]) => {
 		render(
-			<MockedProvider mocks={mocks}>
+			<MockedProvider mocks={mocks} addTypename={false}>
 				<CodingPage />
 			</MockedProvider>
 		);
 	};
 
 	it("render if user can execute some code and increment executionCode on click", async () => {
-		renderExecutionCounter([
-			getExecutionCountMock,
-			getVisitorProfileMock,
-			incrementeExecutionCounter,
-		]);
+		renderExecutionCounter(getExecutionCountMock);
+
 		const btn = await screen.findByTestId("exec-btn");
 
 		expect(btn).toBeInTheDocument();
-		expect(screen.queryByTestId("counter")).toHaveTextContent("1/10");
-		expect(screen.queryByTestId("not-premium")).toHaveTextContent(
+		expect(screen.getByTestId("counter")).toHaveTextContent("1/10");
+		expect(screen.getByTestId("not-premium")).toHaveTextContent(
 			"Pour ne plus avoir de limites, passer premium!"
 		);
 
 		fireEvent.click(btn);
 
 		await waitFor(() => {
-			expect(screen.queryByTestId("counter")).toHaveTextContent("2/10");
+			expect(screen.getByTestId("counter")).toHaveTextContent("2/10");
 		});
 	});
 

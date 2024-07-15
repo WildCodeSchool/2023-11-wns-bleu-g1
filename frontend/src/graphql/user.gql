@@ -38,6 +38,6 @@ query GetUserProfile {
 	}
 }
 
-mutation IncrementeExecutionCounter($counter: ExecutionCounterInput!) {
-	incrementeExecutionCounter(counter: $counter)
+mutation IncrementExecutionCounter($counter: ExecutionCounterInput!) {
+	incrementExecutionCounter(counter: $counter)
 }

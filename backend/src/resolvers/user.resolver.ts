@@ -126,7 +126,7 @@ export default class UserResolver {
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Mutation(() => Number)
-	async incrementeExecutionCounter(
+	async incrementExecutionCounter(
 		@Arg("counter") counter: ExecutionCounterInput,
 		@Ctx() { currentUser }: Context
 	) {

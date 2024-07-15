@@ -1,6 +1,6 @@
 import {
 	GetExecutionCounterDocument,
-	IncrementeExecutionCounterDocument,
+	IncrementExecutionCounterDocument,
 } from "@/graphql/generated/schema";
 
 export const getVisitorProfileMock = {
@@ -35,19 +35,49 @@ export const getPremiumProfileMock = {
 	},
 };
 
-export const getExecutionCountMock = {
-	request: {
-		query: GetExecutionCounterDocument,
-	},
-	result: {
-		data: {
-			getExecutionCounter: {
-				executionCounter: 1,
-				isPremium: false,
+export const getExecutionCountMock = [
+	{
+		request: {
+			query: GetExecutionCounterDocument,
+		},
+		result: {
+			data: {
+				getExecutionCounter: {
+					executionCounter: 1,
+					isPremium: false,
+				},
 			},
 		},
 	},
-};
+	{
+		request: {
+			query: IncrementExecutionCounterDocument,
+			variables: {
+				counter: {
+					executionCounter: 1,
+				},
+			},
+		},
+		result: {
+			data: {
+				incrementExecutionCounter: 2,
+			},
+		},
+	},
+	{
+		request: {
+			query: GetExecutionCounterDocument,
+		},
+		result: {
+			data: {
+				getExecutionCounter: {
+					executionCounter: 2,
+					isPremium: false,
+				},
+			},
+		},
+	},
+];
 
 export const getNotExecutionCountMock = {
 	request: {
@@ -73,22 +103,6 @@ export const getPremiumExecutionMock = {
 				executionCounter: 1,
 				isPremium: true,
 			},
-		},
-	},
-};
-
-export const incrementeExecutionCounter = {
-	request: {
-		query: IncrementeExecutionCounterDocument,
-		variables: {
-			counter: {
-				executionCounter: 1,
-			},
-		},
-	},
-	result: {
-		data: {
-			incrementeExecutionCounter: 2,
 		},
 	},
 };
