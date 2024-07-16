@@ -1,0 +1,17 @@
+mutation Mutation($data: NewProjectInput!) {
+  createProject(data: $data) {
+    id
+    title
+    isPublic
+    codes {
+      id
+      content
+      language {
+        id
+      }
+    }
+    user {
+      id
+    }
+  }
+}
