@@ -18,7 +18,7 @@ import {
 import { useRouter } from "next/router";
 import { useToast } from "../ui/use-toast";
 import Link from "next/link";
-import { buttonVariants } from "../ui/button";
+import NewProjectPopup from "@/components/elements/NewProjectPopup";
 
 const AuthHeader = () => {
 	const router = useRouter();
@@ -59,9 +59,7 @@ const AuthHeader = () => {
 
 				<div className="inline-flex gap-6">
 					{!onCodingPage ? (
-						<Link href={"/coding/codingPage"} className={buttonVariants()}>
-							Nouveau projet
-						</Link>
+						<NewProjectPopup />
 					) : null}
 					<DropdownMenu>
 						<DropdownMenuTrigger>
