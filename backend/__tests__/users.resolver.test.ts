@@ -55,6 +55,7 @@ describe("users resolver", () => {
 	});
 
 	it("can create a user", async () => {
+		try {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const res: any = await execute(createUser, {
 			variableValues: {
@@ -79,6 +80,11 @@ describe("users resolver", () => {
   },
 }
 `);
+		} catch (e) {
+			console.error("error creating user: ", e);
+			throw e;
+
+		}
 	});
 
 	describe("if user can execute some code with visitor permissions", () => {
