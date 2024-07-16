@@ -1,58 +1,59 @@
-// import { execute } from "../jest.setup";
+import { execute } from "../jest.setup";
+import User from "../src/entities/user";
 // import User, { UserRole } from "../src/entities/user";
 // import createUser from "./operations/createUser";
-// import getAdminContext from "./helpers/getAdminContext";
-// import getUsers from "./operations/getUsers";
+import getAdminContext from "./helpers/getAdminContext";
+import getUsers from "./operations/getUsers";
 // import getVisitorContext from "./helpers/getVisitorContext";
 // import getExecutionCounter from "./operations/getExecutionCounter";
 // import incrementExecutionCounter from "./operations/incrementExecutionCounter";
-//
-// describe("users resolver", () => {
-// 	it("can get a list of users", async () => {
-// 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-// 		const user1: any = new User();
-// 		const user2 = new User();
-//
-// 		await Object.assign(user1, {
-// 			email: "sans@sans.sans",
-// 			password: "Test123456!",
-// 			pseudo: "test",
-// 		}).save();
-//
-// 		await Object.assign(user2, {
-// 			email: "test@test.test",
-// 			password: "Test123456!",
-// 			pseudo: "cazzo",
-// 		}).save();
-//
-// 		const jwt = await getAdminContext();
-// 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-// 		const res: any = await execute(getUsers, { contextValue: jwt });
-//
-// 		expect(res).toMatchInlineSnapshot(`
-// {
-//   "data": {
-//     "users": [
-//       {
-//         "email": "sans@sans.sans",
-//         "pseudo": "test",
-//         "role": "visitor",
-//       },
-//       {
-//         "email": "test@test.test",
-//         "pseudo": "cazzo",
-//         "role": "visitor",
-//       },
-//       {
-//         "email": "ad@min.fr",
-//         "pseudo": "i'm admin",
-//         "role": "admin",
-//       },
-//     ],
-//   },
-// }
-// `);
-// 	});
+
+describe("users resolver", () => {
+	it("can get a list of users", async () => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const user1: any = new User();
+		const user2 = new User();
+
+		await Object.assign(user1, {
+			email: "sans@sans.sans",
+			password: "Test123456!",
+			pseudo: "test",
+		}).save();
+
+		await Object.assign(user2, {
+			email: "test@test.test",
+			password: "Test123456!",
+			pseudo: "cazzo",
+		}).save();
+
+		const jwt = await getAdminContext();
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const res: any = await execute(getUsers, { contextValue: jwt });
+
+		expect(res).toMatchInlineSnapshot(`
+{
+  "data": {
+    "users": [
+      {
+        "email": "sans@sans.sans",
+        "pseudo": "test",
+        "role": "visitor",
+      },
+      {
+        "email": "test@test.test",
+        "pseudo": "cazzo",
+        "role": "visitor",
+      },
+      {
+        "email": "ad@min.fr",
+        "pseudo": "i'm admin",
+        "role": "admin",
+      },
+    ],
+  },
+}
+`);
+	});
 //
 // 	it("can create a user", async () => {
 // 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -203,4 +204,4 @@
 // `);
 // 		});
 // 	});
-// });
+});
