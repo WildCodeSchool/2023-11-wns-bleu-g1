@@ -7,8 +7,19 @@ import PrismLoader from "@/components/prism-loader";
 import { Separator } from "@/components/ui/separator";
 import Prism from "prismjs";
 import AuthLayout from "@/components/elements/auth-layout";
+import {
+	GetExecutionCounterDocument,
+	useGetExecutionCounterQuery,
+	useIncrementExecutionCounterMutation,
+} from "@/graphql/generated/schema"
 
 const CodingPage = () => {
+	const { data, loading } = useGetExecutionCounterQuery({
+		onError: (e) => {
+			console.error("useGetExecutionCounterQuery =>", e);
+		},
+	});
+	const isPremium = data && data.getExecutionCounter.isPremium;
 	const [code, setCode] = useState("");
 	const [showResult, setShowResult] = useState("");
 	const [count, setCount] = useState(0);
@@ -127,20 +138,36 @@ const CodingPage = () => {
 						</pre>
 						<PrismLoader />
 					</div>
-					<div className="flex flex-row-reverse md:flex-col w-full justify-center text-center align-center md:items-center px-4 md:px-0">
-						<Button
-							size={"sm"}
-							className="flex md:justify-center md:items-center md:content-center md:align-middle mt-4 mb-4 w-20 ml-2 md:mr-0"
-							onClick={runCode}
-						>
-							Exécuter
-						</Button>
-						{/* @Todo: Remettre le compte à 50 en dehors des tests */}
-						<p className="flex items-center">{count}/10</p>
-						<p className="flex items-center">
-							Pour ne plus avoir de limites, passez premium!
-						</p>
-					</div>
+					{!loading && (
+						<div className="flex flex-row-reverse md:flex-col w-full justify-center text-center align-center md:items-center px-4 md:px-0">
+							{count < 10 && (
+								<Button
+									size={"sm"}
+									data-testid="exec-btn"
+									className="flex md:justify-center md:items-center md:content-center md:align-middle mt-4 mb-4 w-20 ml-2 md:mr-0"
+									onClick={runCode}
+								>
+									Exécuter
+								</Button>
+							)}
+							{/* @Todo: Remettre le compte à 50 en dehors des tests */}
+							{!isPremium && (
+								<>
+									<p data-testid="counter" className="flex items-center">
+										{count}/10
+									</p>
+									<p
+										data-testid="not-premium"
+										className="flex items-center select-none"
+									>
+										{count === 10 &&
+											"Vous avez atteint la limite de 10 exécutions. "}
+										Pour ne plus avoir de limites, passer premium!
+									</p>
+								</>
+							)}
+						</div>
+					)}
 					<div
 						id="resultArea"
 						className="relative min-h-80 md:min-h-[50vh] md:min-w-[45%] flex "
