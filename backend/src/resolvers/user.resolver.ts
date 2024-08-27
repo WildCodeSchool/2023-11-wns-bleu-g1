@@ -22,7 +22,7 @@ export default class UserResolver {
 		return users;
 	}
 
-	@Authorized([UserRole.VISITOR])
+	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Query(() => User)
 	async getUserProfile(@Ctx() ctx: Context) {
 		if (!ctx.currentUser) throw new GraphQLError("you need to be logged in!");
@@ -48,6 +48,7 @@ export default class UserResolver {
 	}
 
 	@Mutation(() => User)
+	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	async createUser(@Arg("data", { validate: true }) data: NewUserInput) {
 		if (!data.email) {
 			throw new GraphQLError("email is missing but require");
@@ -84,6 +85,7 @@ export default class UserResolver {
 	}
 
 	@Mutation(() => String)
+	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	async signin(@Arg("data") data: SigninInput, @Ctx() ctx: Context) {
 		// SELECT * FROM User WHERE email=data.email
 		const user = await User.findOneBy({ email: data.email });

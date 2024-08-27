@@ -3,9 +3,8 @@ name: "test-front"
 on:
   pull_request:
     paths:
-      - "frontend/**"
-    # types:
-    #   - closed
+      - 'frontend/**'
+
 
 jobs:
   linting-frontend:

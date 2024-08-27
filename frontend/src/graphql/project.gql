@@ -27,3 +27,18 @@ query GetMyProjects {
 		id
 	}
 }
+
+query GetProjectById($getProjectId: String!) {
+  getProject(id: $getProjectId) {
+    id
+    title
+    isPublic
+    codes {
+      content
+      language {
+        name
+        id
+      }
+    }
+  }
+}
