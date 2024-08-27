@@ -1,7 +1,11 @@
 query Users {
 	users {
-		email
 		id
+		role
+		email
+		pseudo
+		executionCounter
+		isPremium
 	}
 }
 
@@ -31,10 +35,12 @@ mutation Logout {
 
 query GetUserProfile {
 	getUserProfile {
-		email
 		id
-		pseudo
 		role
+		email
+		pseudo
+		executionCounter
+		isPremium
 	}
 }
 
