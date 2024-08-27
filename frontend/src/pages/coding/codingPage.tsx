@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Image from "next/image";
 import Topbar from "@/components/elements/Topbar";
 import { Button } from "@/components/ui/button";
@@ -88,7 +88,6 @@ const CodingPage = () => {
 		// @Todo: Remettre le compte à 50 en dehors des tests
 		if (count < 10) {
 			if (!isPremium) {
-				// console.log(count);
 				incrementCounter({
 					variables: { counter: { executionCounter: count } },
 				});
