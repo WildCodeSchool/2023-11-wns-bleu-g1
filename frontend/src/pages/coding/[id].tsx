@@ -6,47 +6,76 @@ import PrismLoader from "@/components/prism-loader";
 import { Separator } from "@/components/ui/separator";
 import Prism from "prismjs";
 import AuthLayout from "@/components/elements/auth-layout";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 import {
 	useGetCodeforAProjectIdQuery,
 	useGetCodesQuery,
 	useGetMyProjectsQuery,
-	useUpdateCodeMutation
+	useUpdateCodeMutation,
+	GetExecutionCounterDocument,
+	useGetExecutionCounterQuery,
+	useIncrementExecutionCounterMutation,
 } from "@/graphql/generated/schema";
 
-
 const CodingPage = () => {
-	const getCode = useGetCodesQuery()
-    const router = useRouter();
-    const { id } = router.query;
-	const {data} = useGetMyProjectsQuery();
+	const getCode = useGetCodesQuery();
+	const router = useRouter();
+	const { id } = router.query;
+	const { data } = useGetMyProjectsQuery();
 	const getCodeforAProjectIdQuery = useGetCodeforAProjectIdQuery({
 		variables: {
 			project: id as string,
 		},
 	});
 
+	// logic for counter execution button
+	const { data: counter, loading } = useGetExecutionCounterQuery({
+		onError: (e) => {
+			console.error("useGetExecutionCounterQuery =>", e);
+		},
+	});
+
+	const [incrementCounter] = useIncrementExecutionCounterMutation({
+		refetchQueries: [GetExecutionCounterDocument],
+		onError: (e) => {
+			console.error("useIncrementeExecutionCounterMutation =>", e);
+		},
+	});
+
+	const isPremium = counter && counter.getExecutionCounter.isPremium;
+	const count = counter ? counter.getExecutionCounter.executionCounter : 0;
+
 	const project = data?.getMyProjects.find((project) => project.id === id);
 	const codeIdForThisProject = getCodeforAProjectIdQuery.data?.getCode[0]?.id;
-	const thisCode = getCode.data?.getCodes.find((code) => code.id === codeIdForThisProject);
+	const thisCode = getCode.data?.getCodes.find(
+		(code) => code.id === codeIdForThisProject
+	);
 	const thisCodeId = thisCode?.id;
+
 	const [code, setCode] = useState("");
 	const [showResult, setShowResult] = useState("");
-	const [count, setCount] = useState(0);
 
 	useEffect(() => {
 		async function setCodeOnMount() {
-			const result_element_on_mount = document.querySelector("#highlighting-content");
-			const coding_input_on_mount = document.querySelector("#codingInput") as HTMLTextAreaElement;
-		  if (thisCode?.content && thisCode.content !== "" && result_element_on_mount) {
-			  result_element_on_mount.innerHTML = thisCode?.content;
-			  coding_input_on_mount.innerHTML = thisCode?.content;
-			  Prism.highlightElement(result_element_on_mount)
-			await setCode(thisCode?.content);
-		  }
+			const result_element_on_mount = document.querySelector(
+				"#highlighting-content"
+			);
+			const coding_input_on_mount = document.querySelector(
+				"#codingInput"
+			) as HTMLTextAreaElement;
+			if (
+				thisCode?.content &&
+				thisCode.content !== "" &&
+				result_element_on_mount
+			) {
+				result_element_on_mount.innerHTML = thisCode?.content;
+				coding_input_on_mount.innerHTML = thisCode?.content;
+				Prism.highlightElement(result_element_on_mount);
+				await setCode(thisCode?.content);
+			}
 		}
 		setCodeOnMount();
-	  }, [thisCode?.content]);
+	}, [thisCode?.content]);
 
 	const update = (text: string) => {
 		const result_element = document.querySelector(
@@ -100,9 +129,9 @@ const CodingPage = () => {
 		},
 		onError: (error) => {
 			console.error(error);
-		}
+		},
 	});
-	async function saveCode()  {
+	async function saveCode() {
 		if (!thisCodeId) {
 			console.error("No code id found!");
 			return;
@@ -111,25 +140,29 @@ const CodingPage = () => {
 			variables: {
 				updateCodeId: thisCodeId,
 				content: code,
-			}
-		})
+			},
+		});
 	}
 	const runCode = () => {
 		// @Todo: Remettre le compte à 50 en dehors des tests
 		if (count < 10) {
+			if (!isPremium) {
+				incrementCounter({
+					variables: { counter: { executionCounter: count } },
+				});
+			}
+
 			try {
 				const result = eval(code);
+
 				console.log("result: ", result);
+
 				setShowResult(result);
-				setCount(count + 1);
 			} catch (error: any) {
 				console.error(error);
+
 				setShowResult("Error: " + error.message);
 			}
-		} else {
-			setShowResult(
-				"Vous avez atteint la limite de 10 exécutions. Pour ne plus avoir de limites, passer premium!"
-			);
 		}
 	};
 
@@ -159,7 +192,9 @@ const CodingPage = () => {
 						{/*TODO: limit terminal row max length */}
 						<Textarea
 							className="left-0 z-10 caret-white bg-transparent text-transparent leading-[20pt] text-[15pt] resize-none "
-							placeholder={thisCode?.content === "" ? "Commencez a coder ici..." : ""}
+							placeholder={
+								thisCode?.content === "" ? "Commencez a coder ici..." : ""
+							}
 							id="codingInput"
 							onChange={(e) => {
 								update(e.target.value);
@@ -182,20 +217,36 @@ const CodingPage = () => {
 						</pre>
 						<PrismLoader />
 					</div>
-					<div className="flex flex-row-reverse md:flex-col w-full justify-center text-center align-center md:items-center px-4 md:px-0">
-						<Button
-							size={"sm"}
-							className="flex md:justify-center md:items-center md:content-center md:align-middle mt-4 mb-4 w-20 ml-2 md:mr-0"
-							onClick={runCode}
-						>
-							Exécuter
-						</Button>
-						{/* @Todo: Remettre le compte à 50 en dehors des tests */}
-						<p className="flex items-center">{count}/10</p>
-						<p className="flex items-center">
-							Pour ne plus avoir de limites, passer premium!
-						</p>
-					</div>
+					{!loading && (
+						<div className="flex flex-row-reverse md:flex-col w-full justify-center text-center align-center md:items-center px-4 md:px-0">
+							{count < 10 && (
+								<Button
+									size={"sm"}
+									data-testid="exec-btn"
+									className="flex md:justify-center md:items-center md:content-center md:align-middle mt-4 mb-4 w-20 ml-2 md:mr-0"
+									onClick={runCode}
+								>
+									Exécuter
+								</Button>
+							)}
+							{/* @Todo: Remettre le compte à 50 en dehors des tests */}
+							{!isPremium && (
+								<>
+									<p data-testid="counter" className="flex items-center">
+										{count}/10
+									</p>
+									<p
+										data-testid="not-premium"
+										className="flex items-center select-none"
+									>
+										{count === 10 &&
+											"Vous avez atteint la limite de 10 exécutions. "}
+										Pour ne plus avoir de limites, passer premium!
+									</p>
+								</>
+							)}
+						</div>
+					)}
 					<div
 						id="resultArea"
 						className="relative min-h-80 md:min-h-[50vh] md:min-w-[45%] flex "
