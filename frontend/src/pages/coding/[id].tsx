@@ -1,20 +1,35 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import Topbar from "@/components/elements/Topbar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import PrismLoader from "@/components/prism-loader";
 import { Separator } from "@/components/ui/separator";
 import Prism from "prismjs";
 import AuthLayout from "@/components/elements/auth-layout";
+import { useRouter } from "next/router";
 import {
+	useGetCodeforAProjectIdQuery,
+	useGetCodesQuery,
+	useGetMyProjectsQuery,
+	useUpdateCodeMutation,
 	GetExecutionCounterDocument,
 	useGetExecutionCounterQuery,
 	useIncrementExecutionCounterMutation,
 } from "@/graphql/generated/schema";
 
 const CodingPage = () => {
-	const { data, loading } = useGetExecutionCounterQuery({
+	const getCode = useGetCodesQuery();
+	const router = useRouter();
+	const { id } = router.query;
+	const { data } = useGetMyProjectsQuery();
+	const getCodeforAProjectIdQuery = useGetCodeforAProjectIdQuery({
+		variables: {
+			project: id as string,
+		},
+	});
+
+	// logic for counter execution button
+	const { data: counter, loading } = useGetExecutionCounterQuery({
 		onError: (e) => {
 			console.error("useGetExecutionCounterQuery =>", e);
 		},
@@ -27,11 +42,40 @@ const CodingPage = () => {
 		},
 	});
 
-	const isPremium = data && data.getExecutionCounter.isPremium;
-	const count = data ? data.getExecutionCounter.executionCounter : 0;
+	const isPremium = counter && counter.getExecutionCounter.isPremium;
+	const count = counter ? counter.getExecutionCounter.executionCounter : 0;
+
+	const project = data?.getMyProjects.find((project) => project.id === id);
+	const codeIdForThisProject = getCodeforAProjectIdQuery.data?.getCode[0]?.id;
+	const thisCode = getCode.data?.getCodes.find(
+		(code) => code.id === codeIdForThisProject
+	);
+	const thisCodeId = thisCode?.id;
 
 	const [code, setCode] = useState("");
 	const [showResult, setShowResult] = useState("");
+
+	useEffect(() => {
+		async function setCodeOnMount() {
+			const result_element_on_mount = document.querySelector(
+				"#highlighting-content"
+			);
+			const coding_input_on_mount = document.querySelector(
+				"#codingInput"
+			) as HTMLTextAreaElement;
+			if (
+				thisCode?.content &&
+				thisCode.content !== "" &&
+				result_element_on_mount
+			) {
+				result_element_on_mount.innerHTML = thisCode?.content;
+				coding_input_on_mount.innerHTML = thisCode?.content;
+				Prism.highlightElement(result_element_on_mount);
+				await setCode(thisCode?.content);
+			}
+		}
+		setCodeOnMount();
+	}, [thisCode?.content]);
 
 	const update = (text: string) => {
 		const result_element = document.querySelector(
@@ -62,28 +106,43 @@ const CodingPage = () => {
 
 	const checkTab = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
 		const code = e.currentTarget.value;
-
 		if (e.key == "Tab") {
 			/* Tab key pressed */
 			e.preventDefault(); // stop normal
 			const before_tab = code.slice(0, e.currentTarget.selectionStart); // text before tab
-
 			const after_tab = code.slice(
 				e.currentTarget.selectionEnd,
 				e.currentTarget.value.length
 			); // text after tab
-
 			const cursor_pos = e.currentTarget.selectionEnd + 1; // where cursor moves after tab - moving forward by 1 char to after tab
-
 			e.currentTarget.value = before_tab + "\t" + after_tab; // add tab char
 			// move cursor
 			e.currentTarget.selectionStart = cursor_pos;
 			e.currentTarget.selectionEnd = cursor_pos;
-
 			update(e.currentTarget.value); // Update text to include indent
 		}
 	};
 
+	const [updateCode] = useUpdateCodeMutation({
+		onCompleted: () => {
+			console.log("Code updated!");
+		},
+		onError: (error) => {
+			console.error(error);
+		},
+	});
+	async function saveCode() {
+		if (!thisCodeId) {
+			console.error("No code id found!");
+			return;
+		}
+		await updateCode({
+			variables: {
+				updateCodeId: thisCodeId,
+				content: code,
+			},
+		});
+	}
 	const runCode = () => {
 		// @Todo: Remettre le compte à 50 en dehors des tests
 		if (count < 10) {
@@ -112,8 +171,8 @@ const CodingPage = () => {
 		<AuthLayout>
 			<div>
 				<div id="coddingTopInfo" className="flex w-full relative">
-					<h1 className="flex flex-1 justify-start align-middle items-center pl-4">
-						Nom du projet
+					<h1 className="flex flex-1 justify-start align-middle items-center pl-4 font-bold text-xl">
+						{project?.title}
 					</h1>
 					<div className="relative my-6 mr-4 flex h-10 w-12 rounded-md md:h-14 justify-end align-bottom items-end">
 						<Image
@@ -134,7 +193,9 @@ const CodingPage = () => {
 						{/*TODO: limit terminal row max length */}
 						<Textarea
 							className="left-0 z-10 caret-white bg-transparent text-transparent leading-[20pt] text-[15pt] resize-none "
-							placeholder="Commencez a coder ici..."
+							placeholder={
+								thisCode?.content === "" ? "Commencez a coder ici..." : ""
+							}
 							id="codingInput"
 							onChange={(e) => {
 								update(e.target.value);
@@ -197,6 +258,15 @@ const CodingPage = () => {
 							value={showResult}
 						/>
 					</div>
+				</div>
+				<div className="container mx-auto flex justify-end md:pt-12">
+					<Button
+						size={"sm"}
+						className="flex md:justify-center md:items-center md:content-center md:align-middle mt-4 mb-4 w-20 ml-2 md:mr-0"
+						onClick={saveCode}
+					>
+						Enregistrer
+					</Button>
 				</div>
 			</div>
 		</AuthLayout>

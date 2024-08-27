@@ -19,7 +19,7 @@ export default class Code extends BaseEntity {
 	@Field()
 	id: string;
 
-	@Column()
+	@Column({ nullable: true, default: ""})
 	@Field()
 	content: string;
 
@@ -30,10 +30,10 @@ export default class Code extends BaseEntity {
 	@CreateDateColumn()
 	createdAt: Date;
 
-	@UpdateDateColumn()
+	@UpdateDateColumn({ nullable: true })
 	updatedAt: Date;
 
-	@UpdateDateColumn()
+	@UpdateDateColumn({ nullable: true })
 	reportedAt: Date;
 
 	@ManyToOne(() => Language, (language) => language.codes)
@@ -49,4 +49,10 @@ export default class Code extends BaseEntity {
 export class CodeInput {
 	@Field()
 	content: string;
+
+	@Field({nullable: true})
+	language: string;
+
+	@Field()
+	project: string;
 }
