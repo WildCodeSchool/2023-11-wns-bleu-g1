@@ -32,7 +32,6 @@ export default class ProjectResolver {
 		return projects;
 	}
 
-	// get project by project id
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Query(() => [Project])
 	async getProject(@Arg("id") id: string) {
