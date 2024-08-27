@@ -37,3 +37,7 @@ query GetUserProfile {
 		role
 	}
 }
+
+mutation IncrementExecutionCounter($counter: ExecutionCounterInput!) {
+	incrementExecutionCounter(counter: $counter)
+}

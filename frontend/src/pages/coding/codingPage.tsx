@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Topbar from "@/components/elements/Topbar";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,8 @@ import {
 	GetExecutionCounterDocument,
 	useGetExecutionCounterQuery,
 	useIncrementExecutionCounterMutation,
-} from "@/graphql/generated/schema"
+} from "@/graphql/generated/schema";
+
 
 const CodingPage = () => {
 	const { data, loading } = useGetExecutionCounterQuery({
@@ -19,10 +20,20 @@ const CodingPage = () => {
 			console.error("useGetExecutionCounterQuery =>", e);
 		},
 	});
+
+	const [incrementCounter] = useIncrementExecutionCounterMutation({
+		refetchQueries: [GetExecutionCounterDocument],
+		onError: (e) => {
+			console.error("useIncrementeExecutionCounterMutation =>", e);
+		},
+	});
+
 	const isPremium = data && data.getExecutionCounter.isPremium;
+	const count = data ? data.getExecutionCounter.executionCounter : 0;
+
+
 	const [code, setCode] = useState("");
 	const [showResult, setShowResult] = useState("");
-	const [count, setCount] = useState(0);
 
 	const update = (text: string) => {
 		const result_element = document.querySelector(
@@ -53,19 +64,24 @@ const CodingPage = () => {
 
 	const checkTab = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
 		const code = e.currentTarget.value;
+
 		if (e.key == "Tab") {
 			/* Tab key pressed */
 			e.preventDefault(); // stop normal
 			const before_tab = code.slice(0, e.currentTarget.selectionStart); // text before tab
+
 			const after_tab = code.slice(
 				e.currentTarget.selectionEnd,
 				e.currentTarget.value.length
 			); // text after tab
+
 			const cursor_pos = e.currentTarget.selectionEnd + 1; // where cursor moves after tab - moving forward by 1 char to after tab
+
 			e.currentTarget.value = before_tab + "\t" + after_tab; // add tab char
 			// move cursor
 			e.currentTarget.selectionStart = cursor_pos;
 			e.currentTarget.selectionEnd = cursor_pos;
+
 			update(e.currentTarget.value); // Update text to include indent
 		}
 	};
@@ -73,19 +89,24 @@ const CodingPage = () => {
 	const runCode = () => {
 		// @Todo: Remettre le compte à 50 en dehors des tests
 		if (count < 10) {
+			if (!isPremium) {
+				// console.log(count);
+				incrementCounter({
+					variables: { counter: { executionCounter: count } },
+				});
+			}
+
 			try {
 				const result = eval(code);
+
 				console.log("result: ", result);
+
 				setShowResult(result);
-				setCount(count + 1);
 			} catch (error: any) {
 				console.error(error);
+
 				setShowResult("Error: " + error.message);
 			}
-		} else {
-			setShowResult(
-				"Vous avez atteint la limite de 10 exécutions. Pour ne plus avoir de limites, passer premium!"
-			);
 		}
 	};
 

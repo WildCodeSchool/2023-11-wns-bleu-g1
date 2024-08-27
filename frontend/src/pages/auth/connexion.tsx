@@ -59,7 +59,7 @@ const SignInPage = () => {
 				title: "Connexion réussie",
 				className: "text-success",
 			});
-			router.push("/tableau-de-bord");
+			router.push("/profile");
 		},
 		onError: (err: ApolloError) => {
 			console.error(err);

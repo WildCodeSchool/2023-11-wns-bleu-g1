@@ -3,10 +3,9 @@ name: "test-front"
 on:
   pull_request:
     paths:
-      - 'frontend/**'
-    types:
-      - closed
-
+      - "frontend/**"
+    # types:
+    #   - closed
 
 jobs:
   linting-frontend:
@@ -24,6 +23,7 @@ jobs:
         run: npm ci
       - name: Code Linting
         run: npm run lint
+
   test-client:
     needs: linting-frontend
     runs-on: ubuntu-latest
@@ -41,6 +41,7 @@ jobs:
         run: npm ci
       - name: Run tests
         run: npm test
+
   build-and-push-frontend:
     if: github.event.pull_request.merged == true
     needs: test-client

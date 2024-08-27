@@ -75,13 +75,15 @@ const AuthHeader = () => {
 						<DropdownMenuContent>
 							<DropdownMenuLabel>{profile?.pseudo}</DropdownMenuLabel>
 							<DropdownMenuSeparator />
-							<DropdownMenuItem className={itemsClassName}>
-								<User className={iconsClassName} />
-								Mon profil
+							<DropdownMenuItem className={itemsClassName} asChild>
+								<Link href={"/profile"}>
+									<User className={iconsClassName} />
+									Mon profil
+								</Link>
 							</DropdownMenuItem>
 							<DropdownMenuItem className={itemsClassName}>
 								<FolderOpen className={iconsClassName} />
-								Mes projets
+								Projets publics
 							</DropdownMenuItem>
 							<DropdownMenuItem
 								className={cn(

@@ -25,6 +25,10 @@ export type Code = {
   project: Project;
 };
 
+export type ExecutionCounterInput = {
+  executionCounter: Scalars['Float'];
+};
+
 export type Language = {
   __typename?: 'Language';
   codes: Array<Code>;
@@ -36,6 +40,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createProject: Project;
   createUser: User;
+  incrementExecutionCounter: Scalars['Float'];
   logout: Scalars['String'];
   signin: Scalars['String'];
 };
@@ -51,6 +56,11 @@ export type MutationCreateUserArgs = {
 };
 
 
+export type MutationIncrementExecutionCounterArgs = {
+  counter: ExecutionCounterInput;
+};
+
+
 export type MutationSigninArgs = {
   data: SigninInput;
 };
@@ -62,6 +72,7 @@ export type NewProjectInput = {
 
 export type NewUserInput = {
   email: Scalars['String'];
+  isPremium?: InputMaybe<Scalars['Boolean']>;
   password: Scalars['String'];
   pseudo: Scalars['String'];
   role?: InputMaybe<Scalars['String']>;
@@ -148,6 +159,13 @@ export type GetUserProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetUserProfileQuery = { __typename?: 'Query', getUserProfile: { __typename?: 'User', email: string, id: string, pseudo: string, role: string } };
+
+export type IncrementExecutionCounterMutationVariables = Exact<{
+  counter: ExecutionCounterInput;
+}>;
+
+
+export type IncrementExecutionCounterMutation = { __typename?: 'Mutation', incrementExecutionCounter: number };
 
 
 export const CreateProjectDocument = gql`
@@ -439,3 +457,34 @@ export function useGetUserProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type GetUserProfileQueryHookResult = ReturnType<typeof useGetUserProfileQuery>;
 export type GetUserProfileLazyQueryHookResult = ReturnType<typeof useGetUserProfileLazyQuery>;
 export type GetUserProfileQueryResult = Apollo.QueryResult<GetUserProfileQuery, GetUserProfileQueryVariables>;
+export const IncrementExecutionCounterDocument = gql`
+    mutation IncrementExecutionCounter($counter: ExecutionCounterInput!) {
+  incrementExecutionCounter(counter: $counter)
+}
+    `;
+export type IncrementExecutionCounterMutationFn = Apollo.MutationFunction<IncrementExecutionCounterMutation, IncrementExecutionCounterMutationVariables>;
+
+/**
+ * __useIncrementExecutionCounterMutation__
+ *
+ * To run a mutation, you first call `useIncrementExecutionCounterMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useIncrementExecutionCounterMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [incrementExecutionCounterMutation, { data, loading, error }] = useIncrementExecutionCounterMutation({
+ *   variables: {
+ *      counter: // value for 'counter'
+ *   },
+ * });
+ */
+export function useIncrementExecutionCounterMutation(baseOptions?: Apollo.MutationHookOptions<IncrementExecutionCounterMutation, IncrementExecutionCounterMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<IncrementExecutionCounterMutation, IncrementExecutionCounterMutationVariables>(IncrementExecutionCounterDocument, options);
+      }
+export type IncrementExecutionCounterMutationHookResult = ReturnType<typeof useIncrementExecutionCounterMutation>;
+export type IncrementExecutionCounterMutationResult = Apollo.MutationResult<IncrementExecutionCounterMutation>;
+export type IncrementExecutionCounterMutationOptions = Apollo.BaseMutationOptions<IncrementExecutionCounterMutation, IncrementExecutionCounterMutationVariables>;

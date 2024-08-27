@@ -1,109 +1,75 @@
 import AuthLayout from "@/components/elements/auth-layout";
 import PageLoader from "@/components/elements/page-loader";
 import UserHeadCard from "@/components/elements/user-head-card";
-import { useGetUserProfileQuery } from "@/graphql/generated/schema";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { buttonVariants } from "@/components/ui/button";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import {
+	useGetMyProjectsQuery,
+	useGetUserProfileQuery,
+} from "@/graphql/generated/schema";
+import { MessageCircleWarning, Terminal } from "lucide-react";
+import Link from "next/link";
 
-export default function Profile() {
+const ProfilPage = () => {
 	const getUserProfileQuery = useGetUserProfileQuery();
+	const getMyProjectsQuery = useGetMyProjectsQuery();
 
-	if (getUserProfileQuery.loading) return <PageLoader />;
-	if (getUserProfileQuery.error) console.error(getUserProfileQuery.error);
+	if (getUserProfileQuery.loading || getMyProjectsQuery.loading)
+		return <PageLoader />;
+	if (getUserProfileQuery.error || getMyProjectsQuery.error)
+		console.error(getUserProfileQuery.error || getMyProjectsQuery.error);
 
 	const profile = getUserProfileQuery?.data?.getUserProfile || null;
+	const projects = getMyProjectsQuery?.data?.getMyProjects || [];
 
 	return (
-		<AuthLayout
-		>
-			{/* <div className={`flex gap-5 w-full max-w-3xl items-center`}> */}
+		<AuthLayout>
+			<div className="py-8 space-y-8">
 				<UserHeadCard profile={profile} />
-			{/* </div> */}
-
-			<section className={`flex flex-col gap-5 w-full max-w-3xl text-xl md:justify-center`}>
-				{/* <div
-					className={`flex flex-col gap-6 border-b-2 border-foreground pb-8`}
-				>
-					<p className={`flex gap-5 items-center`}>
-						<span
-							className={`flex justify-center items-center rounded-full bg-blue-400 text-background min-w-[50px] min-h-[50px]`}
-						>
-							58
-						</span>
-						Projets
-					</p>
-					<p className={`flex gap-5 items-center`}>
-						<span
-							className={`flex justify-center items-center rounded-full bg-blue-400 text-background min-w-[50px] min-h-[50px]`}
-						>
-							125
-						</span>
-						Likes
-					</p>
-					<p className={`flex gap-5 items-center`}>
-						<span
-							className={`flex justify-center items-center rounded-full bg-blue-400 text-background min-w-[50px] min-h-[50px]`}
-						>
-							68
-						</span>
-						Commentaires
-					</p>
-				</div> */}
-
-				<div className={`flex flex-col gap-4 min-h-[150px] py-8 border-t-2 border-foreground md:border-none`}>
-					<h3 className={`text-center mb-4`}>Bests projects</h3>
-
-					<div className={`flex gap-5 text-base`}>
-						<p
-							className={`flex items-center bg-gray-400 text-background min-w-[65%] px-3 rounded-xl`}
-						>
-							Hack the NASA
-						</p>
-
-						<span className={`flex items-center gap-2`}>
-							<strong className={`text-2xl`}>★</strong>
-							25
-						</span>
+				<h3 className="text-2xl font-semibold">Mes Projets</h3>
+				{projects.length > 0 ? (
+					<div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+						{projects.map((project) => (
+							<Card key={project.id}>
+								<CardHeader>
+									<CardTitle>{project.title}</CardTitle>
+									<CardDescription>
+										Crée le{" "}
+										{new Date(project.createdAt).toLocaleString("fr-FR", {
+											year: "numeric",
+											month: "long",
+											day: "numeric",
+										})}
+									</CardDescription>
+								</CardHeader>
+								<CardContent>
+									<Link href={"#"} className={buttonVariants()}>
+										Voir le projet
+									</Link>
+								</CardContent>
+							</Card>
+						))}
 					</div>
-
-					<div className={`flex gap-5 text-base`}>
-						<p
-							className={`flex items-center bg-gray-400 text-background min-w-[65%] px-3 rounded-xl`}
-						>
-							Elon is afraid
-						</p>
-
-						<span className={`flex items-center gap-2`}>
-							<strong className={`text-2xl`}>★</strong>
-							25
-						</span>
-					</div>
-
-					<div className={`flex gap-5 text-base`}>
-						<p
-							className={`flex items-center bg-gray-400 text-background min-w-[65%] px-3 rounded-xl`}
-						>
-							Youtube unlimited
-						</p>
-
-						<span className={`flex items-center gap-2`}>
-							<strong className={`text-2xl`}>★</strong>
-							25
-						</span>
-					</div>
-
-					<div className={`flex gap-5 text-base`}>
-						<p
-							className={`flex items-center bg-gray-400 text-background min-w-[65%] px-3 rounded-xl`}
-						>
-							REACT Marios Bros.
-						</p>
-
-						<span className={`flex items-center gap-2`}>
-							<strong className={`text-2xl`}>★</strong>
-							25
-						</span>
-					</div>
-				</div>
-			</section>
+				) : (
+					<Alert>
+						<MessageCircleWarning className="h-4 w-4" />
+						<AlertTitle>Vous n&apos;avez pas encore de projet</AlertTitle>
+						<AlertDescription>
+							Vous pouvez en créer un en cliquant sur le bouton &quot;Nouveau
+							projet&quot;
+						</AlertDescription>
+					</Alert>
+				)}
+			</div>
 		</AuthLayout>
 	);
-}
+};
+
+export default ProfilPage;

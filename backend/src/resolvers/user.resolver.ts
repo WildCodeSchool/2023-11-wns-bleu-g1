@@ -1,5 +1,9 @@
 import { Arg, Authorized, Ctx, Mutation, Query } from "type-graphql";
-import User, { NewUserInput, SigninInput } from "../entities/user";
+import User, {
+	ExecutionCounterInput,
+	NewUserInput,
+	SigninInput,
+} from "../entities/user";
 import { GraphQLError } from "graphql";
 import { verify } from "argon2";
 import jwt from "jsonwebtoken";
@@ -26,6 +30,21 @@ export default class UserResolver {
 			where: { id: ctx.currentUser.id },
 			select: ["id", "pseudo", "email", "role"],
 		});
+	}
+
+	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Query(() => User)
+	async getExecutionCounter(@Ctx() { currentUser }: Context) {
+		if (!currentUser) {
+			throw new GraphQLError("you need to be logged in!");
+		}
+
+		const user = await User.findOneOrFail({
+			where: { id: currentUser?.id },
+			select: ["isPremium", "executionCounter"],
+		});
+
+		return user;
 	}
 
 	@Mutation(() => User)
@@ -103,5 +122,23 @@ export default class UserResolver {
 		ctx.res.clearCookie("token");
 
 		return "ok";
+	}
+
+	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Mutation(() => Number)
+	async incrementExecutionCounter(
+		@Arg("counter") counter: ExecutionCounterInput,
+		@Ctx() { currentUser }: Context
+	) {
+		const user = await User.findOneByOrFail({ id: currentUser?.id });
+
+		user.executionCounter =
+			counter.executionCounter === 10
+				? counter.executionCounter
+				: counter.executionCounter + 1;
+
+		await user.save();
+
+		return user.executionCounter;
 	}
 }
