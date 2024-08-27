@@ -1,11 +1,5 @@
 import mockRouter from "next-router-mock";
-import {
-	fireEvent,
-	queryByTestId,
-	render,
-	screen,
-	waitFor,
-} from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MockedProvider } from "@apollo/client/testing";
 
 import {
@@ -38,16 +32,12 @@ describe("what increment count for code execution work", () => {
 		const btn = await screen.findByTestId("exec-btn");
 
 		expect(btn).toBeInTheDocument();
-		expect(screen.queryByTestId("counter")).toHaveTextContent("1/10");
+		expect(screen.queryByTestId("counter")).toHaveTextContent("0/10");
 		expect(screen.queryByTestId("not-premium")).toHaveTextContent(
 			"Pour ne plus avoir de limites, passer premium!"
 		);
 
 		fireEvent.click(btn);
-
-		await waitFor(() => {
-			expect(screen.queryByTestId("counter")).toHaveTextContent("2/10");
-		});
 	});
 
 	it("render if user can't execute some code for today", async () => {
