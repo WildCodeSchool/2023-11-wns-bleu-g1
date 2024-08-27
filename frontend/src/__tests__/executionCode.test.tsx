@@ -10,7 +10,7 @@ import {
 	getVisitorProfileMock,
 	incrementExecutionCounterMock,
 } from "./executionCode.mock";
-import CodingPage from "@/pages/coding/codingPage";
+import CodingPage from "@/pages/coding/[id]";
 
 describe("what increment count for code execution work", () => {
 	mockRouter.push("/coding/codingPage");
