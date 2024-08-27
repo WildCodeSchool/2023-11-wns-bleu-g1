@@ -25,14 +25,14 @@ export type Code = {
   project: Project;
 };
 
-export type ExecutionCounterInput = {
-  executionCounter: Scalars['Float'];
-};
-
 export type CodeInput = {
   content: Scalars['String'];
   language?: InputMaybe<Scalars['String']>;
   project: Scalars['String'];
+};
+
+export type ExecutionCounterInput = {
+  executionCounter: Scalars['Float'];
 };
 
 export type Language = {
@@ -77,13 +77,13 @@ export type MutationCreateUserArgs = {
 };
 
 
-export type MutationIncrementExecutionCounterArgs = {
-  counter: ExecutionCounterInput;
+export type MutationDeleteLanguageArgs = {
+  id: Scalars['String'];
 };
 
 
-export type MutationDeleteLanguageArgs = {
-  id: Scalars['String'];
+export type MutationIncrementExecutionCounterArgs = {
+  counter: ExecutionCounterInput;
 };
 
 
@@ -215,7 +215,7 @@ export type CreateProjectMutationVariables = Exact<{
 }>;
 
 
-export type CreateProjectMutation = { __typename?: 'Mutation', createProject: { __typename?: 'Project', title: string, id: string, isPublic: boolean, user: { __typename?: 'User', pseudo: string, role: string, id: string } } };
+export type CreateProjectMutation = { __typename?: 'Mutation', createProject: { __typename?: 'Project', title: string, id: string, isPublic: boolean, user: { __typename?: 'User', pseudo: string, role: string, id: string, email: string } } };
 
 export type GetMyProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -232,7 +232,7 @@ export type GetProjectByIdQuery = { __typename?: 'Query', getProject: Array<{ __
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', email: string, id: string }> };
+export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, role: string, email: string, pseudo: string, executionCounter: number, isPremium: boolean }> };
 
 export type GetExecutionCounterQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -261,7 +261,7 @@ export type LogoutMutation = { __typename?: 'Mutation', logout: string };
 export type GetUserProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserProfileQuery = { __typename?: 'Query', getUserProfile: { __typename?: 'User', email: string, id: string, pseudo: string, role: string } };
+export type GetUserProfileQuery = { __typename?: 'Query', getUserProfile: { __typename?: 'User', id: string, role: string, email: string, pseudo: string, executionCounter: number, isPremium: boolean } };
 
 export type IncrementExecutionCounterMutationVariables = Exact<{
   counter: ExecutionCounterInput;
@@ -512,6 +512,7 @@ export const CreateProjectDocument = gql`
       pseudo
       role
       id
+      email
     }
     id
     isPublic
@@ -635,8 +636,12 @@ export type GetProjectByIdQueryResult = Apollo.QueryResult<GetProjectByIdQuery, 
 export const UsersDocument = gql`
     query Users {
   users {
-    email
     id
+    role
+    email
+    pseudo
+    executionCounter
+    isPremium
   }
 }
     `;
@@ -802,10 +807,12 @@ export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, L
 export const GetUserProfileDocument = gql`
     query GetUserProfile {
   getUserProfile {
-    email
     id
-    pseudo
     role
+    email
+    pseudo
+    executionCounter
+    isPremium
   }
 }
     `;
@@ -836,7 +843,6 @@ export function useGetUserProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type GetUserProfileQueryHookResult = ReturnType<typeof useGetUserProfileQuery>;
 export type GetUserProfileLazyQueryHookResult = ReturnType<typeof useGetUserProfileLazyQuery>;
 export type GetUserProfileQueryResult = Apollo.QueryResult<GetUserProfileQuery, GetUserProfileQueryVariables>;
-
 export const IncrementExecutionCounterDocument = gql`
     mutation IncrementExecutionCounter($counter: ExecutionCounterInput!) {
   incrementExecutionCounter(counter: $counter)
