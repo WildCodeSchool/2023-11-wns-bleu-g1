@@ -3,27 +3,24 @@ import { Arg, Authorized, Ctx, Mutation, Query } from "type-graphql";
 import Project, { NewProjectInput } from "../entities/project";
 import { Context } from "../interfaces/auth";
 import { GraphQLError } from "graphql";
+import ProjectService from "../services/projet.service";
+import { UserRole } from "../entities/user";
 
 export default class ProjectResolver {
+	@Authorized([UserRole.ADMIN])
 	@Query(() => [Project])
 	async getProjects() {
-		// SELECT * FROM Project;
-		const projects = await Project.find({
-			relations: { codes: true, user: true },
-		});
+		const projects = await ProjectService.getAllProjects();
 
 		return projects;
 	}
 
 	@Authorized()
 	@Query(() => [Project])
-	async getMyProjects(@Ctx() ctx: Context) {
-		if (!ctx.currentUser) throw new GraphQLError("you need to be logged in!");
-		// SELECT * FROM Project WHERE user=ctx.currentUser;
-		const projects = await Project.find({
-			where: { user: ctx.currentUser },
-			relations: { codes: true, user: true },
-		});
+	async getMyProjects(@Ctx() { currentUser }: Context) {
+		if (!currentUser) throw new GraphQLError("you need to be logged in!");
+
+		const projects = await ProjectService.getAllProjects(currentUser);
 
 		return projects;
 	}
@@ -32,16 +29,12 @@ export default class ProjectResolver {
 	@Mutation(() => Project)
 	async createProject(
 		@Arg("data", { validate: true }) data: NewProjectInput,
-		@Ctx() ctx: Context
+		@Ctx() { currentUser }: Context
 	) {
-		if (!ctx.currentUser) throw new GraphQLError("you need to be logged in!");
+		if (!currentUser) throw new GraphQLError("you need to be logged in!");
 
-		const project = Project.create({
-			...data,
-			isPublic: data.isPublic || false,
-			user: ctx.currentUser,
-		});
+		const project = await ProjectService.create(data, currentUser);
 
-		return await project.save();
+		return project;
 	}
 }
