@@ -18,7 +18,7 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useSignUpMutation } from "@/graphql/generated.old/schema";
+import { useSignUpMutation } from "@/graphql/generated/schema";
 import { cn } from "@/lib/utils";
 import { ApolloError } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";

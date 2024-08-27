@@ -18,7 +18,7 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useSignInMutation } from "@/graphql/generated.old/schema";
+import { useSignInMutation } from "@/graphql/generated/schema";
 import { ApolloError } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle, BadgeCheck } from "lucide-react";
@@ -140,9 +140,6 @@ const SignInPage = () => {
 									</FormItem>
 								)}
 							/>
-							<Link href={`/auth/mot-de-passe-oublie`} className="text-primary text-sm hover:underline">
-								Mot de passe oublié ?
-							</Link>
 							{signInMutationResult.error && (
 								<Alert variant="error">
 									<AlertCircle className="h-4 w-4" />

@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 import {
 	useGetUserProfileQuery,
 	useLogoutMutation,
-} from "@/graphql/generated.old/schema";
+} from "@/graphql/generated/schema";
 import { useRouter } from "next/router";
 import { useToast } from "../ui/use-toast";
 import Link from "next/link";

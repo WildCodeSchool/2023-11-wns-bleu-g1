@@ -1,5 +1,5 @@
 import { Arg, Authorized, Ctx, Mutation, Query } from "type-graphql";
-import User, { ChangePasswordInput, NewUserInput, SigninInput } from "../entities/user";
+import User, { NewUserInput, SigninInput } from "../entities/user";
 import { GraphQLError } from "graphql";
 import { verify } from "argon2";
 import jwt from "jsonwebtoken";
@@ -7,8 +7,6 @@ import jwt from "jsonwebtoken";
 import env from "../env";
 import { Context } from "../interfaces/auth";
 import { UserRole } from "../entities/user";
-import mailer from "../mailer";
-import cryto from "cryto";
 
 export default class UserResolver {
 	@Authorized([UserRole.ADMIN])
@@ -98,46 +96,6 @@ export default class UserResolver {
 		});
 
 		return token;
-	}
-
-	@Mutation(() => String)
-	async forgotPassword(
-		@Arg("email") email: string,
-		@Ctx() ctx: Context
-	) {
-		// SELECT * FROM User WHERE email=email
-		const user = await User.findOneBy({ email: email});
-
-		if (!user) {
-			throw new GraphQLError(`email: ${email} not register`);
-		}
-
-		const token = crypto.randomBytes(20).toString("hex");
-
-		user.resetPasswordToken = token;
-
-		await mailer.sendMail({
-			subject: "Réinitialisation du mot de passe",
-			to: user.email,
-			from: env.EMAIL_FROM,
-			text: `Veuillez suivre ce lien pour réinitialiser votre mot de passe. ${env.APP_URL}changePassword/${token}`
-		})
-
-		user.save();
-
-		return "email sent";
-	}
-
-	@Mutation(() => String)
-	async changePassword(@Arg("password") data: ChangePasswordInput, @Ctx() ctx: Context) {
-
-		const user = await User.findOneBy({
-			where: { resetPasswordToken: data.resetPasswordToken },
-		});
-
-		if (!user) throw new GraphQLError(`email: ${data.resetPasswordToken} not register`);
-
-		console.log('Change Password Mutation')
 	}
 
 	@Mutation(() => String)

@@ -1,7 +1,7 @@
 import AuthLayout from "@/components/elements/auth-layout";
 import PageLoader from "@/components/elements/page-loader";
 import UserHeadCard from "@/components/elements/user-head-card";
-import { useGetUserProfileQuery } from "@/graphql/generated.old/schema";
+import { useGetUserProfileQuery } from "@/graphql/generated/schema";
 
 export default function Profile() {
 	const getUserProfileQuery = useGetUserProfileQuery();

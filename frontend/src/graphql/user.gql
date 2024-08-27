@@ -18,19 +18,6 @@ mutation SignIn($data: SigninInput!) {
 	signin(data: $data)
 }
 
-mutation ForgotPassword($email: String!) {
-	forgotPassword(email: $email)
-}
-
-mutation ChangePassword($data: ChangePasswordInput!) {
-	changePassword(data: $data) {
-		email
-		id
-		pseudo
-		role
-	}
-}
-
 mutation Logout {
 	logout
 }
