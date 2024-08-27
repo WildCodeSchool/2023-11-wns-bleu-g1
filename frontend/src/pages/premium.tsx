@@ -56,6 +56,7 @@ const PricingToggle = memo(
     </div>
   ),
 );
+PricingToggle.displayName = "PricingToggle";
  
 const PricingCard = memo(({ option, enabled }: PricingCardProps) => (
   <div className="grid h-full w-full grid-cols-1 rounded-xl border border-neutral-700/50 lg:grid-cols-5">
@@ -102,10 +103,11 @@ const PricingCard = memo(({ option, enabled }: PricingCardProps) => (
     </div>
   </div>
 ));
+PricingCard.displayName = "PricingCard";
  
 export default function Pricing() {
   const [enabled, setEnabled] = useState(false);
-const pricingOptions: PricingOption[] = [
+  const pricingOptions: PricingOption[] = [
     {
         name: "Gratuit",
         price: "0€",

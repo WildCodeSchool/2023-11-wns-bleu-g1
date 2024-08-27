@@ -20,7 +20,7 @@ const CodingPage = () => {
 			console.error("useGetExecutionCounterQuery =>", e);
 		},
 	});
-
+	
 	const [incrementCounter] = useIncrementExecutionCounterMutation({
 		refetchQueries: [GetExecutionCounterDocument],
 		onError: (e) => {
@@ -30,7 +30,6 @@ const CodingPage = () => {
 
 	const isPremium = data && data.getExecutionCounter.isPremium;
 	const count = data ? data.getExecutionCounter.executionCounter : 0;
-
 
 	const [code, setCode] = useState("");
 	const [showResult, setShowResult] = useState("");
