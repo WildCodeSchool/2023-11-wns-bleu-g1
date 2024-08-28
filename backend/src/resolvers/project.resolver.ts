@@ -19,7 +19,7 @@ export default class ProjectResolver {
 		return projects;
 	}
 
-	@Authorized([UserRole.VISITOR])
+	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Query(() => ProjectPaginationResponse)
 	async getMyProjects(
 		@Ctx() ctx: Context,
@@ -44,7 +44,7 @@ export default class ProjectResolver {
 		};
 	}
 
-	@Authorized([UserRole.VISITOR])
+	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Query(() => ProjectPaginationResponse)
 	async getPublicsProjects(
 		@Ctx() ctx: Context,
