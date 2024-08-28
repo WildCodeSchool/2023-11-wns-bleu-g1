@@ -16,9 +16,10 @@ type ProjectWithPartialUser = Omit<Project, "user"> & { user: Partial<User> };
 interface Props {
 	project: Partial<ProjectWithPartialUser>;
 	onProfilePage: boolean;
+	className?: string;
 }
 
-const ProjectCard = ({ project, onProfilePage }: Props) => {
+const ProjectCard = ({ project, onProfilePage, className }: Props) => {
 	const statusBadge = project.isPublic ? (
 		<Badge variant={"blue"} className="pb-1 font-bold">
 			Public
@@ -29,7 +30,7 @@ const ProjectCard = ({ project, onProfilePage }: Props) => {
 		</Badge>
 	);
 	return (
-		<Card>
+		<Card className={className}>
 			<CardHeader>
 				<div className="flex items-center justify-between">
 					<CardTitle>{project.title}</CardTitle>

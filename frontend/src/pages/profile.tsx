@@ -43,21 +43,26 @@ const ProfilPage = () => {
 								<ProjectCard key={project.id} project={project} onProfilePage />
 							))}
 						</div>
-						<CustomPagination
-							page={page}
-							setPage={setPage}
-							limit={limit}
-							dataLength={projects.length}
-							query={getMyProjectsQuery}
-						/>
 					</div>
+				) : page > 0 ? (
+					<NotFoundAlert
+						title="Vous n'avez pas d'autres projets"
+						description='Vous pouvez revenir en arrière en cliquant sur le bouton "Précédent"'
+					/>
 				) : (
 					<NotFoundAlert
 						title="Vous n'avez pas encore de projet"
 						description='Vous pouvez en créer un en cliquant sur le bouton "Nouveau
-							projet"'
+					projet"'
 					/>
 				)}
+				<CustomPagination
+					page={page}
+					setPage={setPage}
+					limit={limit}
+					dataLength={projects.length}
+					query={getMyProjectsQuery}
+				/>
 			</div>
 		</AuthLayout>
 	);

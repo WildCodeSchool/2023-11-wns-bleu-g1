@@ -19,8 +19,7 @@ export const authChecker: AuthChecker<Context> = async (
 		return false;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const decoded = (await jwt.verify(token, env.JWT_PRIVATE_KEY)) as any;
+	const decoded = jwt.verify(token, env.JWT_PRIVATE_KEY) as jwt.JwtPayload;
 	if (!decoded?.userId) {
 		return false;
 	}

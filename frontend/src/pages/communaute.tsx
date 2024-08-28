@@ -17,17 +17,18 @@ const CommunautePage = () => {
 			limit,
 			offset,
 		},
-		notifyOnNetworkStatusChange: true,
 	});
 
-	if (getPublicProjectsQuery.loading) return <PageLoader />;
+	// if (getPublicProjectsQuery.loading) return <PageLoader />;
 
-	if (getPublicProjectsQuery.error) {
-		console.error(getPublicProjectsQuery.error);
-		return;
-	}
-	const publicsProjects = getPublicProjectsQuery.data?.getPublicsProjects || [];
+	// if (getPublicProjectsQuery.error) {
+	// 	console.error(getPublicProjectsQuery.error);
+	// 	return;
+	// }
+	// const publicsProjects = getPublicProjectsQuery.data?.getPublicsProjects;
 
+	const projects: any[] = [];
+	console.log("getPublicProjectsQuery", getPublicProjectsQuery);
 	return (
 		<AuthLayout>
 			<div className="space-y-0.5">
@@ -38,10 +39,10 @@ const CommunautePage = () => {
 				</p>
 			</div>
 			<Separator className="my-6" />
-			{publicsProjects.length > 0 ? (
+			{projects.length > 0 ? (
 				<div>
 					<div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-						{publicsProjects.map((project) => (
+						{projects.map((project) => (
 							<ProjectCard
 								key={project.id}
 								project={project}
@@ -50,21 +51,26 @@ const CommunautePage = () => {
 						))}
 					</div>
 					{/* PAGINATION */}
-					<CustomPagination
-						page={page}
-						setPage={setPage}
-						limit={limit}
-						dataLength={publicsProjects.length}
-						query={getPublicProjectsQuery}
-					/>
 				</div>
+			) : page > 0 ? (
+				<NotFoundAlert
+					title="Vous n'avez pas d'autres projets"
+					description='Vous pouvez revenir en arrière en cliquant sur le bouton "Précédent"'
+				/>
 			) : (
 				<NotFoundAlert
 					title="Vous n'avez pas encore de projet"
 					description='Vous pouvez en créer un en cliquant sur le bouton "Nouveau
-							projet"'
+				projet"'
 				/>
 			)}
+			<CustomPagination
+				page={page}
+				setPage={setPage}
+				limit={limit}
+				dataLength={projects.length}
+				query={getPublicProjectsQuery}
+			/>
 		</AuthLayout>
 	);
 };

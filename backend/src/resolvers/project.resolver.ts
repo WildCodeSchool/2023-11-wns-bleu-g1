@@ -5,13 +5,13 @@ import { Context } from "../interfaces/auth";
 import { GraphQLError } from "graphql";
 import DataSource from "../db";
 import { UserRole } from "../entities/user";
+import ProjectPaginationResponse from "../types/project-pagination-response";
 
 export default class ProjectResolver {
 	private projectRepository = DataSource.getRepository(Project);
 	@Query(() => [Project])
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	async getProjects() {
-		// SELECT * FROM Project;
 		const projects = await Project.find({
 			relations: { codes: { language: true }, user: true },
 		});
@@ -27,7 +27,6 @@ export default class ProjectResolver {
 		@Arg("offset", { defaultValue: 0 }) offset: number
 	) {
 		if (!ctx.currentUser) throw new GraphQLError("you need to be logged in!");
-		// SELECT * FROM Project WHERE user=ctx.currentUser;
 		const projects = await Project.find({
 			where: { user: ctx.currentUser },
 			relations: { codes: true, user: true },
@@ -39,24 +38,34 @@ export default class ProjectResolver {
 		return projects;
 	}
 
-	@Authorized()
-	@Query(() => [Project])
+	@Authorized([UserRole.VISITOR])
+	@Query(() => ProjectPaginationResponse)
 	async getPublicsProjects(
 		@Ctx() ctx: Context,
 		@Arg("limit", { defaultValue: 12 }) limit: number,
 		@Arg("offset", { defaultValue: 0 }) offset: number
-	) {
+	): Promise<ProjectPaginationResponse> {
 		if (!ctx.currentUser) throw new GraphQLError("you need to be logged in!");
 
 		const projects = await Project.find({
 			where: { isPublic: true },
 			relations: { codes: true, user: true },
 			order: { createdAt: "DESC" },
-			take: limit,
+			take: limit + 1,
 			skip: offset,
 		});
 
-		return projects;
+		const hasMore = projects.length > limit;
+		const resultProjects = projects.slice(0, limit);
+
+		console.log("Projects found:", projects);
+		console.log("Returning projects:", resultProjects);
+		console.log("Has more:", hasMore);
+
+		return {
+			projects: resultProjects,
+			hasMore,
+		};
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])

@@ -124,6 +124,12 @@ export type Project = {
 	user: User;
 };
 
+export type ProjectPaginationResponse = {
+	__typename?: "ProjectPaginationResponse";
+	hasMore: Scalars["Boolean"];
+	projects: Array<Project>;
+};
+
 export type Query = {
 	__typename?: "Query";
 	getCode: Array<Code>;
@@ -134,7 +140,7 @@ export type Query = {
 	getMyProjects: Array<Project>;
 	getProject: Array<Project>;
 	getProjects: Array<Project>;
-	getPublicsProjects: Array<Project>;
+	getPublicsProjects: ProjectPaginationResponse;
 	getUserProfile: User;
 	users: Array<User>;
 };
@@ -281,8 +287,8 @@ export type GetMyProjectsQuery = {
 };
 
 export type GetPublicsProjectsQueryVariables = Exact<{
-	limit: Scalars["Float"];
 	offset: Scalars["Float"];
+	limit: Scalars["Float"];
 }>;
 
 export type GetPublicsProjectsQuery = {
@@ -815,8 +821,8 @@ export const GetPublicsProjectsDocument = gql`
  * @example
  * const { data, loading, error } = useGetPublicsProjectsQuery({
  *   variables: {
- *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
  *   },
  * });
  */

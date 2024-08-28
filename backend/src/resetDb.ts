@@ -3,6 +3,7 @@ import Project from "./entities/project";
 import Code from "./entities/code";
 import User, { UserRole } from "./entities/user";
 import Language from "./entities/language";
+import { EntityMetadata } from "typeorm";
 
 export const cleanDb = async () => {
 	const runner = db.createQueryRunner();
@@ -10,15 +11,13 @@ export const cleanDb = async () => {
 	await runner.query("SET session_replication_role = 'replica'");
 
 	await Promise.all(
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		db.entityMetadatas.map((entity: any) => {
+		db.entityMetadatas.map((entity: EntityMetadata) => {
 			runner.query(`ALTER TABLE "${entity.tableName}" DISABLE TRIGGER ALL`);
 		})
 	);
 
 	await Promise.all(
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		db.entityMetadatas.map((entity: any) => {
+		db.entityMetadatas.map((entity: EntityMetadata) => {
 			runner.query(`DROP TABLE IF EXISTS "${entity.tableName}" CASCADE`);
 		})
 	);
@@ -104,7 +103,7 @@ const main = async () => {
 	await javascriptCode.save();
 	await javascriptCode2.save();
 
-	for (let i = 1; i <= 20; i++) {
+	for (let i = 1; i <= 10; i++) {
 		const project = Project.create({
 			title: `Project ${i}`,
 			user: flexMaster,

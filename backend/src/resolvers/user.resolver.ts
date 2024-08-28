@@ -16,7 +16,6 @@ export default class UserResolver {
 	@Authorized([UserRole.ADMIN])
 	@Query(() => [User])
 	async users() {
-		// SELECT * FROM User;
 		const users = await User.find();
 
 		return users;
@@ -62,9 +61,7 @@ export default class UserResolver {
 			throw new GraphQLError("password is missing but require");
 		}
 
-		// SELECT * FROM User WHERE email=data.email
 		const userAlreadyExist = await User.findOneBy({ email: data.email });
-		// SELECT * FROM User WHERE pseudo=data.pseudo
 		const pseudoAlreadyExist = await User.findOneBy({
 			pseudo: data.pseudo.toLocaleLowerCase(),
 		});
@@ -87,7 +84,6 @@ export default class UserResolver {
 	@Mutation(() => String)
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	async signin(@Arg("data") data: SigninInput, @Ctx() ctx: Context) {
-		// SELECT * FROM User WHERE email=data.email
 		const user = await User.findOneBy({ email: data.email });
 
 		if (!user) {

@@ -1,15 +1,13 @@
-import {Arg, Authorized, Mutation, Query} from "type-graphql";
+import { Arg, Authorized, Mutation, Query } from "type-graphql";
 
-import Code, {CodeInput} from "../entities/code";
-import {UserRole} from "../entities/user";
+import Code, { CodeInput } from "../entities/code";
+import { UserRole } from "../entities/user";
 
 export default class CodeResolver {
-
 	// All codes Query
 	@Query(() => [Code])
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	async getCodes() {
-		// SELECT * FROM Code;
 		const codes = await Code.find({
 			relations: { language: true, project: true },
 		});
@@ -47,7 +45,7 @@ export default class CodeResolver {
 		@Arg("id") id: string,
 		@Arg("content", { nullable: true }) content: string
 	) {
-		const code = await Code.findOneOrFail({where: {id}});
+		const code = await Code.findOneOrFail({ where: { id } });
 		if (content != null) code.content = content;
 		return await code.save();
 	}
