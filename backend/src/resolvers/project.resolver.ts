@@ -1,59 +1,38 @@
 import { Arg, Authorized, Ctx, Mutation, Query } from "type-graphql";
+import { GraphQLError } from "graphql";
 
 import Project, { NewProjectInput } from "../entities/project";
 import { Context } from "../interfaces/auth";
-import { GraphQLError } from "graphql";
-import DataSource from "../db";
-import {UserRole} from "../entities/user";
+import ProjectService from "../services/projet.service";
+import { UserRole } from "../entities/user";
 
 export default class ProjectResolver {
-	private projectRepository = DataSource.getRepository(Project);
-	@Query(() => [Project])
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Query(() => [Project])
 	async getProjects() {
-		// SELECT * FROM Project;
-		const projects = await Project.find({
-			relations: { codes: { language: true }, user: true},
-		});
-
-		return projects;
+		return await new ProjectService().getAll();
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Query(() => [Project])
-	async getMyProjects(@Ctx() ctx: Context) {
-		if (!ctx.currentUser) throw new GraphQLError("you need to be logged in!");
-		// SELECT * FROM Project WHERE user=ctx.currentUser;
-		const projects = await Project.find({
-			where: { user: ctx.currentUser },
-			relations: { codes: true, user: true },
-		});
-
-		return projects;
+	async getMyProjects(@Ctx() { currentUser }: Context) {
+		return await new ProjectService().getAll(currentUser);
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
-	@Query(() => [Project])
+	@Query(() => Project)
 	async getProject(@Arg("id") id: string) {
-
-		return this.projectRepository.findOneOrFail({ where: { id } });
+		return await new ProjectService().get(id);
 	}
-
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Mutation(() => Project)
 	async createProject(
 		@Arg("data", { validate: true }) data: NewProjectInput,
-		@Ctx() ctx: Context
+		@Ctx() { currentUser }: Context
 	) {
-		if (!ctx.currentUser) throw new GraphQLError("you need to be logged in!");
+		if (!currentUser) throw new GraphQLError("you need to be logged in!");
 
-		const project = Project.create({
-			...data,
-			isPublic: data.isPublic || false,
-			user: ctx.currentUser,
-		});
-
-		return await project.save();
+		return await new ProjectService().create(data, currentUser);
 	}
 }

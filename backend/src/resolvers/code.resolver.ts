@@ -1,54 +1,43 @@
-import {Arg, Authorized, Mutation, Query} from "type-graphql";
+import { Arg, Authorized, Mutation, Query } from "type-graphql";
 
-import Code, {CodeInput} from "../entities/code";
-import {UserRole} from "../entities/user";
+import CodeService from "../services/code.service";
+import Code, { CodeInput } from "../entities/code";
+import { UserRole } from "../entities/user";
 
 export default class CodeResolver {
-
 	// All codes Query
-	@Query(() => [Code])
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Query(() => [Code])
 	async getCodes() {
-		// SELECT * FROM Code;
-		const codes = await Code.find({
+		return await new CodeService().getAll({
 			relations: { language: true, project: true },
 		});
-
-		return codes;
 	}
 
 	// find a code for a projectId
-	@Query(() => [Code])
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Query(() => [Code])
 	async getCode(@Arg("project") project: string) {
-		const code = await Code.find({
+		return await new CodeService().getAll({
 			where: { project: { id: project } },
 			relations: { language: true, project: true },
 		});
-
-		return code;
 	}
 
 	// Create new code
-	@Mutation(() => Code)
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Mutation(() => Code)
 	async createCode(@Arg("data", { validate: true }) data: CodeInput) {
-		const code = new Code();
-
-		Object.assign(code, data);
-
-		return await code.save();
+		return await new CodeService().create(data);
 	}
 
 	// update code content
-	@Mutation(() => Code)
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Mutation(() => Code)
 	async updateCode(
 		@Arg("id") id: string,
 		@Arg("content", { nullable: true }) content: string
 	) {
-		const code = await Code.findOneOrFail({where: {id}});
-		if (content != null) code.content = content;
-		return await code.save();
+		return await new CodeService().update(id, content);
 	}
 }

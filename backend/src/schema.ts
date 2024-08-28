@@ -9,5 +9,4 @@ import LanguageResolver from "./resolvers/language.resolver";
 export default buildSchemaSync({
 	resolvers: [UserResolver, CodeResolver, ProjectResolver, LanguageResolver],
 	authChecker,
-	validate: true,
 });
