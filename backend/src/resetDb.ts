@@ -83,49 +83,6 @@ const main = async () => {
 
 	await languageRepository.save(javascript);
 
-	const project1 = new Project();
-
-	Object.assign(project1, {
-		title: "Project 1",
-		user: flexMaster,
-		isPublic: true,
-	});
-	await projectRepository.save(project1);
-
-	const project2 = new Project();
-
-	Object.assign(project2, {
-		title: "Project 2",
-		user: flexMaster,
-		isPublic: true,
-	});
-
-	await projectRepository.save(project2);
-
-	const javascriptCode = new Code();
-
-	Object.assign(javascriptCode, {
-		content: "console.log('Hello World')",
-		language: javascript,
-		project: project1,
-	});
-
-	await codeRepository.save(javascriptCode);
-
-	const javascriptCode2 = new Code();
-
-	Object.assign(javascriptCode2, {
-		content: `function main() {
-			return 1 + 3
-		}
-		
-		main()`,
-		language: javascript,
-		project: project2,
-	});
-
-	await codeRepository.save(javascriptCode2);
-
 	for (let i = 1; i <= 13; i++) {
 		const project = new Project();
 

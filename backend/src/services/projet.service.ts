@@ -10,15 +10,17 @@ export default class ProjectService {
 	constructor() {
 		this.projectRepository = DataSource.getRepository(Project);
 	}
+	getAll = async (request: object = {}) => {
+		return await this.projectRepository.find(request);
+	};
 
-	getAll = async (user?: User) => {
-		// SELECT * FROM Project WHERE user=user;
-		const projects = await this.projectRepository.find({
-			where: { user },
-			relations: { codes: true, user: true },
-		});
+	getAllPaginate = async (request: object, limit: number) => {
+		const projects = await this.projectRepository.find(request);
 
-		return projects;
+		const hasMore = projects.length > limit;
+		const resultProjects = projects.slice(0, limit);
+
+		return { projects: resultProjects, hasMore };
 	};
 
 	get = async (id: string) => {
