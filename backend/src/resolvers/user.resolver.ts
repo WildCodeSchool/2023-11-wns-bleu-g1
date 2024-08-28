@@ -48,7 +48,6 @@ export default class UserResolver {
 	}
 
 	@Mutation(() => User)
-	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	async createUser(@Arg("data", { validate: true }) data: NewUserInput) {
 		if (!data.email) {
 			throw new GraphQLError("email is missing but require");
@@ -85,7 +84,6 @@ export default class UserResolver {
 	}
 
 	@Mutation(() => String)
-	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	async signin(@Arg("data") data: SigninInput, @Ctx() ctx: Context) {
 		// SELECT * FROM User WHERE email=data.email
 		const user = await User.findOneBy({ email: data.email });
