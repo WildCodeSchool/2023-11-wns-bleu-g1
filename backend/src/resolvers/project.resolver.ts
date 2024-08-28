@@ -16,12 +16,6 @@ export default class ProjectResolver {
 		});
 	}
 
-	// @Authorized([UserRole.VISITOR, UserRole.ADMIN])
-	// @Query(() => [Project])
-	// async getMyProjects(@Ctx() { currentUser }: Context) {
-	// 	return await new ProjectService().getAll(currentUser);
-	// }
-
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Query(() => ProjectPaginationResponse)
 	async getMyProjects(
