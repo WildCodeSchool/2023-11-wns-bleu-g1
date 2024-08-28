@@ -91,8 +91,17 @@ export class SigninInput {
 
 @InputType()
 export class ExecutionCounterInput {
-	@Min(0)
+	@Min(1)
 	@Max(50)
 	@Field()
 	executionCounter: number;
+}
+
+@InputType()
+export class UpdateUserInput {
+	@Field({ nullable: true })
+	pseudo?: string;
+
+	@Field({ nullable: true })
+	password?: string;
 }

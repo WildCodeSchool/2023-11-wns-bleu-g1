@@ -49,6 +49,8 @@ const main = async () => {
 		password: "Test123456!",
 		pseudo: "Test",
 		isPremium: true,
+		executionCounter: 1,
+
 	});
 
 	await userRepository.save(user);
@@ -59,6 +61,9 @@ const main = async () => {
 		email: "master@gmail.com",
 		password: "Master@123",
 		pseudo: "Flex Master",
+		executionCounter: 1,
+		isPremium: false,
+
 	});
 
 	await userRepository.save(flexMaster);
@@ -70,6 +75,9 @@ const main = async () => {
 		password: "Admin@123",
 		pseudo: "Admin",
 		role: UserRole.ADMIN,
+		executionCounter: 1,
+		isPremium: true
+
 	});
 
 	await userRepository.save(admin);

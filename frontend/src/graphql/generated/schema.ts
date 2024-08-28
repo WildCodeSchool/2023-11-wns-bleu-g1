@@ -47,6 +47,30 @@ export type LanguageInput = {
 };
 
 export type Mutation = {
+	__typename?: "Mutation";
+	createCode: Code;
+	createLanguage: Array<Language>;
+	createProject: Project;
+	createUser: User;
+	deleteLanguage: Scalars["Boolean"];
+	incrementExecutionCounter: Scalars["Float"];
+	logout: Scalars["String"];
+	signin: Scalars["String"];
+	updateCode: Code;
+	updateLanguage: Array<Language>;
+  __typename?: 'Mutation';
+  createCode: Code;
+  createLanguage: Array<Language>;
+  createProject: Project;
+  createUser: User;
+  deleteLanguage: Scalars['Boolean'];
+  deleteUser: Scalars['Boolean'];
+  incrementExecutionCounter: Scalars['Float'];
+  logout: Scalars['String'];
+  signin: Scalars['String'];
+  updateCode: Code;
+  updateLanguage: Array<Language>;
+  updateUser: User;
   __typename?: 'Mutation';
   createCode: Code;
   createLanguage: Language;
@@ -92,6 +116,12 @@ export type MutationDeleteUserArgs = {
 };
 
 
+
+export type MutationDeleteUserArgs = {
+  id: Scalars['String'];
+};
+
+
 export type MutationIncrementExecutionCounterArgs = {
   counter: ExecutionCounterInput;
 };
@@ -110,6 +140,12 @@ export type MutationUpdateCodeArgs = {
 
 export type MutationUpdateLanguageArgs = {
   data: UpdateLanguageInput;
+};
+
+
+export type MutationUpdateUserArgs = {
+  data: UpdateUserInput;
+  id: Scalars['String'];
 };
 
 export type NewProjectInput = {
@@ -192,6 +228,11 @@ export type SigninInput = {
 export type UpdateLanguageInput = {
   id: Scalars['String'];
   name: Scalars['String'];
+};
+
+export type UpdateUserInput = {
+  password?: InputMaybe<Scalars['String']>;
+  pseudo?: InputMaybe<Scalars['String']>;
 };
 
 export type User = {
@@ -288,6 +329,18 @@ export type SignUpMutationVariables = Exact<{
 }>;
 
 
+export type SignUpMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', email: string, id: string, pseudo: string, role: string, executionCounter: number, isPremium: boolean } };
+export type SignUpMutation = {
+	__typename?: "Mutation";
+	createUser: {
+		__typename?: "User";
+		email: string;
+		id: string;
+		pseudo: string;
+		role: string;
+	};
+};
+
 export type SignUpMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', email: string, id: string, pseudo: string, role: string } };
 
 export type SignInMutationVariables = Exact<{
@@ -305,6 +358,22 @@ export type LogoutMutation = { __typename?: 'Mutation', logout: string };
 export type GetUserProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
+export type GetUserProfileQuery = { __typename?: 'Query', getUserProfile: { __typename?: 'User', id: string, role: string, email: string, pseudo: string } };
+export type GetUserProfileQuery = {
+	__typename?: "Query";
+	getUserProfile: {
+		__typename?: "User";
+		id: string;
+		role: string;
+		email: string;
+		pseudo: string;
+		executionCounter: number;
+		isPremium: boolean;
+	};
+};
+export type GetUserProfileQueryVariables = Exact<{ [key: string]: never; }>;
+
+
 export type GetUserProfileQuery = { __typename?: 'Query', getUserProfile: { __typename?: 'User', id: string, role: string, email: string, pseudo: string, executionCounter: number, isPremium: boolean } };
 
 export type IncrementExecutionCounterMutationVariables = Exact<{
@@ -314,6 +383,25 @@ export type IncrementExecutionCounterMutationVariables = Exact<{
 
 export type IncrementExecutionCounterMutation = { __typename?: 'Mutation', incrementExecutionCounter: number };
 
+export type DeleteUserMutationVariables = Exact<{
+  deleteUserId: Scalars['String'];
+}>;
+
+
+export type DeleteUserMutation = { __typename?: 'Mutation', deleteUser: boolean };
+
+export type UpdateUserMutationVariables = Exact<{
+  data: UpdateUserInput;
+  updateUserId: Scalars['String'];
+}>;
+
+
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, email: string, pseudo: string } };
+
+export type IncrementExecutionCounterMutation = {
+	__typename?: "Mutation";
+	incrementExecutionCounter: number;
+};
 
 export const GetLanguagesDocument = gql`
     query GetLanguages {
@@ -809,6 +897,31 @@ export const SignUpDocument = gql`
 }
     `;
 export type SignUpMutationFn = Apollo.MutationFunction<SignUpMutation, SignUpMutationVariables>;
+    mutation SignUp($data: NewUserInput!) {
+  createUser(data: $data) {
+    email
+    id
+    pseudo
+    role
+    executionCounter
+    isPremium
+  }
+}
+    `;
+export type SignUpMutationFn = Apollo.MutationFunction<SignUpMutation, SignUpMutationVariables>;
+	mutation SignUp($data: NewUserInput!) {
+		createUser(data: $data) {
+			email
+			id
+			pseudo
+			role
+		}
+	}
+`;
+export type SignUpMutationFn = Apollo.MutationFunction<
+	SignUpMutation,
+	SignUpMutationVariables
+>;
 
 /**
  * __useSignUpMutation__
@@ -907,6 +1020,26 @@ export const GetUserProfileDocument = gql`
   }
 }
     `;
+    query GetUserProfile {
+  getUserProfile {
+    id
+    role
+    email
+    pseudo
+  }
+}
+    `;
+	query GetUserProfile {
+		getUserProfile {
+			id
+			role
+			email
+			pseudo
+			executionCounter
+			isPremium
+		}
+	}
+`;
 
 /**
  * __useGetUserProfileQuery__
@@ -965,3 +1098,99 @@ export function useIncrementExecutionCounterMutation(baseOptions?: Apollo.Mutati
 export type IncrementExecutionCounterMutationHookResult = ReturnType<typeof useIncrementExecutionCounterMutation>;
 export type IncrementExecutionCounterMutationResult = Apollo.MutationResult<IncrementExecutionCounterMutation>;
 export type IncrementExecutionCounterMutationOptions = Apollo.BaseMutationOptions<IncrementExecutionCounterMutation, IncrementExecutionCounterMutationVariables>;
+export function useIncrementExecutionCounterMutation(baseOptions?: Apollo.MutationHookOptions<IncrementExecutionCounterMutation, IncrementExecutionCounterMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<IncrementExecutionCounterMutation, IncrementExecutionCounterMutationVariables>(IncrementExecutionCounterDocument, options);
+      }
+export type IncrementExecutionCounterMutationHookResult = ReturnType<typeof useIncrementExecutionCounterMutation>;
+export type IncrementExecutionCounterMutationResult = Apollo.MutationResult<IncrementExecutionCounterMutation>;
+export type IncrementExecutionCounterMutationOptions = Apollo.BaseMutationOptions<IncrementExecutionCounterMutation, IncrementExecutionCounterMutationVariables>;
+export const DeleteUserDocument = gql`
+    mutation DeleteUser($deleteUserId: String!) {
+  deleteUser(id: $deleteUserId)
+}
+    `;
+export type DeleteUserMutationFn = Apollo.MutationFunction<DeleteUserMutation, DeleteUserMutationVariables>;
+
+/**
+ * __useDeleteUserMutation__
+ *
+ * To run a mutation, you first call `useDeleteUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteUserMutation, { data, loading, error }] = useDeleteUserMutation({
+ *   variables: {
+ *      deleteUserId: // value for 'deleteUserId'
+ *   },
+ * });
+ */
+export function useDeleteUserMutation(baseOptions?: Apollo.MutationHookOptions<DeleteUserMutation, DeleteUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteUserMutation, DeleteUserMutationVariables>(DeleteUserDocument, options);
+      }
+export type DeleteUserMutationHookResult = ReturnType<typeof useDeleteUserMutation>;
+export type DeleteUserMutationResult = Apollo.MutationResult<DeleteUserMutation>;
+export type DeleteUserMutationOptions = Apollo.BaseMutationOptions<DeleteUserMutation, DeleteUserMutationVariables>;
+export const UpdateUserDocument = gql`
+    mutation UpdateUser($data: UpdateUserInput!, $updateUserId: String!) {
+  updateUser(data: $data, id: $updateUserId) {
+    id
+    email
+    pseudo
+  }
+}
+    `;
+export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
+
+/**
+ * __useUpdateUserMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *      updateUserId: // value for 'updateUserId'
+ *   },
+ * });
+ */
+export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, options);
+      }
+export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
+export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
+export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
+export function useIncrementExecutionCounterMutation(
+	baseOptions?: Apollo.MutationHookOptions<
+		IncrementExecutionCounterMutation,
+		IncrementExecutionCounterMutationVariables
+	>
+) {
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useMutation<
+		IncrementExecutionCounterMutation,
+		IncrementExecutionCounterMutationVariables
+	>(IncrementExecutionCounterDocument, options);
+}
+export type IncrementExecutionCounterMutationHookResult = ReturnType<
+	typeof useIncrementExecutionCounterMutation
+>;
+export type IncrementExecutionCounterMutationResult =
+	Apollo.MutationResult<IncrementExecutionCounterMutation>;
+export type IncrementExecutionCounterMutationOptions =
+	Apollo.BaseMutationOptions<
+		IncrementExecutionCounterMutation,
+		IncrementExecutionCounterMutationVariables
+	>;

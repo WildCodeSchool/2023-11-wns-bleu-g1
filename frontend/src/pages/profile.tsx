@@ -4,17 +4,36 @@ import NotFoundAlert from "@/components/elements/not-found-alert";
 import PageLoader from "@/components/elements/page-loader";
 import ProjectCard from "@/components/elements/project-card";
 import UserHeadCard from "@/components/elements/user-head-card";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import {Button, buttonVariants} from "@/components/ui/button";
 import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import {
+	useDeleteUserMutation,
 	useGetMyProjectsQuery,
 	useGetUserProfileQuery,
 } from "@/graphql/generated/schema";
 import { useState } from "react";
+import {BadgeCheck, MessageCircleWarning} from "lucide-react";
+import Link from "next/link";
+import {useRouter} from "next/router";
+import {useToast} from "@/components/ui/use-toast";
+import {ApolloError} from "@apollo/client";
+import {useState} from "react";
 
 const ProfilPage = () => {
 	const [page, setPage] = useState(0);
 	const limit = 12;
 	const offset = page * limit;
 
+	const defaultErrorMessage =
+		"Une erreur est survenue lors de la suppression. Veuillez réessayer.";
+	const router = useRouter();
 	const getUserProfileQuery = useGetUserProfileQuery();
 	const getMyProjectsQuery = useGetMyProjectsQuery({
 		variables: {
@@ -23,17 +42,54 @@ const ProfilPage = () => {
 		},
 		notifyOnNetworkStatusChange: true,
 	});
+	const getMyProjectsQuery = useGetMyProjectsQuery();
+	const [errorMessage, setErrorMessage] = useState<string>(defaultErrorMessage);
+	const { toast } = useToast();
+	const [deleteUserMutation, deleteUserResult] = useDeleteUserMutation({
+		onCompleted: (data) => {
+			toast({
+				icon: <BadgeCheck className="h-5 w-5" />,
+				title: "Utilisateur supprimé",
+				className: "text-success",
+			});
+			router.push("/auth/inscription");
 
+		},
+		onError: (err: ApolloError) => {
+			console.error(err);
+			if (err.message.includes("not register")) {
+				setErrorMessage("Aucun n'est lié à cette adresse email.");
+				return;
+			}
+			if (err.message.includes("invalid password")) {
+				setErrorMessage("Les identifiants sont incorrects.");
+				return;
+			}
+			setErrorMessage(defaultErrorMessage);
+		},
+	});
+
+	// console.log("getUserProfileQuery: ", getUserProfileQuery);
 	if (getUserProfileQuery.loading || getMyProjectsQuery.loading)
 		return <PageLoader />;
 
 	if (getUserProfileQuery.error || getMyProjectsQuery.error)
-		console.error(getUserProfileQuery.error || getMyProjectsQuery.error);
+		console.error('1 ',getUserProfileQuery.error || getMyProjectsQuery.error);
 
 	const profile = getUserProfileQuery?.data?.getUserProfile || null;
 	const data = getMyProjectsQuery.data?.getMyProjects;
 
 	const projects = data?.projects || [];
+
+	function deleteAccount() {
+		console.log("button clicked");
+		if (!profile) return;
+		deleteUserMutation({
+			variables: {
+				deleteUserId: profile.id,
+			},
+		});
+	}
 
 	return (
 		<AuthLayout>
@@ -69,8 +125,26 @@ const ProfilPage = () => {
 					query={getMyProjectsQuery}
 				/>
 			</div>
+			<div>
+				<Card>
+					<CardHeader>
+						<CardTitle>Paramètres de compte</CardTitle>
+					</CardHeader>
+					<CardContent className="flex flex-col space-y-3">
+						<Link href="#" className={buttonVariants({ variant: "secondary2"})}>
+							Modifier mon nom d'utilisateur
+						</Link>
+						<Link href="#" className={buttonVariants({ variant: "secondary2"})}>
+							Modifier mon mot de passe
+						</Link>
+						<Button className={buttonVariants({ variant: "destructive"})} onClick={deleteAccount}>
+							Supprimer mon compte
+						</Button>
+					</CardContent>
+				</Card>
+			</div>
 		</AuthLayout>
-	);
+);
 };
 
 export default ProfilPage;
