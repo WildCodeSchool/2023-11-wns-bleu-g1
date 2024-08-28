@@ -1,76 +1,69 @@
-import {Arg, Authorized, Mutation, Query, Resolver} from "type-graphql";
+import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
 
 import Language from "../entities/language";
 
 import DataSource from "../db";
-import {UserRole} from "../entities/user";
-import {GraphQLError} from "graphql";
+import { UserRole } from "../entities/user";
+import { GraphQLError } from "graphql";
 
 @Resolver(Language)
-
 export default class LanguageResolver {
-    languageRepository = DataSource.getRepository(Language);
+	languageRepository = DataSource.getRepository(Language);
 
-    constructor() {}
+	constructor() {}
 
-    // get all languages
-    @Query(() => [Language])
-    @Authorized([UserRole.VISITOR, UserRole.ADMIN])
-    async getLanguages() {
+	// get all languages
+	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Query(() => [Language])
+	async getLanguages() {
+		return this.languageRepository.find();
+	}
 
-        return this.languageRepository.find();
-    }
+	// get language by id
+	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Query(() => [Language])
+	async getLanguage(@Arg("id") id: string) {
+		return this.languageRepository.findOneOrFail({ where: { id } });
+	}
 
-    // get language by id
-    @Query(() => [Language])
-    @Authorized([UserRole.VISITOR, UserRole.ADMIN])
-    async getLanguage(@Arg("id") id: string) {
+	// create a new language
+	@Authorized([UserRole.ADMIN])
+	@Mutation(() => [Language])
+	async createLanguage(@Arg("name") name: string) {
+		const language = Language.create({
+			name,
+		});
 
-        return this.languageRepository.findOneOrFail({ where: { id } });
-    }
+		return this.languageRepository.save(language);
+	}
 
-    // create a new language
-    @Mutation(() => [Language])
-    @Authorized([UserRole.ADMIN])
-    async createLanguage(
-        @Arg("name") name: string
-    ) {
-        const language = Language.create({
-            name
-        });
+	// update a language
+	@Authorized([UserRole.ADMIN])
+	@Mutation(() => [Language])
+	async updateLanguage(@Arg("id") id: string, @Arg("name") name: string) {
+		const language = await this.languageRepository.findOneOrFail({
+			where: { id },
+		});
 
-        return this.languageRepository.save(language);
-    }
+		if (!language) throw new GraphQLError("language not found!");
 
-    // update a language
-    @Mutation(() => [Language])
-    @Authorized([UserRole.ADMIN])
-    async updateLanguage(
-        @Arg("id") id: string,
-        @Arg("name") name: string
-    ) {
-        const language = await this.languageRepository.findOneOrFail({ where: { id } });
+		language.name = name;
 
-        if (!language) throw new GraphQLError("language not found!");
+		return this.languageRepository.save(language);
+	}
 
-        language.name = name;
+	// delete a language
+	@Authorized([UserRole.ADMIN])
+	@Mutation(() => Boolean)
+	async deleteLanguage(@Arg("id") id: string) {
+		const language = await this.languageRepository.findOneOrFail({
+			where: { id },
+		});
 
-        return this.languageRepository.save(language);
-    }
+		if (!language) throw new GraphQLError("language not found!");
 
-    // delete a language
-    @Mutation(() => Boolean)
-    @Authorized([UserRole.ADMIN])
-    async deleteLanguage(
-        @Arg("id") id: string
-    ) {
-        const language = await this.languageRepository.findOneOrFail({ where: { id } });
+		await this.languageRepository.remove(language);
 
-        if (!language) throw new GraphQLError("language not found!");
-
-        await this.languageRepository.remove(language);
-
-        return true;
-    }
-
+		return true;
+	}
 }

@@ -6,19 +6,22 @@ import { UserRole } from "../entities/user";
 
 export default class CodeResolver {
 	// All codes Query
-	@Query(() => [Code])
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Query(() => [Code])
 	async getCodes() {
-		const codes = await CodeService.getAll({ language: true, project: true });
+		const codes = await new CodeService().getAll({
+			language: true,
+			project: true,
+		});
 
 		return codes;
 	}
 
 	// find a code for a projectId
-	@Query(() => [Code])
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Query(() => [Code])
 	async getCode(@Arg("project") project: string) {
-		const code = await Code.find({
+		const code = await new CodeService().getAll({
 			where: { project: { id: project } },
 			relations: { language: true, project: true },
 		});
@@ -27,25 +30,23 @@ export default class CodeResolver {
 	}
 
 	// Create new code
-	@Mutation(() => Code)
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Mutation(() => Code)
 	async createCode(@Arg("data", { validate: true }) data: CodeInput) {
-		const code = new Code();
+		const code = await new CodeService().create(data);
 
-		Object.assign(code, data);
-
-		return await code.save();
+		return code;
 	}
 
 	// update code content
-	@Mutation(() => Code)
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Mutation(() => Code)
 	async updateCode(
 		@Arg("id") id: string,
 		@Arg("content", { nullable: true }) content: string
 	) {
-		const code = await Code.findOneOrFail({ where: { id } });
-		if (content != null) code.content = content;
-		return await code.save();
+		const code = await new CodeService().update(id, content);
+
+		return code;
 	}
 }
