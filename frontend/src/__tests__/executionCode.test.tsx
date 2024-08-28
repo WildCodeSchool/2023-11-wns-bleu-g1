@@ -1,6 +1,7 @@
 import mockRouter from "next-router-mock";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MockedProvider } from "@apollo/client/testing";
+import userEvent from "@testing-library/user-event";
 
 import {
 	getExecutionCountMock,
@@ -9,6 +10,7 @@ import {
 	getPremiumProfileMock,
 	getVisitorProfileMock,
 	incrementExecutionCounterMock,
+	newExecutionCountMock,
 } from "./executionCode.mock";
 import CodingPage from "@/pages/coding/[id]";
 
@@ -28,6 +30,7 @@ describe("what increment count for code execution work", () => {
 			getExecutionCountMock,
 			getVisitorProfileMock,
 			incrementExecutionCounterMock,
+			newExecutionCountMock,
 		]);
 		const btn = await screen.findByTestId("exec-btn");
 
@@ -37,7 +40,10 @@ describe("what increment count for code execution work", () => {
 			"Pour ne plus avoir de limites, passer premium!"
 		);
 
-		fireEvent.click(btn);
+		await userEvent.click(btn);
+		// fireEvent.click(btn);
+
+		expect(screen.queryByTestId("counter")).toHaveTextContent("1/10");
 	});
 
 	it("render if user can't execute some code for today", async () => {
