@@ -7,8 +7,6 @@ import ProjectService from "../services/projet.service";
 import { UserRole } from "../entities/user";
 
 export default class ProjectResolver {
-	constructor(private projectService: ProjectService) {}
-
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Query(() => [Project])
 	async getProjects() {

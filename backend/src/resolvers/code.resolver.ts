@@ -10,8 +10,7 @@ export default class CodeResolver {
 	@Query(() => [Code])
 	async getCodes() {
 		const codes = await new CodeService().getAll({
-			language: true,
-			project: true,
+			relations: { language: true, project: true },
 		});
 
 		return codes;
