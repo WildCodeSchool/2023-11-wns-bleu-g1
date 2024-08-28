@@ -18,7 +18,10 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useSignInMutation } from "@/graphql/generated/schema";
+import {
+	GetUserProfileDocument,
+	useSignInMutation,
+} from "@/graphql/generated/schema";
 import { ApolloError } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle, BadgeCheck } from "lucide-react";
@@ -73,6 +76,11 @@ const SignInPage = () => {
 			}
 			setErrorMessage(defaultErrorMessage);
 		},
+		refetchQueries: [
+			{
+				query: GetUserProfileDocument,
+			},
+		],
 	});
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
