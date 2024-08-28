@@ -1,7 +1,10 @@
 import { AuthChecker } from "type-graphql";
-import { Context } from "./interfaces/auth";
 import cookie from "cookie";
 import jwt from "jsonwebtoken";
+import { Repository } from "typeorm";
+
+import DataSource from "./db";
+import { Context } from "./interfaces/auth";
 import env from "./env";
 import User from "./entities/user";
 
@@ -28,7 +31,11 @@ export const authChecker: AuthChecker<Context> = async (
 		return false;
 	}
 
-	const currentUser = await User.findOneByOrFail({ id: decoded?.userId });
+	const userRepository: Repository<User> = DataSource.getRepository(User);
+
+	const currentUser = await userRepository.findOneByOrFail({
+		id: decoded?.userId,
+	});
 
 	if (currentUser === null) {
 		return false;
