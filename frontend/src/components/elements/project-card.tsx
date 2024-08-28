@@ -47,7 +47,7 @@ const ProjectCard = ({ project, onProfilePage, className }: Props) => {
 				</CardDescription>
 			</CardHeader>
 			<CardContent>
-				<Link href={"#"} className={buttonVariants()}>
+				<Link href={`/coding/${project.id}`} className={buttonVariants()}>
 					Voir le projet
 				</Link>
 			</CardContent>
