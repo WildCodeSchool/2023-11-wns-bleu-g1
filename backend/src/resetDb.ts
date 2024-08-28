@@ -103,7 +103,7 @@ const main = async () => {
 	await javascriptCode.save();
 	await javascriptCode2.save();
 
-	for (let i = 1; i <= 10; i++) {
+	for (let i = 1; i <= 13; i++) {
 		const project = Project.create({
 			title: `Project ${i}`,
 			user: flexMaster,

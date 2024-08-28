@@ -727,17 +727,16 @@ export type CreateProjectMutationOptions = Apollo.BaseMutationOptions<
 export const GetMyProjectsDocument = gql`
 	query GetMyProjects($limit: Float!, $offset: Float!) {
 		getMyProjects(limit: $limit, offset: $offset) {
-			title
-			isPublic
-			createdAt
-			updatedAt
-			user {
-				pseudo
-				role
+			projects {
 				id
-				email
+				isPublic
+				title
+				createdAt
+				user {
+					pseudo
+				}
 			}
-			id
+			hasMore
 		}
 	}
 `;
@@ -794,17 +793,18 @@ export type GetMyProjectsQueryResult = Apollo.QueryResult<
 	GetMyProjectsQueryVariables
 >;
 export const GetPublicsProjectsDocument = gql`
-	query GetPublicsProjects($limit: Float!, $offset: Float!) {
-		getPublicsProjects(limit: $limit, offset: $offset) {
-			isPublic
-			updatedAt
-			title
-			user {
-				pseudo
+	query GetPublicsProjects($offset: Float!, $limit: Float!) {
+		getPublicsProjects(offset: $offset, limit: $limit) {
+			projects {
 				id
+				isPublic
+				title
+				createdAt
+				user {
+					pseudo
+				}
 			}
-			createdAt
-			id
+			hasMore
 		}
 	}
 `;

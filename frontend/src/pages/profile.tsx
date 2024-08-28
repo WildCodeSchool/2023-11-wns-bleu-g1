@@ -14,6 +14,7 @@ const ProfilPage = () => {
 	const [page, setPage] = useState(0);
 	const limit = 12;
 	const offset = page * limit;
+
 	const getUserProfileQuery = useGetUserProfileQuery();
 	const getMyProjectsQuery = useGetMyProjectsQuery({
 		variables: {
@@ -25,11 +26,14 @@ const ProfilPage = () => {
 
 	if (getUserProfileQuery.loading || getMyProjectsQuery.loading)
 		return <PageLoader />;
+
 	if (getUserProfileQuery.error || getMyProjectsQuery.error)
 		console.error(getUserProfileQuery.error || getMyProjectsQuery.error);
 
 	const profile = getUserProfileQuery?.data?.getUserProfile || null;
-	const projects = getMyProjectsQuery?.data?.getMyProjects || [];
+	const data = getMyProjectsQuery.data?.getMyProjects;
+
+	const projects = data?.projects || [];
 
 	return (
 		<AuthLayout>
@@ -60,6 +64,7 @@ const ProfilPage = () => {
 					page={page}
 					setPage={setPage}
 					limit={limit}
+					hasMore={data?.hasMore || false}
 					dataLength={projects.length}
 					query={getMyProjectsQuery}
 				/>

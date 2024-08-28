@@ -14,10 +14,16 @@ mutation CreateProject($data: NewProjectInput!) {
 
 query GetMyProjects($limit: Float!, $offset: Float!) {
 	getMyProjects(limit: $limit, offset: $offset) {
-		id
-		title
-		isPublic
-		createdAt
+		projects {
+			id
+			isPublic
+			title
+			createdAt
+			user {
+				pseudo
+			}
+		}
+		hasMore
 	}
 }
 
@@ -42,6 +48,10 @@ query GetPublicsProjects($offset: Float!, $limit: Float!) {
 			id
 			isPublic
 			title
+			createdAt
+			user {
+				pseudo
+			}
 		}
 		hasMore
 	}

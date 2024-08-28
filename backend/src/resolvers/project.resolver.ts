@@ -19,8 +19,8 @@ export default class ProjectResolver {
 		return projects;
 	}
 
-	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
-	@Query(() => [Project])
+	@Authorized([UserRole.VISITOR])
+	@Query(() => ProjectPaginationResponse)
 	async getMyProjects(
 		@Ctx() ctx: Context,
 		@Arg("limit", { defaultValue: 12 }) limit: number,
@@ -31,11 +31,17 @@ export default class ProjectResolver {
 			where: { user: ctx.currentUser },
 			relations: { codes: true, user: true },
 			order: { createdAt: "DESC" },
-			take: limit,
+			take: limit + 1,
 			skip: offset,
 		});
 
-		return projects;
+		const hasMore = projects.length > limit;
+		const resultProjects = projects.slice(0, limit);
+
+		return {
+			projects: resultProjects,
+			hasMore,
+		};
 	}
 
 	@Authorized([UserRole.VISITOR])
@@ -57,10 +63,6 @@ export default class ProjectResolver {
 
 		const hasMore = projects.length > limit;
 		const resultProjects = projects.slice(0, limit);
-
-		console.log("Projects found:", projects);
-		console.log("Returning projects:", resultProjects);
-		console.log("Has more:", hasMore);
 
 		return {
 			projects: resultProjects,

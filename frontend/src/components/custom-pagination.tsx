@@ -9,6 +9,7 @@ interface Props {
 	limit: number;
 	dataLength: number;
 	query: QueryResult<any, Exact<{ limit: number; offset: number }>>;
+	hasMore: boolean;
 }
 const CustomPagination = ({
 	page,
@@ -16,6 +17,7 @@ const CustomPagination = ({
 	limit,
 	dataLength,
 	query,
+	hasMore,
 }: Props) => {
 	const handlePreviousPage = () => {
 		if (page > 0) setPage(page - 1);
@@ -29,6 +31,8 @@ const CustomPagination = ({
 			},
 		});
 	};
+
+	if (page === 0 && !hasMore) return null;
 
 	return (
 		<div className="w-full flex items-center justify-between px-24 py-2 my-6">

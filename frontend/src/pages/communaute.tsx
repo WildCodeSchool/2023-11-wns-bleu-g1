@@ -19,16 +19,17 @@ const CommunautePage = () => {
 		},
 	});
 
-	// if (getPublicProjectsQuery.loading) return <PageLoader />;
+	if (getPublicProjectsQuery.loading) return <PageLoader />;
 
-	// if (getPublicProjectsQuery.error) {
-	// 	console.error(getPublicProjectsQuery.error);
-	// 	return;
-	// }
-	// const publicsProjects = getPublicProjectsQuery.data?.getPublicsProjects;
+	if (getPublicProjectsQuery.error) {
+		console.error(getPublicProjectsQuery.error);
+		return;
+	}
 
-	const projects: any[] = [];
-	console.log("getPublicProjectsQuery", getPublicProjectsQuery);
+	const data = getPublicProjectsQuery.data?.getPublicsProjects;
+
+	const projects = data?.projects || [];
+
 	return (
 		<AuthLayout>
 			<div className="space-y-0.5">
@@ -50,7 +51,6 @@ const CommunautePage = () => {
 							/>
 						))}
 					</div>
-					{/* PAGINATION */}
 				</div>
 			) : page > 0 ? (
 				<NotFoundAlert
@@ -64,10 +64,12 @@ const CommunautePage = () => {
 				projet"'
 				/>
 			)}
+			{/* PAGINATION */}
 			<CustomPagination
 				page={page}
 				setPage={setPage}
 				limit={limit}
+				hasMore={data?.hasMore || false}
 				dataLength={projects.length}
 				query={getPublicProjectsQuery}
 			/>
