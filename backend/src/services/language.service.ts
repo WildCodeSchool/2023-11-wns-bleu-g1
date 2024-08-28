@@ -1,8 +1,8 @@
 import { Repository } from "typeorm";
+import { GraphQLError } from "graphql";
 
 import DataSource from "../db";
 import Language from "../entities/language";
-import { GraphQLError } from "graphql";
 
 export default class LanguageService {
 	languageRepository: Repository<Language>;

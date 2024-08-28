@@ -10,25 +10,19 @@ export default class ProjectResolver {
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Query(() => [Project])
 	async getProjects() {
-		const projects = await new ProjectService().getAll();
-
-		return projects;
+		return await new ProjectService().getAll();
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Query(() => [Project])
 	async getMyProjects(@Ctx() { currentUser }: Context) {
-		const projects = await new ProjectService().getAll(currentUser);
-
-		return projects;
+		return await new ProjectService().getAll(currentUser);
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Query(() => Project)
 	async getProject(@Arg("id") id: string) {
-		const project = await new ProjectService().get(id);
-
-		return project;
+		return await new ProjectService().get(id);
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
@@ -39,8 +33,6 @@ export default class ProjectResolver {
 	) {
 		if (!currentUser) throw new GraphQLError("you need to be logged in!");
 
-		const project = await new ProjectService().create(data, currentUser);
-
-		return project;
+		return await new ProjectService().create(data, currentUser);
 	}
 }

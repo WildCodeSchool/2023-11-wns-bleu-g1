@@ -1,8 +1,14 @@
+import { Repository } from "typeorm";
+
 import Code, { CodeInput } from "../entities/code";
 import DataSource from "../db";
 
 export default class CodeService {
-	private codeRepository = DataSource.getRepository(Code);
+	codeRepository: Repository<Code>;
+
+	constructor() {
+		this.codeRepository = DataSource.getRepository(Code);
+	}
 
 	getAll = async (request: object) => {
 		// SELECT * FROM Code;
@@ -16,7 +22,7 @@ export default class CodeService {
 
 		Object.assign(code, data);
 
-		return await code.save();
+		return await this.codeRepository.save(code);
 	};
 
 	update = async (id: string, content: string) => {
@@ -26,6 +32,6 @@ export default class CodeService {
 			code.content = content;
 		}
 
-		return await code.save();
+		return await this.codeRepository.save(code);
 	};
 }

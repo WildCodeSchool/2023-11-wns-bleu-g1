@@ -1,9 +1,15 @@
+import { Repository } from "typeorm";
+
 import Project, { NewProjectInput } from "../entities/project";
 import User from "../entities/user";
 import DataSource from "../db";
 
 export default class ProjectService {
-	private projectRepository = DataSource.getRepository(Project);
+	projectRepository: Repository<Project>;
+
+	constructor() {
+		this.projectRepository = DataSource.getRepository(Project);
+	}
 
 	getAll = async (user?: User) => {
 		// SELECT * FROM Project WHERE user=user;
@@ -28,6 +34,6 @@ export default class ProjectService {
 			user: user,
 		});
 
-		return project.save();
+		return this.projectRepository.save(project);
 	};
 }

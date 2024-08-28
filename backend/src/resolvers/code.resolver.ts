@@ -9,32 +9,26 @@ export default class CodeResolver {
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Query(() => [Code])
 	async getCodes() {
-		const codes = await new CodeService().getAll({
+		return await new CodeService().getAll({
 			relations: { language: true, project: true },
 		});
-
-		return codes;
 	}
 
 	// find a code for a projectId
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Query(() => [Code])
 	async getCode(@Arg("project") project: string) {
-		const code = await new CodeService().getAll({
+		return await new CodeService().getAll({
 			where: { project: { id: project } },
 			relations: { language: true, project: true },
 		});
-
-		return code;
 	}
 
 	// Create new code
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Mutation(() => Code)
 	async createCode(@Arg("data", { validate: true }) data: CodeInput) {
-		const code = await new CodeService().create(data);
-
-		return code;
+		return await new CodeService().create(data);
 	}
 
 	// update code content
@@ -44,8 +38,6 @@ export default class CodeResolver {
 		@Arg("id") id: string,
 		@Arg("content", { nullable: true }) content: string
 	) {
-		const code = await new CodeService().update(id, content);
-
-		return code;
+		return await new CodeService().update(id, content);
 	}
 }
