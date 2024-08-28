@@ -1,9 +1,12 @@
+import { Repository } from "typeorm";
+
 import db from "./db";
 import Project from "./entities/project";
 import Code from "./entities/code";
 import User, { UserRole } from "./entities/user";
 import Language from "./entities/language";
 import { EntityMetadata } from "typeorm";
+import DataSource from "./db";
 
 export const cleanDb = async () => {
 	const runner = db.createQueryRunner();
@@ -30,6 +33,13 @@ export const cleanDb = async () => {
 const main = async () => {
 	await db.initialize();
 
+	const userRepository: Repository<User> = DataSource.getRepository(User);
+	const languageRepository: Repository<Language> =
+		DataSource.getRepository(Language);
+	const projectRepository: Repository<Project> =
+		DataSource.getRepository(Project);
+	const codeRepository: Repository<Code> = DataSource.getRepository(Code);
+
 	await cleanDb();
 
 	const user = new User();
@@ -41,7 +51,7 @@ const main = async () => {
 		isPremium: true,
 	});
 
-	await user.save();
+	await userRepository.save(user);
 
 	const flexMaster = new User();
 
@@ -51,7 +61,8 @@ const main = async () => {
 		pseudo: "Flex Master",
 	});
 
-	await flexMaster.save();
+	await userRepository.save(flexMaster);
+
 	const admin = new User();
 
 	Object.assign(admin, {
@@ -61,36 +72,49 @@ const main = async () => {
 		role: UserRole.ADMIN,
 	});
 
-	await admin.save();
+	await userRepository.save(admin);
 
 	// Initialize Language table
-	const javascript = Language.create({
+	const javascript = new Language();
+
+	Object.assign(javascript, {
 		name: "JavaScript",
 	});
 
-	await javascript.save();
+	await languageRepository.save(javascript);
 
-	const project1 = Project.create({
+	const project1 = new Project();
+
+	Object.assign(project1, {
 		title: "Project 1",
 		user: flexMaster,
 		isPublic: true,
 	});
+	await projectRepository.save(project1);
 
-	const project2 = Project.create({
+	const project2 = new Project();
+
+	Object.assign(project2, {
 		title: "Project 2",
 		user: flexMaster,
 		isPublic: true,
 	});
 
-	await project1.save();
-	await project2.save();
+	await projectRepository.save(project2);
 
-	const javascriptCode = Code.create({
+	const javascriptCode = new Code();
+
+	Object.assign(javascriptCode, {
 		content: "console.log('Hello World')",
 		language: javascript,
 		project: project1,
 	});
-	const javascriptCode2 = Code.create({
+
+	await codeRepository.save(javascriptCode);
+
+	const javascriptCode2 = new Code();
+
+	Object.assign(javascriptCode2, {
 		content: `function main() {
 			return 1 + 3
 		}
@@ -100,28 +124,32 @@ const main = async () => {
 		project: project2,
 	});
 
-	await javascriptCode.save();
-	await javascriptCode2.save();
+	await codeRepository.save(javascriptCode2);
 
 	for (let i = 1; i <= 13; i++) {
-		const project = Project.create({
+		const project = new Project();
+
+		Object.assign(project, {
 			title: `Project ${i}`,
 			user: flexMaster,
 			isPublic: true,
 		});
-		await project.save();
 
-		const code = Code.create({
+		await projectRepository.save(project);
+
+		const code = new Code();
+
+		Object.assign(code, {
 			content: `console.log('Hello World from Project ${i}')`,
 			language: javascript,
 			project: project,
 		});
-		await code.save();
+		await codeRepository.save(code);
 	}
 
 	await db.destroy();
 
-	console.log(`${user.email} created`);
+	console.log("DB is reset");
 };
 
 main();

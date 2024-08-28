@@ -1,32 +1,29 @@
 import { Arg, Authorized, Ctx, Mutation, Query } from "type-graphql";
+import { GraphQLError } from "graphql";
+
 import User, {
 	ExecutionCounterInput,
 	NewUserInput,
 	SigninInput,
 } from "../entities/user";
-import { GraphQLError } from "graphql";
-import { verify } from "argon2";
-import jwt from "jsonwebtoken";
-
-import env from "../env";
 import { Context } from "../interfaces/auth";
 import { UserRole } from "../entities/user";
+import UserService from "../services/user.service";
 
 export default class UserResolver {
 	@Authorized([UserRole.ADMIN])
 	@Query(() => [User])
 	async users() {
-		const users = await User.find();
-
-		return users;
+		return await new UserService().getAll();
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Query(() => User)
-	async getUserProfile(@Ctx() ctx: Context) {
-		if (!ctx.currentUser) throw new GraphQLError("you need to be logged in!");
-		return User.findOneOrFail({
-			where: { id: ctx.currentUser.id },
+	async getUserProfile(@Ctx() { currentUser }: Context) {
+		if (!currentUser) throw new GraphQLError("you need to be logged in!");
+
+		return await new UserService().getBy({
+			where: { id: currentUser.id },
 			select: ["id", "pseudo", "email", "role"],
 		});
 	}
@@ -38,88 +35,25 @@ export default class UserResolver {
 			throw new GraphQLError("you need to be logged in!");
 		}
 
-		const user = await User.findOneOrFail({
+		return await new UserService().getBy({
 			where: { id: currentUser?.id },
 			select: ["isPremium", "executionCounter"],
 		});
-
-		return user;
 	}
 
 	@Mutation(() => User)
-	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	async createUser(@Arg("data", { validate: true }) data: NewUserInput) {
-		if (!data.email) {
-			throw new GraphQLError("email is missing but require");
-		}
-
-		if (!data.pseudo) {
-			throw new GraphQLError("pseudo is missing but require");
-		}
-
-		if (!data.password) {
-			throw new GraphQLError("password is missing but require");
-		}
-
-		const userAlreadyExist = await User.findOneBy({ email: data.email });
-		const pseudoAlreadyExist = await User.findOneBy({
-			pseudo: data.pseudo.toLocaleLowerCase(),
-		});
-
-		if (userAlreadyExist) {
-			throw new GraphQLError(`user: ${data.email} already exist`);
-		}
-
-		if (pseudoAlreadyExist) {
-			throw new GraphQLError(`pseudo: ${data.pseudo} is already taken`);
-		}
-
-		const newUser = new User();
-
-		Object.assign(newUser, data);
-
-		return await newUser.save();
+		return await new UserService().create(data);
 	}
 
 	@Mutation(() => String)
-	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	async signin(@Arg("data") data: SigninInput, @Ctx() ctx: Context) {
-		const user = await User.findOneBy({ email: data.email });
-
-		if (!user) {
-			throw new GraphQLError(`email: ${data.email} not register`);
-		}
-
-		const isUserPassword = await verify(user.hashedPassword, data.password);
-
-		if (!isUserPassword) {
-			throw new GraphQLError("invalid password");
-		}
-
-		const token = jwt.sign(
-			{
-				userId: user.id,
-				pseudo: user.pseudo,
-				email: user.email,
-			},
-			env.JWT_PRIVATE_KEY,
-			{ expiresIn: "30d" }
-		);
-
-		ctx.res.cookie("token", token, {
-			httpOnly: true,
-			maxAge: 30 * 24 * 60 * 60 * 1000,
-			secure: env.NODE_ENV === "production",
-		});
-
-		return token;
+		return await new UserService().signin(data, ctx);
 	}
 
 	@Mutation(() => String)
 	async logout(@Ctx() ctx: Context) {
-		ctx.res.clearCookie("token");
-
-		return "ok";
+		return new UserService().logout(ctx);
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
@@ -128,15 +62,19 @@ export default class UserResolver {
 		@Arg("counter") counter: ExecutionCounterInput,
 		@Ctx() { currentUser }: Context
 	) {
-		const user = await User.findOneByOrFail({ id: currentUser?.id });
+		if (!currentUser) {
+			throw new GraphQLError("you need to be logged in!");
+		}
 
-		user.executionCounter =
-			counter.executionCounter === 10
-				? counter.executionCounter
-				: counter.executionCounter + 1;
+		return await new UserService().getExecutionCounter(
+			currentUser.id,
+			counter.executionCounter
+		);
+	}
 
-		await user.save();
-
-		return user.executionCounter;
+	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Mutation(() => Boolean)
+	async deleteUser(@Arg("id") id: string) {
+		return await new UserService().delete(id);
 	}
 }

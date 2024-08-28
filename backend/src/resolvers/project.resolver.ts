@@ -1,95 +1,79 @@
 import { Arg, Authorized, Ctx, Mutation, Query } from "type-graphql";
+import { GraphQLError } from "graphql";
 
 import Project, { NewProjectInput } from "../entities/project";
 import { Context } from "../interfaces/auth";
-import { GraphQLError } from "graphql";
-import DataSource from "../db";
+import ProjectService from "../services/projet.service";
 import { UserRole } from "../entities/user";
 import ProjectPaginationResponse from "../types/project-pagination-response";
 
 export default class ProjectResolver {
-	private projectRepository = DataSource.getRepository(Project);
-	@Query(() => [Project])
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Query(() => [Project])
 	async getProjects() {
-		const projects = await Project.find({
+		return await new ProjectService().getAll({
 			relations: { codes: { language: true }, user: true },
 		});
-
-		return projects;
 	}
+
+	// @Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	// @Query(() => [Project])
+	// async getMyProjects(@Ctx() { currentUser }: Context) {
+	// 	return await new ProjectService().getAll(currentUser);
+	// }
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Query(() => ProjectPaginationResponse)
 	async getMyProjects(
-		@Ctx() ctx: Context,
+		@Ctx() { currentUser }: Context,
 		@Arg("limit", { defaultValue: 12 }) limit: number,
 		@Arg("offset", { defaultValue: 0 }) offset: number
 	) {
-		if (!ctx.currentUser) throw new GraphQLError("you need to be logged in!");
-		const projects = await Project.find({
-			where: { user: ctx.currentUser },
-			relations: { codes: true, user: true },
-			order: { createdAt: "DESC" },
-			take: limit + 1,
-			skip: offset,
-		});
-
-		const hasMore = projects.length > limit;
-		const resultProjects = projects.slice(0, limit);
-
-		return {
-			projects: resultProjects,
-			hasMore,
-		};
+		return await new ProjectService().getAllPaginate(
+			{
+				where: { user: currentUser },
+				relations: { codes: true, user: true },
+				order: { createdAt: "DESC" },
+				take: limit + 1,
+				skip: offset,
+			},
+			limit
+		);
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Query(() => ProjectPaginationResponse)
 	async getPublicsProjects(
-		@Ctx() ctx: Context,
+		// @Ctx() ctx: Context,
 		@Arg("limit", { defaultValue: 12 }) limit: number,
 		@Arg("offset", { defaultValue: 0 }) offset: number
 	): Promise<ProjectPaginationResponse> {
-		if (!ctx.currentUser) throw new GraphQLError("you need to be logged in!");
-
-		const projects = await Project.find({
-			where: { isPublic: true },
-			relations: { codes: true, user: true },
-			order: { createdAt: "DESC" },
-			take: limit + 1,
-			skip: offset,
-		});
-
-		const hasMore = projects.length > limit;
-		const resultProjects = projects.slice(0, limit);
-
-		return {
-			projects: resultProjects,
-			hasMore,
-		};
+		return await new ProjectService().getAllPaginate(
+			{
+				where: { isPublic: true },
+				relations: { codes: true, user: true },
+				order: { createdAt: "DESC" },
+				take: limit + 1,
+				skip: offset,
+			},
+			limit
+		);
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
-	@Query(() => [Project])
+	@Query(() => Project)
 	async getProject(@Arg("id") id: string) {
-		return this.projectRepository.findOneOrFail({ where: { id } });
+		return await new ProjectService().get(id);
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Mutation(() => Project)
 	async createProject(
 		@Arg("data", { validate: true }) data: NewProjectInput,
-		@Ctx() ctx: Context
+		@Ctx() { currentUser }: Context
 	) {
-		if (!ctx.currentUser) throw new GraphQLError("you need to be logged in!");
+		if (!currentUser) throw new GraphQLError("you need to be logged in!");
 
-		const project = Project.create({
-			...data,
-			isPublic: data.isPublic || false,
-			user: ctx.currentUser,
-		});
-
-		return await project.save();
+		return await new ProjectService().create(data, currentUser);
 	}
 }
