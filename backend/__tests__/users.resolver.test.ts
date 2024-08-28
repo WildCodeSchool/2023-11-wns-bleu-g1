@@ -1,3 +1,6 @@
+import { Repository } from "typeorm";
+
+import DataSource from "../src/db";
 import { execute } from "../jest.setup";
 import User, { UserRole } from "../src/entities/user";
 import createUser from "./operations/createUser";
@@ -7,23 +10,29 @@ import getVisitorContext from "./helpers/getVisitorContext";
 import getExecutionCounter from "./operations/getExecutionCounter";
 import incrementExecutionCounter from "./operations/incrementExecutionCounter";
 
+const userRepository: Repository<User> = DataSource.getRepository(User);
+
 describe("users resolver", () => {
 	it("can get a list of users", async () => {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const user1: any = new User();
 		const user2 = new User();
 
-		await Object.assign(user1, {
+		Object.assign(user1, {
 			email: "sans@sans.sans",
 			password: "Test123456!",
 			pseudo: "test",
-		}).save();
+		});
 
-		await Object.assign(user2, {
+		await userRepository.save(user1);
+
+		Object.assign(user2, {
 			email: "test@test.test",
 			password: "Test123456!",
 			pseudo: "cazzo",
-		}).save();
+		});
+
+		await userRepository.save(user2);
 
 		const jwt = await getAdminContext();
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any

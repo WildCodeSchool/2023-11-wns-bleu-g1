@@ -1,7 +1,6 @@
 import { Length } from "class-validator";
 import { Field, InputType, ObjectType } from "type-graphql";
 import {
-	BaseEntity,
 	Column,
 	CreateDateColumn,
 	Entity,
@@ -15,7 +14,7 @@ import User from "./user";
 
 @Entity()
 @ObjectType()
-export default class Project extends BaseEntity {
+export default class Project {
 	@PrimaryGeneratedColumn("uuid")
 	@Field()
 	id: string;

@@ -2,7 +2,6 @@ import { hash } from "argon2";
 import { IsEmail, Length, Matches, Max, Min } from "class-validator";
 import { Field, InputType, ObjectType } from "type-graphql";
 import {
-	BaseEntity,
 	BeforeInsert,
 	Column,
 	Entity,
@@ -18,7 +17,7 @@ export enum UserRole {
 
 @Entity()
 @ObjectType()
-export default class User extends BaseEntity {
+export default class User {
 	password: string;
 
 	@BeforeInsert()
