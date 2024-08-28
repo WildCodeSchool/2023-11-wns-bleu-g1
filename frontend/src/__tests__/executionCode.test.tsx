@@ -1,5 +1,5 @@
 import mockRouter from "next-router-mock";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { MockedProvider } from "@apollo/client/testing";
 import userEvent from "@testing-library/user-event";
 
@@ -41,7 +41,6 @@ describe("what increment count for code execution work", () => {
 		);
 
 		await userEvent.click(btn);
-		// fireEvent.click(btn);
 
 		expect(screen.queryByTestId("counter")).toHaveTextContent("1/10");
 	});
