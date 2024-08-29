@@ -65,10 +65,6 @@ export function ChangeUsernamePopup() {
 
     async function onSubmit(data: z.infer<typeof formSchema>) {
         const { newUsername } = data;
-        console.log("button clicked");
-        console.log("profile: ", profile);
-        console.log("profile.id: ", profile.id);
-        console.log("newUsername: ", newUsername);
         if (!profile) return;
         await changeUsernameMutation({
             variables: {
@@ -84,11 +80,11 @@ export function ChangeUsernamePopup() {
     return (
         <>
             <AlertDialogHeader>
-                <AlertDialogTitle>Changer le nom d'utilisateur</AlertDialogTitle>
+                <AlertDialogTitle>Changer le nom de profil</AlertDialogTitle>
             </AlertDialogHeader>
             <AlertDialogDescription>
                 <p>
-                    Voulez-vous vraiment changer votre nom d'utilisateur ?
+                    Voulez-vous vraiment changer votre nom de profil ?
                 </p>
             </AlertDialogDescription>
             <AlertDialogFooter>

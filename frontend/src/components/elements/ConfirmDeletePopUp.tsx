@@ -53,7 +53,6 @@ export function ConfirmDeletePopUp() {
 
     const profile = getUserProfileQuery?.data?.getUserProfile || null;
     function deleteAccount() {
-		console.log("button clicked");
 		if (!profile) return;
 		deleteUserMutation({
 			variables: {

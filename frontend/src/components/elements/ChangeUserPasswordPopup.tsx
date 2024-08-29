@@ -1,24 +1,22 @@
 import {
   AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import {useDeleteUserMutation, useGetUserProfileQuery, useUpdateUserPasswordMutation} from "@/graphql/generated/schema";
+import {useGetUserProfileQuery, useUpdateUserPasswordMutation} from "@/graphql/generated/schema";
 import {BadgeCheck} from "lucide-react";
 import {ApolloError} from "@apollo/client";
 import {useToast} from "@/components/ui/use-toast";
 import {useState} from "react";
-import {useRouter} from "next/router";
 import {Form, FormControl, FormField, FormItem} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 
-export function ChangeUserPassword() {
+export function ChangeUserPasswordPopup() {
   const getUserProfileQuery = useGetUserProfileQuery();
   const { toast } = useToast();
   const defaultErrorMessage =

@@ -15,12 +15,11 @@ import {
 	useGetMyProjectsQuery,
 	useGetUserProfileQuery,
 } from "@/graphql/generated/schema";
-import Link from "next/link";
 import {useState} from "react";
 import {AlertDialog, AlertDialogContent, AlertDialogTrigger} from "@/components/ui/alert-dialog";
 import {ConfirmDeletePopUp} from "@/components/elements/ConfirmDeletePopUp";
 import {ChangeUsernamePopup} from "@/components/elements/ChangeUsernamePopup";
-import {ChangeUserPassword} from "@/components/elements/ChangeUserPassword";
+import {ChangeUserPasswordPopup} from "@/components/elements/ChangeUserPasswordPopup";
 
 const ProfilPage = () => {
 	const [page, setPage] = useState(0);
@@ -43,7 +42,6 @@ const ProfilPage = () => {
 
 	const profile = getUserProfileQuery?.data?.getUserProfile || null;
 	const data = getMyProjectsQuery.data?.getMyProjects;
-	console.log("profile: ", profile);
 	const projects = data?.projects || [];
 
 	return (
@@ -103,7 +101,7 @@ const ProfilPage = () => {
 								</Button>
 							</AlertDialogTrigger>
 							<AlertDialogContent>
-								<ChangeUserPassword />
+								<ChangeUserPasswordPopup />
 							</AlertDialogContent>
 						</AlertDialog>
 						<AlertDialog>
