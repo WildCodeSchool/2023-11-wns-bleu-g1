@@ -12,8 +12,8 @@ mutation CreateProject($data: NewProjectInput!) {
 	}
 }
 
-query GetMyProjects($limit: Float!, $offset: Float!) {
-	getMyProjects(limit: $limit, offset: $offset) {
+query GetMyProjects($limit: Float!, $offset: Float!, $searchProject: String!) {
+	getMyProjects(limit: $limit, offset: $offset, searchProject: $searchProject) {
 		projects {
 			id
 			isPublic
