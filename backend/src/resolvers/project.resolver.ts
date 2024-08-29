@@ -38,7 +38,6 @@ export default class ProjectResolver {
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Query(() => ProjectPaginationResponse)
 	async getPublicsProjects(
-		// @Ctx() ctx: Context,
 		@Arg("limit", { defaultValue: 12 }) limit: number,
 		@Arg("offset", { defaultValue: 0 }) offset: number
 	): Promise<ProjectPaginationResponse> {
