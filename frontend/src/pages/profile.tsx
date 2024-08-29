@@ -86,9 +86,6 @@ const ProfilPage = () => {
 						<CardTitle>Paramètres de compte</CardTitle>
 					</CardHeader>
 					<CardContent className="flex flex-col space-y-3">
-						{/*<Link href="#" className={buttonVariants({ variant: "secondary2"})}>*/}
-						{/*	Modifier mon nom de profil*/}
-						{/*</Link>*/}
 						<AlertDialog>
 							<AlertDialogTrigger asChild>
 								<Button className={buttonVariants({ variant: "secondary2"})}>
@@ -99,19 +96,16 @@ const ProfilPage = () => {
 								<ChangeUsernamePopup />
 							</AlertDialogContent>
 						</AlertDialog>
-						<Link href="#" className={buttonVariants({ variant: "secondary2"})}>
-							Modifier mon mot de passe
-						</Link>
-						{/*<AlertDialog>*/}
-						{/*	<AlertDialogTrigger asChild>*/}
-						{/*		<Button className={buttonVariants({ variant: "secondary2"})}>*/}
-						{/*			Modifier mon mot de passe*/}
-						{/*		</Button>*/}
-						{/*	</AlertDialogTrigger>*/}
-						{/*	<AlertDialogContent>*/}
-						{/*		<ChangeUserPassword />*/}
-						{/*	</AlertDialogContent>*/}
-						{/*</AlertDialog>*/}
+						<AlertDialog>
+							<AlertDialogTrigger asChild>
+								<Button className={buttonVariants({ variant: "secondary2"})}>
+									Modifier mon mot de passe
+								</Button>
+							</AlertDialogTrigger>
+							<AlertDialogContent>
+								<ChangeUserPassword />
+							</AlertDialogContent>
+						</AlertDialog>
 						<AlertDialog>
 							<AlertDialogTrigger asChild>
 							<Button className={buttonVariants({ variant: "destructive"})}>

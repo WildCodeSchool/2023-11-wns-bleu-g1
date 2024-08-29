@@ -4,7 +4,7 @@ import { GraphQLError } from "graphql";
 import User, {
 	ExecutionCounterInput,
 	NewUserInput,
-	SigninInput, UpdateUsernameInput,
+	SigninInput, UpdatePasswordInput, UpdateUsernameInput,
 	// UpdateUserInput,
 } from "../entities/user";
 import { Context } from "../interfaces/auth";
@@ -96,23 +96,9 @@ export default class UserResolver {
 	async updateUsername(@Arg("datas") datas: UpdateUsernameInput) {
 		return await new UserService().updateUsername(datas);
 	}
-	// @Mutation(() => User)
-	// async updateUser(@Arg("id") id: string, @Arg("data") data: UpdateUserInput) {
-	// 	const user = await this.userRepository.findOneBy({id});
-	// 	if (!user) {
-	// 		throw new GraphQLError("user not found");
-	// 	}
-	//
-	// 	if (data.pseudo) {
-	// 		user.pseudo = data.pseudo;
-	// 	}
-	//
-	// 	if (data.password) {
-	// 		user.password = data.password;
-	// 	}
-	//
-	// 	Object.assign(user, data);
-	//
-	// 	return await user.save();
-	// }
+
+	@Mutation(() => Boolean)
+	async updateUserPassword(@Arg("datas") datas: UpdatePasswordInput) {
+		return await new UserService().updatePassword(datas);
+	}
 }

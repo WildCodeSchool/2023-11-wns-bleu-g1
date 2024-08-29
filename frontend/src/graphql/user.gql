@@ -56,3 +56,7 @@ mutation UpdateUsername($datas: UpdateUsernameInput!) {
   updateUsername(datas: $datas)
 }
 
+mutation UpdateUserPassword($datas: UpdatePasswordInput!) {
+  updateUserPassword(datas: $datas)
+}
+

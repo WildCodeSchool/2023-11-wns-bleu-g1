@@ -5,8 +5,9 @@ import { verify } from "argon2";
 
 import env from "../env";
 import DataSource from "../db";
-import User, {NewUserInput, SigninInput, UpdateUsernameInput} from "../entities/user";
+import User, {NewUserInput, SigninInput, UpdatePasswordInput, UpdateUsernameInput} from "../entities/user";
 import { Context } from "../interfaces/auth";
+import { hash } from "argon2";
 
 export default class UserService {
 	userRepository: Repository<User>;
@@ -126,4 +127,18 @@ export default class UserService {
 
 		return true;
 	};
+
+	updatePassword = async ({id, oldPassword, newPassword}: UpdatePasswordInput) => {
+		const user = await this.getBy({where: {id: id}});
+		if (!user) {
+			throw new GraphQLError("user not found");
+		}
+		const isUserPassword = await verify(user.hashedPassword, oldPassword);
+		if (!isUserPassword) {
+			throw new GraphQLError("invalid password");
+		}
+		user.hashedPassword = await hash(newPassword);
+		await this.userRepository.save(user);
+		return true;
+	}
 }

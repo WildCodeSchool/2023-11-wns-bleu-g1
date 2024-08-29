@@ -59,6 +59,7 @@ export type Mutation = {
   signin: Scalars['String'];
   updateCode: Code;
   updateLanguage: Language;
+  updateUserPassword: Scalars['Boolean'];
   updateUsername: Scalars['Boolean'];
   updateLanguage: Array<Language>;
   updateUser: User;
@@ -138,6 +139,11 @@ export type MutationUpdateUserArgs = {
   data: UpdateUserInput;
   id: Scalars['String'];
   data: UpdateLanguageInput;
+};
+
+
+export type MutationUpdateUserPasswordArgs = {
+  datas: UpdatePasswordInput;
 };
 
 
@@ -234,15 +240,22 @@ export type UpdateLanguageInput = {
   name: Scalars['String'];
 };
 
+export type UpdatePasswordInput = {
+  id: Scalars['String'];
+  newPassword: Scalars['String'];
+  oldPassword: Scalars['String'];
+};
+
 export type UpdateUsernameInput = {
   id: Scalars['String'];
-  newUsername?: InputMaybe<Scalars['String']>;
+  newUsername: Scalars['String'];
 };
 
 export type User = {
   __typename?: 'User';
   email: Scalars['String'];
   executionCounter: Scalars['Float'];
+  hashedPassword: Scalars['String'];
   id: Scalars['String'];
   isPremium: Scalars['Boolean'];
   pseudo: Scalars['String'];
@@ -399,6 +412,13 @@ export type UpdateUsernameMutationVariables = Exact<{
 
 
 export type UpdateUsernameMutation = { __typename?: 'Mutation', updateUsername: boolean };
+
+export type UpdateUserPasswordMutationVariables = Exact<{
+  datas: UpdatePasswordInput;
+}>;
+
+
+export type UpdateUserPasswordMutation = { __typename?: 'Mutation', updateUserPassword: boolean };
 
 
 export const GetLanguagesDocument = gql`

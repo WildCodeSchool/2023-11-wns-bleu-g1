@@ -42,6 +42,7 @@ export default class User {
 	pseudo: string;
 
 	@Column()
+	@Field()
 	hashedPassword: string;
 
 	@Column({ default: 1 })
@@ -102,6 +103,21 @@ export class UpdateUsernameInput {
 	@Field()
 	id: string
 
-	@Field({ nullable: true })
+	@Field()
 	newUsername: string;
+}
+
+@InputType()
+export class UpdatePasswordInput {
+    @Field()
+    id: string;
+
+    @Field()
+    oldPassword: string;
+
+    @Matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/, {
+        message: "Password too weak",
+    })
+    @Field()
+    newPassword: string;
 }
