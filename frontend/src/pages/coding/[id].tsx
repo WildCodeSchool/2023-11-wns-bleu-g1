@@ -145,7 +145,7 @@ const CodingPage = () => {
 	}
 	const runCode = () => {
 		// @Todo: Remettre le compte à 50 en dehors des tests
-		if (count < 10) {
+		if (count < 50) {
 			if (!isPremium) {
 				incrementCounter({
 					variables: { counter: { executionCounter: count } },
@@ -219,7 +219,7 @@ const CodingPage = () => {
 					</div>
 					{!loading && (
 						<div className="flex flex-row-reverse md:flex-col w-full justify-center text-center align-center md:items-center px-4 md:px-0">
-							{count < 10 && (
+							{count < 50 && (
 								<Button
 									size={"sm"}
 									data-testid="exec-btn"
@@ -229,18 +229,17 @@ const CodingPage = () => {
 									Exécuter
 								</Button>
 							)}
-							{/* @Todo: Remettre le compte à 50 en dehors des tests */}
 							{!isPremium && (
 								<>
 									<p data-testid="counter" className="flex items-center">
-										{count}/10
+										{count}/50
 									</p>
 									<p
 										data-testid="not-premium"
 										className="flex items-center select-none"
 									>
-										{count === 10 &&
-											"Vous avez atteint la limite de 10 exécutions. "}
+										{count === 50 &&
+											"Vous avez atteint la limite de 50 exécutions. "}
 										Pour ne plus avoir de limites, passer premium!
 									</p>
 								</>

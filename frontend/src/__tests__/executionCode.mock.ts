@@ -87,7 +87,7 @@ export const getNotExecutionCountMock = {
 	result: {
 		data: {
 			getExecutionCounter: {
-				executionCounter: 10,
+				executionCounter: 50,
 				isPremium: false,
 			},
 		},

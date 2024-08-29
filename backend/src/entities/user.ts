@@ -92,7 +92,7 @@ export class SigninInput {
 @InputType()
 export class ExecutionCounterInput {
 	@Min(0)
-	@Max(10)
+	@Max(50)
 	@Field()
 	executionCounter: number;
 }
