@@ -50,8 +50,18 @@ query GetProjectById($getProjectId: String!) {
 	}
 }
 
-query GetPublicsProjects($offset: Float!, $limit: Float!) {
-	getPublicsProjects(offset: $offset, limit: $limit) {
+query GetPublicsProjects(
+	$offset: Float!
+	$limit: Float!
+	$searchUser: String!
+	$searchProject: String!
+) {
+	getPublicsProjects(
+		offset: $offset
+		limit: $limit
+		searchUser: $searchUser
+		searchProject: $searchProject
+	) {
 		projects {
 			id
 			isPublic

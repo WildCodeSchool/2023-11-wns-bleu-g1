@@ -816,6 +816,8 @@ export const GetPublicsProjectsDocument = gql`
  *   variables: {
  *      offset: // value for 'offset'
  *      limit: // value for 'limit'
+ *      searchUser: // value for 'searchUser'
+ *      searchProject: // value for 'searchProject'
  *   },
  * });
  */
