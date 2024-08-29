@@ -131,25 +131,25 @@ describe("if user can execute some code with visitor permissions", () => {
 		`);
 	});
 
-	it("can't increment executeCounter field more than 10", async () => {
+	it("can't increment executeCounter field more than 50", async () => {
 		const jwt = await getVisitorContext();
 
 		const res = await execute(incrementExecutionCounter, {
 			contextValue: jwt,
 			variableValues: {
 				counter: {
-					executionCounter: 10,
+					executionCounter: 50,
 				},
 			},
 		});
 
 		expect(res).toMatchInlineSnapshot(`
-		{
-		  "data": {
-		    "incrementExecutionCounter": 10,
-		  },
-		}
-		`);
+{
+  "data": {
+    "incrementExecutionCounter": 50,
+  },
+}
+`);
 	});
 });
 
@@ -192,14 +192,14 @@ describe("if user can execute some code with admin permissions", () => {
 	`);
 	});
 
-	it("can't increment executeCounter field more than 10", async () => {
+	it("can't increment executeCounter field more than 50", async () => {
 		const jwt = await getAdminContext();
 
 		const res = await execute(incrementExecutionCounter, {
 			contextValue: jwt,
 			variableValues: {
 				counter: {
-					executionCounter: 10,
+					executionCounter: 50,
 				},
 			},
 		});
@@ -207,7 +207,7 @@ describe("if user can execute some code with admin permissions", () => {
 		expect(res).toMatchInlineSnapshot(`
 	{
 	  "data": {
-	    "incrementExecutionCounter": 10,
+	    "incrementExecutionCounter": 50,
 	  },
 	}
 	`);
