@@ -6,6 +6,7 @@ import { Context } from "../interfaces/auth";
 import ProjectService from "../services/projet.service";
 import { UserRole } from "../entities/user";
 import ProjectPaginationResponse from "../types/project-pagination-response";
+import { ILike } from "typeorm";
 
 export default class ProjectResolver {
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
@@ -21,12 +22,13 @@ export default class ProjectResolver {
 	async getMyProjects(
 		@Ctx() { currentUser }: Context,
 		@Arg("limit", { defaultValue: 12 }) limit: number,
-		@Arg("offset", { defaultValue: 0 }) offset: number
+		@Arg("offset", { defaultValue: 0 }) offset: number,
+		@Arg("search", { defaultValue: "" }) search: string
 	) {
 		return await new ProjectService().getAllPaginate(
 			{
-				where: { user: currentUser },
 				relations: { codes: true, user: true },
+				where: { user: currentUser, title: ILike(`%${search}%`) },
 				order: { createdAt: "DESC" },
 				take: limit + 1,
 				skip: offset,
@@ -39,12 +41,20 @@ export default class ProjectResolver {
 	@Query(() => ProjectPaginationResponse)
 	async getPublicsProjects(
 		@Arg("limit", { defaultValue: 12 }) limit: number,
-		@Arg("offset", { defaultValue: 0 }) offset: number
+		@Arg("offset", { defaultValue: 0 }) offset: number,
+		@Arg("searchProject", { defaultValue: "" }) searchProject: string,
+		@Arg("searchUser", { defaultValue: "" }) searchUser: string
 	): Promise<ProjectPaginationResponse> {
 		return await new ProjectService().getAllPaginate(
 			{
-				where: { isPublic: true },
 				relations: { codes: true, user: true },
+				where: {
+					isPublic: true,
+					title: ILike(`%${searchProject}%`),
+					user: {
+						pseudo: ILike(`%${searchUser}%`),
+					},
+				},
 				order: { createdAt: "DESC" },
 				take: limit + 1,
 				skip: offset,
