@@ -44,7 +44,7 @@ export default class User {
 	@Column()
 	hashedPassword: string;
 
-	@Column({ default: 0 })
+	@Column({ default: 1 })
 	@Field()
 	executionCounter: number;
 

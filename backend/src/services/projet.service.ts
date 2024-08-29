@@ -23,8 +23,8 @@ export default class ProjectService {
 		return { projects: resultProjects, hasMore };
 	};
 
-	get = async (id: string) => {
-		const project = await this.projectRepository.findOneByOrFail({ id });
+	get = async (request: object) => {
+		const project = await this.projectRepository.findOne(request);
 
 		return project;
 	};

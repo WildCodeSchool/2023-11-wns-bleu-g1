@@ -22,10 +22,19 @@ export default class UserResolver {
 	async getUserProfile(@Ctx() { currentUser }: Context) {
 		if (!currentUser) throw new GraphQLError("you need to be logged in!");
 
-		return await new UserService().getBy({
+		const profile = await new UserService().getBy({
 			where: { id: currentUser.id },
-			select: ["id", "pseudo", "email", "role"],
+			select: [
+				"id",
+				"pseudo",
+				"email",
+				"role",
+				"executionCounter",
+				"isPremium",
+			],
 		});
+
+		return profile;
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])

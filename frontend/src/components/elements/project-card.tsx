@@ -29,10 +29,11 @@ const ProjectCard = ({ project, onProfilePage, className }: Props) => {
 			Privé
 		</Badge>
 	);
+
 	return (
 		<Card className={className}>
 			<CardHeader>
-				<div className="flex items-center justify-between">
+				<div className="flex flex-wrap items-center justify-between gap-2">
 					<CardTitle>{project.title}</CardTitle>
 					{onProfilePage && statusBadge}
 				</div>
