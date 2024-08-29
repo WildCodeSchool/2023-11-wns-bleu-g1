@@ -288,6 +288,7 @@ export type CreateProjectMutation = { __typename?: 'Mutation', createProject: { 
 export type GetMyProjectsQueryVariables = Exact<{
   limit: Scalars['Float'];
   offset: Scalars['Float'];
+  searchProject: Scalars['String'];
 }>;
 
 
@@ -689,8 +690,8 @@ export type CreateProjectMutationHookResult = ReturnType<typeof useCreateProject
 export type CreateProjectMutationResult = Apollo.MutationResult<CreateProjectMutation>;
 export type CreateProjectMutationOptions = Apollo.BaseMutationOptions<CreateProjectMutation, CreateProjectMutationVariables>;
 export const GetMyProjectsDocument = gql`
-    query GetMyProjects($limit: Float!, $offset: Float!) {
-  getMyProjects(limit: $limit, offset: $offset) {
+    query GetMyProjects($limit: Float!, $offset: Float!, $searchProject: String!) {
+  getMyProjects(limit: $limit, offset: $offset, searchProject: $searchProject) {
     projects {
       id
       isPublic
@@ -719,6 +720,7 @@ export const GetMyProjectsDocument = gql`
  *   variables: {
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      searchProject: // value for 'searchProject'
  *   },
  * });
  */

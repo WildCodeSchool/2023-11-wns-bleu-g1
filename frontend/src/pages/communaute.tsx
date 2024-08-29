@@ -23,33 +23,32 @@ const CommunautePage = () => {
 
 	// states for searchbar
 	const [searchbar, setSearchbar] = useState("");
-	const [selectOption, setSelectOption] = useState("");
+	const [selectOption, setSelectOption] = useState("project");
 	const [searchProject, setSearchProject] = useState("");
 	const [searchUser, setSearchUser] = useState("");
 
-	const sendSearch = useCallback(() => {
-		switch (selectOption) {
-			case "project":
-				setSearchUser("");
-				setSearchProject(searchbar);
-				setSearchbar("");
-				setSelectOption("");
-				break;
+	const sendSearch = useCallback(
+		(value: string) => {
+			switch (selectOption) {
+				case "project":
+					setSearchProject(value);
+					setSearchbar("");
+					break;
 
-			case "pseudo":
-				setSearchProject("");
-				setSearchUser(searchbar);
-				setSearchbar("");
-				setSelectOption("");
-				break;
+				case "pseudo":
+					setSearchUser(value);
+					setSearchbar("");
+					break;
 
-			default:
-				setSearchProject("");
-				setSearchUser("");
-				setSelectOption("");
-				setSearchbar("");
-		}
-	}, [selectOption, searchbar]);
+				default:
+					setSearchProject("");
+					setSearchUser("");
+					setSelectOption("project");
+					setSearchbar("");
+			}
+		},
+		[selectOption]
+	);
 
 	const limit = 12;
 	const offset = page * limit;
@@ -111,8 +110,23 @@ const CommunautePage = () => {
 							value={searchbar}
 							onChange={(e) => setSearchbar(e.currentTarget.value)}
 						/>
-						<Button className="h-[25px]" onClick={sendSearch}>
+						<Button
+							className="h-[25px]"
+							onClick={() => sendSearch(searchbar)}
+							disabled={!searchbar.length}
+						>
 							Rechercher
+						</Button>
+
+						<Button
+							className="h-[25px]"
+							variant={"destructive"}
+							onClick={() => {
+								sendSearch("");
+								setSelectOption("project");
+							}}
+						>
+							Reset
 						</Button>
 					</div>
 				</div>
