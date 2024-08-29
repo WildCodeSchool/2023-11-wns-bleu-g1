@@ -18,7 +18,7 @@ import {
 	useGetMyProjectsQuery,
 	useGetUserProfileQuery,
 } from "@/graphql/generated/schema";
-import { useState } from "react";
+// import { useState } from "react";
 import {BadgeCheck, MessageCircleWarning} from "lucide-react";
 import Link from "next/link";
 import {useRouter} from "next/router";
@@ -42,7 +42,6 @@ const ProfilPage = () => {
 		},
 		notifyOnNetworkStatusChange: true,
 	});
-	const getMyProjectsQuery = useGetMyProjectsQuery();
 	const [errorMessage, setErrorMessage] = useState<string>(defaultErrorMessage);
 	const { toast } = useToast();
 	const [deleteUserMutation, deleteUserResult] = useDeleteUserMutation({

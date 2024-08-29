@@ -5,7 +5,7 @@ import User, {
 	ExecutionCounterInput,
 	NewUserInput,
 	SigninInput,
-	UpdateUserInput,
+	// UpdateUserInput,
 } from "../entities/user";
 import { Context } from "../interfaces/auth";
 import { UserRole } from "../entities/user";
@@ -87,39 +87,27 @@ export default class UserResolver {
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Mutation(() => Boolean)
-	async deleteUser(@Arg("id") id: string) {
-		return await new UserService().delete(id);
-	}
-
-	@Mutation(()=> Boolean)
 	async deleteUser(@Arg("id") id: string, @Ctx() ctx: Context) {
-		const user = await this.userRepository.findOneBy({id});
-		if (!user) {
-			throw new GraphQLError("user not found");
-		}
-
-		await this.userRepository.remove(user);
-		ctx.res.clearCookie("token");
-		return true;
+		return await new UserService().delete(id, ctx);
 	}
 
-	@Mutation(() => User)
-	async updateUser(@Arg("id") id: string, @Arg("data") data: UpdateUserInput) {
-		const user = await this.userRepository.findOneBy({id});
-		if (!user) {
-			throw new GraphQLError("user not found");
-		}
-
-		if (data.pseudo) {
-			user.pseudo = data.pseudo;
-		}
-
-		if (data.password) {
-			user.password = data.password;
-		}
-
-		Object.assign(user, data);
-
-		return await user.save();
-	}
+	// @Mutation(() => User)
+	// async updateUser(@Arg("id") id: string, @Arg("data") data: UpdateUserInput) {
+	// 	const user = await this.userRepository.findOneBy({id});
+	// 	if (!user) {
+	// 		throw new GraphQLError("user not found");
+	// 	}
+	//
+	// 	if (data.pseudo) {
+	// 		user.pseudo = data.pseudo;
+	// 	}
+	//
+	// 	if (data.password) {
+	// 		user.password = data.password;
+	// 	}
+	//
+	// 	Object.assign(user, data);
+	//
+	// 	return await user.save();
+	// }
 }

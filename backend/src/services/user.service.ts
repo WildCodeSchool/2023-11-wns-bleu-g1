@@ -100,7 +100,7 @@ export default class UserService {
 		return user.executionCounter;
 	};
 
-	delete = async (id: string) => {
+	delete = async (id: string, ctx: Context) => {
 		const user = await this.userRepository.findOneBy({ id });
 
 		if (!user) {
@@ -108,6 +108,7 @@ export default class UserService {
 		}
 
 		await this.userRepository.remove(user);
+		ctx.res.clearCookie("token");
 		return true;
 	};
 }

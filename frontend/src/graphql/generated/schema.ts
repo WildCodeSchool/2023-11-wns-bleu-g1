@@ -47,20 +47,9 @@ export type LanguageInput = {
 };
 
 export type Mutation = {
-	__typename?: "Mutation";
-	createCode: Code;
-	createLanguage: Array<Language>;
-	createProject: Project;
-	createUser: User;
-	deleteLanguage: Scalars["Boolean"];
-	incrementExecutionCounter: Scalars["Float"];
-	logout: Scalars["String"];
-	signin: Scalars["String"];
-	updateCode: Code;
-	updateLanguage: Array<Language>;
   __typename?: 'Mutation';
   createCode: Code;
-  createLanguage: Array<Language>;
+  createLanguage: Language;
   createProject: Project;
   createUser: User;
   deleteLanguage: Scalars['Boolean'];
@@ -69,6 +58,7 @@ export type Mutation = {
   logout: Scalars['String'];
   signin: Scalars['String'];
   updateCode: Code;
+  updateLanguage: Language;
   updateLanguage: Array<Language>;
   updateUser: User;
   __typename?: 'Mutation';
@@ -146,6 +136,7 @@ export type MutationUpdateLanguageArgs = {
 export type MutationUpdateUserArgs = {
   data: UpdateUserInput;
   id: Scalars['String'];
+  data: UpdateLanguageInput;
 };
 
 export type NewProjectInput = {
@@ -228,11 +219,13 @@ export type SigninInput = {
 export type UpdateLanguageInput = {
   id: Scalars['String'];
   name: Scalars['String'];
+  email: Scalars['String'];
+  password: Scalars['String'];
 };
 
-export type UpdateUserInput = {
-  password?: InputMaybe<Scalars['String']>;
-  pseudo?: InputMaybe<Scalars['String']>;
+export type UpdateLanguageInput = {
+  id: Scalars['String'];
+  name: Scalars['String'];
 };
 
 export type User = {
@@ -306,6 +299,15 @@ export type GetProjectByIdQueryVariables = Exact<{
 
 export type GetProjectByIdQuery = { __typename?: 'Query', getProject: { __typename?: 'Project', id: string, title: string, isPublic: boolean, codes: Array<{ __typename?: 'Code', id: string, content: string, language: { __typename?: 'Language', name: string, id: string } }> } };
 
+export type GetMyProjectsQuery = { __typename?: 'Query', getMyProjects: { __typename?: 'ProjectPaginationResponse', hasMore: boolean, projects: Array<{ __typename?: 'Project', id: string, isPublic: boolean, title: string, createdAt: any, user: { __typename?: 'User', pseudo: string } }> } };
+
+export type GetProjectByIdQueryVariables = Exact<{
+  getProjectId: Scalars['String'];
+}>;
+
+
+export type GetProjectByIdQuery = { __typename?: 'Query', getProject: { __typename?: 'Project', id: string, title: string, isPublic: boolean, codes: Array<{ __typename?: 'Code', content: string, language: { __typename?: 'Language', name: string, id: string } }> } };
+
 export type GetPublicsProjectsQueryVariables = Exact<{
   offset: Scalars['Float'];
   limit: Scalars['Float'];
@@ -330,16 +332,6 @@ export type SignUpMutationVariables = Exact<{
 
 
 export type SignUpMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', email: string, id: string, pseudo: string, role: string, executionCounter: number, isPremium: boolean } };
-export type SignUpMutation = {
-	__typename?: "Mutation";
-	createUser: {
-		__typename?: "User";
-		email: string;
-		id: string;
-		pseudo: string;
-		role: string;
-	};
-};
 
 export type SignUpMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', email: string, id: string, pseudo: string, role: string } };
 
@@ -390,18 +382,6 @@ export type DeleteUserMutationVariables = Exact<{
 
 export type DeleteUserMutation = { __typename?: 'Mutation', deleteUser: boolean };
 
-export type UpdateUserMutationVariables = Exact<{
-  data: UpdateUserInput;
-  updateUserId: Scalars['String'];
-}>;
-
-
-export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, email: string, pseudo: string } };
-
-export type IncrementExecutionCounterMutation = {
-	__typename?: "Mutation";
-	incrementExecutionCounter: number;
-};
 
 export const GetLanguagesDocument = gql`
     query GetLanguages {
@@ -737,6 +717,31 @@ export const GetProjectByIdDocument = gql`
       }
     }
   }
+export function useGetMyProjectsQuery(baseOptions: Apollo.QueryHookOptions<GetMyProjectsQuery, GetMyProjectsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMyProjectsQuery, GetMyProjectsQueryVariables>(GetMyProjectsDocument, options);
+      }
+export function useGetMyProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMyProjectsQuery, GetMyProjectsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMyProjectsQuery, GetMyProjectsQueryVariables>(GetMyProjectsDocument, options);
+        }
+export type GetMyProjectsQueryHookResult = ReturnType<typeof useGetMyProjectsQuery>;
+export type GetMyProjectsLazyQueryHookResult = ReturnType<typeof useGetMyProjectsLazyQuery>;
+export type GetMyProjectsQueryResult = Apollo.QueryResult<GetMyProjectsQuery, GetMyProjectsQueryVariables>;
+export const GetProjectByIdDocument = gql`
+    query GetProjectById($getProjectId: String!) {
+  getProject(id: $getProjectId) {
+    id
+    title
+    isPublic
+    codes {
+      content
+      language {
+        name
+        id
+      }
+    }
+  }
 }
     `;
 
@@ -909,19 +914,6 @@ export type SignUpMutationFn = Apollo.MutationFunction<SignUpMutation, SignUpMut
 }
     `;
 export type SignUpMutationFn = Apollo.MutationFunction<SignUpMutation, SignUpMutationVariables>;
-	mutation SignUp($data: NewUserInput!) {
-		createUser(data: $data) {
-			email
-			id
-			pseudo
-			role
-		}
-	}
-`;
-export type SignUpMutationFn = Apollo.MutationFunction<
-	SignUpMutation,
-	SignUpMutationVariables
->;
 
 /**
  * __useSignUpMutation__
@@ -1029,17 +1021,6 @@ export const GetUserProfileDocument = gql`
   }
 }
     `;
-	query GetUserProfile {
-		getUserProfile {
-			id
-			role
-			email
-			pseudo
-			executionCounter
-			isPremium
-		}
-	}
-`;
 
 /**
  * __useGetUserProfileQuery__
@@ -1136,61 +1117,3 @@ export function useDeleteUserMutation(baseOptions?: Apollo.MutationHookOptions<D
 export type DeleteUserMutationHookResult = ReturnType<typeof useDeleteUserMutation>;
 export type DeleteUserMutationResult = Apollo.MutationResult<DeleteUserMutation>;
 export type DeleteUserMutationOptions = Apollo.BaseMutationOptions<DeleteUserMutation, DeleteUserMutationVariables>;
-export const UpdateUserDocument = gql`
-    mutation UpdateUser($data: UpdateUserInput!, $updateUserId: String!) {
-  updateUser(data: $data, id: $updateUserId) {
-    id
-    email
-    pseudo
-  }
-}
-    `;
-export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
-
-/**
- * __useUpdateUserMutation__
- *
- * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
- *   variables: {
- *      data: // value for 'data'
- *      updateUserId: // value for 'updateUserId'
- *   },
- * });
- */
-export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, options);
-      }
-export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
-export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
-export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
-export function useIncrementExecutionCounterMutation(
-	baseOptions?: Apollo.MutationHookOptions<
-		IncrementExecutionCounterMutation,
-		IncrementExecutionCounterMutationVariables
-	>
-) {
-	const options = { ...defaultOptions, ...baseOptions };
-	return Apollo.useMutation<
-		IncrementExecutionCounterMutation,
-		IncrementExecutionCounterMutationVariables
-	>(IncrementExecutionCounterDocument, options);
-}
-export type IncrementExecutionCounterMutationHookResult = ReturnType<
-	typeof useIncrementExecutionCounterMutation
->;
-export type IncrementExecutionCounterMutationResult =
-	Apollo.MutationResult<IncrementExecutionCounterMutation>;
-export type IncrementExecutionCounterMutationOptions =
-	Apollo.BaseMutationOptions<
-		IncrementExecutionCounterMutation,
-		IncrementExecutionCounterMutationVariables
-	>;
