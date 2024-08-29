@@ -52,10 +52,7 @@ mutation DeleteUser($deleteUserId: String!) {
   deleteUser(id: $deleteUserId)
 }
 
-#mutation UpdateUser($data: UpdateUserInput!, $updateUserId: String!) {
-#  updateUser(data: $data, id: $updateUserId) {
-#    id
-#    email
-#    pseudo
-#  }
-#}
+mutation UpdateUsername($datas: UpdateUsernameInput!) {
+  updateUsername(datas: $datas)
+}
+

@@ -98,10 +98,10 @@ export class ExecutionCounterInput {
 }
 
 @InputType()
-export class UpdateUserInput {
-	@Field({ nullable: true })
-	pseudo?: string;
+export class UpdateUsernameInput {
+	@Field()
+	id: string
 
 	@Field({ nullable: true })
-	password?: string;
+	newUsername: string;
 }

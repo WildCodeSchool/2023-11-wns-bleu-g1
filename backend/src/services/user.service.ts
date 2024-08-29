@@ -5,7 +5,7 @@ import { verify } from "argon2";
 
 import env from "../env";
 import DataSource from "../db";
-import User, { NewUserInput, SigninInput } from "../entities/user";
+import User, {NewUserInput, SigninInput, UpdateUsernameInput} from "../entities/user";
 import { Context } from "../interfaces/auth";
 
 export default class UserService {
@@ -91,7 +91,7 @@ export default class UserService {
 	};
 
 	getExecutionCounter = async (id: string, counter: number) => {
-		const user = await this.getBy({ where: { id } });
+		const user = await this.getBy({where: id});
 
 		user.executionCounter = counter === 50 ? counter : counter + 1;
 
@@ -109,6 +109,21 @@ export default class UserService {
 
 		await this.userRepository.remove(user);
 		ctx.res.clearCookie("token");
+		return true;
+	};
+
+	updateUsername = async ({id, newUsername}: UpdateUsernameInput) => {
+			const user = await this.getBy({where: {id: id}});
+		if (!user) {
+			throw new GraphQLError("user not found");
+		}
+		if (newUsername) {
+			user.pseudo = newUsername;
+		} else {
+			throw new GraphQLError("new username is required");
+		}
+		await this.userRepository.save(user);
+
 		return true;
 	};
 }

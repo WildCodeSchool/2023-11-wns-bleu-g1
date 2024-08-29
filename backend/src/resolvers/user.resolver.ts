@@ -4,7 +4,7 @@ import { GraphQLError } from "graphql";
 import User, {
 	ExecutionCounterInput,
 	NewUserInput,
-	SigninInput,
+	SigninInput, UpdateUsernameInput,
 	// UpdateUserInput,
 } from "../entities/user";
 import { Context } from "../interfaces/auth";
@@ -15,7 +15,7 @@ import DataSource from "../db";
 export default class UserResolver {
 	userRepository = DataSource.getRepository(User);
 
-	@Authorized([UserRole.ADMIN])
+	// @Authorized([UserRole.ADMIN])
 	@Query(() => [User])
 	async users() {
 		return await new UserService().getAll();
@@ -91,6 +91,11 @@ export default class UserResolver {
 		return await new UserService().delete(id, ctx);
 	}
 
+	// @Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Mutation(() => Boolean)
+	async updateUsername(@Arg("datas") datas: UpdateUsernameInput) {
+		return await new UserService().updateUsername(datas);
+	}
 	// @Mutation(() => User)
 	// async updateUser(@Arg("id") id: string, @Arg("data") data: UpdateUserInput) {
 	// 	const user = await this.userRepository.findOneBy({id});

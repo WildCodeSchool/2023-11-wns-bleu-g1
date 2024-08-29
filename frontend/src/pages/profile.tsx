@@ -18,7 +18,9 @@ import {
 import Link from "next/link";
 import {useState} from "react";
 import {AlertDialog, AlertDialogContent, AlertDialogTrigger} from "@/components/ui/alert-dialog";
-import {ConfirmPopUp} from "@/components/elements/ConfirmPopUp";
+import {ConfirmDeletePopUp} from "@/components/elements/ConfirmDeletePopUp";
+import {ChangeUsernamePopup} from "@/components/elements/ChangeUsernamePopup";
+import {ChangeUserPassword} from "@/components/elements/ChangeUserPassword";
 
 const ProfilPage = () => {
 	const [page, setPage] = useState(0);
@@ -41,7 +43,7 @@ const ProfilPage = () => {
 
 	const profile = getUserProfileQuery?.data?.getUserProfile || null;
 	const data = getMyProjectsQuery.data?.getMyProjects;
-
+	console.log("profile: ", profile);
 	const projects = data?.projects || [];
 
 	return (
@@ -84,12 +86,32 @@ const ProfilPage = () => {
 						<CardTitle>Paramètres de compte</CardTitle>
 					</CardHeader>
 					<CardContent className="flex flex-col space-y-3">
-						<Link href="#" className={buttonVariants({ variant: "secondary2"})}>
-							Modifier mon nom de profil
-						</Link>
+						{/*<Link href="#" className={buttonVariants({ variant: "secondary2"})}>*/}
+						{/*	Modifier mon nom de profil*/}
+						{/*</Link>*/}
+						<AlertDialog>
+							<AlertDialogTrigger asChild>
+								<Button className={buttonVariants({ variant: "secondary2"})}>
+									Modifier mon nom de profil
+								</Button>
+							</AlertDialogTrigger>
+							<AlertDialogContent>
+								<ChangeUsernamePopup />
+							</AlertDialogContent>
+						</AlertDialog>
 						<Link href="#" className={buttonVariants({ variant: "secondary2"})}>
 							Modifier mon mot de passe
 						</Link>
+						{/*<AlertDialog>*/}
+						{/*	<AlertDialogTrigger asChild>*/}
+						{/*		<Button className={buttonVariants({ variant: "secondary2"})}>*/}
+						{/*			Modifier mon mot de passe*/}
+						{/*		</Button>*/}
+						{/*	</AlertDialogTrigger>*/}
+						{/*	<AlertDialogContent>*/}
+						{/*		<ChangeUserPassword />*/}
+						{/*	</AlertDialogContent>*/}
+						{/*</AlertDialog>*/}
 						<AlertDialog>
 							<AlertDialogTrigger asChild>
 							<Button className={buttonVariants({ variant: "destructive"})}>
@@ -97,7 +119,7 @@ const ProfilPage = () => {
 							</Button>
 						</AlertDialogTrigger>
 						<AlertDialogContent>
-							<ConfirmPopUp />
+							<ConfirmDeletePopUp />
 						</AlertDialogContent>
 						</AlertDialog>
 					</CardContent>

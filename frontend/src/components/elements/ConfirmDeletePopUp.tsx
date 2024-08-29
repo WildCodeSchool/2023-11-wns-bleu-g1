@@ -13,7 +13,7 @@ import {useToast} from "@/components/ui/use-toast";
 import {useState} from "react";
 import {useRouter} from "next/router";
 
-export function ConfirmPopUp() {
+export function ConfirmDeletePopUp() {
     const getUserProfileQuery = useGetUserProfileQuery();
     const router = useRouter();
     const defaultErrorMessage =
@@ -35,8 +35,8 @@ export function ConfirmPopUp() {
 		},
 		onError: (err: ApolloError) => {
 			console.error(err);
-			if (err.message.includes("not register")) {
-				setErrorMessage("Aucun n'est lié à cette adresse email.");
+			if (err.message.includes("not registered")) {
+				setErrorMessage("Aucun compte n'est lié à cette adresse id.");
 				return;
 			}
 			if (err.message.includes("invalid password")) {
