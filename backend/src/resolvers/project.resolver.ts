@@ -23,12 +23,12 @@ export default class ProjectResolver {
 		@Ctx() { currentUser }: Context,
 		@Arg("limit", { defaultValue: 12 }) limit: number,
 		@Arg("offset", { defaultValue: 0 }) offset: number,
-		@Arg("search", { defaultValue: "" }) search: string
+		@Arg("searchProject", { defaultValue: "" }) searchProject: string
 	) {
 		return await new ProjectService().getAllPaginate(
 			{
 				relations: { codes: true, user: true },
-				where: { user: currentUser, title: ILike(`%${search}%`) },
+				where: { user: currentUser, title: ILike(`%${searchProject}%`) },
 				order: { createdAt: "DESC" },
 				take: limit + 1,
 				skip: offset,
