@@ -1,33 +1,39 @@
+import CustomPagination from "@/components/custom-pagination";
 import AuthLayout from "@/components/elements/auth-layout";
+import NotFoundAlert from "@/components/elements/not-found-alert";
 import PageLoader from "@/components/elements/page-loader";
+import ProjectCard from "@/components/elements/project-card";
 import UserHeadCard from "@/components/elements/user-head-card";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { buttonVariants } from "@/components/ui/button";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
 import {
 	useGetMyProjectsQuery,
 	useGetUserProfileQuery,
 } from "@/graphql/generated/schema";
-import { MessageCircleWarning, Terminal } from "lucide-react";
-import Link from "next/link";
+import { useState } from "react";
 
 const ProfilPage = () => {
+	const [page, setPage] = useState(0);
+	const limit = 12;
+	const offset = page * limit;
+
 	const getUserProfileQuery = useGetUserProfileQuery();
-	const getMyProjectsQuery = useGetMyProjectsQuery();
+	const getMyProjectsQuery = useGetMyProjectsQuery({
+		variables: {
+			limit,
+			offset,
+		},
+		notifyOnNetworkStatusChange: true,
+	});
 
 	if (getUserProfileQuery.loading || getMyProjectsQuery.loading)
 		return <PageLoader />;
+
 	if (getUserProfileQuery.error || getMyProjectsQuery.error)
 		console.error(getUserProfileQuery.error || getMyProjectsQuery.error);
 
 	const profile = getUserProfileQuery?.data?.getUserProfile || null;
-	const projects = getMyProjectsQuery?.data?.getMyProjects || [];
+	const data = getMyProjectsQuery.data?.getMyProjects;
+
+	const projects = data?.projects || [];
 
 	return (
 		<AuthLayout>
@@ -35,38 +41,33 @@ const ProfilPage = () => {
 				<UserHeadCard profile={profile} />
 				<h3 className="text-2xl font-semibold">Mes Projets</h3>
 				{projects.length > 0 ? (
-					<div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-						{projects.map((project) => (
-							<Card key={project.id}>
-								<CardHeader>
-									<CardTitle>{project.title}</CardTitle>
-									<CardDescription>
-										Crée le{" "}
-										{new Date(project.createdAt).toLocaleString("fr-FR", {
-											year: "numeric",
-											month: "long",
-											day: "numeric",
-										})}
-									</CardDescription>
-								</CardHeader>
-								<CardContent>
-									<Link href={`/coding/${project.id}`} className={buttonVariants()}>
-										Voir le projet
-									</Link>
-								</CardContent>
-							</Card>
-						))}
+					<div>
+						<div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+							{projects.map((project) => (
+								<ProjectCard key={project.id} project={project} onProfilePage />
+							))}
+						</div>
 					</div>
+				) : page > 0 ? (
+					<NotFoundAlert
+						title="Vous n'avez pas d'autres projets"
+						description='Vous pouvez revenir en arrière en cliquant sur le bouton "Précédent"'
+					/>
 				) : (
-					<Alert>
-						<MessageCircleWarning className="h-4 w-4" />
-						<AlertTitle>Vous n&apos;avez pas encore de projet</AlertTitle>
-						<AlertDescription>
-							Vous pouvez en créer un en cliquant sur le bouton &quot;Nouveau
-							projet&quot;
-						</AlertDescription>
-					</Alert>
+					<NotFoundAlert
+						title="Vous n'avez pas encore de projet"
+						description='Vous pouvez en créer un en cliquant sur le bouton "Nouveau
+					projet"'
+					/>
 				)}
+				<CustomPagination
+					page={page}
+					setPage={setPage}
+					limit={limit}
+					hasMore={data?.hasMore || false}
+					dataLength={projects.length}
+					query={getMyProjectsQuery}
+				/>
 			</div>
 		</AuthLayout>
 	);

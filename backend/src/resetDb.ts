@@ -5,6 +5,7 @@ import Project from "./entities/project";
 import Code from "./entities/code";
 import User, { UserRole } from "./entities/user";
 import Language from "./entities/language";
+import { EntityMetadata } from "typeorm";
 import DataSource from "./db";
 
 export const cleanDb = async () => {
@@ -13,15 +14,13 @@ export const cleanDb = async () => {
 	await runner.query("SET session_replication_role = 'replica'");
 
 	await Promise.all(
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		db.entityMetadatas.map((entity: any) => {
+		db.entityMetadatas.map((entity: EntityMetadata) => {
 			runner.query(`ALTER TABLE "${entity.tableName}" DISABLE TRIGGER ALL`);
 		})
 	);
 
 	await Promise.all(
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		db.entityMetadatas.map((entity: any) => {
+		db.entityMetadatas.map((entity: EntityMetadata) => {
 			runner.query(`DROP TABLE IF EXISTS "${entity.tableName}" CASCADE`);
 		})
 	);
@@ -84,46 +83,26 @@ const main = async () => {
 
 	await languageRepository.save(javascript);
 
-	const project1 = new Project();
+	for (let i = 1; i <= 13; i++) {
+		const project = new Project();
 
-	Object.assign(project1, {
-		title: "Project 1",
-		user: flexMaster,
-	});
-	await projectRepository.save(project1);
+		Object.assign(project, {
+			title: `Project ${i}`,
+			user: flexMaster,
+			isPublic: true,
+		});
 
-	const project2 = new Project();
+		await projectRepository.save(project);
 
-	Object.assign(project2, {
-		title: "Project 2",
-		user: flexMaster,
-	});
+		const code = new Code();
 
-	await projectRepository.save(project2);
-
-	const javascriptCode = new Code();
-
-	Object.assign(javascriptCode, {
-		content: "console.log('Hello World')",
-		language: javascript,
-		project: project1,
-	});
-
-	await codeRepository.save(javascriptCode);
-
-	const javascriptCode2 = new Code();
-
-	Object.assign(javascriptCode2, {
-		content: `function main() {
-			return 1 + 3
-		}
-		
-		main()`,
-		language: javascript,
-		project: project2,
-	});
-
-	await codeRepository.save(javascriptCode2);
+		Object.assign(code, {
+			content: `console.log('Hello World from Project ${i}')`,
+			language: javascript,
+			project: project,
+		});
+		await codeRepository.save(code);
+	}
 
 	await db.destroy();
 
