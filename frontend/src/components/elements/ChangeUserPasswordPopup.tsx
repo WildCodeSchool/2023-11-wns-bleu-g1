@@ -6,7 +6,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import {useGetUserProfileQuery, useUpdateUserPasswordMutation} from "@/graphql/generated/schema";
-import {BadgeCheck} from "lucide-react";
+import {BadgeCheck, CheckCircleIcon, Lock, XCircleIcon} from "lucide-react";
 import {ApolloError} from "@apollo/client";
 import {useToast} from "@/components/ui/use-toast";
 import {useState} from "react";
@@ -15,6 +15,8 @@ import {Input} from "@/components/ui/input";
 import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
+import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert";
+import {cn} from "@/lib/utils";
 
 export function ChangeUserPasswordPopup() {
   const getUserProfileQuery = useGetUserProfileQuery();
@@ -26,11 +28,14 @@ export function ChangeUserPasswordPopup() {
   const profile = getUserProfileQuery?.data?.getUserProfile || null;
 
   const formSchema = z.object({
-        oldPassword: z.string().min(2, {
-            message: "Le mot de passe doit contenir au moins 3 caractères.",
+    oldPassword: z.string().min(1, {
+            message: "Le mot de passe ne peut pas etre vide.",
         }),
-      newPassword: z.string().min(2, {
-          message: "Le mot de passe doit contenir au moins 3 caractères.",
+      newPassword: z.string().min(8, {
+          message: "Le mot de passe doit contenir au moins 8 caractères.",
+      }),
+      newPasswordVerification: z.string().refine((val, ctx) => val === ctx.data.newPassword, {
+          message: "les mots de passe ne correspondent pas.",
       }),
       })
   const form = useForm<z.infer<typeof formSchema>>({
@@ -89,11 +94,11 @@ export function ChangeUserPasswordPopup() {
             </AlertDialogDescription>
             <AlertDialogFooter>
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
                         <FormField name="oldPassword" render={({ field }) => (
                             <FormItem>
                                 <FormControl>
-                                    <Input className="" placeholder="Ancien mot de passe" {...field} />
+                                    <Input type="password" className="bg-secondary" placeholder="Ancien mot de passe" {...field} />
                                 </FormControl>
                             </FormItem>
                         )}
@@ -101,7 +106,15 @@ export function ChangeUserPasswordPopup() {
                       <FormField name="newPassword" render={({ field }) => (
                             <FormItem>
                                 <FormControl>
-                                    <Input className="" placeholder="Nouveau mot de passe" {...field} />
+                                    <Input type="password" className="bg-secondary" placeholder="Nouveau mot de passe" {...field} />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                       />
+                        <FormField name="newPasswordVerification" render={({ field }) => (
+                            <FormItem>
+                                <FormControl>
+                                    <Input type="password" className="bg-secondary" placeholder="Entrer de nouveau votre mot de passe" {...field} />
                                 </FormControl>
                             </FormItem>
                         )}

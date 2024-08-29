@@ -89,11 +89,11 @@ export function ChangeUsernamePopup() {
             </AlertDialogDescription>
             <AlertDialogFooter>
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
                         <FormField name="newUsername" render={({ field }) => (
                             <FormItem>
                                 <FormControl>
-                                    <Input className="" placeholder="Nouveau nom d'utilisateur" {...field} />
+                                    <Input className="bg-secondary" placeholder="Nouveau nom d'utilisateur" {...field} />
                                 </FormControl>
                             </FormItem>
                         )}
