@@ -92,7 +92,7 @@ export default class UserService {
 	};
 
 	getExecutionCounter = async (id: string, counter: number) => {
-		const user = await this.getBy({where: id});
+		const user = await this.getBy({where: { id }});
 
 		user.executionCounter = counter === 50 ? counter : counter + 1;
 
