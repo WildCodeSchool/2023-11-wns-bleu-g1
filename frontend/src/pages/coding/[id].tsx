@@ -247,7 +247,7 @@ const CodingPage = () => {
 						/>
 						<h1 className="font-bold text-xl">{project?.title}</h1>
 					</div>
-					{userId === project.user.id && (
+					{project && userId === project.user.id && (
 						<div className="flex items-center self-end md:self-center gap-5">
 							<div className="flex items-center space-x-2">
 								<Switch
