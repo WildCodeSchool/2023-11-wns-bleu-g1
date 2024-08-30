@@ -113,7 +113,7 @@ export function ChangeUsernamePopup() {
 						<div className="flex justify-end space-x-4">
 							<AlertDialogAction type="submit">Valider</AlertDialogAction>
 							<AlertDialogAction
-								className={buttonVariants({ variant: "secondary2" })}
+								className={buttonVariants({ variant: "dark" })}
 								type="reset"
 							>
 								Annuler

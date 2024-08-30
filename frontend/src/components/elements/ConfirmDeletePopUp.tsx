@@ -72,7 +72,7 @@ export function ConfirmDeletePopUp() {
 				</AlertDialogDescription>
 			</AlertDialogHeader>
 			<AlertDialogFooter>
-				<AlertDialogCancel className={buttonVariants({ variant: "secondary2" })} >Annuler</AlertDialogCancel>
+				<AlertDialogCancel className={buttonVariants({ variant: "dark" })} >Annuler</AlertDialogCancel>
 				<AlertDialogAction className={buttonVariants({ variant: "default" })} onClick={deleteAccount}>Continuer</AlertDialogAction>
 			</AlertDialogFooter>
 		</>

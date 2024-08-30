@@ -190,7 +190,7 @@ export function ChangeUserPasswordPopup() {
 								Valider
 							</Button>
 							<AlertDialogAction
-								className={buttonVariants({ variant: "secondary2" })}
+								className={buttonVariants({ variant: "dark" })}
 								type="reset"
 							>
 								Annuler

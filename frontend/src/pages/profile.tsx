@@ -89,7 +89,7 @@ const ProfilPage = () => {
 					<CardContent className="flex flex-col space-y-3">
 						<AlertDialog>
 							<AlertDialogTrigger asChild>
-								<Button className={buttonVariants({ variant: "secondary2" })}>
+								<Button className={buttonVariants({ variant: "dark" })}>
 									Modifier mon nom de profil
 								</Button>
 							</AlertDialogTrigger>
@@ -99,7 +99,7 @@ const ProfilPage = () => {
 						</AlertDialog>
 						<AlertDialog>
 							<AlertDialogTrigger asChild>
-								<Button className={buttonVariants({ variant: "secondary2" })}>
+								<Button className={buttonVariants({ variant: "dark" })}>
 									Modifier mon mot de passe
 								</Button>
 							</AlertDialogTrigger>
