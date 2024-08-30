@@ -66,7 +66,7 @@ const SignInPage = () => {
 		onError: (err: ApolloError) => {
 			console.error(err);
 			if (err.message.includes("not register")) {
-				setErrorMessage("Aucun n'est lié à cette adresse email.");
+				setErrorMessage("Aucun compte n'est lié à cette adresse email.");
 				return;
 			}
 			if (err.message.includes("invalid password")) {
