@@ -174,6 +174,7 @@ export type QueryGetPaginateProjectsArgs = {
   offset?: Scalars['Float'];
   searchProject?: Scalars['String'];
   searchUser?: Scalars['String'];
+  withUserProject?: Scalars['Boolean'];
 };
 
 
@@ -260,6 +261,7 @@ export type GetPaginateProjectsQueryVariables = Exact<{
   searchUser: Scalars['String'];
   searchProject: Scalars['String'];
   isUser: Scalars['Boolean'];
+  withUserProject: Scalars['Boolean'];
 }>;
 
 
@@ -626,13 +628,14 @@ export type GetProjectByIdQueryHookResult = ReturnType<typeof useGetProjectByIdQ
 export type GetProjectByIdLazyQueryHookResult = ReturnType<typeof useGetProjectByIdLazyQuery>;
 export type GetProjectByIdQueryResult = Apollo.QueryResult<GetProjectByIdQuery, GetProjectByIdQueryVariables>;
 export const GetPaginateProjectsDocument = gql`
-    query GetPaginateProjects($offset: Float!, $limit: Float!, $searchUser: String!, $searchProject: String!, $isUser: Boolean!) {
+    query GetPaginateProjects($offset: Float!, $limit: Float!, $searchUser: String!, $searchProject: String!, $isUser: Boolean!, $withUserProject: Boolean!) {
   getPaginateProjects(
     offset: $offset
     limit: $limit
     searchUser: $searchUser
     searchProject: $searchProject
     isUser: $isUser
+    withUserProject: $withUserProject
   ) {
     projects {
       id
@@ -666,6 +669,7 @@ export const GetPaginateProjectsDocument = gql`
  *      searchUser: // value for 'searchUser'
  *      searchProject: // value for 'searchProject'
  *      isUser: // value for 'isUser'
+ *      withUserProject: // value for 'withUserProject'
  *   },
  * });
  */

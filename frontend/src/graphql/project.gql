@@ -33,6 +33,7 @@ query GetPaginateProjects(
 	$searchUser: String!
 	$searchProject: String!
 	$isUser: Boolean!
+	$withUserProject: Boolean!
 ) {
 	getPaginateProjects(
 		offset: $offset
@@ -40,6 +41,7 @@ query GetPaginateProjects(
 		searchUser: $searchUser
 		searchProject: $searchProject
 		isUser: $isUser
+		withUserProject: $withUserProject
 	) {
 		projects {
 			id
