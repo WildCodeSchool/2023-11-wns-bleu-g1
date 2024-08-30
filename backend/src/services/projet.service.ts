@@ -23,7 +23,6 @@ export default class ProjectService {
 		const projects = await this.projectRepository.find(request);
 
 		const isUserSearch = !!searchUser || !!searchProject;
-		// console.log(isUserSearch);
 
 		const hasMore = projects.length > limit;
 		const resultProjects = projects.slice(0, limit);
