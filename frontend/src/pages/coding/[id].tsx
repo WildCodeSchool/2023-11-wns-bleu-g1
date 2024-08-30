@@ -10,18 +10,22 @@ import { useRouter } from "next/router";
 import {
 	useGetCodeforAProjectIdQuery,
 	useGetCodesQuery,
-	useGetMyProjectsQuery,
 	useUpdateCodeMutation,
 	GetExecutionCounterDocument,
 	useGetExecutionCounterQuery,
 	useIncrementExecutionCounterMutation,
+	useGetProjectByIdQuery,
 } from "@/graphql/generated/schema";
 
 const CodingPage = () => {
 	const getCode = useGetCodesQuery();
 	const router = useRouter();
 	const { id } = router.query;
-	const { data } = useGetMyProjectsQuery();
+	const { data: project } = useGetProjectByIdQuery({
+		variables: {
+			getProjectId: id as string,
+		},
+	});
 	const getCodeforAProjectIdQuery = useGetCodeforAProjectIdQuery({
 		variables: {
 			project: id as string,
@@ -45,7 +49,6 @@ const CodingPage = () => {
 	const isPremium = counter && counter.getExecutionCounter.isPremium;
 	const count = counter ? counter.getExecutionCounter.executionCounter : 0;
 
-	const project = data?.getMyProjects.find((project) => project.id === id);
 	const codeIdForThisProject = getCodeforAProjectIdQuery.data?.getCode[0]?.id;
 	const thisCode = getCode.data?.getCodes.find(
 		(code) => code.id === codeIdForThisProject
@@ -171,7 +174,7 @@ const CodingPage = () => {
 			<div>
 				<div id="coddingTopInfo" className="flex w-full relative">
 					<h1 className="flex flex-1 justify-start align-middle items-center pl-4 font-bold text-xl">
-						{project?.title}
+						{project?.getProject.title}
 					</h1>
 					<div className="relative my-6 mr-4 flex h-10 w-12 rounded-md md:h-14 justify-end align-bottom items-end">
 						<Image
