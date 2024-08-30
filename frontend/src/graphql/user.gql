@@ -41,6 +41,8 @@ query GetUserProfile {
 		role
 		email
 		pseudo
+		executionCounter
+		isPremium
 	}
 }
 

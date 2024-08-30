@@ -255,7 +255,6 @@ export type User = {
   __typename?: 'User';
   email: Scalars['String'];
   executionCounter: Scalars['Float'];
-  hashedPassword: Scalars['String'];
   id: Scalars['String'];
   isPremium: Scalars['Boolean'];
   pseudo: Scalars['String'];
@@ -374,6 +373,7 @@ export type LogoutMutation = { __typename?: 'Mutation', logout: string };
 export type GetUserProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
+export type GetUserProfileQuery = { __typename?: 'Query', getUserProfile: { __typename?: 'User', id: string, role: string, email: string, pseudo: string, executionCounter: number, isPremium: boolean } };
 export type GetUserProfileQuery = { __typename?: 'Query', getUserProfile: { __typename?: 'User', id: string, role: string, email: string, pseudo: string } };
 export type GetUserProfileQuery = {
 	__typename?: "Query";
@@ -1045,6 +1045,8 @@ export const GetUserProfileDocument = gql`
     role
     email
     pseudo
+    executionCounter
+    isPremium
     executionCounter
     isPremium
   }

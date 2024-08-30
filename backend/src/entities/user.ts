@@ -42,7 +42,6 @@ export default class User {
 	pseudo: string;
 
 	@Column()
-	@Field()
 	hashedPassword: string;
 
 	@Column({ default: 1 })

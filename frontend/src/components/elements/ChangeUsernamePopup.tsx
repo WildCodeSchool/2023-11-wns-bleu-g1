@@ -38,6 +38,7 @@ export function ChangeUsernamePopup() {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 	});
+	const placeholderName = profile?.pseudo ? profile.pseudo : "Nouveau nom";
 
 	const [changeUsernameMutation, changeUsernameResult] =
 		useUpdateUsernameMutation({
@@ -102,7 +103,7 @@ export function ChangeUsernamePopup() {
 									<FormControl>
 										<Input
 											className="bg-secondary"
-											placeholder={profile.pseudo}
+											placeholder={placeholderName}
 											{...field}
 										/>
 									</FormControl>
