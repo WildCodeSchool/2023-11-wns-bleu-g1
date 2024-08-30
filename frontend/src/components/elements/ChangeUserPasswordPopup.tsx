@@ -10,7 +10,7 @@ import {BadgeCheck, CheckCircleIcon, Lock, XCircleIcon} from "lucide-react";
 import {ApolloError} from "@apollo/client";
 import {useToast} from "@/components/ui/use-toast";
 import {useState} from "react";
-import {Form, FormControl, FormField, FormItem} from "@/components/ui/form";
+import {Form, FormControl, FormField, FormItem, FormMessage} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import {z} from "zod";
 import {useForm} from "react-hook-form";
@@ -34,12 +34,17 @@ export function ChangeUserPasswordPopup() {
       newPassword: z.string().min(8, {
           message: "Le mot de passe doit contenir au moins 8 caractères.",
       }),
-      newPasswordVerification: z.string().refine((val, ctx) => val === ctx.data.newPassword, {
-          message: "les mots de passe ne correspondent pas.",
-      }),
-      })
+      newPasswordVerification: z.string({
+      required_error: 'Veuillez confirmer le mot de passe'
+    })
+  })
+  .refine((data) => data.newPassword === data.newPasswordVerification, {
+    message: 'Les mots de passe ne correspondent pas',
+    path: ['newPasswordVerification'],
+  });
   const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
+      mode: "onSubmit",
     });
 
   const [changeUserPasswordMutation, changeUserPasswordResult] = useUpdateUserPasswordMutation({
@@ -100,6 +105,7 @@ export function ChangeUserPasswordPopup() {
                                 <FormControl>
                                     <Input type="password" className="bg-secondary" placeholder="Ancien mot de passe" {...field} />
                                 </FormControl>
+                                {form.formState.errors.oldPassword && <FormMessage>{form.formState.errors.oldPassword.message}</FormMessage>}
                             </FormItem>
                         )}
                        />
@@ -108,6 +114,7 @@ export function ChangeUserPasswordPopup() {
                                 <FormControl>
                                     <Input type="password" className="bg-secondary" placeholder="Nouveau mot de passe" {...field} />
                                 </FormControl>
+                                {form.formState.errors.newPassword && <FormMessage>{form.formState.errors.newPassword.message}</FormMessage>}
                             </FormItem>
                         )}
                        />
@@ -116,6 +123,7 @@ export function ChangeUserPasswordPopup() {
                                 <FormControl>
                                     <Input type="password" className="bg-secondary" placeholder="Entrer de nouveau votre mot de passe" {...field} />
                                 </FormControl>
+                                {form.formState.errors.newPasswordVerification && <FormMessage>{form.formState.errors.newPasswordVerification.message}</FormMessage>}
                             </FormItem>
                         )}
                        />
