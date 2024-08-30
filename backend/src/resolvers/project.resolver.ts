@@ -9,7 +9,7 @@ import ProjectPaginationResponse from "../types/project-pagination-response";
 import { ILike } from "typeorm";
 
 export default class ProjectResolver {
-	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Authorized([UserRole.ADMIN])
 	@Query(() => [Project])
 	async getProjects() {
 		return await new ProjectService().getAll({
@@ -19,47 +19,33 @@ export default class ProjectResolver {
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Query(() => ProjectPaginationResponse)
-	async getMyProjects(
+	async getPaginateProjects(
 		@Ctx() { currentUser }: Context,
 		@Arg("limit", { defaultValue: 12 }) limit: number,
 		@Arg("offset", { defaultValue: 0 }) offset: number,
-		@Arg("searchProject", { defaultValue: "" }) searchProject: string
-	) {
-		return await new ProjectService().getAllPaginate(
-			{
-				relations: { codes: true, user: true },
-				where: { user: currentUser, title: ILike(`%${searchProject}%`) },
-				order: { createdAt: "DESC" },
-				take: limit + 1,
-				skip: offset,
-			},
-			limit
-		);
-	}
-
-	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
-	@Query(() => ProjectPaginationResponse)
-	async getPublicsProjects(
-		@Arg("limit", { defaultValue: 12 }) limit: number,
-		@Arg("offset", { defaultValue: 0 }) offset: number,
 		@Arg("searchProject", { defaultValue: "" }) searchProject: string,
-		@Arg("searchUser", { defaultValue: "" }) searchUser: string
+		@Arg("searchUser", { defaultValue: "" }) searchUser: string,
+		@Arg("isUser", { defaultValue: false }) isUser: boolean
 	): Promise<ProjectPaginationResponse> {
 		return await new ProjectService().getAllPaginate(
 			{
 				relations: { codes: true, user: true },
 				where: {
-					isPublic: true,
+					isPublic: isUser ? undefined : true,
 					title: ILike(`%${searchProject}%`),
-					user: {
-						pseudo: ILike(`%${searchUser}%`),
-					},
+					user: isUser
+						? currentUser
+						: {
+								pseudo: ILike(`%${searchUser}%`),
+							},
 				},
 				order: { createdAt: "DESC" },
 				take: limit + 1,
 				skip: offset,
 			},
-			limit
+			limit,
+			searchUser,
+			searchProject
 		);
 	}
 
