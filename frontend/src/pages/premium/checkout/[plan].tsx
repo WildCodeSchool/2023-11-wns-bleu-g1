@@ -15,9 +15,9 @@ export default function Checkout() {
     const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY as string);
 
     const router = useRouter();
-    const { param } = router.query;
+    const { plan } = router.query;
     
-    const amount = param === "annual" ? 99.99 : 9.99;
+    const amount = plan === "annual" ? 99.99 : 9.99;
 
     return (
         <Elements 

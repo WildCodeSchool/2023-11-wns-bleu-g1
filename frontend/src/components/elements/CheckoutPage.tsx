@@ -22,7 +22,7 @@ import { buttonVariants } from "@/components/ui/button";
 const CheckoutPage = ({ amount }: { amount: number }) => {
     const stripe = useStripe();
     const elements = useElements();
-    const form = useForm();
+    const form = useForm();    
     
     // Use the mutation hook directly in the component
     const [createPaymentIntent] = useCreatePaymentIntentMutation();
@@ -74,7 +74,7 @@ const CheckoutPage = ({ amount }: { amount: number }) => {
             elements,
             clientSecret: clientSecret as string,
             confirmParams: {
-                return_url: `http://localhost:3000/premium/checkout/success`,
+                return_url: `${window.origin}/premium`, // changer return route -> method back -> user is premium = true
             },
         });
 
