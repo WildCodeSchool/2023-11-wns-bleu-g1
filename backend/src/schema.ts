@@ -10,5 +10,4 @@ import PremiumResolver from "./resolvers/premium.resolver";
 export default buildSchemaSync({
 	resolvers: [UserResolver, CodeResolver, ProjectResolver, LanguageResolver, PremiumResolver],
 	authChecker,
-	validate: true,
 });

@@ -1,6 +1,5 @@
 import { Field, InputType, ObjectType } from "type-graphql";
 import {
-	BaseEntity,
 	Column,
 	CreateDateColumn,
 	Entity,
@@ -14,12 +13,12 @@ import Project from "./project";
 
 @Entity()
 @ObjectType()
-export default class Code extends BaseEntity {
+export default class Code {
 	@PrimaryGeneratedColumn("uuid")
 	@Field()
 	id: string;
 
-	@Column({ nullable: true, default: ""})
+	@Column({ nullable: true, default: "" })
 	@Field()
 	content: string;
 
@@ -50,7 +49,7 @@ export class CodeInput {
 	@Field()
 	content: string;
 
-	@Field({nullable: true})
+	@Field({ nullable: true })
 	language: string;
 
 	@Field()

@@ -35,7 +35,7 @@
 		--radius: 0.5rem;
 		--dark-terminal-background: 0 0% 12%;
 		--terminal-background: 0, 3%, 87%;
-		--terminal-text-color: 0 0% 0%;;
+		--terminal-text-color: 0 0% 0%;
 		--warning: 33 82% 76%;
 		--warning-200: 33 82% 60%;
 		--warning-300: 33 82% 44%;
@@ -141,7 +141,6 @@
 		text-shadow: none !important;
 	}
 }
-
 
 @layer utilities {
 	* {

@@ -42,19 +42,24 @@ export type Language = {
   name: Scalars['String'];
 };
 
+export type LanguageInput = {
+  name: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createCode: Code;
-  createLanguage: Array<Language>;
+  createLanguage: Language;
   createPaymentIntent: PaymentIntentResponse;
   createProject: Project;
   createUser: User;
   deleteLanguage: Scalars['Boolean'];
+  deleteUser: Scalars['Boolean'];
   incrementExecutionCounter: Scalars['Float'];
   logout: Scalars['String'];
   signin: Scalars['String'];
   updateCode: Code;
-  updateLanguage: Array<Language>;
+  updateLanguage: Language;
 };
 
 
@@ -64,7 +69,7 @@ export type MutationCreateCodeArgs = {
 
 
 export type MutationCreateLanguageArgs = {
-  name: Scalars['String'];
+  data: LanguageInput;
 };
 
 
@@ -88,6 +93,11 @@ export type MutationDeleteLanguageArgs = {
 };
 
 
+export type MutationDeleteUserArgs = {
+  id: Scalars['String'];
+};
+
+
 export type MutationIncrementExecutionCounterArgs = {
   counter: ExecutionCounterInput;
 };
@@ -105,8 +115,7 @@ export type MutationUpdateCodeArgs = {
 
 
 export type MutationUpdateLanguageArgs = {
-  id: Scalars['String'];
-  name: Scalars['String'];
+  data: UpdateLanguageInput;
 };
 
 export type NewProjectInput = {
@@ -139,16 +148,23 @@ export type Project = {
   user: User;
 };
 
+export type ProjectPaginationResponse = {
+  __typename?: 'ProjectPaginationResponse';
+  hasMore: Scalars['Boolean'];
+  projects: Array<Project>;
+};
+
 export type Query = {
   __typename?: 'Query';
   getCode: Array<Code>;
   getCodes: Array<Code>;
   getExecutionCounter: User;
-  getLanguage: Array<Language>;
+  getLanguage: Language;
   getLanguages: Array<Language>;
-  getMyProjects: Array<Project>;
-  getProject: Array<Project>;
+  getMyProjects: ProjectPaginationResponse;
+  getProject: Project;
   getProjects: Array<Project>;
+  getPublicsProjects: ProjectPaginationResponse;
   getUserProfile: User;
   users: Array<User>;
 };
@@ -164,13 +180,30 @@ export type QueryGetLanguageArgs = {
 };
 
 
+export type QueryGetMyProjectsArgs = {
+  limit?: Scalars['Float'];
+  offset?: Scalars['Float'];
+};
+
+
 export type QueryGetProjectArgs = {
   id: Scalars['String'];
+};
+
+
+export type QueryGetPublicsProjectsArgs = {
+  limit?: Scalars['Float'];
+  offset?: Scalars['Float'];
 };
 
 export type SigninInput = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type UpdateLanguageInput = {
+  id: Scalars['String'];
+  name: Scalars['String'];
 };
 
 export type User = {
@@ -229,17 +262,28 @@ export type CreateProjectMutationVariables = Exact<{
 
 export type CreateProjectMutation = { __typename?: 'Mutation', createProject: { __typename?: 'Project', title: string, id: string, isPublic: boolean, user: { __typename?: 'User', pseudo: string, role: string, id: string, email: string } } };
 
-export type GetMyProjectsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetMyProjectsQueryVariables = Exact<{
+  limit: Scalars['Float'];
+  offset: Scalars['Float'];
+}>;
 
 
-export type GetMyProjectsQuery = { __typename?: 'Query', getMyProjects: Array<{ __typename?: 'Project', title: string, isPublic: boolean, createdAt: any, updatedAt: any, id: string, user: { __typename?: 'User', pseudo: string, role: string, id: string, email: string } }> };
+export type GetMyProjectsQuery = { __typename?: 'Query', getMyProjects: { __typename?: 'ProjectPaginationResponse', hasMore: boolean, projects: Array<{ __typename?: 'Project', id: string, isPublic: boolean, title: string, createdAt: any, user: { __typename?: 'User', pseudo: string } }> } };
 
 export type GetProjectByIdQueryVariables = Exact<{
   getProjectId: Scalars['String'];
 }>;
 
 
-export type GetProjectByIdQuery = { __typename?: 'Query', getProject: Array<{ __typename?: 'Project', id: string, title: string, isPublic: boolean, codes: Array<{ __typename?: 'Code', content: string, language: { __typename?: 'Language', name: string, id: string } }> }> };
+export type GetProjectByIdQuery = { __typename?: 'Query', getProject: { __typename?: 'Project', id: string, title: string, isPublic: boolean, codes: Array<{ __typename?: 'Code', id: string, content: string, language: { __typename?: 'Language', name: string, id: string } }> } };
+
+export type GetPublicsProjectsQueryVariables = Exact<{
+  offset: Scalars['Float'];
+  limit: Scalars['Float'];
+}>;
+
+
+export type GetPublicsProjectsQuery = { __typename?: 'Query', getPublicsProjects: { __typename?: 'ProjectPaginationResponse', hasMore: boolean, projects: Array<{ __typename?: 'Project', id: string, isPublic: boolean, title: string, createdAt: any, user: { __typename?: 'User', pseudo: string } }> } };
 
 export type CreatePaymentIntentMutationVariables = Exact<{
   amount: Scalars['Float'];
@@ -565,19 +609,18 @@ export type CreateProjectMutationHookResult = ReturnType<typeof useCreateProject
 export type CreateProjectMutationResult = Apollo.MutationResult<CreateProjectMutation>;
 export type CreateProjectMutationOptions = Apollo.BaseMutationOptions<CreateProjectMutation, CreateProjectMutationVariables>;
 export const GetMyProjectsDocument = gql`
-    query GetMyProjects {
-  getMyProjects {
-    title
-    isPublic
-    createdAt
-    updatedAt
-    user {
-      pseudo
-      role
+    query GetMyProjects($limit: Float!, $offset: Float!) {
+  getMyProjects(limit: $limit, offset: $offset) {
+    projects {
       id
-      email
+      isPublic
+      title
+      createdAt
+      user {
+        pseudo
+      }
     }
-    id
+    hasMore
   }
 }
     `;
@@ -594,10 +637,12 @@ export const GetMyProjectsDocument = gql`
  * @example
  * const { data, loading, error } = useGetMyProjectsQuery({
  *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
  *   },
  * });
  */
-export function useGetMyProjectsQuery(baseOptions?: Apollo.QueryHookOptions<GetMyProjectsQuery, GetMyProjectsQueryVariables>) {
+export function useGetMyProjectsQuery(baseOptions: Apollo.QueryHookOptions<GetMyProjectsQuery, GetMyProjectsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetMyProjectsQuery, GetMyProjectsQueryVariables>(GetMyProjectsDocument, options);
       }
@@ -615,6 +660,7 @@ export const GetProjectByIdDocument = gql`
     title
     isPublic
     codes {
+      id
       content
       language {
         name
@@ -686,6 +732,51 @@ export function useCreatePaymentIntentMutation(baseOptions?: Apollo.MutationHook
 export type CreatePaymentIntentMutationHookResult = ReturnType<typeof useCreatePaymentIntentMutation>;
 export type CreatePaymentIntentMutationResult = Apollo.MutationResult<CreatePaymentIntentMutation>;
 export type CreatePaymentIntentMutationOptions = Apollo.BaseMutationOptions<CreatePaymentIntentMutation, CreatePaymentIntentMutationVariables>;
+export const GetPublicsProjectsDocument = gql`
+    query GetPublicsProjects($offset: Float!, $limit: Float!) {
+  getPublicsProjects(offset: $offset, limit: $limit) {
+    projects {
+      id
+      isPublic
+      title
+      createdAt
+      user {
+        pseudo
+      }
+    }
+    hasMore
+  }
+}
+    `;
+
+/**
+ * __useGetPublicsProjectsQuery__
+ *
+ * To run a query within a React component, call `useGetPublicsProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPublicsProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPublicsProjectsQuery({
+ *   variables: {
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useGetPublicsProjectsQuery(baseOptions: Apollo.QueryHookOptions<GetPublicsProjectsQuery, GetPublicsProjectsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPublicsProjectsQuery, GetPublicsProjectsQueryVariables>(GetPublicsProjectsDocument, options);
+      }
+export function useGetPublicsProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPublicsProjectsQuery, GetPublicsProjectsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPublicsProjectsQuery, GetPublicsProjectsQueryVariables>(GetPublicsProjectsDocument, options);
+        }
+export type GetPublicsProjectsQueryHookResult = ReturnType<typeof useGetPublicsProjectsQuery>;
+export type GetPublicsProjectsLazyQueryHookResult = ReturnType<typeof useGetPublicsProjectsLazyQuery>;
+export type GetPublicsProjectsQueryResult = Apollo.QueryResult<GetPublicsProjectsQuery, GetPublicsProjectsQueryVariables>;
 export const UsersDocument = gql`
     query Users {
   users {

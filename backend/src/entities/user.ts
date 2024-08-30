@@ -2,7 +2,6 @@ import { hash } from "argon2";
 import { IsEmail, Length, Matches, Max, Min } from "class-validator";
 import { Field, InputType, ObjectType } from "type-graphql";
 import {
-	BaseEntity,
 	BeforeInsert,
 	Column,
 	Entity,
@@ -18,7 +17,7 @@ export enum UserRole {
 
 @Entity()
 @ObjectType()
-export default class User extends BaseEntity {
+export default class User {
 	password: string;
 
 	@BeforeInsert()
@@ -45,7 +44,7 @@ export default class User extends BaseEntity {
 	@Column()
 	hashedPassword: string;
 
-	@Column({ default: 0 })
+	@Column({ default: 1 })
 	@Field()
 	executionCounter: number;
 
@@ -93,7 +92,7 @@ export class SigninInput {
 @InputType()
 export class ExecutionCounterInput {
 	@Min(0)
-	@Max(10)
+	@Max(50)
 	@Field()
 	executionCounter: number;
 }
