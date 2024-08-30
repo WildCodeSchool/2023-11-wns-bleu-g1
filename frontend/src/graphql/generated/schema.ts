@@ -181,11 +181,12 @@ export type QueryGetLanguageArgs = {
 };
 
 export type QueryGetPaginateProjectsArgs = {
-	isUser?: Scalars["Boolean"];
-	limit?: Scalars["Float"];
-	offset?: Scalars["Float"];
-	searchProject?: Scalars["String"];
-	searchUser?: Scalars["String"];
+  isUser?: Scalars['Boolean'];
+  limit?: Scalars['Float'];
+  offset?: Scalars['Float'];
+  searchProject?: Scalars['String'];
+  searchUser?: Scalars['String'];
+  withUserProject?: Scalars['Boolean'];
 };
 
 export type QueryGetProjectArgs = {
@@ -354,11 +355,12 @@ export type GetProjectByIdQuery = {
 };
 
 export type GetPaginateProjectsQueryVariables = Exact<{
-	offset: Scalars["Float"];
-	limit: Scalars["Float"];
-	searchUser: Scalars["String"];
-	searchProject: Scalars["String"];
-	isUser: Scalars["Boolean"];
+  offset: Scalars['Float'];
+  limit: Scalars['Float'];
+  searchUser: Scalars['String'];
+  searchProject: Scalars['String'];
+  isUser: Scalars['Boolean'];
+  withUserProject: Scalars['Boolean'];
 }>;
 
 export type GetPaginateProjectsQuery = {
@@ -986,17 +988,39 @@ export const GetProjectByIdDocument = gql`
  *   },
  * });
  */
-export function useGetProjectByIdQuery(
-	baseOptions: Apollo.QueryHookOptions<
-		GetProjectByIdQuery,
-		GetProjectByIdQueryVariables
-	>
-) {
-	const options = { ...defaultOptions, ...baseOptions };
-	return Apollo.useQuery<GetProjectByIdQuery, GetProjectByIdQueryVariables>(
-		GetProjectByIdDocument,
-		options
-	);
+export function useGetProjectByIdQuery(baseOptions: Apollo.QueryHookOptions<GetProjectByIdQuery, GetProjectByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProjectByIdQuery, GetProjectByIdQueryVariables>(GetProjectByIdDocument, options);
+      }
+export function useGetProjectByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProjectByIdQuery, GetProjectByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProjectByIdQuery, GetProjectByIdQueryVariables>(GetProjectByIdDocument, options);
+        }
+export type GetProjectByIdQueryHookResult = ReturnType<typeof useGetProjectByIdQuery>;
+export type GetProjectByIdLazyQueryHookResult = ReturnType<typeof useGetProjectByIdLazyQuery>;
+export type GetProjectByIdQueryResult = Apollo.QueryResult<GetProjectByIdQuery, GetProjectByIdQueryVariables>;
+export const GetPaginateProjectsDocument = gql`
+    query GetPaginateProjects($offset: Float!, $limit: Float!, $searchUser: String!, $searchProject: String!, $isUser: Boolean!, $withUserProject: Boolean!) {
+  getPaginateProjects(
+    offset: $offset
+    limit: $limit
+    searchUser: $searchUser
+    searchProject: $searchProject
+    isUser: $isUser
+    withUserProject: $withUserProject
+  ) {
+    projects {
+      id
+      isPublic
+      title
+      createdAt
+      user {
+        pseudo
+      }
+    }
+    hasMore
+    isUserSearch
+  }
 }
 export function useGetProjectByIdLazyQuery(
 	baseOptions?: Apollo.LazyQueryHookOptions<
@@ -1067,6 +1091,7 @@ export const GetPaginateProjectsDocument = gql`
  *      searchUser: // value for 'searchUser'
  *      searchProject: // value for 'searchProject'
  *      isUser: // value for 'isUser'
+ *      withUserProject: // value for 'withUserProject'
  *   },
  * });
  */

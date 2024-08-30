@@ -1,18 +1,23 @@
 import { useRouter } from "next/router";
 
-import { Query, useGetPaginateProjectsQuery } from "@/graphql/generated/schema";
+import { useGetPaginateProjectsQuery } from "@/graphql/generated/schema";
 import NotFoundAlert from "./not-found-alert";
 import ProjectCard from "./project-card";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import CustomPagination from "../custom-pagination";
 import PageLoader from "./page-loader";
 
 interface Props {
 	searchUser?: string;
 	searchProject: string;
+	withUserProject?: boolean;
 }
 
-const ProjectsContainer = ({ searchUser = "", searchProject }: Props) => {
+const ProjectsContainer = ({
+	searchUser = "",
+	searchProject,
+	withUserProject = false,
+}: Props) => {
 	const { pathname } = useRouter();
 
 	const [page, setPage] = useState(0);
@@ -28,6 +33,7 @@ const ProjectsContainer = ({ searchUser = "", searchProject }: Props) => {
 			searchUser,
 			searchProject,
 			isUser,
+			withUserProject,
 		},
 	});
 
