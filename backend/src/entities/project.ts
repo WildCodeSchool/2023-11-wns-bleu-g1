@@ -11,6 +11,7 @@ import {
 } from "typeorm";
 import Code from "./code";
 import User from "./user";
+import Like from "./like";
 
 @Entity()
 @ObjectType()
@@ -42,6 +43,10 @@ export default class Project {
 	@ManyToOne(() => User, (user) => user.projects, { onDelete: "CASCADE" })
 	@Field(() => User)
 	user: User;
+
+	@OneToMany(() => Like, (like) => like.project, { cascade: true })
+	@Field(() => [Like])
+	likes: Like[];
 }
 
 @InputType()

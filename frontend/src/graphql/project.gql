@@ -18,10 +18,18 @@ query GetProjectById($getProjectId: String!) {
 		title
 		isPublic
 		codes {
+			id
 			content
 			language {
 				name
 				id
+			}
+		}
+		likes {
+			id
+			user {
+				id
+				pseudo
 			}
 		}
 	}

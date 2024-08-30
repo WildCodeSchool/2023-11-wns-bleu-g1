@@ -8,28 +8,35 @@ import Prism from "prismjs";
 import AuthLayout from "@/components/elements/auth-layout";
 import { useRouter } from "next/router";
 import {
-	useGetCodeforAProjectIdQuery,
-	useGetCodesQuery,
 	useUpdateCodeMutation,
 	GetExecutionCounterDocument,
 	useGetExecutionCounterQuery,
 	useIncrementExecutionCounterMutation,
 	useGetProjectByIdQuery,
+	useGetUserProfileQuery,
+	GetProjectByIdQuery,
 } from "@/graphql/generated/schema";
+import { Save } from "lucide-react";
+import LikeButton from "@/components/socials/like-button";
+import PageLoader from "@/components/elements/page-loader";
 
 const CodingPage = () => {
-	const getCode = useGetCodesQuery();
 	const router = useRouter();
 	const { id } = router.query;
-	const { data: project } = useGetProjectByIdQuery({
+	const {
+		data: getUserProfileData,
+		loading: getUserProfileLoading,
+		error: getUserProfileError,
+	} = useGetUserProfileQuery();
+	const {
+		data,
+		loading: getProjectByIdloading,
+		error: getProjectByIdError,
+	} = useGetProjectByIdQuery({
 		variables: {
 			getProjectId: id as string,
 		},
-	});
-	const getCodeforAProjectIdQuery = useGetCodeforAProjectIdQuery({
-		variables: {
-			project: id as string,
-		},
+		skip: !id,
 	});
 
 	// logic for counter execution button
@@ -49,10 +56,8 @@ const CodingPage = () => {
 	const isPremium = counter && counter.getExecutionCounter.isPremium;
 	const count = counter ? counter.getExecutionCounter.executionCounter : 0;
 
-	const codeIdForThisProject = getCodeforAProjectIdQuery.data?.getCode[0]?.id;
-	const thisCode = getCode.data?.getCodes.find(
-		(code) => code.id === codeIdForThisProject
-	);
+	const project = data?.getProject as GetProjectByIdQuery["getProject"];
+	const thisCode = project?.codes[0];
 	const thisCodeId = thisCode?.id;
 
 	const [code, setCode] = useState("");
@@ -134,6 +139,7 @@ const CodingPage = () => {
 			console.error(error);
 		},
 	});
+
 	async function saveCode() {
 		if (!thisCodeId) {
 			console.error("No code id found!");
@@ -146,9 +152,10 @@ const CodingPage = () => {
 			},
 		});
 	}
+
 	const runCode = () => {
 		// @Todo: Remettre le compte à 50 en dehors des tests
-		if (count < 10) {
+		if (count < 50) {
 			if (!isPremium) {
 				incrementCounter({
 					variables: { counter: { executionCounter: count } },
@@ -157,8 +164,6 @@ const CodingPage = () => {
 
 			try {
 				const result = eval(code);
-
-				console.log("result: ", result);
 
 				setShowResult(result);
 			} catch (error: any) {
@@ -169,32 +174,52 @@ const CodingPage = () => {
 		}
 	};
 
+	if (getUserProfileLoading || getProjectByIdloading) {
+		return <PageLoader />;
+	}
+
+	if (getUserProfileError || getProjectByIdError) {
+		console.error(getUserProfileError || getProjectByIdError);
+		return;
+	}
+
+	const userId = getUserProfileData?.getUserProfile.id as string;
+
 	return (
 		<AuthLayout>
-			<div>
-				<div id="coddingTopInfo" className="flex w-full relative">
-					<h1 className="flex flex-1 justify-start align-middle items-center pl-4 font-bold text-xl">
-						{project?.getProject.title}
-					</h1>
-					<div className="relative my-6 mr-4 flex h-10 w-12 rounded-md md:h-14 justify-end align-bottom items-end">
+			<div className="min-h-dvh">
+				<div className="flex flex-col md:flex-row md:items-center justify-between gap-2 w-full">
+					<div className="flex items-center gap-3">
 						<Image
 							src="/Javascript_logo.png"
 							alt="logo javascript"
-							layout="fill"
-							objectFit="contain"
-							className="justify-end align-bottom items-end"
+							width={45}
+							height={45}
+							className="object-cover"
 						/>
+						<h1 className="font-bold text-xl">{project?.title}</h1>
+					</div>
+					<div className="flex items-center self-end md:self-center">
+						<Button
+							size={"sm"}
+							className="gap-2 bg-blue-500 hover:bg-blue-500/80"
+							onClick={saveCode}
+						>
+							<Save />
+							Enregistrer
+						</Button>
 					</div>
 				</div>
-				<Separator />
-				<div id="codingContent" className="flex flex-col md:flex-row w-full">
+				<Separator className="my-3" />
+
+				<div className="flex flex-col md:flex-row">
 					<div
 						id="codingArea"
-						className="relative min-h-80 md:min-h-[50vh] md:min-w-[45%] ml-2 md:ml-0"
+						className="basis-2/5 relative min-h-80 md:min-h-[70dvh]"
 					>
 						{/*TODO: limit terminal row max length */}
 						<Textarea
-							className="left-0 z-10 caret-white bg-transparent text-transparent leading-[20pt] text-[15pt] resize-none "
+							className="left-0 right-0 z-10 caret-white bg-transparent text-transparent leading-[20pt] text-[15pt] resize-none absolute top-0"
 							placeholder={
 								thisCode?.content === "" ? "Commencez a coder ici..." : ""
 							}
@@ -209,7 +234,7 @@ const CodingPage = () => {
 							onKeyDown={checkTab}
 						/>
 						<pre
-							className="left-0 z-0 text-[15pt] w-[calc(100%-32px)] min-h-[33vh] md:h-[500px] font-mono border-none absolute top-0 rounded-md leading-[20pt] overflow-auto bg-input"
+							className="left-0 right-3 z-0 text-[15pt] h-full font-mono border-none absolute top-0 rounded-md leading-[20pt] overflow-auto bg-input"
 							id="highlightedCodingContent"
 							aria-hidden="true"
 						>
@@ -221,55 +246,46 @@ const CodingPage = () => {
 						<PrismLoader />
 					</div>
 					{!loading && (
-						<div className="flex flex-row-reverse md:flex-col w-full justify-center text-center align-center md:items-center px-4 md:px-0">
-							{count < 10 && (
+						<div className="basis-1/5 flex flex-col gap-3 justify-center py-6">
+							{count < 50 && (
 								<Button
 									size={"sm"}
 									data-testid="exec-btn"
-									className="flex md:justify-center md:items-center md:content-center md:align-middle mt-4 mb-4 w-20 ml-2 md:mr-0"
+									className="w-fit self-center"
 									onClick={runCode}
 								>
 									Exécuter
 								</Button>
 							)}
-							{/* @Todo: Remettre le compte à 50 en dehors des tests */}
 							{!isPremium && (
 								<>
-									<p data-testid="counter" className="flex items-center">
-										{count}/10
+									<p data-testid="counter" className="text-center">
+										{count}/50
 									</p>
 									<p
 										data-testid="not-premium"
-										className="flex items-center select-none"
+										className="text-center select-none"
 									>
-										{count === 10 &&
-											"Vous avez atteint la limite de 10 exécutions. "}
+										{count === 50 &&
+											"Vous avez atteint la limite de 50 exécutions. "}
 										Pour ne plus avoir de limites, passer premium!
 									</p>
 								</>
 							)}
 						</div>
 					)}
-					<div
-						id="resultArea"
-						className="relative min-h-80 md:min-h-[50vh] md:min-w-[45%] flex "
-					>
+					<div id="resultArea" className="basis-2/5">
 						<Textarea
 							readOnly={true}
-							className="left-0 leading-[20pt] text-[15pt] ml-4 mt-4 md:mt-3 p-2.5 bg-input resize-none"
+							className="left-0 leading-[20pt] text-[15pt] ml-4 p-2.5 bg-input resize-none min-h-80 md:min-h-[70dvh]"
 							value={showResult}
 						/>
 					</div>
 				</div>
-				<div className="container mx-auto flex justify-end md:pt-12">
-					<Button
-						size={"sm"}
-						className="flex md:justify-center md:items-center md:content-center md:align-middle mt-4 mb-4 w-20 ml-2 md:mr-0"
-						onClick={saveCode}
-					>
-						Enregistrer
-					</Button>
-				</div>
+
+				<Separator className="mt-3 md:mt-8 mb-3" />
+
+				<LikeButton project={project} userId={userId} />
 			</div>
 		</AuthLayout>
 	);

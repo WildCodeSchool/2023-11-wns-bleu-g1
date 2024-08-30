@@ -9,6 +9,7 @@ import {
 	PrimaryGeneratedColumn,
 } from "typeorm";
 import Project from "./project";
+import Like from "./like";
 
 export enum UserRole {
 	ADMIN = "admin",
@@ -44,7 +45,7 @@ export default class User {
 	@Column()
 	hashedPassword: string;
 
-	@Column({ default: 0 })
+	@Column({ default: 1 })
 	@Field()
 	executionCounter: number;
 
@@ -54,6 +55,9 @@ export default class User {
 
 	@OneToMany(() => Project, (project) => project.user, { cascade: true })
 	projects: Project[];
+
+	@OneToMany(() => Like, (like) => like.user, { cascade: true })
+	likes: Like[];
 }
 
 @InputType()
@@ -92,7 +96,7 @@ export class SigninInput {
 @InputType()
 export class ExecutionCounterInput {
 	@Min(0)
-	@Max(10)
+	@Max(50)
 	@Field()
 	executionCounter: number;
 }

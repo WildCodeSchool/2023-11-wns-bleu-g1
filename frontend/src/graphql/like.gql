@@ -1,0 +1,9 @@
+mutation Like($projectId: String!) {
+	like(projectId: $projectId) {
+		id
+	}
+}
+
+mutation Unlike($likeId: String!) {
+	unlike(likeId: $likeId)
+}

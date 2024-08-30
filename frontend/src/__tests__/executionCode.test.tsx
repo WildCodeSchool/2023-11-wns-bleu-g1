@@ -35,23 +35,23 @@ describe("what increment count for code execution work", () => {
 		const btn = await screen.findByTestId("exec-btn");
 
 		expect(btn).toBeInTheDocument();
-		expect(screen.queryByTestId("counter")).toHaveTextContent("0/10");
+		expect(screen.queryByTestId("counter")).toHaveTextContent("0/50");
 		expect(screen.queryByTestId("not-premium")).toHaveTextContent(
 			"Pour ne plus avoir de limites, passer premium!"
 		);
 
 		await userEvent.click(btn);
 
-		expect(screen.queryByTestId("counter")).toHaveTextContent("1/10");
+		expect(screen.queryByTestId("counter")).toHaveTextContent("1/50");
 	});
 
 	it("render if user can't execute some code for today", async () => {
 		renderExecutionCounter([getNotExecutionCountMock, getVisitorProfileMock]);
 
-		expect(await screen.findByText("10/10"));
+		expect(await screen.findByText("50/50"));
 		expect(screen.queryByText(/.*Exécuter.*/)).not.toBeInTheDocument();
 		expect(screen.queryByTestId("not-premium")).toHaveTextContent(
-			"Vous avez atteint la limite de 10 exécutions. Pour ne plus avoir de limites, passer premium!"
+			"Vous avez atteint la limite de 50 exécutions. Pour ne plus avoir de limites, passer premium!"
 		);
 	});
 
