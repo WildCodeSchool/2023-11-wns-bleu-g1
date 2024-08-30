@@ -1,24 +1,14 @@
-import CustomPagination from "@/components/custom-pagination";
+import { useCallback, useState } from "react";
+
 import AuthLayout from "@/components/elements/auth-layout";
 import PageLoader from "@/components/elements/page-loader";
 import ProjectsContainer from "@/components/elements/ProjectsContainer";
 import UserHeadCard from "@/components/elements/user-head-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-	useGetMyProjectsQuery,
-	useGetUserProfileQuery,
-} from "@/graphql/generated/schema";
-import { useCallback, useEffect, useState } from "react";
+import { useGetUserProfileQuery } from "@/graphql/generated/schema";
 
 const ProfilPage = () => {
-	const [page, setPage] = useState(0);
-
-	useEffect(() => {
-		console.log("re render");
-	});
-
-	// states for searchbar
 	const [searchbar, setSearchbar] = useState("");
 	const [selectOption, setSelectOption] = useState("project");
 	const [searchProject, setSearchProject] = useState("");
@@ -35,34 +25,19 @@ const ProfilPage = () => {
 					setSearchProject("");
 					setSelectOption("project");
 					setSearchbar("");
+					break;
 			}
 		},
 		[selectOption]
 	);
 
-	const limit = 12;
-	const offset = page * limit;
-
 	const getUserProfileQuery = useGetUserProfileQuery();
-	const getMyProjectsQuery = useGetMyProjectsQuery({
-		variables: {
-			limit,
-			offset,
-			searchProject,
-		},
-		notifyOnNetworkStatusChange: true,
-	});
 
-	if (getUserProfileQuery.loading || getMyProjectsQuery.loading)
-		return <PageLoader />;
+	if (getUserProfileQuery.loading) return <PageLoader />;
 
-	if (getUserProfileQuery.error || getMyProjectsQuery.error)
-		console.error(getUserProfileQuery.error || getMyProjectsQuery.error);
+	if (getUserProfileQuery.error) console.error(getUserProfileQuery.error);
 
 	const profile = getUserProfileQuery?.data?.getUserProfile || null;
-	const data = getMyProjectsQuery.data?.getMyProjects;
-
-	const projects = data?.projects || [];
 
 	return (
 		<AuthLayout>
@@ -87,7 +62,7 @@ const ProfilPage = () => {
 
 						<Button
 							className="h-[25px]"
-							variant={"destructive"}
+							variant={"secondary"}
 							onClick={() => {
 								sendSearch("");
 								setSelectOption("project");
@@ -98,16 +73,7 @@ const ProfilPage = () => {
 					</div>
 				</div>
 
-				<ProjectsContainer projects={projects} page={page} isPublic />
-
-				<CustomPagination
-					page={page}
-					setPage={setPage}
-					limit={limit}
-					hasMore={data?.hasMore || false}
-					dataLength={projects.length}
-					query={getMyProjectsQuery}
-				/>
+				<ProjectsContainer searchProject={searchProject} />
 			</div>
 		</AuthLayout>
 	);
