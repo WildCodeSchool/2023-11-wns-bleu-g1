@@ -15,6 +15,7 @@ import { z } from "zod"
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useState} from "react";
+import {buttonVariants} from "@/components/ui/button";
 
 export function ChangeUsernamePopup() {
     const getUserProfileQuery = useGetUserProfileQuery();
@@ -90,15 +91,20 @@ export function ChangeUsernamePopup() {
             <AlertDialogFooter>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
-                        <FormField name="newUsername" render={({ field }) => (
+                        <FormField name="newUsername" render={({field}) => (
                             <FormItem>
                                 <FormControl>
-                                    <Input className="bg-secondary" placeholder="Nouveau nom d'utilisateur" {...field} />
+                                    <Input className="bg-secondary"
+                                           placeholder="Nouveau nom d'utilisateur" {...field} />
                                 </FormControl>
                             </FormItem>
                         )}
-                       />
-                        <AlertDialogAction type="submit">Valider</AlertDialogAction>
+                        />
+                        <div className="flex justify-end space-x-4">
+                            <AlertDialogAction type="submit">Valider</AlertDialogAction>
+                            <AlertDialogAction className={buttonVariants({variant: "secondary2"})}
+                                               type="reset">Annuler</AlertDialogAction>
+                        </div>
                     </form>
                 </Form>
             </AlertDialogFooter>

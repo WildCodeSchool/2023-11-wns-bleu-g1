@@ -6,7 +6,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import {useGetUserProfileQuery, useUpdateUserPasswordMutation} from "@/graphql/generated/schema";
-import {BadgeCheck, CheckCircleIcon, Lock, XCircleIcon} from "lucide-react";
+import {BadgeCheck} from "lucide-react";
 import {ApolloError} from "@apollo/client";
 import {useToast} from "@/components/ui/use-toast";
 import {useState} from "react";
@@ -15,8 +15,8 @@ import {Input} from "@/components/ui/input";
 import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert";
-import {cn} from "@/lib/utils";
+import {Button, buttonVariants} from "@/components/ui/button";
+import {CardContent, CardFooter} from "@/components/ui/card";
 
 export function ChangeUserPasswordPopup() {
   const getUserProfileQuery = useGetUserProfileQuery();
@@ -28,20 +28,21 @@ export function ChangeUserPasswordPopup() {
   const profile = getUserProfileQuery?.data?.getUserProfile || null;
 
   const formSchema = z.object({
-    oldPassword: z.string().min(1, {
-            message: "Le mot de passe ne peut pas etre vide.",
-        }),
-      newPassword: z.string().min(8, {
-          message: "Le mot de passe doit contenir au moins 8 caractères.",
-      }),
-      newPasswordVerification: z.string({
-      required_error: 'Veuillez confirmer le mot de passe'
+    oldPassword: z.string( {
+        message: "L'ancien mot de passe ne peut pas etre vide.",
+    }),
+    newPassword: z.string().min(8, {
+        message: "Le mot de passe doit contenir au moins 8 caractères.",
+    }),
+    newPasswordVerification: z.string({
+      message: 'Veuillez confirmer le mot de passe'
     })
   })
   .refine((data) => data.newPassword === data.newPasswordVerification, {
     message: 'Les mots de passe ne correspondent pas',
-    path: ['newPasswordVerification'],
-  });
+    path: ['newPasswordVerification']
+  })
+
   const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
       mode: "onSubmit",
@@ -76,6 +77,13 @@ export function ChangeUserPasswordPopup() {
   async function onSubmit(data: z.infer<typeof formSchema>) {
     const { oldPassword, newPassword } = data;
     if (!profile) return;
+
+    const errors = await form.trigger();
+
+    if (Object.keys(errors).length > 0) {
+        return;
+    }
+
     await changeUserPasswordMutation({
         variables: {
           datas: {
@@ -89,7 +97,7 @@ export function ChangeUserPasswordPopup() {
 
   return (
         <>
-            <AlertDialogHeader>
+                <AlertDialogHeader>
                 <AlertDialogTitle>Changer le nom mot de passe</AlertDialogTitle>
             </AlertDialogHeader>
             <AlertDialogDescription>
@@ -98,36 +106,50 @@ export function ChangeUserPasswordPopup() {
                 </p>
             </AlertDialogDescription>
             <AlertDialogFooter>
-                <Form {...form}>
+
+                    <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
-                        <FormField name="oldPassword" render={({ field }) => (
+                       <CardContent>
+                            <FormField control={form.control} name="oldPassword" render={({ field }) => (
                             <FormItem>
                                 <FormControl>
                                     <Input type="password" className="bg-secondary" placeholder="Ancien mot de passe" {...field} />
                                 </FormControl>
-                                {form.formState.errors.oldPassword && <FormMessage>{form.formState.errors.oldPassword.message}</FormMessage>}
+                                <FormMessage />
                             </FormItem>
                         )}
                        />
-                      <FormField name="newPassword" render={({ field }) => (
+                      <FormField control={form.control} name="newPassword" render={({ field }) => (
                             <FormItem>
                                 <FormControl>
                                     <Input type="password" className="bg-secondary" placeholder="Nouveau mot de passe" {...field} />
                                 </FormControl>
-                                {form.formState.errors.newPassword && <FormMessage>{form.formState.errors.newPassword.message}</FormMessage>}
+                                <FormMessage />
                             </FormItem>
                         )}
                        />
-                        <FormField name="newPasswordVerification" render={({ field }) => (
+                        <FormField control={form.control} name="newPasswordVerification" render={({ field, fieldState }) => (
                             <FormItem>
                                 <FormControl>
                                     <Input type="password" className="bg-secondary" placeholder="Entrer de nouveau votre mot de passe" {...field} />
                                 </FormControl>
-                                {form.formState.errors.newPasswordVerification && <FormMessage>{form.formState.errors.newPasswordVerification.message}</FormMessage>}
+                                    {fieldState.error && <FormMessage>{fieldState.error.message}</FormMessage>}
                             </FormItem>
                         )}
                        />
-                        <AlertDialogAction type="submit">Valider</AlertDialogAction>
+                       </CardContent>
+                        <CardFooter className="">
+                            <div className="flex justify-end space-x-4">
+                                <Button
+                                    type="submit"
+                                    isLoading={changeUserPasswordResult.loading}
+                                    disabled={!!changeUserPasswordResult.data}
+                                >
+                                    Valider
+                                </Button>
+                                <AlertDialogAction className={buttonVariants({ variant: "secondary2"})} type="reset">Annuler</AlertDialogAction>
+                            </div>
+                        </CardFooter>
                     </form>
                 </Form>
             </AlertDialogFooter>
