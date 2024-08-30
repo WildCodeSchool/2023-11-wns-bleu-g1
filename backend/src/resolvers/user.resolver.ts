@@ -11,10 +11,8 @@ import User, {
 import { Context } from "../interfaces/auth";
 import { UserRole } from "../entities/user";
 import UserService from "../services/user.service";
-import DataSource from "../db";
 
 export default class UserResolver {
-	userRepository = DataSource.getRepository(User);
 
 	@Authorized([UserRole.ADMIN])
 	@Query(() => [User])
