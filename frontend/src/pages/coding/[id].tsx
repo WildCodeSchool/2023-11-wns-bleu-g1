@@ -13,20 +13,26 @@ import {
 	useGetExecutionCounterQuery,
 	useIncrementExecutionCounterMutation,
 	useGetProjectByIdQuery,
-	useLikeMutation,
-	GetProjectByIdDocument,
 	useGetUserProfileQuery,
-	useUnlikeMutation,
+	GetProjectByIdQuery,
 } from "@/graphql/generated/schema";
-import { Heart, Save } from "lucide-react";
+import { Save } from "lucide-react";
 import LikeButton from "@/components/socials/like-button";
 import PageLoader from "@/components/elements/page-loader";
 
 const CodingPage = () => {
 	const router = useRouter();
 	const { id } = router.query;
-	const getUserProfileQuery = useGetUserProfileQuery();
-	const { data, loading: getProjectByIdloading } = useGetProjectByIdQuery({
+	const {
+		data: getUserProfileData,
+		loading: getUserProfileLoading,
+		error: getUserProfileError,
+	} = useGetUserProfileQuery();
+	const {
+		data,
+		loading: getProjectByIdloading,
+		error: getProjectByIdError,
+	} = useGetProjectByIdQuery({
 		variables: {
 			getProjectId: id as string,
 		},
@@ -50,7 +56,7 @@ const CodingPage = () => {
 	const isPremium = counter && counter.getExecutionCounter.isPremium;
 	const count = counter ? counter.getExecutionCounter.executionCounter : 0;
 
-	const project = data?.getProject;
+	const project = data?.getProject as GetProjectByIdQuery["getProject"];
 	const thisCode = project?.codes[0];
 	const thisCodeId = thisCode?.id;
 
@@ -168,18 +174,16 @@ const CodingPage = () => {
 		}
 	};
 
-	if (getUserProfileQuery.loading || getProjectByIdloading) {
+	if (getUserProfileLoading || getProjectByIdloading) {
 		return <PageLoader />;
 	}
 
-	if (getUserProfileQuery.error) {
-		console.error(getUserProfileQuery.error);
+	if (getUserProfileError || getProjectByIdError) {
+		console.error(getUserProfileError || getProjectByIdError);
 		return;
 	}
 
-	const userId = getUserProfileQuery.data?.getUserProfile.id;
-
-	if (!userId || !project) return null;
+	const userId = getUserProfileData?.getUserProfile.id as string;
 
 	return (
 		<AuthLayout>
