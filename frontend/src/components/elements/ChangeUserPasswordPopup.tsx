@@ -6,7 +6,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import {useGetUserProfileQuery, useUpdateUserPasswordMutation} from "@/graphql/generated/schema";
-import {BadgeCheck} from "lucide-react";
+import {AlertCircle, BadgeCheck} from "lucide-react";
 import {ApolloError} from "@apollo/client";
 import {useToast} from "@/components/ui/use-toast";
 import {useState} from "react";
@@ -16,7 +16,7 @@ import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Button, buttonVariants} from "@/components/ui/button";
-import {CardContent, CardFooter} from "@/components/ui/card";
+import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert";
 
 export function ChangeUserPasswordPopup() {
   const getUserProfileQuery = useGetUserProfileQuery();
@@ -24,15 +24,17 @@ export function ChangeUserPasswordPopup() {
   const defaultErrorMessage =
       "Une erreur est survenue lors de la suppression. Veuillez réessayer.";
   const [errorMessage, setErrorMessage] = useState<string>(defaultErrorMessage);
-
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   const profile = getUserProfileQuery?.data?.getUserProfile || null;
 
   const formSchema = z.object({
     oldPassword: z.string( {
         message: "L'ancien mot de passe ne peut pas etre vide.",
     }),
-    newPassword: z.string().min(8, {
-        message: "Le mot de passe doit contenir au moins 8 caractères.",
+    newPassword: z.string().refine(
+    (value) => passwordRegex.test(value),
+    {
+      message: 'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.',
     }),
     newPasswordVerification: z.string({
       message: 'Veuillez confirmer le mot de passe'
@@ -55,19 +57,20 @@ export function ChangeUserPasswordPopup() {
         title: "Mot de passe changé",
         className: "text-success",
       });
-      console.log(changeUserPasswordResult)
+      console.log("hey: ",changeUserPasswordResult)
     },
     onError: (err: ApolloError) => {
-        console.error(err);
+        // console.error("error: ", err);
         if (err.message.includes("not register")) {
             setErrorMessage("Aucun n'est lié à cette adresse email.");
             return;
         }
-        if (err.message.includes("invalid password")) {
+         else if (err.message.includes("invalid password")) {
             setErrorMessage("Les identifiants sont incorrects.");
             return;
+        } else {
+             setErrorMessage(defaultErrorMessage);
         }
-        setErrorMessage(defaultErrorMessage);
         toast({
             title: errorMessage,
         })
@@ -109,7 +112,6 @@ export function ChangeUserPasswordPopup() {
 
                     <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
-                       <CardContent>
                             <FormField control={form.control} name="oldPassword" render={({ field }) => (
                             <FormItem>
                                 <FormControl>
@@ -137,8 +139,13 @@ export function ChangeUserPasswordPopup() {
                             </FormItem>
                         )}
                        />
-                       </CardContent>
-                        <CardFooter className="">
+                        {changeUserPasswordResult.error && (
+                        <Alert variant="error">
+                            <AlertCircle className="h-4 w-4" />
+                            <AlertTitle>Erreur</AlertTitle>
+                            <AlertDescription>{errorMessage}</AlertDescription>
+                        </Alert>
+                    )}
                             <div className="flex justify-end space-x-4">
                                 <Button
                                     type="submit"
@@ -149,7 +156,6 @@ export function ChangeUserPasswordPopup() {
                                 </Button>
                                 <AlertDialogAction className={buttonVariants({ variant: "secondary2"})} type="reset">Annuler</AlertDialogAction>
                             </div>
-                        </CardFooter>
                     </form>
                 </Form>
             </AlertDialogFooter>
