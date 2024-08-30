@@ -15,13 +15,19 @@ import {
 	useGetProjectByIdQuery,
 	useGetUserProfileQuery,
 	GetProjectByIdQuery,
+	useToggleProjectPublicStateMutation,
+	GetProjectByIdDocument,
 } from "@/graphql/generated/schema";
-import { Save } from "lucide-react";
+import { BadgeCheck, Save } from "lucide-react";
 import LikeButton from "@/components/socials/like-button";
 import PageLoader from "@/components/elements/page-loader";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/components/ui/use-toast";
 
 const CodingPage = () => {
 	const router = useRouter();
+	const { toast } = useToast();
 	const { id } = router.query;
 	const {
 		data: getUserProfileData,
@@ -52,6 +58,27 @@ const CodingPage = () => {
 			console.error("useIncrementeExecutionCounterMutation =>", e);
 		},
 	});
+
+	const [toggleProjectPublicStateMutation] =
+		useToggleProjectPublicStateMutation({
+			onCompleted: (data) => {
+				const { isPublic } = data.toggleProjectPublicState;
+
+				toast({
+					icon: <BadgeCheck className="h-5 w-5" />,
+					title: `Votre projet est maintenant ${isPublic ? "public" : "privé"}`,
+					className: "text-success",
+				});
+			},
+			refetchQueries: [
+				{
+					query: GetProjectByIdDocument,
+					variables: {
+						getProjectId: id as string,
+					},
+				},
+			],
+		});
 
 	const isPremium = counter && counter.getExecutionCounter.isPremium;
 	const count = counter ? counter.getExecutionCounter.executionCounter : 0;
@@ -185,6 +212,14 @@ const CodingPage = () => {
 
 	const userId = getUserProfileData?.getUserProfile.id as string;
 
+	const handlePublicStateChange = () => {
+		toggleProjectPublicStateMutation({
+			variables: {
+				projectId: id as string,
+			},
+		});
+	};
+
 	return (
 		<AuthLayout>
 			<div className="min-h-dvh">
@@ -199,7 +234,15 @@ const CodingPage = () => {
 						/>
 						<h1 className="font-bold text-xl">{project?.title}</h1>
 					</div>
-					<div className="flex items-center self-end md:self-center">
+					<div className="flex items-center self-end md:self-center gap-5">
+						<div className="flex items-center space-x-2">
+							<Switch
+								id="public-state"
+								checked={project.isPublic}
+								onCheckedChange={handlePublicStateChange}
+							/>
+							<Label htmlFor="public-state">En Public</Label>
+						</div>
 						<Button
 							size={"sm"}
 							className="gap-2 bg-blue-500 hover:bg-blue-500/80"

@@ -64,3 +64,11 @@ query GetPaginateProjects(
 		}
 	}
 }
+
+mutation ToggleProjectPublicState($projectId: String!) {
+	toggleProjectPublicState(id: $projectId) {
+		id
+		isPublic
+		title
+	}
+}
