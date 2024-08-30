@@ -139,6 +139,7 @@ export type Project = {
 export type ProjectPaginationResponse = {
   __typename?: 'ProjectPaginationResponse';
   hasMore: Scalars['Boolean'];
+  isUserSearch: Scalars['Boolean'];
   projects: Array<Project>;
 };
 
@@ -149,10 +150,9 @@ export type Query = {
   getExecutionCounter: User;
   getLanguage: Language;
   getLanguages: Array<Language>;
-  getMyProjects: ProjectPaginationResponse;
+  getPaginateProjects: ProjectPaginationResponse;
   getProject: Project;
   getProjects: Array<Project>;
-  getPublicsProjects: ProjectPaginationResponse;
   getUserProfile: User;
   users: Array<User>;
 };
@@ -168,23 +168,17 @@ export type QueryGetLanguageArgs = {
 };
 
 
-export type QueryGetMyProjectsArgs = {
+export type QueryGetPaginateProjectsArgs = {
+  isUser?: Scalars['Boolean'];
   limit?: Scalars['Float'];
   offset?: Scalars['Float'];
   searchProject?: Scalars['String'];
+  searchUser?: Scalars['String'];
 };
 
 
 export type QueryGetProjectArgs = {
   id: Scalars['String'];
-};
-
-
-export type QueryGetPublicsProjectsArgs = {
-  limit?: Scalars['Float'];
-  offset?: Scalars['Float'];
-  searchProject?: Scalars['String'];
-  searchUser?: Scalars['String'];
 };
 
 export type SigninInput = {
@@ -253,15 +247,6 @@ export type CreateProjectMutationVariables = Exact<{
 
 export type CreateProjectMutation = { __typename?: 'Mutation', createProject: { __typename?: 'Project', title: string, id: string, isPublic: boolean, user: { __typename?: 'User', pseudo: string, role: string, id: string, email: string } } };
 
-export type GetMyProjectsQueryVariables = Exact<{
-  limit: Scalars['Float'];
-  offset: Scalars['Float'];
-  searchProject: Scalars['String'];
-}>;
-
-
-export type GetMyProjectsQuery = { __typename?: 'Query', getMyProjects: { __typename?: 'ProjectPaginationResponse', hasMore: boolean, projects: Array<{ __typename?: 'Project', id: string, isPublic: boolean, title: string, createdAt: any, user: { __typename?: 'User', pseudo: string } }> } };
-
 export type GetProjectByIdQueryVariables = Exact<{
   getProjectId: Scalars['String'];
 }>;
@@ -269,15 +254,16 @@ export type GetProjectByIdQueryVariables = Exact<{
 
 export type GetProjectByIdQuery = { __typename?: 'Query', getProject: { __typename?: 'Project', id: string, title: string, isPublic: boolean, codes: Array<{ __typename?: 'Code', content: string, language: { __typename?: 'Language', name: string, id: string } }> } };
 
-export type GetPublicsProjectsQueryVariables = Exact<{
+export type GetPaginateProjectsQueryVariables = Exact<{
   offset: Scalars['Float'];
   limit: Scalars['Float'];
   searchUser: Scalars['String'];
   searchProject: Scalars['String'];
+  isUser: Scalars['Boolean'];
 }>;
 
 
-export type GetPublicsProjectsQuery = { __typename?: 'Query', getPublicsProjects: { __typename?: 'ProjectPaginationResponse', hasMore: boolean, projects: Array<{ __typename?: 'Project', id: string, isPublic: boolean, title: string, createdAt: any, user: { __typename?: 'User', pseudo: string } }> } };
+export type GetPaginateProjectsQuery = { __typename?: 'Query', getPaginateProjects: { __typename?: 'ProjectPaginationResponse', hasMore: boolean, isUserSearch: boolean, projects: Array<{ __typename?: 'Project', id: string, isPublic: boolean, title: string, createdAt: any, user: { __typename?: 'User', pseudo: string } }> } };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -595,52 +581,6 @@ export function useCreateProjectMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateProjectMutationHookResult = ReturnType<typeof useCreateProjectMutation>;
 export type CreateProjectMutationResult = Apollo.MutationResult<CreateProjectMutation>;
 export type CreateProjectMutationOptions = Apollo.BaseMutationOptions<CreateProjectMutation, CreateProjectMutationVariables>;
-export const GetMyProjectsDocument = gql`
-    query GetMyProjects($limit: Float!, $offset: Float!, $searchProject: String!) {
-  getMyProjects(limit: $limit, offset: $offset, searchProject: $searchProject) {
-    projects {
-      id
-      isPublic
-      title
-      createdAt
-      user {
-        pseudo
-      }
-    }
-    hasMore
-  }
-}
-    `;
-
-/**
- * __useGetMyProjectsQuery__
- *
- * To run a query within a React component, call `useGetMyProjectsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetMyProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetMyProjectsQuery({
- *   variables: {
- *      limit: // value for 'limit'
- *      offset: // value for 'offset'
- *      searchProject: // value for 'searchProject'
- *   },
- * });
- */
-export function useGetMyProjectsQuery(baseOptions: Apollo.QueryHookOptions<GetMyProjectsQuery, GetMyProjectsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetMyProjectsQuery, GetMyProjectsQueryVariables>(GetMyProjectsDocument, options);
-      }
-export function useGetMyProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMyProjectsQuery, GetMyProjectsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetMyProjectsQuery, GetMyProjectsQueryVariables>(GetMyProjectsDocument, options);
-        }
-export type GetMyProjectsQueryHookResult = ReturnType<typeof useGetMyProjectsQuery>;
-export type GetMyProjectsLazyQueryHookResult = ReturnType<typeof useGetMyProjectsLazyQuery>;
-export type GetMyProjectsQueryResult = Apollo.QueryResult<GetMyProjectsQuery, GetMyProjectsQueryVariables>;
 export const GetProjectByIdDocument = gql`
     query GetProjectById($getProjectId: String!) {
   getProject(id: $getProjectId) {
@@ -685,13 +625,14 @@ export function useGetProjectByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type GetProjectByIdQueryHookResult = ReturnType<typeof useGetProjectByIdQuery>;
 export type GetProjectByIdLazyQueryHookResult = ReturnType<typeof useGetProjectByIdLazyQuery>;
 export type GetProjectByIdQueryResult = Apollo.QueryResult<GetProjectByIdQuery, GetProjectByIdQueryVariables>;
-export const GetPublicsProjectsDocument = gql`
-    query GetPublicsProjects($offset: Float!, $limit: Float!, $searchUser: String!, $searchProject: String!) {
-  getPublicsProjects(
+export const GetPaginateProjectsDocument = gql`
+    query GetPaginateProjects($offset: Float!, $limit: Float!, $searchUser: String!, $searchProject: String!, $isUser: Boolean!) {
+  getPaginateProjects(
     offset: $offset
     limit: $limit
     searchUser: $searchUser
     searchProject: $searchProject
+    isUser: $isUser
   ) {
     projects {
       id
@@ -703,40 +644,42 @@ export const GetPublicsProjectsDocument = gql`
       }
     }
     hasMore
+    isUserSearch
   }
 }
     `;
 
 /**
- * __useGetPublicsProjectsQuery__
+ * __useGetPaginateProjectsQuery__
  *
- * To run a query within a React component, call `useGetPublicsProjectsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetPublicsProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetPaginateProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPaginateProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetPublicsProjectsQuery({
+ * const { data, loading, error } = useGetPaginateProjectsQuery({
  *   variables: {
  *      offset: // value for 'offset'
  *      limit: // value for 'limit'
  *      searchUser: // value for 'searchUser'
  *      searchProject: // value for 'searchProject'
+ *      isUser: // value for 'isUser'
  *   },
  * });
  */
-export function useGetPublicsProjectsQuery(baseOptions: Apollo.QueryHookOptions<GetPublicsProjectsQuery, GetPublicsProjectsQueryVariables>) {
+export function useGetPaginateProjectsQuery(baseOptions: Apollo.QueryHookOptions<GetPaginateProjectsQuery, GetPaginateProjectsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetPublicsProjectsQuery, GetPublicsProjectsQueryVariables>(GetPublicsProjectsDocument, options);
+        return Apollo.useQuery<GetPaginateProjectsQuery, GetPaginateProjectsQueryVariables>(GetPaginateProjectsDocument, options);
       }
-export function useGetPublicsProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPublicsProjectsQuery, GetPublicsProjectsQueryVariables>) {
+export function useGetPaginateProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPaginateProjectsQuery, GetPaginateProjectsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetPublicsProjectsQuery, GetPublicsProjectsQueryVariables>(GetPublicsProjectsDocument, options);
+          return Apollo.useLazyQuery<GetPaginateProjectsQuery, GetPaginateProjectsQueryVariables>(GetPaginateProjectsDocument, options);
         }
-export type GetPublicsProjectsQueryHookResult = ReturnType<typeof useGetPublicsProjectsQuery>;
-export type GetPublicsProjectsLazyQueryHookResult = ReturnType<typeof useGetPublicsProjectsLazyQuery>;
-export type GetPublicsProjectsQueryResult = Apollo.QueryResult<GetPublicsProjectsQuery, GetPublicsProjectsQueryVariables>;
+export type GetPaginateProjectsQueryHookResult = ReturnType<typeof useGetPaginateProjectsQuery>;
+export type GetPaginateProjectsLazyQueryHookResult = ReturnType<typeof useGetPaginateProjectsLazyQuery>;
+export type GetPaginateProjectsQueryResult = Apollo.QueryResult<GetPaginateProjectsQuery, GetPaginateProjectsQueryVariables>;
 export const UsersDocument = gql`
     query Users {
   users {

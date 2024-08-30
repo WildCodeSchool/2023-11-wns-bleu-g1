@@ -12,21 +12,6 @@ mutation CreateProject($data: NewProjectInput!) {
 	}
 }
 
-query GetMyProjects($limit: Float!, $offset: Float!, $searchProject: String!) {
-	getMyProjects(limit: $limit, offset: $offset, searchProject: $searchProject) {
-		projects {
-			id
-			isPublic
-			title
-			createdAt
-			user {
-				pseudo
-			}
-		}
-		hasMore
-	}
-}
-
 query GetProjectById($getProjectId: String!) {
 	getProject(id: $getProjectId) {
 		id
@@ -42,17 +27,19 @@ query GetProjectById($getProjectId: String!) {
 	}
 }
 
-query GetPublicsProjects(
+query GetPaginateProjects(
 	$offset: Float!
 	$limit: Float!
 	$searchUser: String!
 	$searchProject: String!
+	$isUser: Boolean!
 ) {
-	getPublicsProjects(
+	getPaginateProjects(
 		offset: $offset
 		limit: $limit
 		searchUser: $searchUser
 		searchProject: $searchProject
+		isUser: $isUser
 	) {
 		projects {
 			id
@@ -64,5 +51,6 @@ query GetPublicsProjects(
 			}
 		}
 		hasMore
+		isUserSearch
 	}
 }

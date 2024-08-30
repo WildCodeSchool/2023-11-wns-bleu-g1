@@ -1,9 +1,6 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 
-import { useGetPublicsProjectsQuery } from "@/graphql/generated/schema";
-import CustomPagination from "@/components/custom-pagination";
 import AuthLayout from "@/components/elements/auth-layout";
-import PageLoader from "@/components/elements/page-loader";
 import ProjectsContainer from "@/components/elements/ProjectsContainer";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "../components/ui/button";
@@ -19,9 +16,6 @@ import {
 } from "../components/ui/select";
 
 const CommunautePage = () => {
-	const [page, setPage] = useState(0);
-
-	// states for searchbar
 	const [searchbar, setSearchbar] = useState("");
 	const [selectOption, setSelectOption] = useState("project");
 	const [searchProject, setSearchProject] = useState("");
@@ -49,29 +43,6 @@ const CommunautePage = () => {
 		},
 		[selectOption]
 	);
-
-	const limit = 12;
-	const offset = page * limit;
-
-	const getPublicProjectsQuery = useGetPublicsProjectsQuery({
-		variables: {
-			limit,
-			offset,
-			searchUser,
-			searchProject,
-		},
-	});
-
-	if (getPublicProjectsQuery.loading) return <PageLoader />;
-
-	if (getPublicProjectsQuery.error) {
-		console.error(getPublicProjectsQuery.error);
-		return;
-	}
-
-	const data = getPublicProjectsQuery.data?.getPublicsProjects;
-
-	const projects = data?.projects || [];
 
 	return (
 		<AuthLayout>
@@ -134,15 +105,9 @@ const CommunautePage = () => {
 
 			<Separator className="my-6" />
 
-			<ProjectsContainer projects={projects} page={page} />
-
-			<CustomPagination
-				page={page}
-				setPage={setPage}
-				limit={limit}
-				hasMore={data?.hasMore || false}
-				dataLength={projects.length}
-				query={getPublicProjectsQuery}
+			<ProjectsContainer
+				searchProject={searchProject}
+				searchUser={searchUser}
 			/>
 		</AuthLayout>
 	);
