@@ -20,7 +20,7 @@ const LikeButton = ({ project, userId }: Props) => {
 			{
 				query: GetProjectByIdDocument,
 				variables: {
-					getProjectId: project.id,
+					getProjectId: project && project.id,
 				},
 			},
 		],
@@ -30,11 +30,13 @@ const LikeButton = ({ project, userId }: Props) => {
 			{
 				query: GetProjectByIdDocument,
 				variables: {
-					getProjectId: project.id,
+					getProjectId: project && project.id,
 				},
 			},
 		],
 	});
+
+	if (!userId || !project) return null;
 
 	const alreadyLiked = project?.likes.find((like) => like.user.id === userId);
 
