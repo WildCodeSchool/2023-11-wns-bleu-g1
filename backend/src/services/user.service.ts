@@ -5,7 +5,12 @@ import { verify } from "argon2";
 
 import env from "../env";
 import DataSource from "../db";
-import User, {NewUserInput, SigninInput, UpdatePasswordInput, UpdateUsernameInput} from "../entities/user";
+import User, {
+	NewUserInput,
+	SigninInput,
+	UpdatePasswordInput,
+	UpdateUsernameInput,
+} from "../entities/user";
 import { Context } from "../interfaces/auth";
 import { hash } from "argon2";
 
@@ -92,7 +97,7 @@ export default class UserService {
 	};
 
 	getExecutionCounter = async (id: string, counter: number) => {
-		const user = await this.getBy({where: { id }});
+		const user = await this.getBy({ where: { id } });
 
 		user.executionCounter = counter === 50 ? counter : counter + 1;
 
@@ -113,8 +118,8 @@ export default class UserService {
 		return true;
 	};
 
-	updateUsername = async ({id, newUsername}: UpdateUsernameInput) => {
-			const user = await this.getBy({where: {id: id}});
+	updateUsername = async ({ id, newUsername }: UpdateUsernameInput) => {
+		const user = await this.getBy({ where: { id: id } });
 		if (!user) {
 			throw new GraphQLError("user not found");
 		}
@@ -128,8 +133,12 @@ export default class UserService {
 		return true;
 	};
 
-	updatePassword = async ({id, oldPassword, newPassword}: UpdatePasswordInput) => {
-		const user = await this.getBy({where: {id: id}});
+	updatePassword = async ({
+		id,
+		oldPassword,
+		newPassword,
+	}: UpdatePasswordInput) => {
+		const user = await this.getBy({ where: { id: id } });
 		if (!user) {
 			throw new GraphQLError("user not found");
 		}
@@ -140,5 +149,5 @@ export default class UserService {
 		user.hashedPassword = await hash(newPassword);
 		await this.userRepository.save(user);
 		return true;
-	}
+	};
 }

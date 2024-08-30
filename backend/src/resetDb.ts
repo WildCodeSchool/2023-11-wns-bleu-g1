@@ -50,7 +50,6 @@ const main = async () => {
 		pseudo: "Test",
 		isPremium: true,
 		executionCounter: 1,
-
 	});
 
 	await userRepository.save(user);
@@ -63,7 +62,6 @@ const main = async () => {
 		pseudo: "Flex Master",
 		executionCounter: 1,
 		isPremium: false,
-
 	});
 
 	await userRepository.save(flexMaster);
@@ -76,8 +74,7 @@ const main = async () => {
 		pseudo: "Admin",
 		role: UserRole.ADMIN,
 		executionCounter: 1,
-		isPremium: true
-
+		isPremium: true,
 	});
 
 	await userRepository.save(admin);

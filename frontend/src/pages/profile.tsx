@@ -4,22 +4,21 @@ import NotFoundAlert from "@/components/elements/not-found-alert";
 import PageLoader from "@/components/elements/page-loader";
 import ProjectCard from "@/components/elements/project-card";
 import UserHeadCard from "@/components/elements/user-head-card";
-import {Button, buttonVariants} from "@/components/ui/button";
-import {
-	Card,
-	CardContent,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
 	useGetMyProjectsQuery,
 	useGetUserProfileQuery,
 } from "@/graphql/generated/schema";
-import {useState} from "react";
-import {AlertDialog, AlertDialogContent, AlertDialogTrigger} from "@/components/ui/alert-dialog";
-import {ConfirmDeletePopUp} from "@/components/elements/ConfirmDeletePopUp";
-import {ChangeUsernamePopup} from "@/components/elements/ChangeUsernamePopup";
-import {ChangeUserPasswordPopup} from "@/components/elements/ChangeUserPasswordPopup";
+import { useState } from "react";
+import {
+	AlertDialog,
+	AlertDialogContent,
+	AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { ConfirmDeletePopUp } from "@/components/elements/ConfirmDeletePopUp";
+import { ChangeUsernamePopup } from "@/components/elements/ChangeUsernamePopup";
+import { ChangeUserPasswordPopup } from "@/components/elements/ChangeUserPasswordPopup";
 
 const ProfilPage = () => {
 	const [page, setPage] = useState(0);
@@ -38,7 +37,7 @@ const ProfilPage = () => {
 		return <PageLoader />;
 
 	if (getUserProfileQuery.error || getMyProjectsQuery.error)
-		console.error('1 ',getUserProfileQuery.error || getMyProjectsQuery.error);
+		console.error("1 ", getUserProfileQuery.error || getMyProjectsQuery.error);
 
 	const profile = getUserProfileQuery?.data?.getUserProfile || null;
 	const data = getMyProjectsQuery.data?.getMyProjects;
@@ -53,7 +52,11 @@ const ProfilPage = () => {
 					<div>
 						<div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
 							{projects.map((project) => (
-								<ProjectCard key={project.id} project={project} onProfilePage={true}/>
+								<ProjectCard
+									key={project.id}
+									project={project}
+									onProfilePage={true}
+								/>
 							))}
 						</div>
 					</div>
@@ -86,7 +89,7 @@ const ProfilPage = () => {
 					<CardContent className="flex flex-col space-y-3">
 						<AlertDialog>
 							<AlertDialogTrigger asChild>
-								<Button className={buttonVariants({ variant: "secondary2"})}>
+								<Button className={buttonVariants({ variant: "secondary2" })}>
 									Modifier mon nom de profil
 								</Button>
 							</AlertDialogTrigger>
@@ -96,7 +99,7 @@ const ProfilPage = () => {
 						</AlertDialog>
 						<AlertDialog>
 							<AlertDialogTrigger asChild>
-								<Button className={buttonVariants({ variant: "secondary2"})}>
+								<Button className={buttonVariants({ variant: "secondary2" })}>
 									Modifier mon mot de passe
 								</Button>
 							</AlertDialogTrigger>
@@ -106,19 +109,19 @@ const ProfilPage = () => {
 						</AlertDialog>
 						<AlertDialog>
 							<AlertDialogTrigger asChild>
-							<Button className={buttonVariants({ variant: "destructive"})}>
-								Supprimer mon compte
-							</Button>
-						</AlertDialogTrigger>
-						<AlertDialogContent>
-							<ConfirmDeletePopUp />
-						</AlertDialogContent>
+								<Button className={buttonVariants({ variant: "destructive" })}>
+									Supprimer mon compte
+								</Button>
+							</AlertDialogTrigger>
+							<AlertDialogContent>
+								<ConfirmDeletePopUp />
+							</AlertDialogContent>
 						</AlertDialog>
 					</CardContent>
 				</Card>
 			</div>
 		</AuthLayout>
-);
+	);
 };
 
 export default ProfilPage;

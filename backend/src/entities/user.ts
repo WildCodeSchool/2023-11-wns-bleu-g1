@@ -101,7 +101,7 @@ export class ExecutionCounterInput {
 @InputType()
 export class UpdateUsernameInput {
 	@Field()
-	id: string
+	id: string;
 
 	@Field()
 	newUsername: string;
@@ -109,15 +109,15 @@ export class UpdateUsernameInput {
 
 @InputType()
 export class UpdatePasswordInput {
-    @Field()
-    id: string;
+	@Field()
+	id: string;
 
-    @Field()
-    oldPassword: string;
+	@Field()
+	oldPassword: string;
 
-    @Matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/, {
-        message: "Password too weak",
-    })
-    @Field()
-    newPassword: string;
+	@Matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/, {
+		message: "Password too weak",
+	})
+	@Field()
+	newPassword: string;
 }
