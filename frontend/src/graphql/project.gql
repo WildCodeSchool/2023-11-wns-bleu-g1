@@ -40,6 +40,13 @@ query GetProjectById($getProjectId: String!) {
 				id
 			}
 		}
+		likes {
+			id
+			user {
+				id
+				pseudo
+			}
+		}
 	}
 }
 

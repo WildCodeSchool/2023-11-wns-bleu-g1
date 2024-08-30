@@ -46,6 +46,13 @@ export type LanguageInput = {
   name: Scalars['String'];
 };
 
+export type Like = {
+  __typename?: 'Like';
+  id: Scalars['String'];
+  project: Project;
+  user: User;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createCode: Code;
@@ -55,8 +62,10 @@ export type Mutation = {
   deleteLanguage: Scalars['Boolean'];
   deleteUser: Scalars['Boolean'];
   incrementExecutionCounter: Scalars['Float'];
+  like: Like;
   logout: Scalars['String'];
   signin: Scalars['String'];
+  unlike: Scalars['Boolean'];
   updateCode: Code;
   updateLanguage: Language;
 };
@@ -97,8 +106,18 @@ export type MutationIncrementExecutionCounterArgs = {
 };
 
 
+export type MutationLikeArgs = {
+  projectId: Scalars['String'];
+};
+
+
 export type MutationSigninArgs = {
   data: SigninInput;
+};
+
+
+export type MutationUnlikeArgs = {
+  likeId: Scalars['String'];
 };
 
 
@@ -131,6 +150,7 @@ export type Project = {
   createdAt: Scalars['DateTimeISO'];
   id: Scalars['String'];
   isPublic: Scalars['Boolean'];
+  likes: Array<Like>;
   title: Scalars['String'];
   updatedAt: Scalars['DateTimeISO'];
   user: User;
@@ -149,6 +169,7 @@ export type Query = {
   getExecutionCounter: User;
   getLanguage: Language;
   getLanguages: Array<Language>;
+  getLikes: Array<Like>;
   getMyProjects: ProjectPaginationResponse;
   getProject: Project;
   getProjects: Array<Project>;
@@ -209,6 +230,20 @@ export type GetLanguagesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetLanguagesQuery = { __typename?: 'Query', getLanguages: Array<{ __typename?: 'Language', id: string, name: string }> };
 
+export type LikeMutationVariables = Exact<{
+  projectId: Scalars['String'];
+}>;
+
+
+export type LikeMutation = { __typename?: 'Mutation', like: { __typename?: 'Like', id: string } };
+
+export type UnlikeMutationVariables = Exact<{
+  likeId: Scalars['String'];
+}>;
+
+
+export type UnlikeMutation = { __typename?: 'Mutation', unlike: boolean };
+
 export type CreateCodeMutationVariables = Exact<{
   data: CodeInput;
 }>;
@@ -263,7 +298,7 @@ export type GetProjectByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetProjectByIdQuery = { __typename?: 'Query', getProject: { __typename?: 'Project', id: string, title: string, isPublic: boolean, codes: Array<{ __typename?: 'Code', id: string, content: string, language: { __typename?: 'Language', name: string, id: string } }> } };
+export type GetProjectByIdQuery = { __typename?: 'Query', getProject: { __typename?: 'Project', id: string, title: string, isPublic: boolean, codes: Array<{ __typename?: 'Code', id: string, content: string, language: { __typename?: 'Language', name: string, id: string } }>, likes: Array<{ __typename?: 'Like', id: string, user: { __typename?: 'User', id: string, pseudo: string } }> } };
 
 export type GetPublicsProjectsQueryVariables = Exact<{
   offset: Scalars['Float'];
@@ -350,6 +385,70 @@ export function useGetLanguagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GetLanguagesQueryHookResult = ReturnType<typeof useGetLanguagesQuery>;
 export type GetLanguagesLazyQueryHookResult = ReturnType<typeof useGetLanguagesLazyQuery>;
 export type GetLanguagesQueryResult = Apollo.QueryResult<GetLanguagesQuery, GetLanguagesQueryVariables>;
+export const LikeDocument = gql`
+    mutation Like($projectId: String!) {
+  like(projectId: $projectId) {
+    id
+  }
+}
+    `;
+export type LikeMutationFn = Apollo.MutationFunction<LikeMutation, LikeMutationVariables>;
+
+/**
+ * __useLikeMutation__
+ *
+ * To run a mutation, you first call `useLikeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLikeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [likeMutation, { data, loading, error }] = useLikeMutation({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useLikeMutation(baseOptions?: Apollo.MutationHookOptions<LikeMutation, LikeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LikeMutation, LikeMutationVariables>(LikeDocument, options);
+      }
+export type LikeMutationHookResult = ReturnType<typeof useLikeMutation>;
+export type LikeMutationResult = Apollo.MutationResult<LikeMutation>;
+export type LikeMutationOptions = Apollo.BaseMutationOptions<LikeMutation, LikeMutationVariables>;
+export const UnlikeDocument = gql`
+    mutation Unlike($likeId: String!) {
+  unlike(likeId: $likeId)
+}
+    `;
+export type UnlikeMutationFn = Apollo.MutationFunction<UnlikeMutation, UnlikeMutationVariables>;
+
+/**
+ * __useUnlikeMutation__
+ *
+ * To run a mutation, you first call `useUnlikeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnlikeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unlikeMutation, { data, loading, error }] = useUnlikeMutation({
+ *   variables: {
+ *      likeId: // value for 'likeId'
+ *   },
+ * });
+ */
+export function useUnlikeMutation(baseOptions?: Apollo.MutationHookOptions<UnlikeMutation, UnlikeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UnlikeMutation, UnlikeMutationVariables>(UnlikeDocument, options);
+      }
+export type UnlikeMutationHookResult = ReturnType<typeof useUnlikeMutation>;
+export type UnlikeMutationResult = Apollo.MutationResult<UnlikeMutation>;
+export type UnlikeMutationOptions = Apollo.BaseMutationOptions<UnlikeMutation, UnlikeMutationVariables>;
 export const CreateCodeDocument = gql`
     mutation CreateCode($data: CodeInput!) {
   createCode(data: $data) {
@@ -646,6 +745,13 @@ export const GetProjectByIdDocument = gql`
       language {
         name
         id
+      }
+    }
+    likes {
+      id
+      user {
+        id
+        pseudo
       }
     }
   }
