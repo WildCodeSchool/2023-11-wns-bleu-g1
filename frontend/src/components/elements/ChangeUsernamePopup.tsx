@@ -48,7 +48,6 @@ export function ChangeUsernamePopup() {
 					title: "Nom d'utilisateur changé",
 					className: "text-success",
 				});
-				console.log(changeUsernameResult);
 			},
 			refetchQueries: [GetUserProfileDocument],
 			onError: (err: ApolloError) => {

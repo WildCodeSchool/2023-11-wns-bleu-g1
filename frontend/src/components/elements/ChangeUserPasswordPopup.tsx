@@ -70,7 +70,6 @@ export function ChangeUserPasswordPopup() {
 					title: "Mot de passe changé",
 					className: "text-success",
 				});
-				//close the modal
 				closeBtn.current?.click();
 
 

@@ -32,7 +32,6 @@ export function ConfirmDeletePopUp() {
 				title: "Utilisateur supprimé",
 				className: "text-success",
 			});
-			console.log(deleteUserResult);
 			router.push("/auth/inscription");
 		},
 		onError: (err: ApolloError) => {
