@@ -9,6 +9,7 @@ import {
 	PrimaryGeneratedColumn,
 } from "typeorm";
 import Project from "./project";
+import Like from "./like";
 
 export enum UserRole {
 	ADMIN = "admin",
@@ -54,6 +55,9 @@ export default class User {
 
 	@OneToMany(() => Project, (project) => project.user, { cascade: true })
 	projects: Project[];
+
+	@OneToMany(() => Like, (like) => like.user, { cascade: true })
+	likes: Like[];
 }
 
 @InputType()

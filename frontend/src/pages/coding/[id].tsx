@@ -13,13 +13,26 @@ import {
 	useGetExecutionCounterQuery,
 	useIncrementExecutionCounterMutation,
 	useGetProjectByIdQuery,
+	useGetUserProfileQuery,
+	GetProjectByIdQuery,
 } from "@/graphql/generated/schema";
 import { Save } from "lucide-react";
+import LikeButton from "@/components/socials/like-button";
+import PageLoader from "@/components/elements/page-loader";
 
 const CodingPage = () => {
 	const router = useRouter();
 	const { id } = router.query;
-	const { data } = useGetProjectByIdQuery({
+	const {
+		data: getUserProfileData,
+		loading: getUserProfileLoading,
+		error: getUserProfileError,
+	} = useGetUserProfileQuery();
+	const {
+		data,
+		loading: getProjectByIdloading,
+		error: getProjectByIdError,
+	} = useGetProjectByIdQuery({
 		variables: {
 			getProjectId: id as string,
 		},
@@ -43,7 +56,7 @@ const CodingPage = () => {
 	const isPremium = counter && counter.getExecutionCounter.isPremium;
 	const count = counter ? counter.getExecutionCounter.executionCounter : 0;
 
-	const project = data?.getProject;
+	const project = data?.getProject as GetProjectByIdQuery["getProject"];
 	const thisCode = project?.codes[0];
 	const thisCodeId = thisCode?.id;
 
@@ -126,6 +139,7 @@ const CodingPage = () => {
 			console.error(error);
 		},
 	});
+
 	async function saveCode() {
 		if (!thisCodeId) {
 			console.error("No code id found!");
@@ -138,6 +152,7 @@ const CodingPage = () => {
 			},
 		});
 	}
+
 	const runCode = () => {
 		// @Todo: Remettre le compte à 50 en dehors des tests
 		if (count < 50) {
@@ -150,8 +165,6 @@ const CodingPage = () => {
 			try {
 				const result = eval(code);
 
-				console.log("result: ", result);
-
 				setShowResult(result);
 			} catch (error: any) {
 				console.error(error);
@@ -160,6 +173,17 @@ const CodingPage = () => {
 			}
 		}
 	};
+
+	if (getUserProfileLoading || getProjectByIdloading) {
+		return <PageLoader />;
+	}
+
+	if (getUserProfileError || getProjectByIdError) {
+		console.error(getUserProfileError || getProjectByIdError);
+		return;
+	}
+
+	const userId = getUserProfileData?.getUserProfile.id as string;
 
 	return (
 		<AuthLayout>
@@ -258,6 +282,10 @@ const CodingPage = () => {
 						/>
 					</div>
 				</div>
+
+				<Separator className="mt-3 md:mt-8 mb-3" />
+
+				<LikeButton project={project} userId={userId} />
 			</div>
 		</AuthLayout>
 	);
