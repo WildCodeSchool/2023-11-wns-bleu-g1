@@ -56,7 +56,10 @@ export default class ProjectResolver {
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Query(() => Project)
 	async getProject(@Arg("id") id: string) {
-		return await new ProjectService().get(id);
+		return await new ProjectService().get({
+			where: { id },
+			relations: { codes: { language: true } },
+		});
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])

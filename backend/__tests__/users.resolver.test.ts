@@ -163,7 +163,7 @@ describe("if user can execute some code with admin permissions", () => {
 	{
 	  "data": {
 	    "getExecutionCounter": {
-	      "executionCounter": 0,
+	      "executionCounter": 1,
 	      "isPremium": false,
 	    },
 	  },

@@ -33,6 +33,7 @@ query GetProjectById($getProjectId: String!) {
 		title
 		isPublic
 		codes {
+			id
 			content
 			language {
 				name
