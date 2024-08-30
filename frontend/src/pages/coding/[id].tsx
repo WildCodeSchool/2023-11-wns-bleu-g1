@@ -8,6 +8,8 @@ import Prism from "prismjs";
 import AuthLayout from "@/components/elements/auth-layout";
 import { useRouter } from "next/router";
 import {
+	useGetCodeforAProjectIdQuery,
+	useGetCodesQuery,
 	useUpdateCodeMutation,
 	GetExecutionCounterDocument,
 	useGetExecutionCounterQuery,
