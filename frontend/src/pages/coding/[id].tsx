@@ -17,6 +17,7 @@ import {
 	GetProjectByIdQuery,
 	useToggleProjectPublicStateMutation,
 	GetProjectByIdDocument,
+	GetPublicsProjectsDocument,
 } from "@/graphql/generated/schema";
 import { BadgeCheck, Save } from "lucide-react";
 import LikeButton from "@/components/socials/like-button";
@@ -75,6 +76,13 @@ const CodingPage = () => {
 					query: GetProjectByIdDocument,
 					variables: {
 						getProjectId: id as string,
+					},
+				},
+				{
+					query: GetPublicsProjectsDocument,
+					variables: {
+						limit: 12,
+						offset: 0,
 					},
 				},
 			],
@@ -161,6 +169,11 @@ const CodingPage = () => {
 	const [updateCode] = useUpdateCodeMutation({
 		onCompleted: () => {
 			console.log("Code updated!");
+			toast({
+				icon: <BadgeCheck className="h-5 w-5" />,
+				title: `Votre projet a bien été enregistré !`,
+				className: "text-success",
+			});
 		},
 		onError: (error) => {
 			console.error(error);
@@ -234,24 +247,26 @@ const CodingPage = () => {
 						/>
 						<h1 className="font-bold text-xl">{project?.title}</h1>
 					</div>
-					<div className="flex items-center self-end md:self-center gap-5">
-						<div className="flex items-center space-x-2">
-							<Switch
-								id="public-state"
-								checked={project.isPublic}
-								onCheckedChange={handlePublicStateChange}
-							/>
-							<Label htmlFor="public-state">En Public</Label>
+					{userId === project.user.id && (
+						<div className="flex items-center self-end md:self-center gap-5">
+							<div className="flex items-center space-x-2">
+								<Switch
+									id="public-state"
+									checked={project.isPublic}
+									onCheckedChange={handlePublicStateChange}
+								/>
+								<Label htmlFor="public-state">En Public</Label>
+							</div>
+							<Button
+								size={"sm"}
+								className="gap-2 bg-blue-500 hover:bg-blue-500/80"
+								onClick={saveCode}
+							>
+								<Save />
+								Enregistrer
+							</Button>
 						</div>
-						<Button
-							size={"sm"}
-							className="gap-2 bg-blue-500 hover:bg-blue-500/80"
-							onClick={saveCode}
-						>
-							<Save />
-							Enregistrer
-						</Button>
-					</div>
+					)}
 				</div>
 				<Separator className="my-3" />
 

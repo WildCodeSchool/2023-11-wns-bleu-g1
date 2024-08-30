@@ -317,7 +317,7 @@ export type GetProjectByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetProjectByIdQuery = { __typename?: 'Query', getProject: { __typename?: 'Project', id: string, title: string, isPublic: boolean, codes: Array<{ __typename?: 'Code', id: string, content: string, language: { __typename?: 'Language', name: string, id: string } }>, likes: Array<{ __typename?: 'Like', id: string, user: { __typename?: 'User', id: string, pseudo: string } }> } };
+export type GetProjectByIdQuery = { __typename?: 'Query', getProject: { __typename?: 'Project', id: string, title: string, isPublic: boolean, codes: Array<{ __typename?: 'Code', id: string, content: string, language: { __typename?: 'Language', name: string, id: string } }>, user: { __typename?: 'User', id: string, pseudo: string }, likes: Array<{ __typename?: 'Like', id: string, user: { __typename?: 'User', id: string, pseudo: string } }> } };
 
 export type GetPaginateProjectsQueryVariables = Exact<{
   withUserProject: Scalars['Boolean'];
@@ -752,6 +752,10 @@ export const GetProjectByIdDocument = gql`
         name
         id
       }
+    }
+    user {
+      id
+      pseudo
     }
     likes {
       id

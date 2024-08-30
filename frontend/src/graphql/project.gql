@@ -25,6 +25,10 @@ query GetProjectById($getProjectId: String!) {
 				id
 			}
 		}
+		user {
+			id
+			pseudo
+		}
 		likes {
 			id
 			user {

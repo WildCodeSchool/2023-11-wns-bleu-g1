@@ -58,7 +58,11 @@ export default class ProjectResolver {
 	async getProject(@Arg("id") id: string) {
 		return await new ProjectService().get({
 			where: { id },
-			relations: { codes: { language: true }, likes: { user: true } },
+			relations: {
+				codes: { language: true },
+				likes: { user: true },
+				user: true,
+			},
 		});
 	}
 
