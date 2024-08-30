@@ -72,9 +72,6 @@ const CodingPage = () => {
 		setCodeOnMount();
 	}, [thisCode?.content]);
 
-	// if (getProjectByIdLoading) {
-	// 	return <PageLoader />;
-	// }
 	const update = (text: string) => {
 		const result_element = document.querySelector(
 			"#highlighting-content"
