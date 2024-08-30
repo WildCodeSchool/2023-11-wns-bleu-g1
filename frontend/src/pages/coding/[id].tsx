@@ -13,13 +13,20 @@ import {
 	useGetExecutionCounterQuery,
 	useIncrementExecutionCounterMutation,
 	useGetProjectByIdQuery,
+	useLikeMutation,
+	GetProjectByIdDocument,
+	useGetUserProfileQuery,
+	useUnlikeMutation,
 } from "@/graphql/generated/schema";
-import { Save } from "lucide-react";
+import { Heart, Save } from "lucide-react";
+import LikeButton from "@/components/socials/like-button";
+import PageLoader from "@/components/elements/page-loader";
 
 const CodingPage = () => {
 	const router = useRouter();
 	const { id } = router.query;
-	const { data } = useGetProjectByIdQuery({
+	const getUserProfileQuery = useGetUserProfileQuery();
+	const { data, loading: getProjectByIdloading } = useGetProjectByIdQuery({
 		variables: {
 			getProjectId: id as string,
 		},
@@ -126,6 +133,7 @@ const CodingPage = () => {
 			console.error(error);
 		},
 	});
+
 	async function saveCode() {
 		if (!thisCodeId) {
 			console.error("No code id found!");
@@ -138,6 +146,7 @@ const CodingPage = () => {
 			},
 		});
 	}
+
 	const runCode = () => {
 		// @Todo: Remettre le compte à 50 en dehors des tests
 		if (count < 50) {
@@ -150,8 +159,6 @@ const CodingPage = () => {
 			try {
 				const result = eval(code);
 
-				console.log("result: ", result);
-
 				setShowResult(result);
 			} catch (error: any) {
 				console.error(error);
@@ -160,6 +167,19 @@ const CodingPage = () => {
 			}
 		}
 	};
+
+	if (getUserProfileQuery.loading || getProjectByIdloading) {
+		return <PageLoader />;
+	}
+
+	if (getUserProfileQuery.error) {
+		console.error(getUserProfileQuery.error);
+		return;
+	}
+
+	const userId = getUserProfileQuery.data?.getUserProfile.id;
+
+	if (!userId || !project) return null;
 
 	return (
 		<AuthLayout>
@@ -258,6 +278,10 @@ const CodingPage = () => {
 						/>
 					</div>
 				</div>
+
+				<Separator className="mt-3 md:mt-8 mb-3" />
+
+				<LikeButton project={project} userId={userId} />
 			</div>
 		</AuthLayout>
 	);
