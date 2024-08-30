@@ -1,0 +1,6 @@
+mutation CreatePaymentIntent($amount: Float!) {
+    createPaymentIntent(amount: $amount) {
+        clientSecret
+        error
+    }
+}

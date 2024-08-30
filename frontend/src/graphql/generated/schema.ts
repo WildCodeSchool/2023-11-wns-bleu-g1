@@ -46,6 +46,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createCode: Code;
   createLanguage: Array<Language>;
+  createPaymentIntent: PaymentIntentResponse;
   createProject: Project;
   createUser: User;
   deleteLanguage: Scalars['Boolean'];
@@ -64,6 +65,11 @@ export type MutationCreateCodeArgs = {
 
 export type MutationCreateLanguageArgs = {
   name: Scalars['String'];
+};
+
+
+export type MutationCreatePaymentIntentArgs = {
+  amount: Scalars['Float'];
 };
 
 
@@ -114,6 +120,12 @@ export type NewUserInput = {
   password: Scalars['String'];
   pseudo: Scalars['String'];
   role?: InputMaybe<Scalars['String']>;
+};
+
+export type PaymentIntentResponse = {
+  __typename?: 'PaymentIntentResponse';
+  clientSecret?: Maybe<Scalars['String']>;
+  error?: Maybe<Scalars['String']>;
 };
 
 export type Project = {
@@ -228,6 +240,13 @@ export type GetProjectByIdQueryVariables = Exact<{
 
 
 export type GetProjectByIdQuery = { __typename?: 'Query', getProject: Array<{ __typename?: 'Project', id: string, title: string, isPublic: boolean, codes: Array<{ __typename?: 'Code', content: string, language: { __typename?: 'Language', name: string, id: string } }> }> };
+
+export type CreatePaymentIntentMutationVariables = Exact<{
+  amount: Scalars['Float'];
+}>;
+
+
+export type CreatePaymentIntentMutation = { __typename?: 'Mutation', createPaymentIntent: { __typename?: 'PaymentIntentResponse', clientSecret?: string | null, error?: string | null } };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -633,6 +652,40 @@ export function useGetProjectByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type GetProjectByIdQueryHookResult = ReturnType<typeof useGetProjectByIdQuery>;
 export type GetProjectByIdLazyQueryHookResult = ReturnType<typeof useGetProjectByIdLazyQuery>;
 export type GetProjectByIdQueryResult = Apollo.QueryResult<GetProjectByIdQuery, GetProjectByIdQueryVariables>;
+export const CreatePaymentIntentDocument = gql`
+    mutation CreatePaymentIntent($amount: Float!) {
+  createPaymentIntent(amount: $amount) {
+    clientSecret
+    error
+  }
+}
+    `;
+export type CreatePaymentIntentMutationFn = Apollo.MutationFunction<CreatePaymentIntentMutation, CreatePaymentIntentMutationVariables>;
+
+/**
+ * __useCreatePaymentIntentMutation__
+ *
+ * To run a mutation, you first call `useCreatePaymentIntentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePaymentIntentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPaymentIntentMutation, { data, loading, error }] = useCreatePaymentIntentMutation({
+ *   variables: {
+ *      amount: // value for 'amount'
+ *   },
+ * });
+ */
+export function useCreatePaymentIntentMutation(baseOptions?: Apollo.MutationHookOptions<CreatePaymentIntentMutation, CreatePaymentIntentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePaymentIntentMutation, CreatePaymentIntentMutationVariables>(CreatePaymentIntentDocument, options);
+      }
+export type CreatePaymentIntentMutationHookResult = ReturnType<typeof useCreatePaymentIntentMutation>;
+export type CreatePaymentIntentMutationResult = Apollo.MutationResult<CreatePaymentIntentMutation>;
+export type CreatePaymentIntentMutationOptions = Apollo.BaseMutationOptions<CreatePaymentIntentMutation, CreatePaymentIntentMutationVariables>;
 export const UsersDocument = gql`
     query Users {
   users {

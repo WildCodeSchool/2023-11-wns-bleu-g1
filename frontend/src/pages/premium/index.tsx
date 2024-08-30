@@ -1,6 +1,7 @@
 import AuthLayout from "@/components/elements/auth-layout";
 import ExternalLinkIcon from "@/components/elements/icons/external-link-arrow";
 import CheckCircleIcon from "@/components/elements/icons/check-circle";
+import { useRouter } from 'next/router';
 
 import { memo, useState } from "react";
 import Link from "next/link";
@@ -137,9 +138,9 @@ export default function Pricing() {
             "Travail en équipe",
             "Accès anticipé aux nouvelles fonctionnalités",
         ],
-        link: "https://buy.stripe.com/test_5kAcQy4Qj08j0c8fYZ",
+        link: "/premium/checkout/" + (enabled ? "annual" : "monthly"),
         btn: "Passer premium",
-        external: true,
+        external: false,
         extraBenefits: "Tout ce qui est inclus dans le plan gratuit, plus",
     },
 ];
