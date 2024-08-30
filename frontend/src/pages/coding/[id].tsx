@@ -184,6 +184,7 @@ const CodingPage = () => {
 	}
 
 	const userId = getUserProfileData?.getUserProfile.id as string;
+	console.log(project)
 
 	return (
 		<AuthLayout>
@@ -197,7 +198,11 @@ const CodingPage = () => {
 							height={45}
 							className="object-cover"
 						/>
-						<h1 className="font-bold text-xl">{project?.title}</h1>
+						<h1 className="font-bold text-xl">{project?.title}{project?.user.id !== userId && (
+								<span
+									className="text-xs ml-3">({project.user.pseudo})</span>
+							)}
+						</h1>
 					</div>
 					<div className="flex items-center self-end md:self-center">
 						<Button
@@ -217,7 +222,6 @@ const CodingPage = () => {
 						id="codingArea"
 						className="basis-2/5 relative min-h-80 md:min-h-[70dvh]"
 					>
-						{/*TODO: limit terminal row max length */}
 						<Textarea
 							className="left-0 right-0 z-10 caret-white bg-transparent text-transparent leading-[20pt] text-[15pt] resize-none absolute top-0"
 							placeholder={
@@ -247,7 +251,7 @@ const CodingPage = () => {
 					</div>
 					{!loading && (
 						<div className="basis-1/5 flex flex-col gap-3 justify-center py-6">
-							{count < 50 && (
+							{count < 50 && project?.user.id === userId && (
 								<Button
 									size={"sm"}
 									data-testid="exec-btn"
@@ -257,7 +261,7 @@ const CodingPage = () => {
 									Exécuter
 								</Button>
 							)}
-							{!isPremium && (
+							{!isPremium && project?.user.id === userId && 		(
 								<>
 									<p data-testid="counter" className="text-center">
 										{count}/50
