@@ -1,12 +1,12 @@
 import { Arg, Authorized, Ctx, Mutation, Query } from "type-graphql";
 import { GraphQLError } from "graphql";
+import { Equal, ILike, Not } from "typeorm";
 
 import Project, { NewProjectInput } from "../entities/project";
 import { Context } from "../interfaces/auth";
 import ProjectService from "../services/projet.service";
 import { UserRole } from "../entities/user";
 import ProjectPaginationResponse from "../types/project-pagination-response";
-import { ILike } from "typeorm";
 
 export default class ProjectResolver {
 	@Authorized([UserRole.ADMIN])
@@ -25,8 +25,11 @@ export default class ProjectResolver {
 		@Arg("offset", { defaultValue: 0 }) offset: number,
 		@Arg("searchProject", { defaultValue: "" }) searchProject: string,
 		@Arg("searchUser", { defaultValue: "" }) searchUser: string,
-		@Arg("isUser", { defaultValue: false }) isUser: boolean
+		@Arg("isUser", { defaultValue: false }) isUser: boolean,
+		@Arg("withUserProject", { defaultValue: false }) withUserProject: boolean
 	): Promise<ProjectPaginationResponse> {
+		const id = withUserProject ? undefined : Not(Equal(currentUser?.id));
+
 		return await new ProjectService().getAllPaginate(
 			{
 				relations: { codes: true, user: true },
@@ -37,6 +40,7 @@ export default class ProjectResolver {
 						? currentUser
 						: {
 								pseudo: ILike(`%${searchUser}%`),
+								id,
 							},
 				},
 				order: { createdAt: "DESC" },
