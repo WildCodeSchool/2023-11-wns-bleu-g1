@@ -30,6 +30,8 @@ const CheckoutPage = ({ amount }: { amount: number }) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
 
+    const router = useRouter();
+
     useEffect(() => {
         // Call the mutation directly in the effect
         const fetchClientSecret = async () => {
@@ -39,7 +41,6 @@ const CheckoutPage = ({ amount }: { amount: number }) => {
                         amount: Math.round(amount * 100),
                     },
                 });
-                console.log(response);
                 setClientSecret(response.data?.createPaymentIntent.clientSecret || undefined);
             } catch (err) {
                 console.error("Failed to create payment intent:", err);
@@ -51,9 +52,6 @@ const CheckoutPage = ({ amount }: { amount: number }) => {
             fetchClientSecret();
         }
     }, [amount, createPaymentIntent]);
-
-    // Handle loading and error states
-    // if (!clientSecret) return <p>No client secret available</p>;
 
     // Handle form submission
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -76,7 +74,7 @@ const CheckoutPage = ({ amount }: { amount: number }) => {
             elements,
             clientSecret: clientSecret as string,
             confirmParams: {
-                return_url: `/premium`,
+                return_url: `http://localhost:3000/premium/checkout/success`,
             },
         });
 
@@ -84,10 +82,6 @@ const CheckoutPage = ({ amount }: { amount: number }) => {
             setErrorMessage(error.message);
             setLoading(false);
             return;
-        }else{
-            const router = useRouter();
-
-            router.push('/premium');
         }
 
         setLoading(false);
@@ -126,7 +120,7 @@ const CheckoutPage = ({ amount }: { amount: number }) => {
 				<Logo width={150} height={100} />
 			</Link>
             <Card className="h-fit sm:w-[350px] xl:w-[350px] m-auto p-2">
-                <form>
+                <form onSubmit={handleSubmit}>
                     <CardContent className="space-y-3">
                         {clientSecret && <PaymentElement />}
                         {errorMessage && <p>{errorMessage}</p>}
