@@ -87,7 +87,7 @@ export function ChangeUsernamePopup() {
 				<AlertDialogTitle>Changer le nom de profil</AlertDialogTitle>
 			</AlertDialogHeader>
 			<AlertDialogDescription>
-				<p>Voulez-vous vraiment changer votre nom de profil ?</p>
+				<p>Quel nom voulez vous donner à votre profil ?</p>
 			</AlertDialogDescription>
 			<AlertDialogFooter>
 				<Form {...form}>
@@ -102,7 +102,7 @@ export function ChangeUsernamePopup() {
 									<FormControl>
 										<Input
 											className="bg-secondary"
-											placeholder="Nouveau nom d'utilisateur"
+											placeholder={profile.pseudo}
 											{...field}
 										/>
 									</FormControl>

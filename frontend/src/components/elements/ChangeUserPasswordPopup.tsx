@@ -71,7 +71,6 @@ export function ChangeUserPasswordPopup() {
 				console.log("hey: ", changeUserPasswordResult);
 			},
 			onError: (err: ApolloError) => {
-				// console.error("error: ", err);
 				if (err.message.includes("not register")) {
 					setErrorMessage("Aucun n'est lié à cette adresse email.");
 					return;
@@ -111,10 +110,10 @@ export function ChangeUserPasswordPopup() {
 	return (
 		<>
 			<AlertDialogHeader>
-				<AlertDialogTitle>Changer le nom mot de passe</AlertDialogTitle>
+				<AlertDialogTitle>Modification de mot de passe</AlertDialogTitle>
 			</AlertDialogHeader>
 			<AlertDialogDescription>
-				<p>Voulez-vous vraiment changer votre mot de passe ?</p>
+				<p>Pour modifier votre mot de passe, veuillez remplir les champs suivant</p>
 			</AlertDialogDescription>
 			<AlertDialogFooter>
 				<Form {...form}>

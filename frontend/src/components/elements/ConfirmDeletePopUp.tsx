@@ -15,6 +15,7 @@ import { ApolloError } from "@apollo/client";
 import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import {buttonVariants} from "@/components/ui/button";
 
 export function ConfirmDeletePopUp() {
 	const getUserProfileQuery = useGetUserProfileQuery();
@@ -65,15 +66,14 @@ export function ConfirmDeletePopUp() {
 	return (
 		<>
 			<AlertDialogHeader>
-				<AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+				<AlertDialogTitle>Etes-vous sûr de vouloir continuer?</AlertDialogTitle>
 				<AlertDialogDescription>
-					This action cannot be undone. This will permanently delete your
-					account and remove your data from our servers.
+					Cette action est irréversible. Cela supprimera définitivement votre compte et effacera vos données de nos serveurs.
 				</AlertDialogDescription>
 			</AlertDialogHeader>
 			<AlertDialogFooter>
-				<AlertDialogCancel>Cancel</AlertDialogCancel>
-				<AlertDialogAction onClick={deleteAccount}>Continue</AlertDialogAction>
+				<AlertDialogCancel className={buttonVariants({ variant: "secondary2" })} >Annuler</AlertDialogCancel>
+				<AlertDialogAction className={buttonVariants({ variant: "default" })} onClick={deleteAccount}>Continuer</AlertDialogAction>
 			</AlertDialogFooter>
 		</>
 	);
