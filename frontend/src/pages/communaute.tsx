@@ -103,7 +103,7 @@ const CommunautePage = () => {
 
 					<Button
 						className="h-[25px]"
-						variant={"destructive"}
+						variant={"dark"}
 						onClick={() => {
 							sendSearch("");
 							setSelectOption("project");

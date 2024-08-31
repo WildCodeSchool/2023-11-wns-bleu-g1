@@ -65,7 +65,7 @@ const ProfilPage = () => {
 
 					<Button
 						className="h-[25px]"
-						variant={"secondary"}
+						variant={"dark"}
 						onClick={() => {
 							sendSearch("");
 							setSelectOption("project");
