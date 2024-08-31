@@ -14,17 +14,24 @@ export default class ProjectService {
 		return await this.projectRepository.find(request);
 	};
 
-	getAllPaginate = async (request: object, limit: number) => {
+	getAllPaginate = async (
+		request: object,
+		limit: number,
+		searchUser: string,
+		searchProject: string
+	) => {
 		const projects = await this.projectRepository.find(request);
+
+		const isUserSearch = !!searchUser || !!searchProject;
 
 		const hasMore = projects.length > limit;
 		const resultProjects = projects.slice(0, limit);
 
-		return { projects: resultProjects, hasMore };
+		return { projects: resultProjects, hasMore, isUserSearch };
 	};
 
-	get = async (id: string) => {
-		const project = await this.projectRepository.findOneByOrFail({ id });
+	get = async (request: object) => {
+		const project = await this.projectRepository.findOne(request);
 
 		return project;
 	};

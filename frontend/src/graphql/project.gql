@@ -12,27 +12,13 @@ mutation CreateProject($data: NewProjectInput!) {
 	}
 }
 
-query GetMyProjects($limit: Float!, $offset: Float!) {
-	getMyProjects(limit: $limit, offset: $offset) {
-		projects {
-			id
-			isPublic
-			title
-			createdAt
-			user {
-				pseudo
-			}
-		}
-		hasMore
-	}
-}
-
 query GetProjectById($getProjectId: String!) {
 	getProject(id: $getProjectId) {
 		id
 		title
 		isPublic
 		codes {
+			id
 			content
 			language {
 				name
@@ -42,8 +28,24 @@ query GetProjectById($getProjectId: String!) {
 	}
 }
 
-query GetPublicsProjects($offset: Float!, $limit: Float!) {
-	getPublicsProjects(offset: $offset, limit: $limit) {
+query GetPaginateProjects(
+	$withUserProject: Boolean!
+	$isUser: Boolean!
+	$searchUser: String!
+	$searchProject: String!
+	$offset: Float!
+	$limit: Float!
+) {
+	getPaginateProjects(
+		withUserProject: $withUserProject
+		isUser: $isUser
+		searchUser: $searchUser
+		searchProject: $searchProject
+		offset: $offset
+		limit: $limit
+	) {
+		hasMore
+		isUserSearch
 		projects {
 			id
 			isPublic
@@ -53,6 +55,5 @@ query GetPublicsProjects($offset: Float!, $limit: Float!) {
 				pseudo
 			}
 		}
-		hasMore
 	}
 }

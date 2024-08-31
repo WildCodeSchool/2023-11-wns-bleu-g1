@@ -6,10 +6,10 @@ import { Context } from "../interfaces/auth";
 import ProjectService from "../services/projet.service";
 import { UserRole } from "../entities/user";
 import ProjectPaginationResponse from "../types/project-pagination-response";
-import { ILike } from "typeorm";
+import { Equal, ILike, Not } from "typeorm";
 
 export default class ProjectResolver {
-	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Authorized([UserRole.ADMIN])
 	@Query(() => [Project])
 	async getProjects() {
 		return await new ProjectService().getAll({
@@ -19,54 +19,47 @@ export default class ProjectResolver {
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Query(() => ProjectPaginationResponse)
-	async getMyProjects(
+	async getPaginateProjects(
 		@Ctx() { currentUser }: Context,
 		@Arg("limit", { defaultValue: 12 }) limit: number,
 		@Arg("offset", { defaultValue: 0 }) offset: number,
-		@Arg("searchProject", { defaultValue: "" }) searchProject: string
-	) {
-		return await new ProjectService().getAllPaginate(
-			{
-				relations: { codes: true, user: true },
-				where: { user: currentUser, title: ILike(`%${searchProject}%`) },
-				order: { createdAt: "DESC" },
-				take: limit + 1,
-				skip: offset,
-			},
-			limit
-		);
-	}
-
-	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
-	@Query(() => ProjectPaginationResponse)
-	async getPublicsProjects(
-		@Arg("limit", { defaultValue: 12 }) limit: number,
-		@Arg("offset", { defaultValue: 0 }) offset: number,
 		@Arg("searchProject", { defaultValue: "" }) searchProject: string,
-		@Arg("searchUser", { defaultValue: "" }) searchUser: string
+		@Arg("searchUser", { defaultValue: "" }) searchUser: string,
+		@Arg("isUser", { defaultValue: false }) isUser: boolean,
+		@Arg("withUserProject", { defaultValue: false }) withUserProject: boolean
 	): Promise<ProjectPaginationResponse> {
+		const id = withUserProject ? undefined : Not(Equal(currentUser?.id));
+
 		return await new ProjectService().getAllPaginate(
 			{
 				relations: { codes: true, user: true },
 				where: {
-					isPublic: true,
+					isPublic: isUser ? undefined : true,
 					title: ILike(`%${searchProject}%`),
-					user: {
-						pseudo: ILike(`%${searchUser}%`),
-					},
+					user: isUser
+						? currentUser
+						: {
+								pseudo: ILike(`%${searchUser}%`),
+								id,
+							},
 				},
 				order: { createdAt: "DESC" },
 				take: limit + 1,
 				skip: offset,
 			},
-			limit
+			limit,
+			searchUser,
+			searchProject
 		);
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Query(() => Project)
 	async getProject(@Arg("id") id: string) {
-		return await new ProjectService().get(id);
+		return await new ProjectService().get({
+			where: { id },
+			relations: { codes: { language: true }, likes: { user: true } },
+		});
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
