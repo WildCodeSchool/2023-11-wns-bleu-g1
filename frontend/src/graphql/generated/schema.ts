@@ -68,6 +68,8 @@ export type Mutation = {
   unlike: Scalars['Boolean'];
   updateCode: Code;
   updateLanguage: Language;
+  updateUserPassword: Scalars['Boolean'];
+  updateUsername: Scalars['Boolean'];
 };
 
 
@@ -129,6 +131,16 @@ export type MutationUpdateCodeArgs = {
 
 export type MutationUpdateLanguageArgs = {
   data: UpdateLanguageInput;
+};
+
+
+export type MutationUpdateUserPasswordArgs = {
+  datas: UpdatePasswordInput;
+};
+
+
+export type MutationUpdateUsernameArgs = {
+  datas: UpdateUsernameInput;
 };
 
 export type NewProjectInput = {
@@ -213,6 +225,17 @@ export type SigninInput = {
 export type UpdateLanguageInput = {
   id: Scalars['String'];
   name: Scalars['String'];
+};
+
+export type UpdatePasswordInput = {
+  id: Scalars['String'];
+  newPassword: Scalars['String'];
+  oldPassword: Scalars['String'];
+};
+
+export type UpdateUsernameInput = {
+  id: Scalars['String'];
+  newUsername: Scalars['String'];
 };
 
 export type User = {
@@ -323,7 +346,7 @@ export type SignUpMutationVariables = Exact<{
 }>;
 
 
-export type SignUpMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', email: string, id: string, pseudo: string, role: string } };
+export type SignUpMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', email: string, id: string, pseudo: string, role: string, executionCounter: number, isPremium: boolean } };
 
 export type SignInMutationVariables = Exact<{
   data: SigninInput;
@@ -348,6 +371,27 @@ export type IncrementExecutionCounterMutationVariables = Exact<{
 
 
 export type IncrementExecutionCounterMutation = { __typename?: 'Mutation', incrementExecutionCounter: number };
+
+export type DeleteUserMutationVariables = Exact<{
+  deleteUserId: Scalars['String'];
+}>;
+
+
+export type DeleteUserMutation = { __typename?: 'Mutation', deleteUser: boolean };
+
+export type UpdateUsernameMutationVariables = Exact<{
+  datas: UpdateUsernameInput;
+}>;
+
+
+export type UpdateUsernameMutation = { __typename?: 'Mutation', updateUsername: boolean };
+
+export type UpdateUserPasswordMutationVariables = Exact<{
+  datas: UpdatePasswordInput;
+}>;
+
+
+export type UpdateUserPasswordMutation = { __typename?: 'Mutation', updateUserPassword: boolean };
 
 
 export const GetLanguagesDocument = gql`
@@ -911,6 +955,8 @@ export const SignUpDocument = gql`
     id
     pseudo
     role
+    executionCounter
+    isPremium
   }
 }
     `;
@@ -1071,3 +1117,96 @@ export function useIncrementExecutionCounterMutation(baseOptions?: Apollo.Mutati
 export type IncrementExecutionCounterMutationHookResult = ReturnType<typeof useIncrementExecutionCounterMutation>;
 export type IncrementExecutionCounterMutationResult = Apollo.MutationResult<IncrementExecutionCounterMutation>;
 export type IncrementExecutionCounterMutationOptions = Apollo.BaseMutationOptions<IncrementExecutionCounterMutation, IncrementExecutionCounterMutationVariables>;
+export const DeleteUserDocument = gql`
+    mutation DeleteUser($deleteUserId: String!) {
+  deleteUser(id: $deleteUserId)
+}
+    `;
+export type DeleteUserMutationFn = Apollo.MutationFunction<DeleteUserMutation, DeleteUserMutationVariables>;
+
+/**
+ * __useDeleteUserMutation__
+ *
+ * To run a mutation, you first call `useDeleteUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteUserMutation, { data, loading, error }] = useDeleteUserMutation({
+ *   variables: {
+ *      deleteUserId: // value for 'deleteUserId'
+ *   },
+ * });
+ */
+export function useDeleteUserMutation(baseOptions?: Apollo.MutationHookOptions<DeleteUserMutation, DeleteUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteUserMutation, DeleteUserMutationVariables>(DeleteUserDocument, options);
+      }
+export type DeleteUserMutationHookResult = ReturnType<typeof useDeleteUserMutation>;
+export type DeleteUserMutationResult = Apollo.MutationResult<DeleteUserMutation>;
+export type DeleteUserMutationOptions = Apollo.BaseMutationOptions<DeleteUserMutation, DeleteUserMutationVariables>;
+export const UpdateUsernameDocument = gql`
+    mutation UpdateUsername($datas: UpdateUsernameInput!) {
+  updateUsername(datas: $datas)
+}
+    `;
+export type UpdateUsernameMutationFn = Apollo.MutationFunction<UpdateUsernameMutation, UpdateUsernameMutationVariables>;
+
+/**
+ * __useUpdateUsernameMutation__
+ *
+ * To run a mutation, you first call `useUpdateUsernameMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUsernameMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUsernameMutation, { data, loading, error }] = useUpdateUsernameMutation({
+ *   variables: {
+ *      datas: // value for 'datas'
+ *   },
+ * });
+ */
+export function useUpdateUsernameMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUsernameMutation, UpdateUsernameMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUsernameMutation, UpdateUsernameMutationVariables>(UpdateUsernameDocument, options);
+      }
+export type UpdateUsernameMutationHookResult = ReturnType<typeof useUpdateUsernameMutation>;
+export type UpdateUsernameMutationResult = Apollo.MutationResult<UpdateUsernameMutation>;
+export type UpdateUsernameMutationOptions = Apollo.BaseMutationOptions<UpdateUsernameMutation, UpdateUsernameMutationVariables>;
+export const UpdateUserPasswordDocument = gql`
+    mutation UpdateUserPassword($datas: UpdatePasswordInput!) {
+  updateUserPassword(datas: $datas)
+}
+    `;
+export type UpdateUserPasswordMutationFn = Apollo.MutationFunction<UpdateUserPasswordMutation, UpdateUserPasswordMutationVariables>;
+
+/**
+ * __useUpdateUserPasswordMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserPasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserPasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserPasswordMutation, { data, loading, error }] = useUpdateUserPasswordMutation({
+ *   variables: {
+ *      datas: // value for 'datas'
+ *   },
+ * });
+ */
+export function useUpdateUserPasswordMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserPasswordMutation, UpdateUserPasswordMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUserPasswordMutation, UpdateUserPasswordMutationVariables>(UpdateUserPasswordDocument, options);
+      }
+export type UpdateUserPasswordMutationHookResult = ReturnType<typeof useUpdateUserPasswordMutation>;
+export type UpdateUserPasswordMutationResult = Apollo.MutationResult<UpdateUserPasswordMutation>;
+export type UpdateUserPasswordMutationOptions = Apollo.BaseMutationOptions<UpdateUserPasswordMutation, UpdateUserPasswordMutationVariables>;

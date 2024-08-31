@@ -95,8 +95,32 @@ export class SigninInput {
 
 @InputType()
 export class ExecutionCounterInput {
-	@Min(0)
+	@Min(1)
 	@Max(50)
 	@Field()
 	executionCounter: number;
+}
+
+@InputType()
+export class UpdateUsernameInput {
+	@Field()
+	id: string;
+
+	@Field()
+	newUsername: string;
+}
+
+@InputType()
+export class UpdatePasswordInput {
+	@Field()
+	id: string;
+
+	@Field()
+	oldPassword: string;
+
+	@Matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/, {
+		message: "Password too weak",
+	})
+	@Field()
+	newPassword: string;
 }

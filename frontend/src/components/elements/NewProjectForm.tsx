@@ -119,7 +119,7 @@ export default function NewProjectForm() {
               render={({field}) => (
                   <FormItem className="space-y-4">
                     <FormControl>
-                      <Input className="my-2" placeholder="Mon super projet" {...field} />
+                      <Input className="my-2 bg-secondary" placeholder="Mon super projet" {...field} />
                     </FormControl>
                 </FormItem>
                 )}
@@ -133,7 +133,7 @@ export default function NewProjectForm() {
                     <FormLabel className="mr-2 content-center">Langage</FormLabel>
                     <Select onValueChange={field.onChange}>
                     <FormControl>
-                      <SelectTrigger className="w-[240px]">
+                      <SelectTrigger className="w-[240px] bg-secondary">
                           <SelectValue />
                       </SelectTrigger>
                     </FormControl>
