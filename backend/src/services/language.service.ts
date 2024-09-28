@@ -21,7 +21,7 @@ export default class LanguageService {
 
 	create = async (name: string) => {
 		const nameAlreadyTaken = await this.languageRepository.findOneBy({
-			name: ILike(`${name}`),
+			name: ILike(name),
 		});
 
 		if (nameAlreadyTaken) {
