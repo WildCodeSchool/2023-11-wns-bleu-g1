@@ -4,19 +4,12 @@ import AuthLayout from "@/components/elements/auth-layout";
 import PageLoader from "@/components/elements/page-loader";
 import ProjectsContainer from "@/components/elements/ProjectsContainer";
 import UserHeadCard from "@/components/elements/user-head-card";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { useGetUserProfileQuery } from "@/graphql/generated/schema";
-import {
-	AlertDialog,
-	AlertDialogContent,
-	AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { ConfirmDeletePopUp } from "@/components/elements/ConfirmDeletePopUp";
-import { ChangeUsernamePopup } from "@/components/elements/ChangeUsernamePopup";
-import { ChangeUserPasswordPopup } from "@/components/elements/ChangeUserPasswordPopup";
+
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import AccountSettings from "@/components/elements/AccountSettings";
 
 const ProfilPage = () => {
 	const [searchbar, setSearchbar] = useState("");
@@ -88,45 +81,10 @@ const ProfilPage = () => {
 			<Separator className="my-6" />
 
 			<ProjectsContainer searchProject={searchProject} />
-			<div>
-				<Card>
-					<CardHeader>
-						<CardTitle>Paramètres de compte</CardTitle>
-					</CardHeader>
-					<CardContent className="flex flex-col space-y-3">
-						<AlertDialog>
-							<AlertDialogTrigger asChild>
-								<Button className={buttonVariants({ variant: "dark" })}>
-									Modifier mon nom de profil
-								</Button>
-							</AlertDialogTrigger>
-							<AlertDialogContent>
-								<ChangeUsernamePopup />
-							</AlertDialogContent>
-						</AlertDialog>
-						<AlertDialog>
-							<AlertDialogTrigger asChild>
-								<Button className={buttonVariants({ variant: "dark" })}>
-									Modifier mon mot de passe
-								</Button>
-							</AlertDialogTrigger>
-							<AlertDialogContent>
-								<ChangeUserPasswordPopup />
-							</AlertDialogContent>
-						</AlertDialog>
-						<AlertDialog>
-							<AlertDialogTrigger asChild>
-								<Button className={buttonVariants({ variant: "destructive" })}>
-									Supprimer mon compte
-								</Button>
-							</AlertDialogTrigger>
-							<AlertDialogContent>
-								<ConfirmDeletePopUp />
-							</AlertDialogContent>
-						</AlertDialog>
-					</CardContent>
-				</Card>
-			</div>
+
+			<Separator className="my-6" />
+
+			<AccountSettings />
 		</AuthLayout>
 	);
 };
