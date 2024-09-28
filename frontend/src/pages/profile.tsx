@@ -15,6 +15,8 @@ import {
 import { ConfirmDeletePopUp } from "@/components/elements/ConfirmDeletePopUp";
 import { ChangeUsernamePopup } from "@/components/elements/ChangeUsernamePopup";
 import { ChangeUserPasswordPopup } from "@/components/elements/ChangeUserPasswordPopup";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 
 const ProfilPage = () => {
 	const [searchbar, setSearchbar] = useState("");
