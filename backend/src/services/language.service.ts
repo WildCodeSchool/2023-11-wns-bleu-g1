@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { ILike, Repository } from "typeorm";
 import { GraphQLError } from "graphql";
 
 import DataSource from "../db";
@@ -20,12 +20,9 @@ export default class LanguageService {
 	};
 
 	create = async (name: string) => {
-		const languages = await this.getAll();
-
-		const nameAlreadyTaken = languages.find(
-			(language) =>
-				language.name.toLocaleLowerCase() === name.toLocaleLowerCase()
-		);
+		const nameAlreadyTaken = await this.languageRepository.findOneBy({
+			name: ILike(`${name}`),
+		});
 
 		if (nameAlreadyTaken) {
 			throw new GraphQLError(`${name} already taken`);
@@ -40,12 +37,9 @@ export default class LanguageService {
 
 	update = async (id: string, name: string) => {
 		const language = await this.languageRepository.findOneBy({ id });
-		const languages = await this.getAll();
-
-		const nameAlreadyTaken = languages.find(
-			(language) =>
-				language.name.toLocaleLowerCase() === name.toLocaleLowerCase()
-		);
+		const nameAlreadyTaken = await this.languageRepository.findOneBy({
+			name: ILike(`${name}`),
+		});
 
 		if (!language) {
 			throw new GraphQLError("language not found!");

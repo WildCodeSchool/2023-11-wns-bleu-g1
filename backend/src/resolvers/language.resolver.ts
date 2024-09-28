@@ -4,16 +4,11 @@ import Language, {
 	LanguageInput,
 	UpdateLanguageInput,
 } from "../entities/language";
-import DataSource from "../db";
 import { UserRole } from "../entities/user";
 import LanguageService from "../services/language.service";
 
 @Resolver(Language)
 export default class LanguageResolver {
-	languageRepository = DataSource.getRepository(Language);
-
-	constructor() {}
-
 	// get all languages
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Query(() => [Language])
