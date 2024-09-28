@@ -5,12 +5,15 @@ import User, {
 	ExecutionCounterInput,
 	NewUserInput,
 	SigninInput,
+	UpdatePasswordInput,
+	UpdateUsernameInput,
 } from "../entities/user";
 import { Context } from "../interfaces/auth";
 import { UserRole } from "../entities/user";
 import UserService from "../services/user.service";
 
 export default class UserResolver {
+
 	@Authorized([UserRole.ADMIN])
 	@Query(() => [User])
 	async users() {
@@ -22,10 +25,19 @@ export default class UserResolver {
 	async getUserProfile(@Ctx() { currentUser }: Context) {
 		if (!currentUser) throw new GraphQLError("you need to be logged in!");
 
-		return await new UserService().getBy({
+		const profile = await new UserService().getBy({
 			where: { id: currentUser.id },
-			select: ["id", "pseudo", "email", "role"],
+			select: [
+				"id",
+				"pseudo",
+				"email",
+				"role",
+				"executionCounter",
+				"isPremium",
+			],
 		});
+
+		return profile;
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
@@ -74,7 +86,19 @@ export default class UserResolver {
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Mutation(() => Boolean)
-	async deleteUser(@Arg("id") id: string) {
-		return await new UserService().delete(id);
+	async deleteUser(@Arg("id") id: string, @Ctx() ctx: Context) {
+		return await new UserService().delete(id, ctx);
+	}
+
+	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Mutation(() => Boolean)
+	async updateUsername(@Arg("datas") datas: UpdateUsernameInput) {
+		return await new UserService().updateUsername(datas);
+	}
+
+	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Mutation(() => Boolean)
+	async updateUserPassword(@Arg("datas") datas: UpdatePasswordInput) {
+		return await new UserService().updatePassword(datas);
 	}
 }

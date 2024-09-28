@@ -22,6 +22,8 @@ mutation SignUp($data: NewUserInput!) {
 		id
 		pseudo
 		role
+		executionCounter
+		isPremium
 	}
 }
 
@@ -47,3 +49,16 @@ query GetUserProfile {
 mutation IncrementExecutionCounter($counter: ExecutionCounterInput!) {
 	incrementExecutionCounter(counter: $counter)
 }
+
+mutation DeleteUser($deleteUserId: String!) {
+  deleteUser(id: $deleteUserId)
+}
+
+mutation UpdateUsername($datas: UpdateUsernameInput!) {
+  updateUsername(datas: $datas)
+}
+
+mutation UpdateUserPassword($datas: UpdatePasswordInput!) {
+  updateUserPassword(datas: $datas)
+}
+
