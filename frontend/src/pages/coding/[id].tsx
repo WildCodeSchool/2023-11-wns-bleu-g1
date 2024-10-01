@@ -59,6 +59,7 @@ const CodingPage = () => {
 	const project = data?.getProject as GetProjectByIdQuery["getProject"];
 	const thisCode = project?.codes[0];
 	const thisCodeId = thisCode?.id;
+	console.log("thisCode", thisCode);
 
 	const [code, setCode] = useState("");
 	const [showResult, setShowResult] = useState("");
@@ -274,13 +275,13 @@ const CodingPage = () => {
 							)}
 						</div>
 					)}
-					<div id="resultArea" className="basis-2/5">
+					{/* <div id="resultArea" className="basis-2/5">
 						<Textarea
 							readOnly={true}
 							className="left-0 leading-[20pt] text-[15pt] ml-4 p-2.5 bg-input resize-none min-h-80 md:min-h-[70dvh]"
 							value={showResult}
 						/>
-					</div>
+					</div> */}
 				</div>
 
 				<Separator className="mt-3 md:mt-8 mb-3" />
