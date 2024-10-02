@@ -26,7 +26,7 @@ export default function Home() {
 			className={`flex min-h-screen flex-col items-center justify-center ${inter.className}`}
 		>
 			<Topbar isTopOfPage={isTopOfPage} />
-			<div className="container mx-auto" id='landingContent'>
+			<div className="container mx-auto" id="landingContent">
 				<div className="pt-32 sm:flex sm:items-center sm:gap-4 px-2">
 					<div className="space-y-6 flex-1">
 						<h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl text-center sm:text-start font-bold">

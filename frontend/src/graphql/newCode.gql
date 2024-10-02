@@ -1,39 +1,39 @@
 mutation CreateCode($data: CodeInput!) {
-  createCode(data: $data) {
-    id
-    content
-    isReported
-  }
+	createCode(data: $data) {
+		id
+		content
+		isReported
+	}
 }
 
 query getCodes {
-  getCodes {
-    id
-    isReported
-    content
-    language {
-      id
-      name
-    }
-  }
+	getCodes {
+		id
+		isReported
+		content
+		language {
+			id
+			name
+		}
+	}
 }
 query GetCodeforAProjectId($project: String!) {
-  getCode(project: $project) {
-    id
-    content
-    language {
-      name
-    }
-    project {
-      title
-      id
-    }
-  }
+	getCode(project: $project) {
+		id
+		content
+		language {
+			name
+		}
+		project {
+			title
+			id
+		}
+	}
 }
 
 mutation UpdateCode($updateCodeId: String!, $content: String) {
-  updateCode(id: $updateCodeId, content: $content) {
-    content
-    id
-  }
+	updateCode(id: $updateCodeId, content: $content) {
+		content
+		id
+	}
 }

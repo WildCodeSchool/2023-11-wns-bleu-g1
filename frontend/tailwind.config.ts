@@ -31,7 +31,7 @@ const config = {
 				border: "hsl(var(--border))",
 				topbarbackground: "hsl(var(--topbar-background))",
 				terminalbackground: "hsl(var(--terminal-background))",
-         darkterminalbackground: "hsl(var(--dark-terminal-background))",
+				darkterminalbackground: "hsl(var(--dark-terminal-background))",
 				input: "hsl(var(--input))",
 				ring: "hsl(var(--ring))",
 				background: {
