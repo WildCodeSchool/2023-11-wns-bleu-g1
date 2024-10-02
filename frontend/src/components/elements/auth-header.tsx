@@ -19,6 +19,7 @@ import { useRouter } from "next/router";
 import { useToast } from "../ui/use-toast";
 import Link from "next/link";
 import NewProjectPopup from "@/components/elements/NewProjectPopup";
+import { client } from "@/pages/_app";
 
 const AuthHeader = () => {
 	const router = useRouter();
@@ -33,6 +34,7 @@ const AuthHeader = () => {
 				title: "Déconnexion réussie",
 				className: "text-success",
 			});
+			client.clearStore();
 			router.push("/auth/connexion");
 		},
 		onError: (error) => {

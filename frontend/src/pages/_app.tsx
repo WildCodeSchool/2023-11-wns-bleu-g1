@@ -4,7 +4,7 @@ import "@/styles/globals.css";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import type { AppProps } from "next/app";
 
-const client = new ApolloClient({
+export const client = new ApolloClient({
 	uri: process.env.NEXT_PUBLIC_GRAPHQL_API_URL || "/graphql",
 	cache: new InMemoryCache({
 		addTypename: false,
