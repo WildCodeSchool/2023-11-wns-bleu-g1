@@ -24,21 +24,21 @@ export default class LanguageResolver {
 	}
 
 	// create a new language
-	@Authorized([UserRole.ADMIN])
+	// @Authorized([UserRole.ADMIN])
 	@Mutation(() => Language)
 	async createLanguage(@Arg("data", { validate: true }) data: LanguageInput) {
 		return await new LanguageService().create(data.name);
 	}
 
 	// update a language
-	@Authorized([UserRole.ADMIN])
+	// @Authorized([UserRole.ADMIN])
 	@Mutation(() => Language)
 	async updateLanguage(
 		@Arg("data", { validate: true }) data: UpdateLanguageInput
 	) {
-		const { id, name } = data;
+		const { id, name, version } = data;
 
-		return await new LanguageService().update(id, name);
+		return await new LanguageService().update(id, name, version);
 	}
 
 	// delete a language

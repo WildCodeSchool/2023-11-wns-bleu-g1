@@ -15,6 +15,10 @@ export default class Language {
 	@Field()
 	name: string;
 
+	@Column({ nullable: true })
+	@Field()
+	version: string;
+
 	@OneToMany(() => Code, (code) => code.language, { cascade: true })
 	@Field(() => [Code])
 	codes: Code[];
@@ -27,11 +31,14 @@ export class LanguageInput {
 		message: "le nom du langage doit êtres compris entre 1 et 15 caractères",
 	})
 	name: string;
+
+	@Field()
+	version: string;
 }
 
 @InputType()
 export class UpdateLanguageInput {
-	@Field()
+	@Field({ nullable: true })
 	@Length(1, 15, {
 		message: "le nom du langage doit êtres compris entre 1 et 15 caractères",
 	})
@@ -39,4 +46,7 @@ export class UpdateLanguageInput {
 
 	@Field()
 	id: string;
+
+	@Field()
+	version: string;
 }

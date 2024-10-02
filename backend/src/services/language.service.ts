@@ -35,7 +35,7 @@ export default class LanguageService {
 		return this.languageRepository.save(newLanguage);
 	};
 
-	update = async (id: string, name: string) => {
+	update = async (id: string, name: string, version: string) => {
 		const language = await this.languageRepository.findOneBy({ id });
 		const nameAlreadyTaken = await this.languageRepository.findOneBy({
 			name: ILike(`${name}`),
@@ -50,6 +50,7 @@ export default class LanguageService {
 		}
 
 		language.name = name;
+		language.version = version;
 
 		return this.languageRepository.save(language);
 	};
