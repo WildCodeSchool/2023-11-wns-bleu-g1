@@ -25,6 +25,10 @@ query GetProjectById($getProjectId: String!) {
 				id
 			}
 		}
+		user {
+			id
+			pseudo
+		}
 		likes {
 			id
 			user {
@@ -62,5 +66,13 @@ query GetPaginateProjects(
 				pseudo
 			}
 		}
+	}
+}
+
+mutation ToggleProjectPublicState($projectId: String!) {
+	toggleProjectPublicState(id: $projectId) {
+		id
+		isPublic
+		title
 	}
 }

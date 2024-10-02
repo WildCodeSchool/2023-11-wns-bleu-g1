@@ -13,7 +13,6 @@ import { UserRole } from "../entities/user";
 import UserService from "../services/user.service";
 
 export default class UserResolver {
-
 	@Authorized([UserRole.ADMIN])
 	@Query(() => [User])
 	async users() {

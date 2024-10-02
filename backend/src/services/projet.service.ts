@@ -45,4 +45,18 @@ export default class ProjectService {
 
 		return this.projectRepository.save(project);
 	};
+
+	togglePublicState = async (id: string) => {
+		const project = await this.projectRepository.findOne({
+			where: { id },
+		});
+
+		if (!project) {
+			throw new Error("Project not found");
+		}
+
+		project.isPublic = !project.isPublic;
+
+		return this.projectRepository.save(project);
+	};
 }
