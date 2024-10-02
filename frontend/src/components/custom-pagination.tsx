@@ -8,7 +8,17 @@ interface Props {
 	setPage: (page: number) => void;
 	limit: number;
 	dataLength: number;
-	query: QueryResult<any, Exact<{ limit: number; offset: number }>>;
+	query: QueryResult<
+		any,
+		Exact<{
+			withUserProject: boolean;
+			isUser: boolean;
+			searchUser: string;
+			searchProject: string;
+			offset: number;
+			limit: number;
+		}>
+	>;
 	hasMore: boolean;
 }
 const CustomPagination = ({
