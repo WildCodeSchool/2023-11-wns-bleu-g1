@@ -1,5 +1,4 @@
 name: "test-front"
-
 on:
   pull_request:
     paths:

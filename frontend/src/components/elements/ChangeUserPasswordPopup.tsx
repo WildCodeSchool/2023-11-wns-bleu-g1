@@ -12,7 +12,7 @@ import {
 import { AlertCircle, BadgeCheck } from "lucide-react";
 import { ApolloError } from "@apollo/client";
 import { useToast } from "@/components/ui/use-toast";
-import {useRef, useState} from "react";
+import { useRef, useState } from "react";
 import {
 	Form,
 	FormControl,
@@ -26,7 +26,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import {AlertDialogProps} from "@radix-ui/react-alert-dialog";
+import { AlertDialogProps } from "@radix-ui/react-alert-dialog";
 
 export function ChangeUserPasswordPopup() {
 	const getUserProfileQuery = useGetUserProfileQuery();
@@ -37,7 +37,7 @@ export function ChangeUserPasswordPopup() {
 	const passwordRegex =
 		/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 	const profile = getUserProfileQuery?.data?.getUserProfile || null;
-	const closeBtn = useRef<AlertDialogProps>(null)
+	const closeBtn = useRef<HTMLButtonElement>(null);
 
 	const formSchema = z
 		.object({
@@ -71,8 +71,6 @@ export function ChangeUserPasswordPopup() {
 					className: "text-success",
 				});
 				closeBtn.current?.click();
-
-
 			},
 			onError: (err: ApolloError) => {
 				if (err.message.includes("not register")) {
@@ -117,7 +115,9 @@ export function ChangeUserPasswordPopup() {
 				<AlertDialogTitle>Modification de mot de passe</AlertDialogTitle>
 			</AlertDialogHeader>
 			<AlertDialogDescription>
-				<p>Pour modifier votre mot de passe, veuillez remplir les champs suivant</p>
+				<p>
+					Pour modifier votre mot de passe, veuillez remplir les champs suivant
+				</p>
 			</AlertDialogDescription>
 			<AlertDialogFooter>
 				<Form {...form}>

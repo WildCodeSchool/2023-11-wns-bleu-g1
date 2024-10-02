@@ -1,23 +1,22 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import AuthLayout from "@/components/elements/auth-layout";
 import { useRouter } from "next/router";
 import {
-	useUpdateCodeMutation,
 	useGetProjectByIdQuery,
 	useGetUserProfileQuery,
 	GetProjectByIdQuery,
 } from "@/graphql/generated/schema";
-import { BadgeCheck, Save } from "lucide-react";
+
 import LikeButton from "@/components/socials/like-button";
 import PageLoader from "@/components/elements/page-loader";
 import CodeEditor from "@/components/elements/CodeEditor";
-import { toast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 
 const CodingPage = () => {
 	const router = useRouter();
+	const { toast } = useToast();
 	const { id } = router.query;
 
 	const {

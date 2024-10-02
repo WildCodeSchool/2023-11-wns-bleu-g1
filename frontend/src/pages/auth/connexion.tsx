@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
+	GetMyProjectsDocument,
 	GetUserProfileDocument,
 	useSignInMutation,
 } from "@/graphql/generated/schema";
@@ -78,6 +79,13 @@ const SignInPage = () => {
 		refetchQueries: [
 			{
 				query: GetUserProfileDocument,
+			},
+			{
+				query: GetMyProjectsDocument,
+				variables: {
+					limit: 12,
+					offset: 0,
+				},
 			},
 		],
 	});

@@ -58,7 +58,11 @@ export default class ProjectResolver {
 	async getProject(@Arg("id") id: string) {
 		return await new ProjectService().get({
 			where: { id },
-			relations: { codes: { language: true }, likes: { user: true } },
+			relations: {
+				codes: { language: true },
+				likes: { user: true },
+				user: true,
+			},
 		});
 	}
 
@@ -71,5 +75,11 @@ export default class ProjectResolver {
 		if (!currentUser) throw new GraphQLError("you need to be logged in!");
 
 		return await new ProjectService().create(data, currentUser);
+	}
+
+	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Mutation(() => Project)
+	async toggleProjectPublicState(@Arg("id") id: string) {
+		return await new ProjectService().togglePublicState(id);
 	}
 }

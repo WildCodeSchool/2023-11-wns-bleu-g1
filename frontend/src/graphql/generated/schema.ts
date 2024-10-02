@@ -67,6 +67,7 @@ export type Mutation = {
   like: Like;
   logout: Scalars['String'];
   signin: Scalars['String'];
+  toggleProjectPublicState: Project;
   unlike: Scalars['Boolean'];
   updateCode: Code;
   updateLanguage: Language;
@@ -117,6 +118,11 @@ export type MutationLikeArgs = {
 
 export type MutationSigninArgs = {
   data: SigninInput;
+};
+
+
+export type MutationToggleProjectPublicStateArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -314,7 +320,7 @@ export type GetProjectByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetProjectByIdQuery = { __typename?: 'Query', getProject: { __typename?: 'Project', id: string, title: string, isPublic: boolean, codes: Array<{ __typename?: 'Code', id: string, content: string, language: { __typename?: 'Language', name: string, id: string, version: string } }>, likes: Array<{ __typename?: 'Like', id: string, user: { __typename?: 'User', id: string, pseudo: string } }> } };
+export type GetProjectByIdQuery = { __typename?: 'Query', getProject: { __typename?: 'Project', id: string, title: string, isPublic: boolean, codes: Array<{ __typename?: 'Code', id: string, content: string, language: { __typename?: 'Language', name: string, id: string, version: string } }>, user: { __typename?: 'User', id: string, pseudo: string }, likes: Array<{ __typename?: 'Like', id: string, user: { __typename?: 'User', id: string, pseudo: string } }> } };
 
 export type GetPaginateProjectsQueryVariables = Exact<{
   withUserProject: Scalars['Boolean'];
@@ -327,6 +333,13 @@ export type GetPaginateProjectsQueryVariables = Exact<{
 
 
 export type GetPaginateProjectsQuery = { __typename?: 'Query', getPaginateProjects: { __typename?: 'ProjectPaginationResponse', hasMore: boolean, isUserSearch: boolean, projects: Array<{ __typename?: 'Project', id: string, isPublic: boolean, title: string, createdAt: any, user: { __typename?: 'User', pseudo: string } }> } };
+
+export type ToggleProjectPublicStateMutationVariables = Exact<{
+  projectId: Scalars['String'];
+}>;
+
+
+export type ToggleProjectPublicStateMutation = { __typename?: 'Mutation', toggleProjectPublicState: { __typename?: 'Project', id: string, isPublic: boolean, title: string } };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -744,6 +757,10 @@ export const GetProjectByIdDocument = gql`
         version
       }
     }
+    user {
+      id
+      pseudo
+    }
     likes {
       id
       user {
@@ -839,6 +856,41 @@ export function useGetPaginateProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHo
 export type GetPaginateProjectsQueryHookResult = ReturnType<typeof useGetPaginateProjectsQuery>;
 export type GetPaginateProjectsLazyQueryHookResult = ReturnType<typeof useGetPaginateProjectsLazyQuery>;
 export type GetPaginateProjectsQueryResult = Apollo.QueryResult<GetPaginateProjectsQuery, GetPaginateProjectsQueryVariables>;
+export const ToggleProjectPublicStateDocument = gql`
+    mutation ToggleProjectPublicState($projectId: String!) {
+  toggleProjectPublicState(id: $projectId) {
+    id
+    isPublic
+    title
+  }
+}
+    `;
+export type ToggleProjectPublicStateMutationFn = Apollo.MutationFunction<ToggleProjectPublicStateMutation, ToggleProjectPublicStateMutationVariables>;
+
+/**
+ * __useToggleProjectPublicStateMutation__
+ *
+ * To run a mutation, you first call `useToggleProjectPublicStateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useToggleProjectPublicStateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [toggleProjectPublicStateMutation, { data, loading, error }] = useToggleProjectPublicStateMutation({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useToggleProjectPublicStateMutation(baseOptions?: Apollo.MutationHookOptions<ToggleProjectPublicStateMutation, ToggleProjectPublicStateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ToggleProjectPublicStateMutation, ToggleProjectPublicStateMutationVariables>(ToggleProjectPublicStateDocument, options);
+      }
+export type ToggleProjectPublicStateMutationHookResult = ReturnType<typeof useToggleProjectPublicStateMutation>;
+export type ToggleProjectPublicStateMutationResult = Apollo.MutationResult<ToggleProjectPublicStateMutation>;
+export type ToggleProjectPublicStateMutationOptions = Apollo.BaseMutationOptions<ToggleProjectPublicStateMutation, ToggleProjectPublicStateMutationVariables>;
 export const UsersDocument = gql`
     query Users {
   users {

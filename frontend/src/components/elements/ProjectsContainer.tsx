@@ -35,6 +35,7 @@ const ProjectsContainer = ({
 			isUser,
 			withUserProject,
 		},
+		fetchPolicy: "no-cache",
 	});
 
 	if (getPaginateProjectsQuery.loading) return <PageLoader />;

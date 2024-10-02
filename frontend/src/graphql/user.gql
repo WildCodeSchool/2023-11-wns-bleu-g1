@@ -51,14 +51,13 @@ mutation IncrementExecutionCounter($counter: ExecutionCounterInput!) {
 }
 
 mutation DeleteUser($deleteUserId: String!) {
-  deleteUser(id: $deleteUserId)
+	deleteUser(id: $deleteUserId)
 }
 
 mutation UpdateUsername($datas: UpdateUsernameInput!) {
-  updateUsername(datas: $datas)
+	updateUsername(datas: $datas)
 }
 
 mutation UpdateUserPassword($datas: UpdatePasswordInput!) {
-  updateUserPassword(datas: $datas)
+	updateUserPassword(datas: $datas)
 }
-
