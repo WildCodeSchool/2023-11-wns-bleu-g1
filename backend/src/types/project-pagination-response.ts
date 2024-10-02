@@ -8,4 +8,7 @@ export default class ProjectPaginationResponse {
 
 	@Field(() => Boolean)
 	hasMore: boolean;
+
+	@Field(() => Boolean)
+	isUserSearch: boolean;
 }
