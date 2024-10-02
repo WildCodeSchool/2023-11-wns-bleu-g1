@@ -6,9 +6,10 @@ import { Context } from "../interfaces/auth";
 import ProjectService from "../services/projet.service";
 import { UserRole } from "../entities/user";
 import ProjectPaginationResponse from "../types/project-pagination-response";
+import { Equal, ILike, Not } from "typeorm";
 
 export default class ProjectResolver {
-	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Authorized([UserRole.ADMIN])
 	@Query(() => [Project])
 	async getProjects() {
 		return await new ProjectService().getAll({
@@ -18,38 +19,37 @@ export default class ProjectResolver {
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Query(() => ProjectPaginationResponse)
-	async getMyProjects(
+	async getPaginateProjects(
 		@Ctx() { currentUser }: Context,
 		@Arg("limit", { defaultValue: 12 }) limit: number,
-		@Arg("offset", { defaultValue: 0 }) offset: number
-	) {
-		return await new ProjectService().getAllPaginate(
-			{
-				where: { user: currentUser },
-				relations: { codes: true, user: true },
-				order: { createdAt: "DESC" },
-				take: limit + 1,
-				skip: offset,
-			},
-			limit
-		);
-	}
-
-	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
-	@Query(() => ProjectPaginationResponse)
-	async getPublicsProjects(
-		@Arg("limit", { defaultValue: 12 }) limit: number,
-		@Arg("offset", { defaultValue: 0 }) offset: number
+		@Arg("offset", { defaultValue: 0 }) offset: number,
+		@Arg("searchProject", { defaultValue: "" }) searchProject: string,
+		@Arg("searchUser", { defaultValue: "" }) searchUser: string,
+		@Arg("isUser", { defaultValue: false }) isUser: boolean,
+		@Arg("withUserProject", { defaultValue: false }) withUserProject: boolean
 	): Promise<ProjectPaginationResponse> {
+		const id = withUserProject ? undefined : Not(Equal(currentUser?.id));
+
 		return await new ProjectService().getAllPaginate(
 			{
-				where: { isPublic: true },
 				relations: { codes: true, user: true },
+				where: {
+					isPublic: isUser ? undefined : true,
+					title: ILike(`%${searchProject}%`),
+					user: isUser
+						? currentUser
+						: {
+								pseudo: ILike(`%${searchUser}%`),
+								id,
+							},
+				},
 				order: { createdAt: "DESC" },
 				take: limit + 1,
 				skip: offset,
 			},
-			limit
+			limit,
+			searchUser,
+			searchProject
 		);
 	}
 
