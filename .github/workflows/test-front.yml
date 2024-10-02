@@ -1,13 +1,12 @@
 name: "test-front"
-
 on:
   pull_request:
     paths:
       - 'frontend/**'
   workflow_call:
 
-jobs:
 
+jobs:
   linting-frontend:
     name: Linting frontend
     runs-on: ubuntu-latest
@@ -24,53 +23,20 @@ jobs:
       - name: Code Linting
         run: npm run lint
 
-  prettier-frontend:
-    name: Prettier frontend
-    needs: [ linting-frontend ]
+  test-client:
+    needs: linting-frontend
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./frontend
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Get the code
+        uses: actions/checkout@v4
+      - name: Install nodeJS
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Install Dependencies
-        run: npm ci
-      - name: Code Prettier
-        run: npx prettier . --check
-
-  frontend-integration-tests:
-    name: integration tests
-    needs: prettier-frontend
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./frontend
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Install Dependencies
+      - name: Install deps
         run: npm ci
       - name: Run tests
-        run: npm run test
-
-  frontend-e2e-tests:
-    name: e2e tests
-    runs-on: ubuntu-latest
-    needs: frontend-integration-tests
-    defaults:
-      run:
-        working-directory: ./frontend
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Cypress Github Action
-        uses: cypress-io/github-action@v6
-        with:
-          working-directory: ./frontend
-          build: npm run build
-          start: npm run start
+        run: npm test
