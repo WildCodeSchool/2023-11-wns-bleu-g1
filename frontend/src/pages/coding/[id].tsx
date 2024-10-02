@@ -57,7 +57,7 @@ const CodingPage = () => {
 
 				<Separator className="mt-3 md:mt-8 mb-3" />
 
-				{/* <LikeButton project={project} userId={userId} /> */}
+				<LikeButton project={project} userId={userId} />
 			</div>
 		</AuthLayout>
 	);

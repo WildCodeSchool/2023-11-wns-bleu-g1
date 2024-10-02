@@ -38,11 +38,12 @@ const CodeEditor = ({ project }: Props) => {
 
 	const { toast } = useToast();
 
-	const editorRef = useRef();
+	const editorRef = useRef(); // typer le useref <T>
 
 	const [value, setValue] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 	const [output, setOutput] = useState(null);
+	const [isError, setIsError] = useState(false);
 
 	useMemo(() => {
 		setValue(codes[0].content);
@@ -84,7 +85,7 @@ const CodeEditor = ({ project }: Props) => {
 	};
 
 	const runCode = async () => {
-		const sourceCode = editorRef.current.getValue();
+		const sourceCode = editorRef.current && editorRef.current.getValue();
 
 		if (!sourceCode) return;
 
@@ -104,14 +105,20 @@ const CodeEditor = ({ project }: Props) => {
 					codes[0].language.version
 				);
 
-				setOutput(result.output);
+				setOutput(result.output.split("\n"));
+				result.stderr ? setIsError(true) : setIsError(false);
 				toast({
 					icon: <BadgeCheck className="h-5 w-5" />,
 					title: `${count === 49 ? "C'était ton dernier essai" : `Il te reste ${49 - count} execution. Pour ne plus avoir de limitation, passer prremium!`}`,
 					className: "text-success",
 				});
-			} catch (e) {
-				console.log("Run code error", e);
+			} catch (e: any) {
+				console.error("Run code error", e);
+				toast({
+					title: "Une erreur est survenue",
+					description: e.message || "Impossblie d'executer le code",
+					className: "text-error",
+				});
 			} finally {
 			}
 			setIsLoading(false);
@@ -187,7 +194,9 @@ const CodeEditor = ({ project }: Props) => {
 					/>
 				</div>
 
-				<div className={`bg-black p-5 w-1/2 border-[1px] border-white`}>
+				<div
+					className={`bg-black p-5 w-1/2 border-[1px] ${isError ? "border-red-600 text-red-600" : "border-white text-white"}`}
+				>
 					{isLoading && <p>Compilation en cours</p>}
 					<div>{output ? output : "Le résultat s'affichera ici …"}</div>
 				</div>
