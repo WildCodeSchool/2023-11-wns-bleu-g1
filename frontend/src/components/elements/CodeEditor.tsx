@@ -98,7 +98,11 @@ const CodeEditor = ({ project }: Props) => {
 			try {
 				setIsLoading(true);
 
-				const { run: result } = await executeCode(language, sourceCode);
+				const { run: result } = await executeCode(
+					language,
+					sourceCode,
+					codes[0].language.version
+				);
 
 				setOutput(result.output);
 				toast({
@@ -183,7 +187,7 @@ const CodeEditor = ({ project }: Props) => {
 					/>
 				</div>
 
-				<div className="bg-black p-5 w-1/2">
+				<div className={`bg-black p-5 w-1/2 border-[1px] border-white`}>
 					{isLoading && <p>Compilation en cours</p>}
 					<div>{output ? output : "Le résultat s'affichera ici …"}</div>
 				</div>

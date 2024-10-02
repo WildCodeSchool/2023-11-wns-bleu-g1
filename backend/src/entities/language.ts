@@ -15,7 +15,7 @@ export default class Language {
 	@Field()
 	name: string;
 
-	@Column({ nullable: true })
+	@Column()
 	@Field()
 	version: string;
 

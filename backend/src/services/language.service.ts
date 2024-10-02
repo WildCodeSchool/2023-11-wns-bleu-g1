@@ -2,7 +2,10 @@ import { ILike, Repository } from "typeorm";
 import { GraphQLError } from "graphql";
 
 import DataSource from "../db";
-import Language from "../entities/language";
+import Language, {
+	LanguageInput,
+	UpdateLanguageInput,
+} from "../entities/language";
 
 export default class LanguageService {
 	languageRepository: Repository<Language>;
@@ -19,7 +22,8 @@ export default class LanguageService {
 		return await this.languageRepository.findOneOrFail(request);
 	};
 
-	create = async (name: string) => {
+	create = async (data: LanguageInput) => {
+		const { name, version } = data;
 		const nameAlreadyTaken = await this.languageRepository.findOneBy({
 			name: ILike(name),
 		});
@@ -30,12 +34,15 @@ export default class LanguageService {
 
 		const newLanguage = this.languageRepository.create({
 			name,
+			version,
 		});
 
 		return this.languageRepository.save(newLanguage);
 	};
 
-	update = async (id: string, name: string, version: string) => {
+	update = async (data: UpdateLanguageInput) => {
+		const { id, name, version } = data;
+
 		const language = await this.languageRepository.findOneBy({ id });
 		const nameAlreadyTaken = await this.languageRepository.findOneBy({
 			name: ILike(`${name}`),
@@ -49,8 +56,8 @@ export default class LanguageService {
 			throw new GraphQLError(`${name} already taken`);
 		}
 
-		language.name = name;
-		language.version = version;
+		language.name = name ? name : language.name;
+		language.version = version ? version : language.version;
 
 		return this.languageRepository.save(language);
 	};
