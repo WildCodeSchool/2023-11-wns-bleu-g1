@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { ILike, Repository } from "typeorm";
 import { GraphQLError } from "graphql";
 import jwt from "jsonwebtoken";
 import { verify } from "argon2";
@@ -35,12 +35,9 @@ export default class UserService {
 		const userAlreadyExist = await this.userRepository.findOneBy({
 			email: data.email,
 		});
-
-		const users = await this.getAll();
-		const pseudoAlreadyExist = users.find(
-			(user) =>
-				user.pseudo.toLocaleLowerCase() === data.pseudo.toLocaleLowerCase()
-		);
+		const pseudoAlreadyExist = await this.userRepository.findOneBy({
+			pseudo: ILike(data.pseudo),
+		});
 
 		if (userAlreadyExist) {
 			throw new GraphQLError(`user: ${data.email} already exist`);
