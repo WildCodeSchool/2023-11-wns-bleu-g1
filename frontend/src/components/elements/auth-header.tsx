@@ -60,7 +60,8 @@ const AuthHeader = () => {
 				<div className="inline-flex gap-6">
 					{!onCodingPage ? <NewProjectPopup /> : null}
 					<DropdownMenu>
-						<DropdownMenuTrigger>
+						<DropdownMenuTrigger className="relative isolate">
+							{ profile?.isPremium && <Crown className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2" /> }
 							<Avatar>
 								<AvatarImage src="https://github.com/shadcn.png" />
 								<AvatarFallback>
@@ -73,7 +74,7 @@ const AuthHeader = () => {
 							<DropdownMenuSeparator />
 							<DropdownMenuItem className={itemsClassName} asChild>
 								<Link href={`/profile`}>
-									<User className="{iconsClassName}" />
+									<User className={iconsClassName} />
 									Mon profil
 								</Link>
 							</DropdownMenuItem>
@@ -92,7 +93,7 @@ const AuthHeader = () => {
 							>
 								<Link href={"/premium"}>
 									<Crown className={iconsClassName} />
-									Passer Premium
+									Mon abonnement
 								</Link>
 							</DropdownMenuItem>
 							<DropdownMenuItem
