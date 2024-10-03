@@ -1034,7 +1034,8 @@ export const GetProjectByIdDocument = gql`
 			user {
 				id
 				pseudo
-			}likes {
+			}
+			likes {
 				id
 				user {
 					id
