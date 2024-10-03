@@ -40,9 +40,9 @@ jobs:
       - name: Code Prettier
         run: npx prettier . --check
 
-  unit-tests:
+  back-unit-test:
     name: Unit test backend
-    needs: prettier-backend
+    needs: [ prettier-backend ]
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -54,5 +54,5 @@ jobs:
           node-version: 20
       - name: Install Dependencies
         run: npm ci
-      - name: Run tests
-        run: npm test
+      - name: Unit test
+        run: npm run test
