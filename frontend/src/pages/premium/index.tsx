@@ -88,7 +88,7 @@ const PricingCard = memo(({ option, enabled, isPremium }: PricingCardProps) => (
 						<Link
 							href={`${option.link}`}
 							className={buttonVariants()}
-							target={`${option.external}` && "_blank"}
+							target={option.external && "_blank"}
 						>
 							<span className="tracking-tight">{option.btn}</span>
 							{/* {option.external && <ExternalLinkIcon className="h-4 w-4 ml-2" />} */}
@@ -188,7 +188,7 @@ export default function Pricing() {
 				"50 exécutions de code par jour",
 				"Limite de 5 projets",
 			],
-			link: "/coding/codingPage",
+			link: "/profile",
 			external: false,
 			btn: "Continuer avec le plan gratuit",
 		},
