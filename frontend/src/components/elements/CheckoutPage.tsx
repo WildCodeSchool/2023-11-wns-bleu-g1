@@ -26,8 +26,8 @@ import { ApolloError } from '@apollo/client';
 const CheckoutPage = ({ amount }: { amount: number }) => {
     const stripe = useStripe();
     const elements = useElements();
+    elements?.update({ appearance: { theme: 'night', labels: 'floating' } });
     const form = useForm();
-    // const appearance = { theme: 'night', labels: 'floating' };
     
     // Use the mutation hook directly in the component
     const [createPaymentIntent] = useCreatePaymentIntentMutation();
@@ -55,12 +55,9 @@ const CheckoutPage = ({ amount }: { amount: number }) => {
 		},
 	});
 
-    // const elements = stripe?.elements({clientSecret, options: { appearance }});
-
     const router = useRouter();
 
     useEffect(() => {
-        // Call the mutation directly in the effect
         const fetchClientSecret = async () => {
             try {
                 const response = await createPaymentIntent({
@@ -80,7 +77,6 @@ const CheckoutPage = ({ amount }: { amount: number }) => {
         }
     }, [amount, createPaymentIntent]);
 
-    // Handle form submission
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setLoading(true);
@@ -89,10 +85,10 @@ const CheckoutPage = ({ amount }: { amount: number }) => {
             return;
         }
 
-        const cardElement = elements.getElement(PaymentElement);
-        if (cardElement) {
-            cardElement.update({ value: JSON.stringify({ cardNumber: "4242424242424242", expDate: "12/34", cvc: "123" }) });
-        }
+        // const cardElement = elements.getElement(PaymentElement);
+        // if (cardElement) {
+        //     cardElement.update({ value: JSON.stringify({ cardNumber: "4242424242424242", expDate: "12/34", cvc: "123" }) });
+        // }
 
         const { error: submitError } = await elements.submit();
 
@@ -164,12 +160,9 @@ const CheckoutPage = ({ amount }: { amount: number }) => {
                 <form onSubmit={handleSubmit}>
                     <CardContent className="space-y-3">
                         <p className='rounded-md text-sm text-neutral-600'>Carte pour les tests : 4242 4242 4242 4242 <br /> Date Expiration : 12/34 <br /> CVC : 123</p>
-                        {/* <Elements stripe={stripe} options={{ clientSecret, appearance: { theme: 'night', labels: 'floating' } }}> */}
                             {clientSecret && (
-                                    <PaymentElement />
-                            )}
-                        {/* </Elements> */}
-
+                                <PaymentElement />
+                        )}
                         {errorMessage && <p>{errorMessage}</p>}
                     </CardContent>
                     <CardFooter className="flex-col gap-4">
