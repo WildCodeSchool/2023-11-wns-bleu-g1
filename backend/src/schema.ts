@@ -6,6 +6,7 @@ import ProjectResolver from "./resolvers/project.resolver";
 import LanguageResolver from "./resolvers/language.resolver";
 
 import LikeResolver from "./resolvers/like.resolver";
+import PremiumResolver from "./resolvers/premium.resolver";
 
 export default buildSchemaSync({
 	resolvers: [
