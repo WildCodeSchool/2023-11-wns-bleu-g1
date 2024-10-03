@@ -17,7 +17,6 @@ import {
 	GetProjectByIdQuery,
 	useToggleProjectPublicStateMutation,
 	GetProjectByIdDocument,
-	GetPublicsProjectsDocument,
 } from "@/graphql/generated/schema";
 import { BadgeCheck, Save } from "lucide-react";
 import LikeButton from "@/components/socials/like-button";
@@ -76,13 +75,6 @@ const CodingPage = () => {
 					query: GetProjectByIdDocument,
 					variables: {
 						getProjectId: id as string,
-					},
-				},
-				{
-					query: GetPublicsProjectsDocument,
-					variables: {
-						limit: 12,
-						offset: 0,
 					},
 				},
 			],

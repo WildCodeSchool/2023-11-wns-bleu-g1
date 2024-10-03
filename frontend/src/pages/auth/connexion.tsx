@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
-	GetMyProjectsDocument,
+	GetPaginateProjectsDocument,
 	GetUserProfileDocument,
 	useSignInMutation,
 } from "@/graphql/generated/schema";
@@ -81,7 +81,7 @@ const SignInPage = () => {
 				query: GetUserProfileDocument,
 			},
 			{
-				query: GetMyProjectsDocument,
+				query: GetPaginateProjectsDocument,
 				variables: {
 					limit: 12,
 					offset: 0,

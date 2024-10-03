@@ -5,131 +5,14 @@ on:
 
 jobs:
 
-  backend-linting:
-    name: Linting backend
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./backend
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Install Dependencies
-        run: npm ci
-      - name: Code Linting
-        run: npm run lint
+  call-test-front:
+    uses: WildCodeSchool/2023-11-wns-bleu-g1/.github/workflows/test-front.yml@master
 
-  frontend-linting:
-    name: Linting frontend
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./frontend
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Install Dependencies
-        run: npm ci
-      - name: Code Linting
-        run: npm run lint
-
-  backend-integration-tests:
-    needs: backend-linting
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./backend
-    steps:
-      - name: Get the code
-        uses: actions/checkout@v4
-      - name: Install nodeJS
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Make envfile
-        run: cp .env.example .env
-      - name: Install deps
-        run: npm ci
-      - name: Start test DB
-        run: npm run testDb:wait
-      - name: Run tests
-        run: npm test
-
-  frontend-test-client:
-    needs: frontend-linting
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./frontend
-    steps:
-      - name: Get the code
-        uses: actions/checkout@v4
-      - name: Install nodeJS
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Install deps
-        run: npm ci
-      - name: Run tests
-        run: npm test
-
-  backend-e2e-test:
-    needs: backend-integration-tests
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./test-e2e
-    steps:
-      - name: Get the code
-        uses: actions/checkout@v4
-      - name: Layers cache
-        uses: satackey/action-docker-layer-caching@v0.0.11
-        continue-on-error: true
-      - name: Install nodeJS
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Install deps
-        run: npm ci
-      - name: Install backend deps
-        run: cd ../backend && npm ci
-      - name: Store Playwright's Version
-        run: |
-          PLAYWRIGHT_VERSION=$(npm ls @playwright/test | grep @playwright | sed 's/.*@//')
-          echo "Playwright's Version: $PLAYWRIGHT_VERSION"
-          echo "PLAYWRIGHT_VERSION=$PLAYWRIGHT_VERSION" >> $GITHUB_ENV
-      - name: Cache Playwright Browsers for Playwright's Version
-        id: cache-playwright-browsers
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-browsers-${{ env.PLAYWRIGHT_VERSION }}
-      - name: Setup Playwright
-        if: steps.cache-playwright-browsers.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps
-      - name: Make envfiles
-        run: |
-          cp .env.example .env
-          cd ../backend/ && cp .env.example .env
-          cd ../frontend/ && cp .env.example .env
-      - name: Start app
-        run: npm run app:start
-      - name: Run Playwright tests
-        run: npm run test
-      - name: Store Artifacts from Failed Tests
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results
-          path: test-results/
-          retention-days: 7
+  call-test-back:
+    uses: WildCodeSchool/2023-11-wns-bleu-g1/.github/workflows/test-back.yml@master
 
   build-and-push-frontend-production:
-    needs: frontend-test-client
+    needs: call-test-front
     runs-on: ubuntu-latest
     steps:
       - name: Set up QEMU
@@ -152,7 +35,7 @@ jobs:
           cache-to: type=gha,mode=max
 
   build-and-push-backend-production:
-    needs: backend-e2e-test
+    needs: call-test-back
     runs-on: ubuntu-latest
     steps:
       - name: Set up QEMU
