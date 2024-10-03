@@ -5,6 +5,8 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import {
 	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
 	AlertDialogContent,
 	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
@@ -28,6 +30,7 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { BadgeCheck } from "lucide-react";
 import { ApolloError } from "@apollo/client";
+import { cn } from "@/lib/utils";
 
 interface PricingOption {
 	name: string;
@@ -253,24 +256,18 @@ export default function Pricing() {
 							</AlertDialogTrigger>
 
 							<AlertDialogContent>
-								<p className="text-center text-white">
-									Êtes-vous sûr de vouloir vous désabonner ?
-								</p>
-								
-								<div className="flex justify-center gap-2">
-									<Button
-										variant={"destructive"}
-										className="mt-4 gap-1 w-fit"
-										onClick={unsubscribe}
-									>
+								<div className="flex flex-col space-y-2 text-center sm:text-left">
+									<h2 className="text-lg font-semibold">Êtes-vous sûr de vouloir annuler votre abonnement ?</h2>
+									<p className="text-md text-muted-foreground">Vous perdrez vos avantages à la fin de votre abonnement et devrez renseigner vos coordonnées bancaires à nouveau afin de les retrouver.</p>
+								</div>
+								<div className="flex sm:flex-row sm:justify-end sm:space-x-2 mt-4">
+									<AlertDialogAction className={buttonVariants({ variant: "destructive" })}
+											onClick={unsubscribe}>
 										Oui
-									</Button>
-									<Button
-										variant={"outline"}
-										className="mt-4 gap-1 w-fit"
-									>
+									</AlertDialogAction>
+									<AlertDialogCancel>
 										Non
-									</Button>
+									</AlertDialogCancel>
 								</div>
 							</AlertDialogContent>
 						</AlertDialog>
