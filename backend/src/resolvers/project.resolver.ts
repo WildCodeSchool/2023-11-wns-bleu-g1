@@ -62,6 +62,7 @@ export default class ProjectResolver {
 				codes: { language: true },
 				likes: { user: true },
 				user: true,
+				comments: { user: true },
 			},
 		});
 	}
