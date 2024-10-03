@@ -64,7 +64,7 @@ export function ConfirmDeletePopUp() {
 
 	return (
 		<>
-			<AlertDialogHeader>
+			<AlertDialogHeader id="confirmDeletePopup">
 				<AlertDialogTitle>Etes-vous sûr de vouloir continuer?</AlertDialogTitle>
 				<AlertDialogDescription>
 					Cette action est irréversible. Cela supprimera définitivement votre
