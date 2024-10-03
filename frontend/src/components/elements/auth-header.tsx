@@ -58,9 +58,7 @@ const AuthHeader = () => {
 				</Link>
 
 				<div className="inline-flex gap-6">
-					{!onCodingPage ? (
-						<NewProjectPopup />
-					) : null}
+					{!onCodingPage ? <NewProjectPopup /> : null}
 					<DropdownMenu>
 						<DropdownMenuTrigger>
 							<Avatar>
@@ -75,8 +73,8 @@ const AuthHeader = () => {
 							<DropdownMenuSeparator />
 							<DropdownMenuItem className={itemsClassName} asChild>
 								<Link href={`/profile`}>
-									<User className="{iconsClassName}"/>
-										 Mon profil
+									<User className="{iconsClassName}" />
+									Mon profil
 								</Link>
 							</DropdownMenuItem>
 							<DropdownMenuItem className={itemsClassName} asChild>

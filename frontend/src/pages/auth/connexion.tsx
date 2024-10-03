@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
+	GetMyProjectsDocument,
 	GetUserProfileDocument,
 	useSignInMutation,
 } from "@/graphql/generated/schema";
@@ -67,7 +68,7 @@ const SignInPage = () => {
 		onError: (err: ApolloError) => {
 			console.error(err);
 			if (err.message.includes("not register")) {
-				setErrorMessage("Aucun n'est lié à cette adresse email.");
+				setErrorMessage("Aucun compte n'est lié à cette adresse email.");
 				return;
 			}
 			if (err.message.includes("invalid password")) {
@@ -79,6 +80,13 @@ const SignInPage = () => {
 		refetchQueries: [
 			{
 				query: GetUserProfileDocument,
+			},
+			{
+				query: GetMyProjectsDocument,
+				variables: {
+					limit: 12,
+					offset: 0,
+				},
 			},
 		],
 	});

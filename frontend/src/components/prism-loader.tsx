@@ -4,9 +4,9 @@ import "prismjs/themes/prism-okaidia.css";
 import "prismjs/components/prism-typescript";
 
 export default function PrismLoader() {
-  useEffect(() => {
-    Prism.highlightAll();
-  }, []);
+	useEffect(() => {
+		Prism.highlightAll();
+	}, []);
 
-  return <div className="hidden"></div>;
+	return <div className="hidden"></div>;
 }

@@ -22,6 +22,8 @@ mutation SignUp($data: NewUserInput!) {
 		id
 		pseudo
 		role
+		executionCounter
+		isPremium
 	}
 }
 
@@ -50,4 +52,16 @@ mutation IncrementExecutionCounter($counter: ExecutionCounterInput!) {
 
 mutation UpdateUserIsPremium($isPremium: Boolean!) {
 	updateUserIsPremium(isPremium: $isPremium)
+}
+
+mutation DeleteUser($deleteUserId: String!) {
+	deleteUser(id: $deleteUserId)
+}
+
+mutation UpdateUsername($datas: UpdateUsernameInput!) {
+	updateUsername(datas: $datas)
+}
+
+mutation UpdateUserPassword($datas: UpdatePasswordInput!) {
+	updateUserPassword(datas: $datas)
 }

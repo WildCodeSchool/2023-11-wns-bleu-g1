@@ -9,6 +9,7 @@ import {
 	PrimaryGeneratedColumn,
 } from "typeorm";
 import Project from "./project";
+import Like from "./like";
 
 export enum UserRole {
 	ADMIN = "admin",
@@ -54,6 +55,9 @@ export default class User {
 
 	@OneToMany(() => Project, (project) => project.user, { cascade: true })
 	projects: Project[];
+
+	@OneToMany(() => Like, (like) => like.user, { cascade: true })
+	likes: Like[];
 }
 
 @InputType()
@@ -91,7 +95,7 @@ export class SigninInput {
 
 @InputType()
 export class ExecutionCounterInput {
-	@Min(0)
+	@Min(1)
 	@Max(50)
 	@Field()
 	executionCounter: number;
@@ -101,4 +105,26 @@ export class ExecutionCounterInput {
 export class IsPremiumInput {
 	@Field()
 	isPremium: boolean;
+}
+export class UpdateUsernameInput {
+	@Field()
+	id: string;
+
+	@Field()
+	newUsername: string;
+}
+
+@InputType()
+export class UpdatePasswordInput {
+	@Field()
+	id: string;
+
+	@Field()
+	oldPassword: string;
+
+	@Matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/, {
+		message: "Password too weak",
+	})
+	@Field()
+	newPassword: string;
 }

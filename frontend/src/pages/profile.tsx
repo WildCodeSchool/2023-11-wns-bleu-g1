@@ -1,74 +1,90 @@
-import CustomPagination from "@/components/custom-pagination";
+import { useCallback, useState } from "react";
+
 import AuthLayout from "@/components/elements/auth-layout";
-import NotFoundAlert from "@/components/elements/not-found-alert";
 import PageLoader from "@/components/elements/page-loader";
-import ProjectCard from "@/components/elements/project-card";
+import ProjectsContainer from "@/components/elements/ProjectsContainer";
 import UserHeadCard from "@/components/elements/user-head-card";
-import {
-	useGetMyProjectsQuery,
-	useGetUserProfileQuery,
-} from "@/graphql/generated/schema";
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { useGetUserProfileQuery } from "@/graphql/generated/schema";
+
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import AccountSettings from "@/components/elements/AccountSettings";
 
 const ProfilPage = () => {
-	const [page, setPage] = useState(0);
-	const limit = 12;
-	const offset = page * limit;
+	const [searchbar, setSearchbar] = useState("");
+	const [selectOption, setSelectOption] = useState("project");
+	const [searchProject, setSearchProject] = useState("");
+
+	const sendSearch = useCallback(
+		(value: string) => {
+			switch (selectOption) {
+				case "project":
+					setSearchProject(value);
+					setSearchbar("");
+					break;
+
+				default:
+					setSearchProject("");
+					setSelectOption("project");
+					setSearchbar("");
+					break;
+			}
+		},
+		[selectOption]
+	);
 
 	const getUserProfileQuery = useGetUserProfileQuery();
-	const getMyProjectsQuery = useGetMyProjectsQuery({
-		variables: {
-			limit,
-			offset,
-		},
-		notifyOnNetworkStatusChange: true,
-	});
 
-	if (getUserProfileQuery.loading || getMyProjectsQuery.loading)
-		return <PageLoader />;
+	if (getUserProfileQuery.loading) return <PageLoader />;
 
-	if (getUserProfileQuery.error || getMyProjectsQuery.error)
-		console.error(getUserProfileQuery.error || getMyProjectsQuery.error);
+	if (getUserProfileQuery.error) console.error(getUserProfileQuery.error);
 
 	const profile = getUserProfileQuery?.data?.getUserProfile || null;
-	const data = getMyProjectsQuery.data?.getMyProjects;
-
-	const projects = data?.projects || [];
 
 	return (
 		<AuthLayout>
 			<div className="py-8 space-y-8">
 				<UserHeadCard profile={profile} />
 				<h3 className="text-2xl font-semibold">Mes Projets</h3>
-				{projects.length > 0 ? (
-					<div>
-						<div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-							{projects.map((project) => (
-								<ProjectCard key={project.id} project={project} onProfilePage />
-							))}
-						</div>
-					</div>
-				) : page > 0 ? (
-					<NotFoundAlert
-						title="Vous n'avez pas d'autres projets"
-						description='Vous pouvez revenir en arrière en cliquant sur le bouton "Précédent"'
-					/>
-				) : (
-					<NotFoundAlert
-						title="Vous n'avez pas encore de projet"
-						description='Vous pouvez en créer un en cliquant sur le bouton "Nouveau
-					projet"'
-					/>
-				)}
-				<CustomPagination
-					page={page}
-					setPage={setPage}
-					limit={limit}
-					hasMore={data?.hasMore || false}
-					dataLength={projects.length}
-					query={getMyProjectsQuery}
-				/>
 			</div>
+
+			<div className="flex justify-evenly items-center gap-8">
+				<Input
+					className="bg-white h-[30px] w-[300px] rounded-xl text-black"
+					value={searchbar}
+					onChange={(e) => setSearchbar(e.currentTarget.value)}
+				/>
+
+				<div className="flex gap-5">
+					<Button
+						className="h-[25px]"
+						onClick={() => sendSearch(searchbar)}
+						disabled={!searchbar.length}
+					>
+						Rechercher
+					</Button>
+
+					<Button
+						className="h-[25px]"
+						variant={"dark"}
+						onClick={() => {
+							sendSearch("");
+							setSelectOption("project");
+						}}
+					>
+						Reset
+					</Button>
+				</div>
+			</div>
+
+			<Separator className="my-6" />
+
+			<ProjectsContainer searchProject={searchProject} />
+
+			<Separator className="my-6" />
+
+			<AccountSettings />
 		</AuthLayout>
 	);
 };

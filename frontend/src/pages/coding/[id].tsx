@@ -13,13 +13,33 @@ import {
 	useGetExecutionCounterQuery,
 	useIncrementExecutionCounterMutation,
 	useGetProjectByIdQuery,
+	useGetUserProfileQuery,
+	GetProjectByIdQuery,
+	useToggleProjectPublicStateMutation,
+	GetProjectByIdDocument,
+	GetPublicsProjectsDocument,
 } from "@/graphql/generated/schema";
-import { Save } from "lucide-react";
+import { BadgeCheck, Save } from "lucide-react";
+import LikeButton from "@/components/socials/like-button";
+import PageLoader from "@/components/elements/page-loader";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/components/ui/use-toast";
 
 const CodingPage = () => {
 	const router = useRouter();
+	const { toast } = useToast();
 	const { id } = router.query;
-	const { data } = useGetProjectByIdQuery({
+	const {
+		data: getUserProfileData,
+		loading: getUserProfileLoading,
+		error: getUserProfileError,
+	} = useGetUserProfileQuery();
+	const {
+		data,
+		loading: getProjectByIdloading,
+		error: getProjectByIdError,
+	} = useGetProjectByIdQuery({
 		variables: {
 			getProjectId: id as string,
 		},
@@ -40,10 +60,38 @@ const CodingPage = () => {
 		},
 	});
 
+	const [toggleProjectPublicStateMutation] =
+		useToggleProjectPublicStateMutation({
+			onCompleted: (data) => {
+				const { isPublic } = data.toggleProjectPublicState;
+
+				toast({
+					icon: <BadgeCheck className="h-5 w-5" />,
+					title: `Votre projet est maintenant ${isPublic ? "public" : "privé"}`,
+					className: "text-success",
+				});
+			},
+			refetchQueries: [
+				{
+					query: GetProjectByIdDocument,
+					variables: {
+						getProjectId: id as string,
+					},
+				},
+				{
+					query: GetPublicsProjectsDocument,
+					variables: {
+						limit: 12,
+						offset: 0,
+					},
+				},
+			],
+		});
+
 	const isPremium = counter && counter.getExecutionCounter.isPremium;
 	const count = counter ? counter.getExecutionCounter.executionCounter : 0;
 
-	const project = data?.getProject;
+	const project = data?.getProject as GetProjectByIdQuery["getProject"];
 	const thisCode = project?.codes[0];
 	const thisCodeId = thisCode?.id;
 
@@ -121,11 +169,17 @@ const CodingPage = () => {
 	const [updateCode] = useUpdateCodeMutation({
 		onCompleted: () => {
 			console.log("Code updated!");
+			toast({
+				icon: <BadgeCheck className="h-5 w-5" />,
+				title: `Votre projet a bien été enregistré !`,
+				className: "text-success",
+			});
 		},
 		onError: (error) => {
 			console.error(error);
 		},
 	});
+
 	async function saveCode() {
 		if (!thisCodeId) {
 			console.error("No code id found!");
@@ -138,6 +192,7 @@ const CodingPage = () => {
 			},
 		});
 	}
+
 	const runCode = () => {
 		// @Todo: Remettre le compte à 50 en dehors des tests
 		if (count < 50) {
@@ -150,8 +205,6 @@ const CodingPage = () => {
 			try {
 				const result = eval(code);
 
-				console.log("result: ", result);
-
 				setShowResult(result);
 			} catch (error: any) {
 				console.error(error);
@@ -159,6 +212,25 @@ const CodingPage = () => {
 				setShowResult("Error: " + error.message);
 			}
 		}
+	};
+
+	if (getUserProfileLoading || getProjectByIdloading) {
+		return <PageLoader />;
+	}
+
+	if (getUserProfileError || getProjectByIdError) {
+		console.error(getUserProfileError || getProjectByIdError);
+		return;
+	}
+
+	const userId = getUserProfileData?.getUserProfile.id as string;
+
+	const handlePublicStateChange = () => {
+		toggleProjectPublicStateMutation({
+			variables: {
+				projectId: id as string,
+			},
+		});
 	};
 
 	return (
@@ -175,16 +247,26 @@ const CodingPage = () => {
 						/>
 						<h1 className="font-bold text-xl">{project?.title}</h1>
 					</div>
-					<div className="flex items-center self-end md:self-center">
-						<Button
-							size={"sm"}
-							className="gap-2 bg-blue-500 hover:bg-blue-500/80"
-							onClick={saveCode}
-						>
-							<Save />
-							Enregistrer
-						</Button>
-					</div>
+					{project && userId === project.user.id && (
+						<div className="flex items-center self-end md:self-center gap-5">
+							<div className="flex items-center space-x-2">
+								<Switch
+									id="public-state"
+									checked={project.isPublic}
+									onCheckedChange={handlePublicStateChange}
+								/>
+								<Label htmlFor="public-state">En Public</Label>
+							</div>
+							<Button
+								size={"sm"}
+								className="gap-2 bg-blue-500 hover:bg-blue-500/80"
+								onClick={saveCode}
+							>
+								<Save />
+								Enregistrer
+							</Button>
+						</div>
+					)}
 				</div>
 				<Separator className="my-3" />
 
@@ -258,6 +340,10 @@ const CodingPage = () => {
 						/>
 					</div>
 				</div>
+
+				<Separator className="mt-3 md:mt-8 mb-3" />
+
+				<LikeButton project={project} userId={userId} />
 			</div>
 		</AuthLayout>
 	);
