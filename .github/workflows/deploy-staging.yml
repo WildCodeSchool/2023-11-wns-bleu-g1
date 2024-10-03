@@ -34,7 +34,7 @@ jobs:
               push: true
               context: "{{defaultContext}}:backend"
               file: "Dockerfile.production"
-              tags: ${{ secrets.DOCKERHUB_USERNAME }}/newapp-staging-backend:latest
+              tags: ${{ secrets.DOCKERHUB_USERNAME }}/wild-code-online-staging-backend:latest
               cache-from: type=gha
               cache-to: type=gha,mode=max
 
