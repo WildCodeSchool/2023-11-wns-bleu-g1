@@ -24,6 +24,8 @@ import PageLoader from "@/components/elements/page-loader";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
+import { CommentsSection } from "@/components/socials/comments-section";
+import { CommentButton } from "@/components/socials/comment-button";
 
 const CodingPage = () => {
 	const router = useRouter();
@@ -335,7 +337,11 @@ const CodingPage = () => {
 
 				<Separator className="mt-3 md:mt-8 mb-3" />
 
-				<LikeButton project={project} userId={userId} />
+				<div className="flex items-center gap-3">
+					<LikeButton project={project} userId={userId} />
+					<CommentButton commentsLength={project.comments.length} />
+				</div>
+				<CommentsSection project={project} userId={userId} />
 			</div>
 		</AuthLayout>
 	);
