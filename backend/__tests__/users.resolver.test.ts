@@ -1,9 +1,8 @@
-import {buildSchemaSync} from "type-graphql";
+import { buildSchemaSync } from "type-graphql";
 import UserResolver from "../src/resolvers/user.resolver";
-import {ApolloServer} from "@apollo/server";
-import User, {UserRole} from "../src/entities/user";
+import { ApolloServer } from "@apollo/server";
+import User, { UserRole } from "../src/entities/user";
 import UserService from "../src/services/user.service";
-
 
 const baseSchema = buildSchemaSync({
 	resolvers: [UserResolver],
@@ -21,14 +20,21 @@ afterAll(() => {
 });
 
 class MockUser extends User {
-	constructor(id: string, pseudo: string, email: string, password: string, role: UserRole, isPremium: boolean) {
+	constructor(
+		id: string,
+		pseudo: string,
+		email: string,
+		password: string,
+		role: UserRole,
+		isPremium: boolean
+	) {
 		super();
 		this.id = id;
 		this.pseudo = pseudo;
 		this.email = email;
 		this.password = password;
 		this.role = role;
-		this.isPremium = isPremium
+		this.isPremium = isPremium;
 	}
 
 	public async hashPassword() {}
@@ -36,13 +42,33 @@ class MockUser extends User {
 }
 
 const mockUsers = [
-	new MockUser("1", "User1", "user1@mail.com", "password", UserRole.ADMIN, false),
-	new MockUser("2", "User2", "user2@mail.com", "password", UserRole.VISITOR, true),
-	new MockUser("3", "User3", "user3@mail.com", "password", UserRole.VISITOR, false),
+	new MockUser(
+		"1",
+		"User1",
+		"user1@mail.com",
+		"password",
+		UserRole.ADMIN,
+		false
+	),
+	new MockUser(
+		"2",
+		"User2",
+		"user2@mail.com",
+		"password",
+		UserRole.VISITOR,
+		true
+	),
+	new MockUser(
+		"3",
+		"User3",
+		"user3@mail.com",
+		"password",
+		UserRole.VISITOR,
+		false
+	),
 ];
 
 const mockUserService = new UserService();
-
 
 describe("Tests on users", () => {
 	it("should return all users", async () => {
@@ -54,7 +80,14 @@ describe("Tests on users", () => {
 	});
 
 	it("should create a new user", async () => {
-		const newUser = new MockUser("4", "User4", "user4@mail.com", "password", UserRole.VISITOR, false);
+		const newUser = new MockUser(
+			"4",
+			"User4",
+			"user4@mail.com",
+			"password",
+			UserRole.VISITOR,
+			false
+		);
 		jest.spyOn(mockUserService, "create").mockResolvedValue(newUser);
 
 		const result = await mockUserService.create({
@@ -62,14 +95,14 @@ describe("Tests on users", () => {
 			password: "password",
 			pseudo: "User4",
 			role: UserRole.VISITOR,
-			isPremium: false
+			isPremium: false,
 		});
 
 		expect(result).toMatchObject({
 			email: newUser.email,
 			pseudo: newUser.pseudo,
 			role: newUser.role,
-			isPremium: newUser.isPremium
+			isPremium: newUser.isPremium,
 		});
 	});
 
@@ -82,16 +115,21 @@ describe("Tests on users", () => {
 			UserRole.ADMIN,
 			false
 		);
-		jest.spyOn(mockUserService, 'getBy').mockResolvedValueOnce(mockUsers[0]);
+		jest.spyOn(mockUserService, "getBy").mockResolvedValueOnce(mockUsers[0]);
 		const mockSave = jest.fn().mockResolvedValue(true);
 		mockUserService.userRepository.save = mockSave;
 
-		const result = await mockUserService.updateUsername({ newUsername: updatedUser.pseudo, id: updatedUser.id });
+		const result = await mockUserService.updateUsername({
+			newUsername: updatedUser.pseudo,
+			id: updatedUser.id,
+		});
 
 		expect(result).toBe(true);
 
 		expect(mockSave).toHaveBeenCalledTimes(1);
-		expect(mockSave).toHaveBeenCalledWith(expect.objectContaining({ pseudo: updatedUser.pseudo }));
+		expect(mockSave).toHaveBeenCalledWith(
+			expect.objectContaining({ pseudo: updatedUser.pseudo })
+		);
 
 		jest.clearAllMocks();
 	});
