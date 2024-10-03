@@ -1,6 +1,6 @@
-import {ApolloServer} from "@apollo/server";
-import {expressMiddleware} from "@apollo/server/express4";
-import {ApolloServerPluginDrainHttpServer} from "@apollo/server/plugin/drainHttpServer";
+import { ApolloServer } from "@apollo/server";
+import { expressMiddleware } from "@apollo/server/express4";
+import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import express from "express";
 import http from "http";
 import cors from "cors";
@@ -9,7 +9,7 @@ import cron from "node-cron";
 import env from "./env";
 import schema from "./schema";
 import db from "./db";
-import {resetExecCode} from "./script/reset-execution-code";
+import { resetExecCode } from "./script/reset-execution-code";
 
 const app = express();
 const httpServer = http.createServer(app);
