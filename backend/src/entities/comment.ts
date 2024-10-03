@@ -5,7 +5,6 @@ import {
 	Entity,
 	ManyToOne,
 	PrimaryGeneratedColumn,
-	Unique,
 	UpdateDateColumn,
 } from "typeorm";
 
@@ -14,7 +13,6 @@ import Project from "./project";
 
 @Entity()
 @ObjectType()
-@Unique(["user", "project"])
 export default class Comment {
 	@PrimaryGeneratedColumn("uuid")
 	@Field()
