@@ -1,16 +1,9 @@
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
+import client from "@/graphql/config/client";
 import "@/styles/globals.css";
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import { ApolloProvider } from "@apollo/client";
 import type { AppProps } from "next/app";
-
-export const client = new ApolloClient({
-	uri: process.env.NEXT_PUBLIC_GRAPHQL_API_URL || "/graphql",
-	cache: new InMemoryCache({
-		addTypename: false,
-	}),
-	credentials: "include",
-});
 
 export default function App({ Component, pageProps }: AppProps) {
 	return (
