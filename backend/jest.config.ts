@@ -1,7 +1,9 @@
-/** @type {import('ts-jest').JestConfigWithTsJest} **/
+/** @type {import('ts-jest').JestConfigWithTsJest} */
+
 module.exports = {
+	preset: "ts-jest",
 	testEnvironment: "node",
-	transform: {
-		"^.+.tsx?$": ["ts-jest", {}],
-	},
+	setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+	testMatch: ["**/__tests__/**/*.test.ts"],
+	prettierPath: null,
 };
