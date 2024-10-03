@@ -86,9 +86,9 @@ const PricingCard = memo(({ option, enabled, isPremium }: PricingCardProps) => (
 							</span>
 						</h3>
 						<Link
-							href={option.link}
+							href={`${option.link}`}
 							className={buttonVariants()}
-							target={option.external && "_blank"}
+							target={`${option.external}` && "_blank"}
 						>
 							<span className="tracking-tight">{option.btn}</span>
 							{option.external && <ExternalLinkIcon className="h-4 w-4 ml-2" />}
