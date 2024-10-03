@@ -12,6 +12,7 @@ import {
 import Code from "./code";
 import User from "./user";
 import Like from "./like";
+import Comment from "./comment";
 
 @Entity()
 @ObjectType()
@@ -47,6 +48,10 @@ export default class Project {
 	@OneToMany(() => Like, (like) => like.project, { cascade: true })
 	@Field(() => [Like])
 	likes: Like[];
+
+	@OneToMany(() => Comment, (comment) => comment.project, { cascade: true })
+	@Field(() => [Comment])
+	comments: Comment[];
 }
 
 @InputType()
