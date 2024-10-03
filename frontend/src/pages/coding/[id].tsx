@@ -52,7 +52,7 @@ const CodingPage = () => {
 	return (
 		<AuthLayout>
 			<div className="min-h-dvh">
-				<CodeEditor project={project} />
+				<CodeEditor project={project} userId={userId} />
 
 				<Separator className="mt-3 md:mt-8 mb-3" />
 

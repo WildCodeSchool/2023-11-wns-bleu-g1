@@ -1,39 +1,37 @@
-import { Editor, MonacoDiffEditor } from "@monaco-editor/react";
+import { Editor, MonacoDiffEditor, OnMount } from "@monaco-editor/react";
 import Image from "next/image";
+import { useMemo, useRef, useState } from "react";
+import type monaco from "monaco-editor";
 
 import { Separator } from "@/components/ui/separator";
 import {
-	forwardRef,
-	useEffect,
-	useImperativeHandle,
-	useMemo,
-	useRef,
-	useState,
-} from "react";
-import { CODE_SNIPPETS } from "@/lib/constansCodeEditor";
-import {
 	GetExecutionCounterDocument,
+	GetProjectByIdDocument,
 	GetProjectByIdQuery,
 	useGetExecutionCounterQuery,
 	useIncrementExecutionCounterMutation,
+	useToggleProjectPublicStateMutation,
 	useUpdateCodeMutation,
 } from "@/graphql/generated/schema";
 import { Button } from "../ui/button";
-import { BadgeCheck, Save } from "lucide-react";
 import { useToast } from "../ui/use-toast";
-import { executeCode } from "@/lib/executeCode";
+import { BadgeCheck, Save } from "lucide-react";
 import {
 	HoverCard,
 	HoverCardContent,
 	HoverCardTrigger,
 } from "../ui/hover-card";
+import { Switch } from "../ui/switch";
+import { Label } from "../ui/label";
+import { executeCode } from "@/lib/executeCode";
 
 interface Props {
 	project: GetProjectByIdQuery["getProject"];
+	userId: string;
 }
 
-const CodeEditor = ({ project }: Props) => {
-	const { codes } = project;
+const CodeEditor = ({ project, userId }: Props) => {
+	const { isPublic, user, codes } = project;
 	const language = codes[0].language.name.toLocaleLowerCase();
 
 	const { toast } = useToast();
@@ -50,17 +48,45 @@ const CodeEditor = ({ project }: Props) => {
 	}, [codes]);
 
 	const { data: counter } = useGetExecutionCounterQuery({
-		onError: (e) => {
+		onError: (e: any) => {
 			console.error("useGetExecutionCounterQuery =>", e);
 		},
 	});
 
 	const [incrementCounter] = useIncrementExecutionCounterMutation({
 		refetchQueries: [GetExecutionCounterDocument],
-		onError: (e) => {
+		onError: (e: any) => {
 			console.error("useIncrementeExecutionCounterMutation =>", e);
 		},
 	});
+
+	const [toggleProjectPublicStateMutation] =
+		useToggleProjectPublicStateMutation({
+			onCompleted: (data) => {
+				const { isPublic } = data.toggleProjectPublicState;
+
+				toast({
+					icon: <BadgeCheck className="h-5 w-5" />,
+					title: `Votre projet est maintenant ${isPublic ? "public" : "privé"}`,
+					className: "text-success",
+				});
+			},
+			refetchQueries: [
+				{
+					query: GetProjectByIdDocument,
+					variables: {
+						getProjectId: project.id as string,
+					},
+				},
+				{
+					query: GetProjectByIdDocument,
+					variables: {
+						limit: 12,
+						offset: 0,
+					},
+				},
+			],
+		});
 
 	const isPremium = counter && counter.getExecutionCounter.isPremium;
 	const count = counter ? counter.getExecutionCounter.executionCounter : 0;
@@ -74,8 +100,8 @@ const CodeEditor = ({ project }: Props) => {
 				className: "text-success",
 			});
 		},
-		onError: (error) => {
-			console.error(error);
+		onError: (e: any) => {
+			console.error(e);
 		},
 	});
 
@@ -138,10 +164,18 @@ const CodeEditor = ({ project }: Props) => {
 		});
 	};
 
+	const handlePublicStateChange = () => {
+		toggleProjectPublicStateMutation({
+			variables: {
+				projectId: project.id as string,
+			},
+		});
+	};
+
 	return (
 		<>
 			<div className="flex flex-col md:flex-row md:items-center justify-between gap-2 w-full">
-				<div className="flex items-center gap-3">
+				<div className="flex items-center gap-4">
 					<Image
 						src="/Javascript_logo.png"
 						alt="logo javascript"
@@ -150,6 +184,20 @@ const CodeEditor = ({ project }: Props) => {
 						className="object-cover"
 					/>
 					<h1 className="font-bold text-xl">{project?.title}</h1>
+
+					{userId === user.id && (
+						<div className="flex items-center space-x-2">
+							<Switch
+								id="public-state"
+								checked={project.isPublic}
+								onCheckedChange={handlePublicStateChange}
+								className="data-[state=unchecked]:bg-white"
+							/>
+							<Label htmlFor="public-state">
+								{isPublic ? "Public" : "Privé"}
+							</Label>
+						</div>
+					)}
 				</div>
 
 				<div className="flex gap-10">
@@ -157,7 +205,7 @@ const CodeEditor = ({ project }: Props) => {
 						<HoverCard>
 							<HoverCardTrigger>
 								<Button size={"sm"} variant={"default"} onClick={runCode}>
-									Executer ({count}/50)
+									Executer {!isPremium && `(${count}/50)`}
 								</Button>
 							</HoverCardTrigger>
 							<HoverCardContent>
@@ -167,16 +215,18 @@ const CodeEditor = ({ project }: Props) => {
 						</HoverCard>
 					)}
 
-					<div className="flex items-center self-end md:self-center">
-						<Button
-							size={"sm"}
-							className="gap-2 bg-blue-500 hover:bg-blue-500/80"
-							onClick={saveCode}
-						>
-							<Save />
-							Enregistrer
-						</Button>
-					</div>
+					{userId === user.id && (
+						<div className="flex items-center self-end md:self-center">
+							<Button
+								size={"sm"}
+								className="gap-2 bg-blue-500 hover:bg-blue-500/80"
+								onClick={saveCode}
+							>
+								<Save />
+								Enregistrer
+							</Button>
+						</div>
+					)}
 				</div>
 			</div>
 
