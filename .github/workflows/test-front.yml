@@ -67,6 +67,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Make envfile
+        run: cp .env.example .env
       - name: Cypress Github Action
         uses: cypress-io/github-action@v6
         with:
