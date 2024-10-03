@@ -1,8 +1,8 @@
-import {ASTNode, graphql, GraphQLSchema, print} from "graphql";
+import { ASTNode, graphql, GraphQLSchema, print } from "graphql";
 
-import db, {clearDb} from "./src/db";
+import db, { clearDb } from "./src/db";
 import getSchema from "./src/schema";
-import {Maybe} from "type-graphql";
+import { Maybe } from "type-graphql";
 
 const mockedEnv = {
 	DB_HOST: "localhost",
@@ -15,7 +15,7 @@ const mockedEnv = {
 	JWT_PRIVATE_KEY: "testkey",
 };
 
-process.env = {...process.env, ...mockedEnv};
+process.env = { ...process.env, ...mockedEnv };
 
 export let schema: GraphQLSchema;
 
