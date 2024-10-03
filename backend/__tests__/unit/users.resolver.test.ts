@@ -1,7 +1,7 @@
-import {buildSchemaSync} from "type-graphql";
+import { buildSchemaSync } from "type-graphql";
 import UserResolver from "../../src/resolvers/user.resolver";
-import {ApolloServer} from "@apollo/server";
-import User, {UserRole} from "../../src/entities/user";
+import { ApolloServer } from "@apollo/server";
+import User, { UserRole } from "../../src/entities/user";
 import UserService from "../../src/services/user.service";
 
 const baseSchema = buildSchemaSync({
