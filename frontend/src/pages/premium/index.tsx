@@ -244,33 +244,39 @@ export default function Pricing() {
 							</div>
 						</div>
 						<div className="flex justify-center">
-						<AlertDialog>
-							<AlertDialogTrigger asChild>
-								<Button
-									variant={"destructive"}
-									className="mt-4 gap-1 w-fit"
-									// onClick={unsubscribe}
-								>
-									Se désabonner
-								</Button>
-							</AlertDialogTrigger>
+							<AlertDialog>
+								<AlertDialogTrigger asChild>
+									<Button
+										variant={"destructive"}
+										className="mt-4 gap-1 w-fit"
+										// onClick={unsubscribe}
+									>
+										Se désabonner
+									</Button>
+								</AlertDialogTrigger>
 
-							<AlertDialogContent>
-								<div className="flex flex-col space-y-2 text-center sm:text-left">
-									<h2 className="text-lg font-semibold">Êtes-vous sûr de vouloir annuler votre abonnement ?</h2>
-									<p className="text-md text-muted-foreground">Vous perdrez vos avantages à la fin de votre abonnement et devrez renseigner vos coordonnées bancaires à nouveau afin de les retrouver.</p>
-								</div>
-								<div className="flex sm:flex-row sm:justify-end sm:space-x-2 mt-4">
-									<AlertDialogAction className={buttonVariants({ variant: "destructive" })}
-											onClick={unsubscribe}>
-										Oui
-									</AlertDialogAction>
-									<AlertDialogCancel>
-										Non
-									</AlertDialogCancel>
-								</div>
-							</AlertDialogContent>
-						</AlertDialog>
+								<AlertDialogContent>
+									<div className="flex flex-col space-y-2 text-center sm:text-left">
+										<h2 className="text-lg font-semibold">
+											Êtes-vous sûr de vouloir annuler votre abonnement ?
+										</h2>
+										<p className="text-md text-muted-foreground">
+											Vous perdrez vos avantages à la fin de votre abonnement et
+											devrez renseigner vos coordonnées bancaires à nouveau afin
+											de les retrouver.
+										</p>
+									</div>
+									<div className="flex sm:flex-row sm:justify-end sm:space-x-2 mt-4">
+										<AlertDialogAction
+											className={buttonVariants({ variant: "destructive" })}
+											onClick={unsubscribe}
+										>
+											Oui
+										</AlertDialogAction>
+										<AlertDialogCancel>Non</AlertDialogCancel>
+									</div>
+								</AlertDialogContent>
+							</AlertDialog>
 						</div>
 					</div>
 				</section>
