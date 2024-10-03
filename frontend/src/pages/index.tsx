@@ -39,7 +39,7 @@ export default function Home() {
 							des autres utilisateurs. Sauvegarder et télécharger vos fichiers
 							de code pour pouvoir les utiliser sur d’autres projets
 						</p>
-						<p>v.2024-08-27</p>
+						<p>v.2024-10-02</p>
 						<div className="space-x-4 lg:space-x-8 text-center sm:text-start">
 							<Link
 								href={"/coding/codingPage"}
