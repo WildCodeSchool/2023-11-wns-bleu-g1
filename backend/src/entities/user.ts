@@ -102,12 +102,6 @@ export class ExecutionCounterInput {
 }
 
 @InputType()
-export class IsPremiumInput {
-	@Field()
-	isPremium: boolean;
-}
-
-@InputType()
 export class UpdateUsernameInput {
 	@Field()
 	id: string;

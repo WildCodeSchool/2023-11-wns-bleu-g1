@@ -5,7 +5,6 @@ import User, {
 	ExecutionCounterInput,
 	NewUserInput,
 	SigninInput,
-	IsPremiumInput,
 	UpdatePasswordInput,
 	UpdateUsernameInput,
 } from "../entities/user";
