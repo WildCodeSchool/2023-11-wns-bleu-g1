@@ -1,9 +1,8 @@
-import { Editor, MonacoDiffEditor, OnMount } from "@monaco-editor/react";
+import { Editor, OnMount } from "@monaco-editor/react";
 import Image from "next/image";
 import { useMemo, useRef, useState } from "react";
-import type monaco from "monaco-editor";
+import { editor } from "monaco-editor";
 
-import { Separator } from "@/components/ui/separator";
 import {
 	GetExecutionCounterDocument,
 	GetProjectByIdDocument,
@@ -13,6 +12,8 @@ import {
 	useToggleProjectPublicStateMutation,
 	useUpdateCodeMutation,
 } from "@/graphql/generated/schema";
+import { executeCode } from "@/lib/executeCode";
+import { Separator } from "@/components/ui/separator";
 import { Button } from "../ui/button";
 import { useToast } from "../ui/use-toast";
 import { BadgeCheck, Save } from "lucide-react";
@@ -23,7 +24,6 @@ import {
 } from "../ui/hover-card";
 import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
-import { executeCode } from "@/lib/executeCode";
 
 interface Props {
 	project: GetProjectByIdQuery["getProject"];
@@ -33,10 +33,9 @@ interface Props {
 const CodeEditor = ({ project, userId }: Props) => {
 	const { isPublic, user, codes } = project;
 	const language = codes[0].language.name.toLocaleLowerCase();
-
 	const { toast } = useToast();
 
-	const editorRef = useRef(); // typer le useref <T>
+	const editorRef = useRef<editor.IStandaloneCodeEditor>();
 
 	const [value, setValue] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
@@ -105,7 +104,7 @@ const CodeEditor = ({ project, userId }: Props) => {
 		},
 	});
 
-	const onMount = (editor: any) => {
+	const onMount: OnMount = (editor) => {
 		editorRef.current = editor;
 		editor.focus();
 	};
@@ -133,11 +132,14 @@ const CodeEditor = ({ project, userId }: Props) => {
 
 				setOutput(result.output.split("\n"));
 				result.stderr ? setIsError(true) : setIsError(false);
-				toast({
-					icon: <BadgeCheck className="h-5 w-5" />,
-					title: `${count === 49 ? "C'était ton dernier essai" : `Il te reste ${49 - count} execution. Pour ne plus avoir de limitation, passer prremium!`}`,
-					className: "text-success",
-				});
+
+				if (!isPremium) {
+					toast({
+						icon: <BadgeCheck className="h-5 w-5" />,
+						title: `${count === 49 ? "C'était ton dernier essai" : `Il te reste ${49 - count} execution. Pour ne plus avoir de limitation, passer premium!`}`,
+						className: "text-success",
+					});
+				}
 			} catch (e: any) {
 				console.error("Run code error", e);
 				toast({
@@ -189,11 +191,12 @@ const CodeEditor = ({ project, userId }: Props) => {
 						<div className="flex items-center space-x-2">
 							<Switch
 								id="public-state"
+								data-testid="public-state-btn"
 								checked={project.isPublic}
 								onCheckedChange={handlePublicStateChange}
 								className="data-[state=unchecked]:bg-white"
 							/>
-							<Label htmlFor="public-state">
+							<Label data-testid="public-state-label" htmlFor="public-state">
 								{isPublic ? "Public" : "Privé"}
 							</Label>
 						</div>
@@ -204,20 +207,28 @@ const CodeEditor = ({ project, userId }: Props) => {
 					{count < 50 && (
 						<HoverCard>
 							<HoverCardTrigger>
-								<Button size={"sm"} variant={"default"} onClick={runCode}>
+								<Button
+									data-testid="exec-btn"
+									size={"sm"}
+									variant={"default"}
+									onClick={runCode}
+								>
 									Executer {!isPremium && `(${count}/50)`}
 								</Button>
 							</HoverCardTrigger>
-							<HoverCardContent>
-								Tu as executé du code {count} fois sur 50. Pour ne plus avoir de
-								limitation, passe premium!
-							</HoverCardContent>
+							{!isPremium && (
+								<HoverCardContent>
+									Tu as executé du code {count} fois sur 50. Pour ne plus avoir
+									de limitation, passe premium!
+								</HoverCardContent>
+							)}
 						</HoverCard>
 					)}
 
 					{userId === user.id && (
 						<div className="flex items-center self-end md:self-center">
 							<Button
+								data-testid="save-btn"
 								size={"sm"}
 								className="gap-2 bg-blue-500 hover:bg-blue-500/80"
 								onClick={saveCode}

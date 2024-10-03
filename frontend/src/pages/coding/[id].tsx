@@ -1,5 +1,3 @@
-import React, { useEffect, useRef, useState } from "react";
-
 import { Separator } from "@/components/ui/separator";
 import AuthLayout from "@/components/elements/auth-layout";
 import { useRouter } from "next/router";
@@ -12,11 +10,9 @@ import {
 import LikeButton from "@/components/socials/like-button";
 import PageLoader from "@/components/elements/page-loader";
 import CodeEditor from "@/components/elements/CodeEditor";
-import { useToast } from "@/components/ui/use-toast";
 
 const CodingPage = () => {
 	const router = useRouter();
-	const { toast } = useToast();
 	const { id } = router.query;
 
 	const {
