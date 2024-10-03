@@ -3,11 +3,10 @@ name: "test-front"
 on:
   pull_request:
     paths:
-      - 'frontend/**'
+      - "frontend/**"
   workflow_call:
 
 jobs:
-
   linting-frontend:
     name: Linting frontend
     runs-on: ubuntu-latest
@@ -26,7 +25,7 @@ jobs:
 
   prettier-frontend:
     name: Prettier frontend
-    needs: [ linting-frontend ]
+    needs: [linting-frontend]
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -66,25 +65,7 @@ jobs:
       run:
         working-directory: ./
     steps:
-      - name: Prepare backend
-        run: |
-          cp backend/.env.example backend/.env
-          cd backend
-          npm ci
-          npm run start &
-          cd ..
-      - name: Prepare frontend
-        run: |
-          cp frontend/.env.example frontend/.env
-          cd frontend
-          npm ci
-          npm run start &
-          cd ..
       - name: Checkout
-        uses: actions/checkout@v4
-      - name: Cypress Github Action
-        uses: cypress-io/github-action@v6
-        with:
-          working-directory: ./frontend
-          build: npm run build
-          start: npm run start
+        run: npm run dev
+      - name: launch frontend e2e tests
+        run: npm run cypress:run
