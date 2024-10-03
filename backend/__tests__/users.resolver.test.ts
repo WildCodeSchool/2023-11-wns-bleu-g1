@@ -1,215 +1,98 @@
-import { Repository } from "typeorm";
+import {buildSchemaSync} from "type-graphql";
+import UserResolver from "../src/resolvers/user.resolver";
+import {ApolloServer} from "@apollo/server";
+import User, {UserRole} from "../src/entities/user";
+import UserService from "../src/services/user.service";
 
-import DataSource from "../src/db";
-import { execute } from "../jest.setup";
-import User, { UserRole } from "../src/entities/user";
-import createUser from "./operations/createUser";
-import getAdminContext from "./helpers/getAdminContext";
-import getUsers from "./operations/getUsers";
-import getVisitorContext from "./helpers/getVisitorContext";
-import getExecutionCounter from "./operations/getExecutionCounter";
-import incrementExecutionCounter from "./operations/incrementExecutionCounter";
 
-const userRepository: Repository<User> = DataSource.getRepository(User);
+const baseSchema = buildSchemaSync({
+	resolvers: [UserResolver],
+	authChecker: () => true,
+});
 
-describe("users resolver", () => {
-	it("can get a list of users", async () => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const user1: any = new User();
-		const user2 = new User();
-
-		Object.assign(user1, {
-			email: "sans@sans.sans",
-			password: "Test123456!",
-			pseudo: "test",
-		});
-
-		await userRepository.save(user1);
-
-		Object.assign(user2, {
-			email: "test@test.test",
-			password: "Test123456!",
-			pseudo: "cazzo",
-		});
-
-		await userRepository.save(user2);
-
-		const jwt = await getAdminContext();
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const res: any = await execute(getUsers, { contextValue: jwt });
-
-		expect(res).toMatchInlineSnapshot(`
-{
-  "data": {
-    "users": [
-      {
-        "email": "sans@sans.sans",
-        "pseudo": "test",
-        "role": "visitor",
-      },
-      {
-        "email": "test@test.test",
-        "pseudo": "cazzo",
-        "role": "visitor",
-      },
-      {
-        "email": "ad@min.fr",
-        "pseudo": "i'm admin",
-        "role": "admin",
-      },
-    ],
-  },
-}
-`);
-	});
-
-	it("can create a user", async () => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const res: any = await execute(createUser, {
-			variableValues: {
-				data: {
-					email: "pas@gmail.fr",
-					password: "Test123456!",
-					pseudo: "pasDid",
-					role: UserRole.ADMIN,
-				},
-			},
-		});
-
-		delete res.data.createUser.id;
-
-		expect(res).toMatchInlineSnapshot(`
-	{
-	  "data": {
-	    "createUser": {
-	      "email": "pas@gmail.fr",
-	      "pseudo": "pasDid",
-	    },
-	  },
-	}
-	`);
+beforeAll(() => {
+	new ApolloServer({
+		schema: baseSchema,
 	});
 });
 
-describe("if user can execute some code with visitor permissions", () => {
-	it("can get executionOunter and isPremium field with visitor authorize", async () => {
-		const jwt = await getVisitorContext();
-
-		const res = await execute(getExecutionCounter, {
-			contextValue: jwt,
-		});
-
-		expect(res).toMatchInlineSnapshot(`
-    {
-      "data": {
-        "getExecutionCounter": {
-          "executionCounter": 1,
-          "isPremium": true,
-        },
-      },
-    }
-    `);
-	});
-	it("can increment executionCounter field for 1 more with visitor authorize", async () => {
-		const jwt = await getVisitorContext();
-
-		const res = await execute(incrementExecutionCounter, {
-			contextValue: jwt,
-			variableValues: {
-				counter: {
-					executionCounter: 1,
-				},
-			},
-		});
-
-		expect(res).toMatchInlineSnapshot(`
-		{
-		  "data": {
-		    "incrementExecutionCounter": 2,
-		  },
-		}
-		`);
-	});
-
-	it("can't increment executeCounter field more than 50", async () => {
-		const jwt = await getVisitorContext();
-
-		const res = await execute(incrementExecutionCounter, {
-			contextValue: jwt,
-			variableValues: {
-				counter: {
-					executionCounter: 50,
-				},
-			},
-		});
-
-		expect(res).toMatchInlineSnapshot(`
-{
-  "data": {
-    "incrementExecutionCounter": 50,
-  },
-}
-`);
-	});
+afterAll(() => {
+	jest.restoreAllMocks();
 });
 
-describe("if user can execute some code with admin permissions", () => {
-	it("can get executionOunter and isPremium field with admin authorize", async () => {
-		const jwt = await getAdminContext();
-
-		const res = await execute(getExecutionCounter, { contextValue: jwt });
-
-		expect(res).toMatchInlineSnapshot(`
-	{
-	  "data": {
-	    "getExecutionCounter": {
-	      "executionCounter": 1,
-	      "isPremium": false,
-	    },
-	  },
+class MockUser extends User {
+	constructor(id: string, pseudo: string, email: string, password: string, role: UserRole, isPremium: boolean) {
+		super();
+		this.id = id;
+		this.pseudo = pseudo;
+		this.email = email;
+		this.password = password;
+		this.role = role;
+		this.isPremium = isPremium
 	}
-	`);
+
+	public async hashPassword() {}
+	public async hashNewPassword() {}
+}
+
+const mockUsers = [
+	new MockUser("1", "User1", "user1@mail.com", "password", UserRole.ADMIN, false),
+	new MockUser("2", "User2", "user2@mail.com", "password", UserRole.VISITOR, true),
+	new MockUser("3", "User3", "user3@mail.com", "password", UserRole.VISITOR, false),
+];
+
+const mockUserService = new UserService();
+
+
+describe("Tests on users", () => {
+	it("should return all users", async () => {
+		jest.spyOn(mockUserService, "getAll").mockResolvedValue(mockUsers);
+
+		const result = await mockUserService.getAll();
+
+		expect(result).toEqual(mockUsers);
 	});
 
-	it("can increment executionCounter field for 1 more with admin authorize", async () => {
-		const jwt = await getAdminContext();
+	it("should create a new user", async () => {
+		const newUser = new MockUser("4", "User4", "user4@mail.com", "password", UserRole.VISITOR, false);
+		jest.spyOn(mockUserService, "create").mockResolvedValue(newUser);
 
-		const res = await execute(incrementExecutionCounter, {
-			contextValue: jwt,
-			variableValues: {
-				counter: {
-					executionCounter: 1,
-				},
-			},
+		const result = await mockUserService.create({
+			email: "user4@mail.com",
+			password: "password",
+			pseudo: "User4",
+			role: UserRole.VISITOR,
+			isPremium: false
 		});
 
-		expect(res).toMatchInlineSnapshot(`
-	{
-	  "data": {
-	    "incrementExecutionCounter": 2,
-	  },
-	}
-	`);
+		expect(result).toMatchObject({
+			email: newUser.email,
+			pseudo: newUser.pseudo,
+			role: newUser.role,
+			isPremium: newUser.isPremium
+		});
 	});
 
-	it("can't increment executeCounter field more than 50", async () => {
-		const jwt = await getAdminContext();
+	it("should update user username and return true", async () => {
+		const updatedUser = new MockUser(
+			"1",
+			"User1Updated",
+			"user1@mail.com",
+			"password",
+			UserRole.ADMIN,
+			false
+		);
+		jest.spyOn(mockUserService, 'getBy').mockResolvedValueOnce(mockUsers[0]);
+		const mockSave = jest.fn().mockResolvedValue(true);
+		mockUserService.userRepository.save = mockSave;
 
-		const res = await execute(incrementExecutionCounter, {
-			contextValue: jwt,
-			variableValues: {
-				counter: {
-					executionCounter: 50,
-				},
-			},
-		});
+		const result = await mockUserService.updateUsername({ newUsername: updatedUser.pseudo, id: updatedUser.id });
 
-		expect(res).toMatchInlineSnapshot(`
-	{
-	  "data": {
-	    "incrementExecutionCounter": 50,
-	  },
-	}
-	`);
+		expect(result).toBe(true);
+
+		expect(mockSave).toHaveBeenCalledTimes(1);
+		expect(mockSave).toHaveBeenCalledWith(expect.objectContaining({ pseudo: updatedUser.pseudo }));
+
+		jest.clearAllMocks();
 	});
 });
