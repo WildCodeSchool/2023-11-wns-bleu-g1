@@ -19,6 +19,7 @@ import { useRouter } from "next/router";
 import { useToast } from "../ui/use-toast";
 import Link from "next/link";
 import NewProjectPopup from "@/components/elements/NewProjectPopup";
+import client from "@/graphql/config/client";
 
 const AuthHeader = () => {
 	const router = useRouter();
@@ -27,12 +28,13 @@ const AuthHeader = () => {
 	const getUserProfileQuery = useGetUserProfileQuery();
 
 	const [logoutMutation, logoutMutationResult] = useLogoutMutation({
-		onCompleted: () => {
+		onCompleted: async () => {
 			toast({
 				icon: <BadgeCheck className="h-5 w-5" />,
 				title: "Déconnexion réussie",
 				className: "text-success",
 			});
+			await client.clearStore();
 			router.push("/auth/connexion");
 		},
 		onError: (error) => {
