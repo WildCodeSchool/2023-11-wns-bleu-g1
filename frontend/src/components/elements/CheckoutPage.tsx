@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { useForm } from "react-hook-form";
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
 import { useCreatePaymentIntentMutation } from "@/graphql/generated/schema";
+import { useUpdateUserIsPremiumMutation } from "@/graphql/generated/schema";
 import Link from "next/link";
 
 import Logo from "@/components/elements/Logo";
@@ -18,17 +19,43 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { buttonVariants } from "@/components/ui/button";
+import { toast } from '../ui/use-toast';
+import { BadgeCheck } from 'lucide-react';
+import { ApolloError } from '@apollo/client';
 
 const CheckoutPage = ({ amount }: { amount: number }) => {
     const stripe = useStripe();
     const elements = useElements();
-    const form = useForm();    
+    const form = useForm();
+    // const appearance = { theme: 'night', labels: 'floating' };
     
     // Use the mutation hook directly in the component
     const [createPaymentIntent] = useCreatePaymentIntentMutation();
     const [clientSecret, setClientSecret] = useState<string | undefined>(undefined);
     const [loading, setLoading] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
+
+    const [updateUserIsPremiumMutation, updateUserIsPremiumMutationResult] = useUpdateUserIsPremiumMutation({
+		onCompleted: () => {
+			console.log("updateUserIsPremiumResult", updateUserIsPremiumMutationResult);
+			toast({
+				icon: <BadgeCheck className="h-5 w-5" />,
+				title: "Vous êtes désormais Premium.",
+				className: "text-success",
+			});
+			router.push("/premium");
+		},
+		onError: (err: ApolloError) => {
+			console.error(err);
+			toast({
+				icon: <BadgeCheck className="h-5 w-5" />,
+				title: "Une erreur est survenue lors du paiement.",
+				className: "text-danger",
+			});
+		},
+	});
+
+    // const elements = stripe?.elements({clientSecret, options: { appearance }});
 
     const router = useRouter();
 
@@ -62,6 +89,11 @@ const CheckoutPage = ({ amount }: { amount: number }) => {
             return;
         }
 
+        const cardElement = elements.getElement(PaymentElement);
+        if (cardElement) {
+            cardElement.update({ value: JSON.stringify({ cardNumber: "4242424242424242", expDate: "12/34", cvc: "123" }) });
+        }
+
         const { error: submitError } = await elements.submit();
 
         if(submitError) {
@@ -70,15 +102,24 @@ const CheckoutPage = ({ amount }: { amount: number }) => {
             return;
         }
 
-        const {error} = await stripe.confirmPayment({
+        const { error } = await stripe.confirmPayment({
             elements,
             clientSecret: clientSecret as string,
             confirmParams: {
-                return_url: `${window.origin}/premium`, // changer return route -> method back -> user is premium = true
+                return_url: `${window.origin}/premium/checkout/success`,
             },
+            redirect: 'if_required',
         });
 
-        if(error) {
+        if ( !error ) {
+            updateUserIsPremiumMutation({
+                variables: {
+                    isPremium: true,
+                },
+            });
+        }
+
+        if( error ) {
             setErrorMessage(error.message);
             setLoading(false);
             return;
@@ -117,12 +158,18 @@ const CheckoutPage = ({ amount }: { amount: number }) => {
     return (
         <div className="container mx-auto w-full min-h-screen py-10 space-y-6 md:space-y-10">
             <Link href={"/"} className="flex w-full justify-center">
-				<Logo width={150} height={100} />
-			</Link>
+                <Logo width={150} height={100} />
+            </Link>
             <Card className="h-fit sm:w-[350px] xl:w-[350px] m-auto p-2">
                 <form onSubmit={handleSubmit}>
                     <CardContent className="space-y-3">
-                        {clientSecret && <PaymentElement />}
+                        <p className='rounded-md text-sm text-neutral-600'>Carte pour les tests : 4242 4242 4242 4242 <br /> Date Expiration : 12/34 <br /> CVC : 123</p>
+                        {/* <Elements stripe={stripe} options={{ clientSecret, appearance: { theme: 'night', labels: 'floating' } }}> */}
+                            {clientSecret && (
+                                    <PaymentElement />
+                            )}
+                        {/* </Elements> */}
+
                         {errorMessage && <p>{errorMessage}</p>}
                     </CardContent>
                     <CardFooter className="flex-col gap-4">

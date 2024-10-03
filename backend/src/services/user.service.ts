@@ -110,4 +110,16 @@ export default class UserService {
 		await this.userRepository.remove(user);
 		return true;
 	};
+
+	togglePremium = async (id: string, isPremium: boolean) => {
+		const user = await this.getBy({ where: { id } });
+
+		console.log("user", user);
+
+		user.isPremium = isPremium;
+
+		await this.userRepository.save(user);
+
+		return user.isPremium;
+	}
 }

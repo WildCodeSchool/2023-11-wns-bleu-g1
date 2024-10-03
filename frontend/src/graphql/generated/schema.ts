@@ -60,6 +60,7 @@ export type Mutation = {
   signin: Scalars['String'];
   updateCode: Code;
   updateLanguage: Language;
+  updateUserIsPremium: Scalars['Float'];
 };
 
 
@@ -116,6 +117,11 @@ export type MutationUpdateCodeArgs = {
 
 export type MutationUpdateLanguageArgs = {
   data: UpdateLanguageInput;
+};
+
+
+export type MutationUpdateUserIsPremiumArgs = {
+  isPremium: Scalars['Boolean'];
 };
 
 export type NewProjectInput = {
@@ -332,6 +338,13 @@ export type IncrementExecutionCounterMutationVariables = Exact<{
 
 
 export type IncrementExecutionCounterMutation = { __typename?: 'Mutation', incrementExecutionCounter: number };
+
+export type UpdateUserIsPremiumMutationVariables = Exact<{
+  isPremium: Scalars['Boolean'];
+}>;
+
+
+export type UpdateUserIsPremiumMutation = { __typename?: 'Mutation', updateUserIsPremium: number };
 
 
 export const GetLanguagesDocument = gql`
@@ -698,40 +711,6 @@ export function useGetProjectByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type GetProjectByIdQueryHookResult = ReturnType<typeof useGetProjectByIdQuery>;
 export type GetProjectByIdLazyQueryHookResult = ReturnType<typeof useGetProjectByIdLazyQuery>;
 export type GetProjectByIdQueryResult = Apollo.QueryResult<GetProjectByIdQuery, GetProjectByIdQueryVariables>;
-export const CreatePaymentIntentDocument = gql`
-    mutation CreatePaymentIntent($amount: Float!) {
-  createPaymentIntent(amount: $amount) {
-    clientSecret
-    error
-  }
-}
-    `;
-export type CreatePaymentIntentMutationFn = Apollo.MutationFunction<CreatePaymentIntentMutation, CreatePaymentIntentMutationVariables>;
-
-/**
- * __useCreatePaymentIntentMutation__
- *
- * To run a mutation, you first call `useCreatePaymentIntentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreatePaymentIntentMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createPaymentIntentMutation, { data, loading, error }] = useCreatePaymentIntentMutation({
- *   variables: {
- *      amount: // value for 'amount'
- *   },
- * });
- */
-export function useCreatePaymentIntentMutation(baseOptions?: Apollo.MutationHookOptions<CreatePaymentIntentMutation, CreatePaymentIntentMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreatePaymentIntentMutation, CreatePaymentIntentMutationVariables>(CreatePaymentIntentDocument, options);
-      }
-export type CreatePaymentIntentMutationHookResult = ReturnType<typeof useCreatePaymentIntentMutation>;
-export type CreatePaymentIntentMutationResult = Apollo.MutationResult<CreatePaymentIntentMutation>;
-export type CreatePaymentIntentMutationOptions = Apollo.BaseMutationOptions<CreatePaymentIntentMutation, CreatePaymentIntentMutationVariables>;
 export const GetPublicsProjectsDocument = gql`
     query GetPublicsProjects($offset: Float!, $limit: Float!) {
   getPublicsProjects(offset: $offset, limit: $limit) {
@@ -777,6 +756,40 @@ export function useGetPublicsProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type GetPublicsProjectsQueryHookResult = ReturnType<typeof useGetPublicsProjectsQuery>;
 export type GetPublicsProjectsLazyQueryHookResult = ReturnType<typeof useGetPublicsProjectsLazyQuery>;
 export type GetPublicsProjectsQueryResult = Apollo.QueryResult<GetPublicsProjectsQuery, GetPublicsProjectsQueryVariables>;
+export const CreatePaymentIntentDocument = gql`
+    mutation CreatePaymentIntent($amount: Float!) {
+  createPaymentIntent(amount: $amount) {
+    clientSecret
+    error
+  }
+}
+    `;
+export type CreatePaymentIntentMutationFn = Apollo.MutationFunction<CreatePaymentIntentMutation, CreatePaymentIntentMutationVariables>;
+
+/**
+ * __useCreatePaymentIntentMutation__
+ *
+ * To run a mutation, you first call `useCreatePaymentIntentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePaymentIntentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPaymentIntentMutation, { data, loading, error }] = useCreatePaymentIntentMutation({
+ *   variables: {
+ *      amount: // value for 'amount'
+ *   },
+ * });
+ */
+export function useCreatePaymentIntentMutation(baseOptions?: Apollo.MutationHookOptions<CreatePaymentIntentMutation, CreatePaymentIntentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePaymentIntentMutation, CreatePaymentIntentMutationVariables>(CreatePaymentIntentDocument, options);
+      }
+export type CreatePaymentIntentMutationHookResult = ReturnType<typeof useCreatePaymentIntentMutation>;
+export type CreatePaymentIntentMutationResult = Apollo.MutationResult<CreatePaymentIntentMutation>;
+export type CreatePaymentIntentMutationOptions = Apollo.BaseMutationOptions<CreatePaymentIntentMutation, CreatePaymentIntentMutationVariables>;
 export const UsersDocument = gql`
     query Users {
   users {
@@ -1018,3 +1031,34 @@ export function useIncrementExecutionCounterMutation(baseOptions?: Apollo.Mutati
 export type IncrementExecutionCounterMutationHookResult = ReturnType<typeof useIncrementExecutionCounterMutation>;
 export type IncrementExecutionCounterMutationResult = Apollo.MutationResult<IncrementExecutionCounterMutation>;
 export type IncrementExecutionCounterMutationOptions = Apollo.BaseMutationOptions<IncrementExecutionCounterMutation, IncrementExecutionCounterMutationVariables>;
+export const UpdateUserIsPremiumDocument = gql`
+    mutation UpdateUserIsPremium($isPremium: Boolean!) {
+  updateUserIsPremium(isPremium: $isPremium)
+}
+    `;
+export type UpdateUserIsPremiumMutationFn = Apollo.MutationFunction<UpdateUserIsPremiumMutation, UpdateUserIsPremiumMutationVariables>;
+
+/**
+ * __useUpdateUserIsPremiumMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserIsPremiumMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserIsPremiumMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserIsPremiumMutation, { data, loading, error }] = useUpdateUserIsPremiumMutation({
+ *   variables: {
+ *      isPremium: // value for 'isPremium'
+ *   },
+ * });
+ */
+export function useUpdateUserIsPremiumMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserIsPremiumMutation, UpdateUserIsPremiumMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUserIsPremiumMutation, UpdateUserIsPremiumMutationVariables>(UpdateUserIsPremiumDocument, options);
+      }
+export type UpdateUserIsPremiumMutationHookResult = ReturnType<typeof useUpdateUserIsPremiumMutation>;
+export type UpdateUserIsPremiumMutationResult = Apollo.MutationResult<UpdateUserIsPremiumMutation>;
+export type UpdateUserIsPremiumMutationOptions = Apollo.BaseMutationOptions<UpdateUserIsPremiumMutation, UpdateUserIsPremiumMutationVariables>;

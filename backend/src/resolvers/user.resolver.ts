@@ -5,6 +5,7 @@ import User, {
 	ExecutionCounterInput,
 	NewUserInput,
 	SigninInput,
+	IsPremiumInput,
 } from "../entities/user";
 import { Context } from "../interfaces/auth";
 import { UserRole } from "../entities/user";
@@ -78,6 +79,22 @@ export default class UserResolver {
 		return await new UserService().getExecutionCounter(
 			currentUser.id,
 			counter.executionCounter
+		);
+	}
+
+	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Mutation(() => Number)
+	async updateUserIsPremium(
+		@Arg("isPremium") isPremium: boolean,
+		@Ctx() { currentUser }: Context
+	) {
+		if (!currentUser) {
+			throw new GraphQLError("you need to be logged in!");
+		}
+
+		return await new UserService().togglePremium(
+			currentUser.id,
+			isPremium
 		);
 	}
 

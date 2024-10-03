@@ -96,3 +96,9 @@ export class ExecutionCounterInput {
 	@Field()
 	executionCounter: number;
 }
+
+@InputType()
+export class IsPremiumInput {
+	@Field()
+	isPremium: boolean;
+}
