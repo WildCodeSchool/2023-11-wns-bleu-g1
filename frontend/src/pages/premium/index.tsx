@@ -3,6 +3,11 @@ import ExternalLinkIcon from "@/components/elements/icons/external-link-arrow";
 import CheckCircleIcon from "@/components/elements/icons/check-circle";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import {
+	AlertDialog,
+	AlertDialogContent,
+	AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 import { memo, useState } from "react";
 import Link from "next/link";
@@ -236,13 +241,39 @@ export default function Pricing() {
 							</div>
 						</div>
 						<div className="flex justify-center">
-							<Button
-								variant={"destructive"}
-								className="mt-4 gap-1 w-fit"
-								onClick={unsubscribe}
-							>
-								Se désabonner
-							</Button>
+						<AlertDialog>
+							<AlertDialogTrigger asChild>
+								<Button
+									variant={"destructive"}
+									className="mt-4 gap-1 w-fit"
+									// onClick={unsubscribe}
+								>
+									Se désabonner
+								</Button>
+							</AlertDialogTrigger>
+
+							<AlertDialogContent>
+								<p className="text-center text-white">
+									Êtes-vous sûr de vouloir vous désabonner ?
+								</p>
+								
+								<div className="flex justify-center gap-2">
+									<Button
+										variant={"destructive"}
+										className="mt-4 gap-1 w-fit"
+										onClick={unsubscribe}
+									>
+										Oui
+									</Button>
+									<Button
+										variant={"outline"}
+										className="mt-4 gap-1 w-fit"
+									>
+										Non
+									</Button>
+								</div>
+							</AlertDialogContent>
+						</AlertDialog>
 						</div>
 					</div>
 				</section>
