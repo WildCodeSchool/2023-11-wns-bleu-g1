@@ -1,6 +1,6 @@
-import { ApolloServer } from "@apollo/server";
-import { expressMiddleware } from "@apollo/server/express4";
-import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
+import {ApolloServer} from "@apollo/server";
+import {expressMiddleware} from "@apollo/server/express4";
+import {ApolloServerPluginDrainHttpServer} from "@apollo/server/plugin/drainHttpServer";
 import express from "express";
 import http from "http";
 import cors from "cors";
@@ -9,7 +9,7 @@ import cron from "node-cron";
 import env from "./env";
 import schema from "./schema";
 import db from "./db";
-import { resetExecCode } from "./script/reset-execution-code";
+import {resetExecCode} from "./script/reset-execution-code";
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -39,7 +39,7 @@ const main = async () => {
 	);
 
 	await new Promise<void>((resolve) => httpServer.listen(port, resolve));
-	console.log(`🚀 Server ready at http://localhost:${port}`);
+	console.log(`🚀 Hey, server ready at http://localhost:${port}`);
 
 	cron.schedule("0 0 * * *", async () => {
 		await resetExecCode();
