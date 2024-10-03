@@ -93,10 +93,7 @@ export default class UserResolver {
 			throw new GraphQLError("you need to be logged in!");
 		}
 
-		return await new UserService().togglePremium(
-			currentUser.id,
-			isPremium
-		);
+		return await new UserService().togglePremium(currentUser.id, isPremium);
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])

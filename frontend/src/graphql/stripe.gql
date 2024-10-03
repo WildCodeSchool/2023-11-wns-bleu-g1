@@ -1,6 +1,6 @@
 mutation CreatePaymentIntent($amount: Float!) {
-    createPaymentIntent(amount: $amount) {
-        clientSecret
-        error
-    }
+	createPaymentIntent(amount: $amount) {
+		clientSecret
+		error
+	}
 }

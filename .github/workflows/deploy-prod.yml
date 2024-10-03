@@ -4,7 +4,6 @@ on:
   workflow_dispatch:
 
 jobs:
-
   call-test-front:
     uses: WildCodeSchool/2023-11-wns-bleu-g1/.github/workflows/test-front.yml@master
 

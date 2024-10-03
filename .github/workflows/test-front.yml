@@ -3,11 +3,10 @@ name: "test-front"
 on:
   pull_request:
     paths:
-      - 'frontend/**'
+      - "frontend/**"
   workflow_call:
 
 jobs:
-
   linting-frontend:
     name: Linting frontend
     runs-on: ubuntu-latest
@@ -26,7 +25,7 @@ jobs:
 
   prettier-frontend:
     name: Prettier frontend
-    needs: [ linting-frontend ]
+    needs: [linting-frontend]
     runs-on: ubuntu-latest
     defaults:
       run:

@@ -15,7 +15,7 @@ export default buildSchemaSync({
 		ProjectResolver,
 		LanguageResolver,
 		LikeResolver,
-    PremiumResolver,
+		PremiumResolver,
 	],
 	authChecker,
 });

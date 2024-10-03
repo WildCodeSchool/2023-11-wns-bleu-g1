@@ -61,7 +61,9 @@ const AuthHeader = () => {
 					{!onCodingPage ? <NewProjectPopup /> : null}
 					<DropdownMenu>
 						<DropdownMenuTrigger className="relative isolate">
-							{ profile?.isPremium && <Crown className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2" /> }
+							{profile?.isPremium && (
+								<Crown className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+							)}
 							<Avatar>
 								<AvatarImage src="https://github.com/shadcn.png" />
 								<AvatarFallback>
@@ -89,7 +91,7 @@ const AuthHeader = () => {
 									itemsClassName,
 									"text-warning focus:text-warning"
 								)}
-								asChild 
+								asChild
 							>
 								<Link href={"/premium"}>
 									<Crown className={iconsClassName} />
