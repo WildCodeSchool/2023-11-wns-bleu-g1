@@ -4,14 +4,3 @@ query GetLanguages {
 		name
 	}
 }
-
-mutation DeleteLanguage($deleteLanguageId: String!) {
-	deleteLanguage(id: $deleteLanguageId)
-}
-
-mutation CreateLanguage($data: LanguageInput!) {
-  createLanguage(data: $data) {
-    id
-    name
-  }
-}
