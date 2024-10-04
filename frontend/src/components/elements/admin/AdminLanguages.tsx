@@ -1,13 +1,9 @@
-
-
 const AdminLanguages = () => {
+	return (
+		<>
+			<h1>Languages</h1>
+		</>
+	);
+};
 
-
-    return (
-        <>
-            <h1>Languages</h1>
-        </>
-    )
-}
-
-export default AdminLanguages
+export default AdminLanguages;

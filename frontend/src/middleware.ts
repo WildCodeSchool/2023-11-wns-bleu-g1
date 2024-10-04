@@ -21,7 +21,7 @@ export async function middleware(request: NextRequest) {
 	}
 
 	if (request.nextUrl.pathname.startsWith("/admin")) {
-		console.log('in admin')
+		console.log("in admin");
 		if (token) {
 			console.log("in if token");
 			try {
@@ -72,6 +72,6 @@ export const config = {
 		"/coding/codingPage",
 		"/profile",
 		"/communaute",
-		"/admin"
+		"/admin",
 	],
 };

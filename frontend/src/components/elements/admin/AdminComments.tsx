@@ -1,12 +1,9 @@
-
-
 const AdminComments = () => {
+	return (
+		<>
+			<h1>Commentaires</h1>
+		</>
+	);
+};
 
-    return (
-        <>
-            <h1>Commentaires</h1>
-        </>
-    )
-}
-
-export default AdminComments
+export default AdminComments;
