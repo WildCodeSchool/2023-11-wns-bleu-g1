@@ -27,4 +27,20 @@ export default class CommentResolver {
 	async getComments() {
 		return await new CommentService().getAll();
 	}
+
+	@Authorized([UserRole.ADMIN, UserRole.VISITOR])
+	@Mutation(() => Boolean)
+	async deleteComment(
+		@Ctx() { currentUser }: Context,
+		@Arg("commentId") commentId: string
+	) {
+		if (!currentUser) throw new GraphQLError("you need to be logged in!");
+
+		await new CommentService().delete({
+			user: currentUser,
+			id: commentId,
+		});
+
+		return true;
+	}
 }

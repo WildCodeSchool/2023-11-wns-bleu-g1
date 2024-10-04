@@ -5,3 +5,7 @@ mutation Comment($content: String!, $projectId: String!) {
 		createdAt
 	}
 }
+
+mutation DeleteComment($commentId: String!) {
+	deleteComment(commentId: $commentId)
+}

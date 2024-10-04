@@ -1,7 +1,8 @@
 import { Repository } from "typeorm";
 import DataSource from "../db";
 import Comment from "../entities/comment";
-import User from "../entities/user";
+import User, { UserRole } from "../entities/user";
+import { GraphQLError } from "graphql";
 
 export default class CommentService {
 	commentRepository: Repository<Comment>;
@@ -30,5 +31,22 @@ export default class CommentService {
 
 	getAll = async () => {
 		return await this.commentRepository.find();
+	};
+
+	delete = async ({ user, id }: { user: User; id: string }) => {
+		const comment = await this.commentRepository.findOne({
+			where: { id },
+			relations: { user: true },
+		});
+
+		if (!comment) {
+			throw new GraphQLError("Comment not found");
+		}
+
+		if (user.role === UserRole.VISITOR && comment.user.id !== user.id) {
+			throw new GraphQLError("Not Authorized");
+		}
+
+		return await this.commentRepository.remove(comment);
 	};
 }
