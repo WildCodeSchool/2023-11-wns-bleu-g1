@@ -72,5 +72,5 @@ export default class ProjectService {
 		await this.projectRepository.remove(project);
 
 		return true;
-	}
+	};
 }

@@ -88,5 +88,5 @@ query GetProjects {
 }
 
 mutation DeleteProject($deleteProjectId: String!) {
-  deleteProject(id: $deleteProjectId)
+	deleteProject(id: $deleteProjectId)
 }

@@ -12,13 +12,21 @@ import {
 import { Button, buttonVariants } from "@/components/ui/button";
 import React from "react";
 import {
-	GetLanguagesDocument, GetProjectsDocument,
-	useDeleteLanguageMutation, useDeleteProjectMutation,
+	GetLanguagesDocument,
+	GetProjectsDocument,
+	useDeleteLanguageMutation,
+	useDeleteProjectMutation,
 } from "@/graphql/generated/schema";
 import { Check, Cross } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
-const ElementDelete = ({ id, elementType}: {id: string, elementType: string }) => {
+const ElementDelete = ({
+	id,
+	elementType,
+}: {
+	id: string;
+	elementType: string;
+}) => {
 	const { toast } = useToast();
 	console.log("elementType: ", elementType);
 
