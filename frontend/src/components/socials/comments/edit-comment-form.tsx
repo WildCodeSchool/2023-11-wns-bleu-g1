@@ -109,7 +109,6 @@ export const EditCommentForm = ({ projectId, comment, setEditMode }: Props) => {
 							type="submit"
 							isLoading={updateCommentMutationResult.loading}
 							disabled={updateCommentMutationResult.loading}
-							className="bg-success-300 hover:bg-success-300/80"
 							size={"sm"}
 						>
 							<Check />

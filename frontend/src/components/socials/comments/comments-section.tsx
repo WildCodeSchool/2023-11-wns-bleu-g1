@@ -22,7 +22,7 @@ export const CommentsSection = ({ project, userId }: Props) => {
 	);
 
 	return (
-		<div className="space-y-3 my-4 ">
+		<div className="space-y-3 my-4">
 			{sortedComments.map((comment) => (
 				<CommentCard
 					key={comment.id}

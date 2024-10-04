@@ -78,7 +78,7 @@ export const CommentCard = ({ projectId, comment, userId }: Props) => {
 	};
 
 	return (
-		<div className="flex gap-2 bg-foreground/5 py-3 pl-2 pr-4 w-full md:w-fit rounded-lg">
+		<div className="flex gap-2 bg-foreground/5 py-3 pl-2 pr-4 w-full rounded-lg">
 			<div className="flex-shrink-0">
 				<Avatar className="w-8 h-8">
 					<AvatarImage src="https://github.com/shadcn.png" />
