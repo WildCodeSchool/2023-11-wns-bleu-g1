@@ -3,7 +3,8 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import {
 	useDeleteLanguageMutation,
 	useGetLanguagesQuery,
-	useCreateLanguageMutation, GetLanguagesDocument,
+	useCreateLanguageMutation,
+	GetLanguagesDocument,
 } from "@/graphql/generated/schema";
 import {
 	AlertDialog,
@@ -18,38 +19,37 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/components/ui/use-toast";
 import { Check, Cross } from "lucide-react";
-import {Form, FormControl, FormField, FormItem} from "@/components/ui/form";
-import {Input} from "@/components/ui/input";
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import React from "react";
 import { useForm } from "react-hook-form";
-import {z} from "zod";
-import {zodResolver} from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const AdminLanguages = () => {
 	const { data } = useGetLanguagesQuery();
 	const languages = data?.getLanguages || [];
 	const { toast } = useToast();
 
-	const [deleteLanguageMutation] =
-		useDeleteLanguageMutation({
-			onCompleted: () => {
-				console.log("Language deleted");
-				toast({
-					icon: <Check className="h-5 w-5" />,
-					title: "Language supprimé",
-					className: "text-success",
-				});
-			},
-			refetchQueries: [GetLanguagesDocument],
-			onError: (error) => {
-				console.error("deleteLanguage error: ", error);
-				toast({
-					icon: <Cross className="h-5 w-5" />,
-					title: error?.message || "Une erreur est survenue lors de la création.",
-					className: "text-error",
-				});
-			},
-		});
+	const [deleteLanguageMutation] = useDeleteLanguageMutation({
+		onCompleted: () => {
+			console.log("Language deleted");
+			toast({
+				icon: <Check className="h-5 w-5" />,
+				title: "Language supprimé",
+				className: "text-success",
+			});
+		},
+		refetchQueries: [GetLanguagesDocument],
+		onError: (error) => {
+			console.error("deleteLanguage error: ", error);
+			toast({
+				icon: <Cross className="h-5 w-5" />,
+				title: error?.message || "Une erreur est survenue lors de la création.",
+				className: "text-error",
+			});
+		},
+	});
 
 	const [addLanguageMutation] = useCreateLanguageMutation({
 		onCompleted: () => {
@@ -77,35 +77,35 @@ const AdminLanguages = () => {
 				data: {
 					name: name,
 				},
-			}
+			},
 		});
-		}
+	}
 
 	function deleteLanguage(id: string) {
 		deleteLanguageMutation({
 			variables: {
 				deleteLanguageId: id,
-			}
+			},
 		});
 		console.log(`deleteLanguageMutation: lang.id=${id}`);
 	}
 
 	const formSchema = z.object({
 		name: z.string().min(2, {
-		message: "Le nom du langage doit contenir au moins 2 caractères.",
-	}),
+			message: "Le nom du langage doit contenir au moins 2 caractères.",
+		}),
 	});
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			name: "",
-		}
+		},
 	});
 
 	async function onNewLanguageSubmit(values: z.infer<typeof formSchema>) {
-		addLanguage(values.name)
-		form.reset()
+		addLanguage(values.name);
+		form.reset();
 	}
 
 	return (
@@ -179,11 +179,14 @@ const AdminLanguages = () => {
 							</AlertDialogHeader>
 							<AlertDialogDescription>
 								<Form {...form}>
-									<form onSubmit={form.handleSubmit(onNewLanguageSubmit)} className="space-y-8">
+									<form
+										onSubmit={form.handleSubmit(onNewLanguageSubmit)}
+										className="space-y-8"
+									>
 										<FormField
 											control={form.control}
 											name="name"
-											render={({field}) => (
+											render={({ field }) => (
 												<FormItem className="space-y-4">
 													<FormControl>
 														<Input
@@ -196,16 +199,16 @@ const AdminLanguages = () => {
 											)}
 										/>
 										<AlertDialogCancel
-									className={buttonVariants({variant: "dark"})}
-								>
-									Annuler
-								</AlertDialogCancel>
-								<AlertDialogAction
-									className={buttonVariants({variant: "default"})}
-									type="submit"
-								>
-									Ajouter
-								</AlertDialogAction>
+											className={buttonVariants({ variant: "dark" })}
+										>
+											Annuler
+										</AlertDialogCancel>
+										<AlertDialogAction
+											className={buttonVariants({ variant: "default" })}
+											type="submit"
+										>
+											Ajouter
+										</AlertDialogAction>
 									</form>
 								</Form>
 							</AlertDialogDescription>
