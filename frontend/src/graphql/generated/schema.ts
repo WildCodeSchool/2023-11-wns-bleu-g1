@@ -271,6 +271,14 @@ export type User = {
   role: Scalars['String'];
 };
 
+export type CommentMutationVariables = Exact<{
+  content: Scalars['String'];
+  projectId: Scalars['String'];
+}>;
+
+
+export type CommentMutation = { __typename?: 'Mutation', comment: { __typename?: 'Comment', id: string, content: string, createdAt: any } };
+
 export type GetLanguagesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -420,6 +428,42 @@ export type UpdateUserPasswordMutationVariables = Exact<{
 export type UpdateUserPasswordMutation = { __typename?: 'Mutation', updateUserPassword: boolean };
 
 
+export const CommentDocument = gql`
+    mutation Comment($content: String!, $projectId: String!) {
+  comment(content: $content, projectId: $projectId) {
+    id
+    content
+    createdAt
+  }
+}
+    `;
+export type CommentMutationFn = Apollo.MutationFunction<CommentMutation, CommentMutationVariables>;
+
+/**
+ * __useCommentMutation__
+ *
+ * To run a mutation, you first call `useCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [commentMutation, { data, loading, error }] = useCommentMutation({
+ *   variables: {
+ *      content: // value for 'content'
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useCommentMutation(baseOptions?: Apollo.MutationHookOptions<CommentMutation, CommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CommentMutation, CommentMutationVariables>(CommentDocument, options);
+      }
+export type CommentMutationHookResult = ReturnType<typeof useCommentMutation>;
+export type CommentMutationResult = Apollo.MutationResult<CommentMutation>;
+export type CommentMutationOptions = Apollo.BaseMutationOptions<CommentMutation, CommentMutationVariables>;
 export const GetLanguagesDocument = gql`
     query GetLanguages {
   getLanguages {

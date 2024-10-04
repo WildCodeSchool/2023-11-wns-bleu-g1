@@ -26,11 +26,13 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { CommentsSection } from "@/components/socials/comments/comments-section";
 import { CommentButton } from "@/components/socials/comments/comment-button";
+import { AddCommentForm } from "@/components/socials/comments/add-comment-form";
 
 const CodingPage = () => {
 	const router = useRouter();
 	const { toast } = useToast();
 	const { id } = router.query;
+
 	const {
 		data: getUserProfileData,
 		loading: getUserProfileLoading,
@@ -342,6 +344,8 @@ const CodingPage = () => {
 					<CommentButton commentsLength={project.comments?.length} />
 				</div>
 				<CommentsSection project={project} userId={userId} />
+				<Separator className="mt-3 md:mt-8 mb-3" />
+				<AddCommentForm projectId={project.id} />
 			</div>
 		</AuthLayout>
 	);

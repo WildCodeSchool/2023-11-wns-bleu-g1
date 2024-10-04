@@ -1,0 +1,7 @@
+mutation Comment($content: String!, $projectId: String!) {
+	comment(content: $content, projectId: $projectId) {
+		id
+		content
+		createdAt
+	}
+}
