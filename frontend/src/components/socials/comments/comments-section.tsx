@@ -1,11 +1,21 @@
 import React from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
+import { elapsedTime } from "@/lib/utils";
 import { CommentCard } from "./comment-card";
-import { Comment } from "@/graphql/generated/schema";
 
 interface Props {
 	project: {
 		id: string;
-		comments: Comment[];
+		comments: {
+			id: string;
+			content: string;
+			user: {
+				id: string;
+				pseudo: string;
+			};
+			createdAt: Date;
+			updatedAt: Date;
+		}[];
 	};
 	userId: string;
 }

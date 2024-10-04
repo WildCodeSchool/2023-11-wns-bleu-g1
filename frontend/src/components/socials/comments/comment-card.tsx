@@ -4,7 +4,15 @@ import { elapsedTime } from "@/lib/utils";
 import React from "react";
 
 interface Props {
-	comment: Omit<Comment, "project">;
+	comment: {
+		id: string;
+		content: string;
+		user: {
+			id: string;
+			pseudo: string;
+		};
+		createdAt: Date;
+	};
 	userId: string;
 }
 

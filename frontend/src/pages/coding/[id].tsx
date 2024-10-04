@@ -339,7 +339,7 @@ const CodingPage = () => {
 
 				<div className="flex items-center gap-3">
 					<LikeButton project={project} userId={userId} />
-					<CommentButton commentsLength={project.comments.length} />
+					<CommentButton commentsLength={project.comments?.length} />
 				</div>
 				<CommentsSection project={project} userId={userId} />
 			</div>
