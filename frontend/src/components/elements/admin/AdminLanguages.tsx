@@ -5,6 +5,7 @@ import {
 	useGetLanguagesQuery,
 	useCreateLanguageMutation,
 	GetLanguagesDocument,
+	useUpdateLanguageMutation,
 } from "@/graphql/generated/schema";
 import {
 	AlertDialog,
@@ -71,6 +72,26 @@ const AdminLanguages = () => {
 		},
 	});
 
+	const [updateLanguageMutation] = useUpdateLanguageMutation({
+		onCompleted: () => {
+			console.log("Language updated");
+			toast({
+				icon: <Check className="h-5 w-5" />,
+				title: "Language mis à jour",
+				className: "text-success",
+			});
+		},
+		refetchQueries: [GetLanguagesDocument],
+		onError: (error) => {
+			console.error("updateLanguage error: ", error);
+			toast({
+				icon: <Cross className="h-5 w-5" />,
+				title: error?.message || "Une erreur est survenue lors de la création.",
+				className: "text-error",
+			});
+		},
+	});
+
 	function addLanguage(name: string) {
 		addLanguageMutation({
 			variables: {
@@ -90,7 +111,19 @@ const AdminLanguages = () => {
 		console.log(`deleteLanguageMutation: lang.id=${id}`);
 	}
 
+	function updateLanguage(id: string, name: string) {
+		updateLanguageMutation({
+			variables: {
+				data: {
+					id: id,
+					name: name,
+				},
+			},
+		});
+	}
+
 	const formSchema = z.object({
+		id: z.string(),
 		name: z.string().min(2, {
 			message: "Le nom du langage doit contenir au moins 2 caractères.",
 		}),
@@ -99,12 +132,19 @@ const AdminLanguages = () => {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
+			id: "",
 			name: "",
 		},
 	});
 
 	async function onNewLanguageSubmit(values: z.infer<typeof formSchema>) {
 		addLanguage(values.name);
+		form.reset();
+	}
+
+	async function onUpdateLanguageSubmit(values: z.infer<typeof formSchema>) {
+		console.log("onUpdateLanguageSubmit: ", values);
+		updateLanguage(values.id, values.name);
 		form.reset();
 	}
 
@@ -127,7 +167,61 @@ const AdminLanguages = () => {
 									{lang.name}
 								</p>
 								<div className="flex gap-2">
-									<Button variant="secondary">Modifier</Button>
+									<AlertDialog>
+										<AlertDialogTrigger asChild>
+											<Button
+												variant="secondary"
+												onClick={() => {
+													form.setValue("id", lang.id);
+													form.setValue("name", lang.name);
+												}}
+											>
+												Modifier
+											</Button>
+										</AlertDialogTrigger>
+										<AlertDialogContent>
+											<AlertDialogHeader>
+												<AlertDialogTitle>
+													Quel est le nouveau nom de votre language?
+												</AlertDialogTitle>
+											</AlertDialogHeader>
+											<AlertDialogDescription>
+												<Form {...form}>
+													<form
+														onSubmit={form.handleSubmit(onUpdateLanguageSubmit)}
+														className="space-y-8"
+													>
+														<FormField
+															control={form.control}
+															name="name"
+															render={({ field }) => (
+																<FormItem className="space-y-4">
+																	<FormControl>
+																		<Input
+																			className="my-2 bg-secondary"
+																			placeholder={lang.name}
+																			{...field}
+																		/>
+																	</FormControl>
+																</FormItem>
+															)}
+														/>
+														<AlertDialogCancel
+															className={buttonVariants({ variant: "dark" })}
+														>
+															Annuler
+														</AlertDialogCancel>
+														<AlertDialogAction
+															className={buttonVariants({ variant: "default" })}
+															type="submit"
+														>
+															Ajouter
+														</AlertDialogAction>
+													</form>
+												</Form>
+											</AlertDialogDescription>
+										</AlertDialogContent>
+									</AlertDialog>
 									<AlertDialog>
 										<AlertDialogTrigger asChild>
 											<Button variant="destructive">Supprimer</Button>

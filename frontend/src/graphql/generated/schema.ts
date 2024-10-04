@@ -264,6 +264,15 @@ export type CreateLanguageMutation = {
 	createLanguage: { __typename?: "Language"; id: string; name: string };
 };
 
+export type UpdateLanguageMutationVariables = Exact<{
+	data: UpdateLanguageInput;
+}>;
+
+export type UpdateLanguageMutation = {
+	__typename?: "Mutation";
+	updateLanguage: { __typename?: "Language"; id: string; name: string };
+};
+
 export type LikeMutationVariables = Exact<{
 	projectId: Scalars["String"];
 }>;
@@ -699,6 +708,57 @@ export type CreateLanguageMutationResult =
 export type CreateLanguageMutationOptions = Apollo.BaseMutationOptions<
 	CreateLanguageMutation,
 	CreateLanguageMutationVariables
+>;
+export const UpdateLanguageDocument = gql`
+	mutation UpdateLanguage($data: UpdateLanguageInput!) {
+		updateLanguage(data: $data) {
+			id
+			name
+		}
+	}
+`;
+export type UpdateLanguageMutationFn = Apollo.MutationFunction<
+	UpdateLanguageMutation,
+	UpdateLanguageMutationVariables
+>;
+
+/**
+ * __useUpdateLanguageMutation__
+ *
+ * To run a mutation, you first call `useUpdateLanguageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateLanguageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateLanguageMutation, { data, loading, error }] = useUpdateLanguageMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateLanguageMutation(
+	baseOptions?: Apollo.MutationHookOptions<
+		UpdateLanguageMutation,
+		UpdateLanguageMutationVariables
+	>
+) {
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useMutation<
+		UpdateLanguageMutation,
+		UpdateLanguageMutationVariables
+	>(UpdateLanguageDocument, options);
+}
+export type UpdateLanguageMutationHookResult = ReturnType<
+	typeof useUpdateLanguageMutation
+>;
+export type UpdateLanguageMutationResult =
+	Apollo.MutationResult<UpdateLanguageMutation>;
+export type UpdateLanguageMutationOptions = Apollo.BaseMutationOptions<
+	UpdateLanguageMutation,
+	UpdateLanguageMutationVariables
 >;
 export const LikeDocument = gql`
 	mutation Like($projectId: String!) {
