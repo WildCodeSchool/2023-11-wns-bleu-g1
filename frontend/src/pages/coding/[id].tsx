@@ -24,8 +24,8 @@ import PageLoader from "@/components/elements/page-loader";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
-import { CommentsSection } from "@/components/socials/comments-section";
-import { CommentButton } from "@/components/socials/comment-button";
+import { CommentsSection } from "@/components/socials/comments/comments-section";
+import { CommentButton } from "@/components/socials/comments/comment-button";
 
 const CodingPage = () => {
 	const router = useRouter();
