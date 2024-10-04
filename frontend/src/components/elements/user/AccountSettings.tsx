@@ -1,14 +1,14 @@
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
 import {
 	AlertDialog,
 	AlertDialogContent,
 	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { ConfirmDeletePopUp } from "@/components/elements/ConfirmDeletePopUp";
-import { ChangeUsernamePopup } from "@/components/elements/ChangeUsernamePopup";
-import { ChangeUserPasswordPopup } from "@/components/elements/ChangeUserPasswordPopup";
+import { ConfirmDeletePopUp } from "@/components/elements/user/ConfirmDeletePopUp";
+import { ChangeUsernamePopup } from "@/components/elements/user/ChangeUsernamePopup";
+import { ChangeUserPasswordPopup } from "@/components/elements/user/ChangeUserPasswordPopup";
 
 const AccountSettings = () => {
 	return (

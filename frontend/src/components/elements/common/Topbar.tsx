@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import Logo from "@/components/elements/Logo";
+import Logo from "@/components/elements/common/Logo";
 
 type TopbarProps = {
 	isTopOfPage: boolean;
@@ -18,7 +18,7 @@ const Topbar = ({ isTopOfPage }: TopbarProps) => {
 			id="topbar"
 		>
 			<div className="container mx-auto flex items-center justify-between align-middle transition duration-700 ease-in-out">
-				<Link href={"/"}>
+				<Link href={"/frontend/public"}>
 					<Logo />
 				</Link>
 				<Link href={"/auth/connexion"} className="text-primary hover:underline">

@@ -1,5 +1,5 @@
 import React from "react";
-import Logo from "./Logo";
+import Logo from "../common/Logo";
 import {
 	DropdownMenu,
 	DropdownMenuTrigger,
@@ -16,9 +16,9 @@ import {
 	useLogoutMutation,
 } from "@/graphql/generated/schema";
 import { useRouter } from "next/router";
-import { useToast } from "../ui/use-toast";
+import { useToast } from "../../ui/use-toast";
 import Link from "next/link";
-import NewProjectPopup from "@/components/elements/NewProjectPopup";
+import NewProjectPopup from "@/components/elements/project/NewProjectPopup";
 import client from "@/graphql/config/client";
 
 const AuthHeader = () => {
@@ -55,7 +55,7 @@ const AuthHeader = () => {
 	return (
 		<header className="py-4 bg-topbarbackground/[33%]">
 			<nav className="container flex items-center justify-between">
-				<Link href="/">
+				<Link href="/frontend/public">
 					<Logo />
 				</Link>
 
