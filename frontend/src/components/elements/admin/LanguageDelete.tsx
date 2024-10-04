@@ -23,7 +23,6 @@ const LanguageDelete = (lang: { id: string }) => {
 
 	const [deleteLanguageMutation] = useDeleteLanguageMutation({
 		onCompleted: () => {
-			console.log("Language deleted");
 			toast({
 				icon: <Check className="h-5 w-5" />,
 				title: "Language supprimé",
@@ -32,10 +31,14 @@ const LanguageDelete = (lang: { id: string }) => {
 		},
 		refetchQueries: [GetLanguagesDocument],
 		onError: (error) => {
-			console.error("deleteLanguage error: ", error);
+			let errorMessage =
+				error?.message || "Une erreur est survenue lors de la suppression.";
+			if (errorMessage.includes("violates foreign key constraint")) {
+				errorMessage = "Impossible de supprimer un langage utilisé.";
+			}
 			toast({
 				icon: <Cross className="h-5 w-5" />,
-				title: error?.message || "Une erreur est survenue lors de la création.",
+				title: errorMessage,
 				className: "text-error",
 			});
 		},
@@ -46,7 +49,6 @@ const LanguageDelete = (lang: { id: string }) => {
 				deleteLanguageId: id,
 			},
 		});
-		console.log(`deleteLanguageMutation: lang.id=${id}`);
 	}
 
 	return (

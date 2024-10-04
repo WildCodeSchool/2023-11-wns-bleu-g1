@@ -53,7 +53,6 @@ const LanguageUpdate = (lang: { id: string; name: string }) => {
 
 	const [updateLanguageMutation] = useUpdateLanguageMutation({
 		onCompleted: () => {
-			console.log("Language updated");
 			toast({
 				icon: <Check className="h-5 w-5" />,
 				title: "Language mis à jour",
@@ -62,17 +61,20 @@ const LanguageUpdate = (lang: { id: string; name: string }) => {
 		},
 		refetchQueries: [GetLanguagesDocument],
 		onError: (error) => {
-			console.error("updateLanguage error: ", error);
+			let errorMessage =
+				error?.message || "Une erreur est survenue lors de la création.";
+			if (errorMessage.includes("already taken")) {
+				errorMessage = "Ce nom de langage est déjà utilisé.";
+			}
 			toast({
 				icon: <Cross className="h-5 w-5" />,
-				title: error?.message || "Une erreur est survenue lors de la création.",
+				title: errorMessage,
 				className: "text-error",
 			});
 		},
 	});
 
 	async function onUpdateLanguageSubmit(values: z.infer<typeof formSchema>) {
-		console.log("onUpdateLanguageSubmit: ", values);
 		updateLanguage(values.id, values.name);
 		form.reset();
 	}

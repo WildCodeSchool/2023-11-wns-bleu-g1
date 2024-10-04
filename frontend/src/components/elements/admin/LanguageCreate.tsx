@@ -40,7 +40,6 @@ const LanguageCreate = () => {
 
 	const [addLanguageMutation] = useCreateLanguageMutation({
 		onCompleted: () => {
-			console.log("Language created");
 			toast({
 				icon: <Check className="h-5 w-5" />,
 				title: "Language créé",
@@ -49,10 +48,14 @@ const LanguageCreate = () => {
 		},
 		refetchQueries: [GetLanguagesDocument],
 		onError: (error) => {
-			console.error("addLanguage error: ", error);
+			let errorMessage =
+				error?.message || "Une erreur est survenue lors de la création.";
+			if (errorMessage.includes("already taken")) {
+				errorMessage = "Ce nom de langage est déjà utilisé.";
+			}
 			toast({
 				icon: <Cross className="h-5 w-5" />,
-				title: error?.message || "Une erreur est survenue lors de la création.",
+				title: errorMessage,
 				className: "text-error",
 			});
 		},
