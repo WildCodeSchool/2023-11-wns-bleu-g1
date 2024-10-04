@@ -18,7 +18,7 @@ const Topbar = ({ isTopOfPage }: TopbarProps) => {
 			id="topbar"
 		>
 			<div className="container mx-auto flex items-center justify-between align-middle transition duration-700 ease-in-out">
-				<Link href={"/frontend/public"}>
+				<Link href={"/"}>
 					<Logo />
 				</Link>
 				<Link href={"/auth/connexion"} className="text-primary hover:underline">

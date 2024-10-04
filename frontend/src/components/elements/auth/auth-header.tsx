@@ -55,7 +55,7 @@ const AuthHeader = () => {
 	return (
 		<header className="py-4 bg-topbarbackground/[33%]">
 			<nav className="container flex items-center justify-between">
-				<Link href="/frontend/public">
+				<Link href="/">
 					<Logo />
 				</Link>
 
