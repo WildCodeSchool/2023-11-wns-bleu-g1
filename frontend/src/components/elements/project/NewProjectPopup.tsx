@@ -7,7 +7,7 @@ import {
 	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-import NewProjectFrom from "@/components/elements/NewProjectForm";
+import NewProjectFrom from "@/components/elements/project/NewProjectForm";
 import { buttonVariants } from "@/components/ui/button";
 
 const NewProjectPopup = () => {

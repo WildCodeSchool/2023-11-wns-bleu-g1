@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 
 import { MessageCircleWarning } from "lucide-react";
 import React from "react";
-import { Alert, AlertTitle, AlertDescription } from "../ui/alert";
+import { Alert, AlertTitle, AlertDescription } from "../../ui/alert";
 
 const Title = {
 	noOtherProjects: "Vous n'avez pas d'autres projets",

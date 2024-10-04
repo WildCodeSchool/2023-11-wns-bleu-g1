@@ -73,6 +73,7 @@ export default class UserService {
 				userId: user.id,
 				pseudo: user.pseudo,
 				email: user.email,
+				role: user.role,
 			},
 			env.JWT_PRIVATE_KEY,
 			{ expiresIn: "30d" }

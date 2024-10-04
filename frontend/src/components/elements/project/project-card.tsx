@@ -1,15 +1,15 @@
 import Link from "next/link";
 import React from "react";
-import { buttonVariants } from "../ui/button";
+import { buttonVariants } from "../../ui/button";
 import {
 	Card,
 	CardHeader,
 	CardTitle,
 	CardDescription,
 	CardContent,
-} from "../ui/card";
+} from "../../ui/card";
 import { Project, User } from "@/graphql/generated/schema";
-import { Badge } from "../ui/badge";
+import { Badge } from "../../ui/badge";
 
 type ProjectWithPartialUser = Omit<Project, "user"> & { user: Partial<User> };
 

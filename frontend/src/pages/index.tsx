@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import { Button } from "@/components/ui/button";
-import Topbar from "@/components/elements/Topbar";
+import Topbar from "@/components/elements/common/Topbar";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 

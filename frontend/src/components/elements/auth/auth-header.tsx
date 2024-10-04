@@ -1,5 +1,5 @@
 import React from "react";
-import Logo from "./Logo";
+import Logo from "../common/Logo";
 import {
 	DropdownMenu,
 	DropdownMenuTrigger,
@@ -9,16 +9,23 @@ import {
 	DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { BadgeCheck, Crown, FolderOpen, LogOut, User } from "lucide-react";
+import {
+	BadgeCheck,
+	Crown,
+	FolderOpen,
+	LogOut,
+	Shield,
+	User,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
 	useGetUserProfileQuery,
 	useLogoutMutation,
 } from "@/graphql/generated/schema";
 import { useRouter } from "next/router";
-import { useToast } from "../ui/use-toast";
+import { useToast } from "../../ui/use-toast";
 import Link from "next/link";
-import NewProjectPopup from "@/components/elements/NewProjectPopup";
+import NewProjectPopup from "@/components/elements/project/NewProjectPopup";
 import client from "@/graphql/config/client";
 
 const AuthHeader = () => {
@@ -94,6 +101,20 @@ const AuthHeader = () => {
 								<Crown className={iconsClassName} />
 								Passer Premium
 							</DropdownMenuItem>
+							{profile?.role === "admin" ? (
+								<DropdownMenuItem
+									className={cn(
+										itemsClassName,
+										"text-success focus:text-success"
+									)}
+									asChild
+								>
+									<Link href={`/admin`}>
+										<Shield className="{iconsClassName} size-4" />
+										Administation
+									</Link>
+								</DropdownMenuItem>
+							) : null}
 							<DropdownMenuItem
 								className={cn(itemsClassName, "text-error focus:text-error")}
 								onClick={handleLogout}

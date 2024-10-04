@@ -1,15 +1,15 @@
 import { useCallback, useState } from "react";
 
-import AuthLayout from "@/components/elements/auth-layout";
-import PageLoader from "@/components/elements/page-loader";
-import ProjectsContainer from "@/components/elements/ProjectsContainer";
-import UserHeadCard from "@/components/elements/user-head-card";
+import AuthLayout from "@/components/elements/auth/auth-layout";
+import PageLoader from "@/components/elements/common/page-loader";
+import ProjectsContainer from "@/components/elements/project/ProjectsContainer";
+import UserHeadCard from "@/components/elements/user/user-head-card";
 import { Button } from "@/components/ui/button";
 import { useGetUserProfileQuery } from "@/graphql/generated/schema";
 
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import AccountSettings from "@/components/elements/AccountSettings";
+import AccountSettings from "@/components/elements/user/AccountSettings";
 
 const ProfilPage = () => {
 	const [searchbar, setSearchbar] = useState("");

@@ -1,11 +1,11 @@
 import { useRouter } from "next/router";
 
 import { useGetPaginateProjectsQuery } from "@/graphql/generated/schema";
-import NotFoundAlert from "./not-found-alert";
+import NotFoundAlert from "../common/not-found-alert";
 import ProjectCard from "./project-card";
 import { useState } from "react";
-import CustomPagination from "../custom-pagination";
-import PageLoader from "./page-loader";
+import CustomPagination from "../../custom-pagination";
+import PageLoader from "../common/page-loader";
 
 interface Props {
 	searchUser?: string;
