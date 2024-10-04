@@ -49,4 +49,29 @@ export default class CommentService {
 
 		return await this.commentRepository.remove(comment);
 	};
+
+	update = async ({
+		user,
+		id,
+		newContent,
+	}: {
+		user: User;
+		id: string;
+		newContent: string;
+	}) => {
+		const comment = await this.commentRepository.findOne({
+			where: { id },
+			relations: { user: true },
+		});
+
+		if (!comment) {
+			throw new GraphQLError("Comment not found");
+		}
+
+		if (user.role === UserRole.VISITOR && comment.user.id !== user.id) {
+			throw new GraphQLError("Not Authorized");
+		}
+
+		return await this.commentRepository.update(id, { content: newContent });
+	};
 }

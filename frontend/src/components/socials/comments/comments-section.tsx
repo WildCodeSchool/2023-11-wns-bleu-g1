@@ -17,9 +17,13 @@ interface Props {
 	userId: string;
 }
 export const CommentsSection = ({ project, userId }: Props) => {
+	const sortedComments = project.comments.toSorted(
+		(a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+	);
+
 	return (
 		<div className="space-y-3 my-4 ">
-			{project.comments.map((comment) => (
+			{sortedComments.map((comment) => (
 				<CommentCard
 					key={comment.id}
 					comment={comment}

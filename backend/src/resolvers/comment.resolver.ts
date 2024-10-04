@@ -43,4 +43,22 @@ export default class CommentResolver {
 
 		return true;
 	}
+
+	@Authorized([UserRole.ADMIN, UserRole.VISITOR])
+	@Mutation(() => Boolean)
+	async updateComment(
+		@Ctx() { currentUser }: Context,
+		@Arg("commentId") commentId: string,
+		@Arg("newContent") newContent: string
+	) {
+		if (!currentUser) throw new GraphQLError("you need to be logged in!");
+
+		await new CommentService().update({
+			user: currentUser,
+			id: commentId,
+			newContent,
+		});
+
+		return true;
+	}
 }

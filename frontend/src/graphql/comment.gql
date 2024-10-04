@@ -9,3 +9,7 @@ mutation Comment($content: String!, $projectId: String!) {
 mutation DeleteComment($commentId: String!) {
 	deleteComment(commentId: $commentId)
 }
+
+mutation UpdateComment($newContent: String!, $commentId: String!) {
+	updateComment(newContent: $newContent, commentId: $commentId)
+}
