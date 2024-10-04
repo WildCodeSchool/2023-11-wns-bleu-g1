@@ -76,3 +76,13 @@ mutation ToggleProjectPublicState($projectId: String!) {
 		title
 	}
 }
+
+query GetProjects {
+	getProjects {
+		id
+		title
+		isPublic
+		createdAt
+		updatedAt
+	}
+}
