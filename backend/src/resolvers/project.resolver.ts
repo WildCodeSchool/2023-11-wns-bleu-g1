@@ -82,4 +82,10 @@ export default class ProjectResolver {
 	async toggleProjectPublicState(@Arg("id") id: string) {
 		return await new ProjectService().togglePublicState(id);
 	}
+
+	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Mutation(() => Boolean)
+	async deleteProject(@Arg("id") id: string) {
+		return await new ProjectService().delete(id);
+	}
 }

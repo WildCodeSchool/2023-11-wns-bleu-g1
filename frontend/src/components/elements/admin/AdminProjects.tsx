@@ -1,11 +1,10 @@
 import { useGetProjectsQuery } from "@/graphql/generated/schema";
 import { Separator } from "@radix-ui/react-menu";
-import { Button, buttonVariants } from "@/components/ui/button";
+import ElementDelete from "@/components/elements/admin/ElementDelete";
 
 const AdminProjects = () => {
 	const { data } = useGetProjectsQuery();
 	const projects = data?.getProjects || [];
-	console.log("projects: ", projects);
 
 	return (
 		<>
@@ -25,7 +24,7 @@ const AdminProjects = () => {
 								{project.title}
 							</p>
 							<div className="flex gap-2">
-								<Button variant="destructive">Supprimer</Button>
+								<ElementDelete id={project.id} elementType="project" />
 							</div>
 						</div>
 					))}

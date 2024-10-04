@@ -2,7 +2,7 @@ import { Separator } from "@/components/ui/separator";
 import { useGetLanguagesQuery } from "@/graphql/generated/schema";
 import React from "react";
 import LanguageUpdate from "@/components/elements/admin/LanguageUpdate";
-import LanguageDelete from "@/components/elements/admin/LanguageDelete";
+import ElementDelete from "@/components/elements/admin/ElementDelete";
 import LanguageCreate from "@/components/elements/admin/LanguageCreate";
 
 const AdminLanguages = () => {
@@ -29,7 +29,7 @@ const AdminLanguages = () => {
 								</p>
 								<div className="flex gap-2">
 									<LanguageUpdate id={lang.id} name={lang.name} />
-									<LanguageDelete id={lang.id} />
+									<ElementDelete id={lang.id} elementType="language" />
 								</div>
 							</div>
 						))}

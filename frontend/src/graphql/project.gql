@@ -86,3 +86,7 @@ query GetProjects {
 		updatedAt
 	}
 }
+
+mutation DeleteProject($deleteProjectId: String!) {
+  deleteProject(id: $deleteProjectId)
+}

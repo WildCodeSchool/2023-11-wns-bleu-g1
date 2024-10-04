@@ -12,14 +12,15 @@ import {
 import { Button, buttonVariants } from "@/components/ui/button";
 import React from "react";
 import {
-	GetLanguagesDocument,
-	useDeleteLanguageMutation,
+	GetLanguagesDocument, GetProjectsDocument,
+	useDeleteLanguageMutation, useDeleteProjectMutation,
 } from "@/graphql/generated/schema";
 import { Check, Cross } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
-const LanguageDelete = (lang: { id: string }) => {
+const ElementDelete = ({ id, elementType}: {id: string, elementType: string }) => {
 	const { toast } = useToast();
+	console.log("elementType: ", elementType);
 
 	const [deleteLanguageMutation] = useDeleteLanguageMutation({
 		onCompleted: () => {
@@ -43,12 +44,45 @@ const LanguageDelete = (lang: { id: string }) => {
 			});
 		},
 	});
-	function deleteLanguage(id: string) {
-		deleteLanguageMutation({
-			variables: {
-				deleteLanguageId: id,
-			},
-		});
+
+	const [deleteProjectMutation] = useDeleteProjectMutation({
+		onCompleted: () => {
+			toast({
+				icon: <Check className="h-5 w-5" />,
+				title: "Projet supprimé",
+				className: "text-success",
+			});
+		},
+		refetchQueries: [GetProjectsDocument],
+		onError: (error) => {
+			let errorMessage =
+				error?.message || "Une erreur est survenue lors de la suppression.";
+			if (errorMessage.includes("violates foreign key constraint")) {
+				errorMessage = "Impossible de supprimer un projet utilisé.";
+			}
+			toast({
+				icon: <Cross className="h-5 w-5" />,
+				title: errorMessage,
+				className: "text-error",
+			});
+		},
+	});
+
+	function deleteElement(id: string, type: string) {
+		if (type === "language") {
+			deleteLanguageMutation({
+				variables: {
+					deleteLanguageId: id,
+				},
+			});
+		}
+		if (type === "project") {
+			deleteProjectMutation({
+				variables: {
+					deleteProjectId: id,
+				},
+			});
+		}
 	}
 
 	return (
@@ -61,7 +95,7 @@ const LanguageDelete = (lang: { id: string }) => {
 					<div className="flex flex-col gap-2">
 						<AlertDialogHeader>
 							<AlertDialogTitle>
-								Etes-vous sûr de vouloir supprimer ce langage?
+								Etes-vous sûr de vouloir supprimer cet élément?
 							</AlertDialogTitle>
 							<AlertDialogDescription>
 								Cette action est irréversible.
@@ -77,7 +111,7 @@ const LanguageDelete = (lang: { id: string }) => {
 								className={buttonVariants({
 									variant: "destructive",
 								})}
-								onClick={() => deleteLanguage(lang.id)}
+								onClick={() => deleteElement(id, elementType)}
 							>
 								Confirmer
 							</AlertDialogAction>
@@ -89,4 +123,4 @@ const LanguageDelete = (lang: { id: string }) => {
 	);
 };
 
-export default LanguageDelete;
+export default ElementDelete;

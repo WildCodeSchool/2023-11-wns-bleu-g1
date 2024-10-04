@@ -59,4 +59,18 @@ export default class ProjectService {
 
 		return this.projectRepository.save(project);
 	};
+
+	delete = async (id: string) => {
+		const project = await this.projectRepository.findOne({
+			where: { id },
+		});
+
+		if (!project) {
+			throw new Error("Project not found");
+		}
+
+		await this.projectRepository.remove(project);
+
+		return true;
+	}
 }
