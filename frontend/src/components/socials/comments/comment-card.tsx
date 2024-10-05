@@ -6,21 +6,14 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-	HoverCard,
-	HoverCardContent,
-	HoverCardTrigger,
-} from "@/components/ui/hover-card";
 import { useToast } from "@/components/ui/use-toast";
 import {
 	GetProjectByIdDocument,
 	useDeleteCommentMutation,
 } from "@/graphql/generated/schema";
-import { cn, elapsedTime } from "@/lib/utils";
+import { elapsedTime } from "@/lib/utils";
 import { ApolloError } from "@apollo/client";
 import { BadgeCheck, CircleAlert, Ellipsis } from "lucide-react";
-import { useState } from "react";
-import { EditCommentForm } from "./edit-comment-form";
 
 interface Props {
 	projectId: string;
@@ -39,7 +32,6 @@ interface Props {
 
 export const CommentCard = ({ projectId, comment, userId }: Props) => {
 	const { toast } = useToast();
-	const [editMode, setEditMode] = useState(false);
 
 	const [deleteCommentMutation, deleteCommentMutationResult] =
 		useDeleteCommentMutation({
@@ -91,28 +83,11 @@ export const CommentCard = ({ projectId, comment, userId }: Props) => {
 				<span className="font-bold">
 					{comment.user.id === userId ? "Moi" : comment.user.pseudo}
 				</span>
-				{editMode ? (
-					<EditCommentForm
-						projectId={projectId}
-						comment={comment}
-						setEditMode={setEditMode}
-					/>
-				) : (
-					<p>{comment.content}</p>
-				)}
 
-				<p className="text-xs text-gray-500 mt-2">
-					{elapsedTime(comment.createdAt)}{" "}
-					{comment.createdAt !== comment.updatedAt ? (
-						<HoverCard>
-							<HoverCardTrigger>(Modifié)</HoverCardTrigger>
-							<HoverCardContent>
-								Modilié {elapsedTime(comment.updatedAt)}
-							</HoverCardContent>
-						</HoverCard>
-					) : (
-						""
-					)}
+				<p>{comment.content}</p>
+
+				<p className="text-xs text-gray-500 mt-2 ">
+					{elapsedTime(comment.createdAt)}
 				</p>
 			</div>
 			{comment.user.id === userId && (
@@ -124,9 +99,6 @@ export const CommentCard = ({ projectId, comment, userId }: Props) => {
 						<Ellipsis className="h-6 w-6" />
 					</DropdownMenuTrigger>
 					<DropdownMenuContent sideOffset={0} side="top">
-						<DropdownMenuItem onClick={() => setEditMode(true)}>
-							Modifier
-						</DropdownMenuItem>
 						<DropdownMenuItem onClick={deleteComment}>Retirer</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>

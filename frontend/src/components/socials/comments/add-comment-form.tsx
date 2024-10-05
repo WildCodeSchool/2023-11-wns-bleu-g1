@@ -102,7 +102,7 @@ export const AddCommentForm = ({ projectId }: Props) => {
 						disabled={commentMutationResult.loading}
 						className="w-full sm:w-fit mt-2 sm:mt-0"
 					>
-						Ajouter
+						Commenter
 					</Button>
 				</form>
 			</Form>

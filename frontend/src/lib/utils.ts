@@ -27,6 +27,6 @@ export const elapsedTime = (date: Date) => {
 		case minutes > 0:
 			return `il y a ${minutes} ${minutes > 1 ? "minutes" : "minute"}`;
 		default:
-			return `il y a ${secondes} ${secondes > 1 ? "secondes" : "seconde"}`;
+			return `à l'instant`;
 	}
 };

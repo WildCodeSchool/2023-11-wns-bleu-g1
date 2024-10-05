@@ -339,14 +339,15 @@ const CodingPage = () => {
 
 				<Separator className="mt-3 md:mt-8 mb-3" />
 
+				{/* SOCIALS */}
 				<div className="flex items-center gap-3">
 					<LikeButton project={project} userId={userId} />
-					<CommentButton commentsLength={project?.comments?.length} />
+					<CommentButton commentsLength={project.comments.length} />
 				</div>
 				<div className="max-w-3xl mx-auto">
 					<CommentsSection project={project} userId={userId} />
 					<Separator className="mt-3 md:mt-8 mb-3" />
-					<AddCommentForm projectId={project?.id} />
+					<AddCommentForm projectId={project.id} />
 				</div>
 			</div>
 		</AuthLayout>
