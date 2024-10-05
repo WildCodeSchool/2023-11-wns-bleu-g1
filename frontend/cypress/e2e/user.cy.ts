@@ -8,7 +8,6 @@ describe("Test user account", () => {
 	});
 
 	it("Can create an account", () => {
-
 		cy.get("#topbar").contains("Se connecter").click();
 		cy.url().should("eq", "http://localhost:3000/auth/connexion");
 		cy.get("a").contains("Inscrivez-vous").click();
@@ -25,7 +24,6 @@ describe("Test user account", () => {
 	});
 
 	it("Can logout", () => {
-
 		cy.get("#topbar").contains("Se connecter").click();
 		cy.url().should("eq", "http://localhost:3000/auth/connexion");
 		cy.get("input[name=email]").type(newUserEmail);
@@ -38,7 +36,6 @@ describe("Test user account", () => {
 	});
 
 	it("can delete account", () => {
-
 		cy.get("#topbar").contains("Se connecter").click();
 		cy.url().should("eq", "http://localhost:3000/auth/connexion");
 		cy.get("input[name=email]").type(newUserEmail);
