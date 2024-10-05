@@ -1,12 +1,13 @@
 describe("Test user account", () => {
+	const newUserPseudo = "CypressUserTest";
+	const newUserEmail = "CypressTest@mail.test";
+	const newUserPassword = "CypressTestPassword123!";
+
 	beforeEach(() => {
 		cy.visit("http://localhost:3000/");
 	});
 
 	it("Can create an account", () => {
-		const newUserPseudo = "CypressUserTest";
-		const newUserEmail = "CypressTest@mail.test";
-		const newUserPassword = "CypressTestPassword123!";
 
 		cy.get("#topbar").contains("Se connecter").click();
 		cy.url().should("eq", "http://localhost:3000/auth/connexion");
@@ -24,8 +25,6 @@ describe("Test user account", () => {
 	});
 
 	it("Can logout", () => {
-		const newUserEmail = "CypressTest@mail.test";
-		const newUserPassword = "CypressTestPassword123!";
 
 		cy.get("#topbar").contains("Se connecter").click();
 		cy.url().should("eq", "http://localhost:3000/auth/connexion");
@@ -39,8 +38,6 @@ describe("Test user account", () => {
 	});
 
 	it("can delete account", () => {
-		const newUserEmail = "CypressTest@mail.test";
-		const newUserPassword = "CypressTestPassword123!";
 
 		cy.get("#topbar").contains("Se connecter").click();
 		cy.url().should("eq", "http://localhost:3000/auth/connexion");
