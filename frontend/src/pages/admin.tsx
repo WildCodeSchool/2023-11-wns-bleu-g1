@@ -20,7 +20,7 @@ const adminDashboard = () => {
 								<h1>Vue d&apos;ensemble</h1>
 							</TabsTrigger>
 							<TabsTrigger value="languages" className="border-white">
-								Languages
+								Langages
 							</TabsTrigger>
 							<TabsTrigger value="projects" className="border-white">
 								Projets
