@@ -69,7 +69,7 @@ const AuthHeader = () => {
 				<div className="inline-flex gap-6">
 					{!onCodingPage ? <NewProjectPopup /> : null}
 					<DropdownMenu>
-						<DropdownMenuTrigger>
+						<DropdownMenuTrigger id="dropdownMenu">
 							<Avatar>
 								<AvatarImage src="https://github.com/shadcn.png" />
 								<AvatarFallback>
