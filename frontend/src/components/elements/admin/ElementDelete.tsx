@@ -13,9 +13,11 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import React from "react";
 import {
 	DeleteUserDocument,
+	GetCommentsDocument,
 	GetLanguagesDocument,
 	GetProjectsDocument,
 	GetUserProfileDocument,
+	useDeleteCommentMutation,
 	useDeleteLanguageMutation,
 	useDeleteProjectMutation,
 	useDeleteUserMutation,
@@ -102,6 +104,26 @@ const ElementDelete = ({
 		},
 	});
 
+	const [deleteCommentMutation] = useDeleteCommentMutation({
+		onCompleted: () => {
+			toast({
+				icon: <Check className="h-5 w-5" />,
+				title: "Commentaire supprimé",
+				className: "text-success",
+			});
+		},
+		refetchQueries: [GetCommentsDocument],
+		onError: (error) => {
+			let errorMessage =
+				error?.message || "Une erreur est survenue lors de la suppression.";
+			toast({
+				icon: <Cross className="h-5 w-5" />,
+				title: errorMessage,
+				className: "text-error",
+			});
+		},
+	});
+
 	function deleteElement(id: string, type: string) {
 		if (type === "language") {
 			deleteLanguageMutation({
@@ -123,6 +145,13 @@ const ElementDelete = ({
 				variables: {
 					deleteUserId: id,
 					inAdminPanel: true,
+				},
+			});
+		}
+		if (type === "comment") {
+			deleteCommentMutation({
+				variables: {
+					commentId: id,
 				},
 			});
 		}

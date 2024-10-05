@@ -6,6 +6,15 @@ mutation Comment($content: String!, $projectId: String!) {
 	}
 }
 
+query GetComments {
+	getComments {
+		id
+		content
+		createdAt
+		updatedAt
+	}
+}
+
 mutation DeleteComment($commentId: String!) {
 	deleteComment(commentId: $commentId)
 }
