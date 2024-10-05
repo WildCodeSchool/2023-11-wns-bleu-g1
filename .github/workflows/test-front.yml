@@ -71,15 +71,15 @@ jobs:
 #      - name: Start server in the background
 #        run: npm run dev &
       - name: go to backend directory and make envfile
-        run:
+        run: |
           -cd backend
           -cp .env.example .env
       - name: go to frontend directory and make envfile
-        run:
+        run: |
           -cd ../frontend
           -cp .env.example .env
       - name: Build and start Docker Compose
-        run:
+        run: |
           -cd ..
           -docker compose up --build -d
       - name: go to frontend directory
