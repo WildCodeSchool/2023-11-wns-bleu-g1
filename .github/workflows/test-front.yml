@@ -79,9 +79,7 @@ jobs:
           cd frontend
           cp .env.example .env
       - name: Build and start Docker Compose
-        run: |
-          cd ..
-          docker compose up --build -d
+        run: docker compose up --build -d
       - name: go to frontend directory
         run: cd frontend
       - name: Install Cypress and run tests
