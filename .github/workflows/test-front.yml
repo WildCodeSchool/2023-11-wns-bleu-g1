@@ -70,8 +70,6 @@ jobs:
 #        run: npm ci
 #      - name: Start server in the background
 #        run: npm run dev &
-      - name: Build and start Docker Compose
-        run: docker compose up --build -d
       - name: go to backend directory and make envfile
         run:
           -cd backend
@@ -80,6 +78,12 @@ jobs:
         run:
           -cd ../frontend
           -cp .env.example .env
+      - name: Build and start Docker Compose
+        run:
+          -cd ..
+          -docker compose up --build -d
+      - name: go to frontend directory
+        run: cd frontend
       - name: Install Cypress and run tests
         uses: cypress-io/github-action@v6
         with:
