@@ -2,6 +2,7 @@ import {
 	GetUserProfileDocument,
 	GetExecutionCounterDocument,
 	IncrementExecutionCounterDocument,
+	GetProjectByIdDocument,
 } from "@/graphql/generated/schema";
 
 export const getVisitorProfileMock = {
@@ -15,6 +16,8 @@ export const getVisitorProfileMock = {
 				email: "charles-rox@pasgmail.com",
 				pseudo: "ceciEstUnTest",
 				role: "visitor",
+				isPremium: false,
+				executionCounter: 1,
 			},
 		},
 	},
@@ -31,6 +34,39 @@ export const getPremiumProfileMock = {
 				email: "jeSuis@premium.fr",
 				pseudo: "SurpriseMotherfucker",
 				role: "visitor",
+				isPremium: false,
+				executionCounter: 1,
+			},
+		},
+	},
+};
+
+export const getProjectByIdMock = {
+	request: {
+		query: GetProjectByIdDocument,
+		variables: {
+			getProjectId: "24ccfd7e-4add-48fb-a179-0902a63f63",
+		},
+	},
+	result: {
+		data: {
+			getProject: {
+				id: "24ccfd7e-4add-48fb-a179-0902a63f63",
+				title: "Mon super projet",
+				isPublic: true,
+				createdAt: "2024-10-10Z10:00:00",
+				updatedAt: "2024-10-10Z10:00:00",
+				codes: [],
+				likes: [],
+				user: {
+					id: "24ccfd-4add-48fb-a179-0902",
+					pseudo: "Ghost",
+					role: "Visitor",
+					email: "ghost@gmail.com",
+					executionCounter: 1,
+					isPremium: false,
+				},
+				comments: [],
 			},
 		},
 	},
