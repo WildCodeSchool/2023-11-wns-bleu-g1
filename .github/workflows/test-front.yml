@@ -76,7 +76,7 @@ jobs:
           cp .env.example .env
       - name: go to frontend directory and make envfile
         run: |
-          cd ../frontend
+          cd frontend
           cp .env.example .env
       - name: Build and start Docker Compose
         run: |
