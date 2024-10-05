@@ -1,0 +1,15 @@
+mutation Comment($content: String!, $projectId: String!) {
+	comment(content: $content, projectId: $projectId) {
+		id
+		content
+		createdAt
+	}
+}
+
+mutation DeleteComment($commentId: String!) {
+	deleteComment(commentId: $commentId)
+}
+
+mutation UpdateComment($newContent: String!, $commentId: String!) {
+	updateComment(newContent: $newContent, commentId: $commentId)
+}

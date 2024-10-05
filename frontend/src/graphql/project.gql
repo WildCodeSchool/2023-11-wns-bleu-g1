@@ -36,6 +36,16 @@ query GetProjectById($getProjectId: String!) {
 				pseudo
 			}
 		}
+		comments {
+			id
+			content
+			user {
+				id
+				pseudo
+			}
+			createdAt
+			updatedAt
+		}
 	}
 }
 

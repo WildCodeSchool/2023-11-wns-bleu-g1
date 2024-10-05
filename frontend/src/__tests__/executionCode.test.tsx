@@ -8,14 +8,20 @@ import {
 	getNotExecutionCountMock,
 	getPremiumExecutionMock,
 	getPremiumProfileMock,
+	getProjectByIdMock,
 	getVisitorProfileMock,
 	incrementExecutionCounterMock,
 	newExecutionCountMock,
 } from "./executionCode.mock";
 import CodingPage from "@/pages/coding/[id]";
+import { createDynamicRouteParser } from "next-router-mock/dynamic-routes";
+
+jest.mock("next/router", () => jest.requireActual("next-router-mock"));
 
 describe("what increment count for code execution work", () => {
-	mockRouter.push("/coding/codingPage");
+	const projectId = getProjectByIdMock.result.data.getProject.id;
+
+	mockRouter.useParser(createDynamicRouteParser(["/coding/[id]"]));
 
 	const renderExecutionCounter = (mocks: any[]) => {
 		render(
@@ -25,12 +31,30 @@ describe("what increment count for code execution work", () => {
 		);
 	};
 
+	mockRouter.push(`/coding/${projectId}`);
+
+	it("get id query", async () => {
+		renderExecutionCounter([
+			getExecutionCountMock,
+			getVisitorProfileMock,
+			incrementExecutionCounterMock,
+			newExecutionCountMock,
+			getProjectByIdMock,
+		]);
+
+		expect(mockRouter).toMatchObject({
+			pathname: "/coding/[id]",
+			query: { id: projectId },
+		});
+	});
+
 	it("render if user can execute some code and increment executionCode on click", async () => {
 		renderExecutionCounter([
 			getExecutionCountMock,
 			getVisitorProfileMock,
 			incrementExecutionCounterMock,
 			newExecutionCountMock,
+			getProjectByIdMock,
 		]);
 		const btn = await screen.findByTestId("exec-btn");
 
@@ -46,7 +70,11 @@ describe("what increment count for code execution work", () => {
 	});
 
 	it("render if user can't execute some code for today", async () => {
-		renderExecutionCounter([getNotExecutionCountMock, getVisitorProfileMock]);
+		renderExecutionCounter([
+			getNotExecutionCountMock,
+			getVisitorProfileMock,
+			getProjectByIdMock,
+		]);
 
 		expect(await screen.findByText("50/50"));
 		expect(screen.queryByText(/.*Exécuter.*/)).not.toBeInTheDocument();
@@ -56,7 +84,11 @@ describe("what increment count for code execution work", () => {
 	});
 
 	it("render if user is premium (have no execution limit)", async () => {
-		renderExecutionCounter([getPremiumExecutionMock, getPremiumProfileMock]);
+		renderExecutionCounter([
+			getPremiumExecutionMock,
+			getPremiumProfileMock,
+			getProjectByIdMock,
+		]);
 
 		expect(await screen.findByTestId("exec-btn")).toBeInTheDocument();
 		expect(screen.queryByTestId("not-premium")).not.toBeInTheDocument();
