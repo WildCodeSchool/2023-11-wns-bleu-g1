@@ -25,7 +25,7 @@ export function ConfirmDeletePopUp() {
 	const [errorMessage, setErrorMessage] = useState<string>(defaultErrorMessage);
 	const { toast } = useToast();
 
-	const [deleteUserMutation, deleteUserResult] = useDeleteUserMutation({
+	const [deleteUserMutation] = useDeleteUserMutation({
 		onCompleted: () => {
 			toast({
 				icon: <BadgeCheck className="h-5 w-5" />,
@@ -58,6 +58,7 @@ export function ConfirmDeletePopUp() {
 		deleteUserMutation({
 			variables: {
 				deleteUserId: profile.id,
+				inAdminPanel: false,
 			},
 		});
 	}
