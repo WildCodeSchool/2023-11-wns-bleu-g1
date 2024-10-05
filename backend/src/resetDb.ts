@@ -78,20 +78,6 @@ const main = async () => {
 	});
 
 	await userRepository.save(admin);
-	for (let i = 1; i <= 13; i++) {
-		const username = `user${i}`;
-		const newuser = new User();
-
-		Object.assign(newuser, {
-			email: `${username}@gmail.com`,
-			password: "Master@123",
-			pseudo: username,
-			executionCounter: 1,
-			isPremium: false,
-		});
-
-		await userRepository.save(newuser);
-	}
 
 	// Initialize Language table
 	const javascript = new Language();
