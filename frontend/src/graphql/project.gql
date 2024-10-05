@@ -76,3 +76,17 @@ mutation ToggleProjectPublicState($projectId: String!) {
 		title
 	}
 }
+
+query GetProjects {
+	getProjects {
+		id
+		title
+		isPublic
+		createdAt
+		updatedAt
+	}
+}
+
+mutation DeleteProject($deleteProjectId: String!) {
+	deleteProject(id: $deleteProjectId)
+}

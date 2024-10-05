@@ -66,6 +66,7 @@ export type Mutation = {
 	createProject: Project;
 	createUser: User;
 	deleteLanguage: Scalars["Boolean"];
+	deleteProject: Scalars["Boolean"];
 	deleteUser: Scalars["Boolean"];
 	incrementExecutionCounter: Scalars["Float"];
 	like: Like;
@@ -96,6 +97,10 @@ export type MutationCreateUserArgs = {
 };
 
 export type MutationDeleteLanguageArgs = {
+	id: Scalars["String"];
+};
+
+export type MutationDeleteProjectArgs = {
 	id: Scalars["String"];
 };
 
@@ -446,6 +451,29 @@ export type ToggleProjectPublicStateMutation = {
 		isPublic: boolean;
 		title: string;
 	};
+};
+
+export type GetProjectsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetProjectsQuery = {
+	__typename?: "Query";
+	getProjects: Array<{
+		__typename?: "Project";
+		id: string;
+		title: string;
+		isPublic: boolean;
+		createdAt: any;
+		updatedAt: any;
+	}>;
+};
+
+export type DeleteProjectMutationVariables = Exact<{
+	deleteProjectId: Scalars["String"];
+}>;
+
+export type DeleteProjectMutation = {
+	__typename?: "Mutation";
+	deleteProject: boolean;
 };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never }>;
@@ -1413,6 +1441,113 @@ export type ToggleProjectPublicStateMutationOptions =
 		ToggleProjectPublicStateMutation,
 		ToggleProjectPublicStateMutationVariables
 	>;
+export const GetProjectsDocument = gql`
+	query GetProjects {
+		getProjects {
+			id
+			title
+			isPublic
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
+/**
+ * __useGetProjectsQuery__
+ *
+ * To run a query within a React component, call `useGetProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetProjectsQuery(
+	baseOptions?: Apollo.QueryHookOptions<
+		GetProjectsQuery,
+		GetProjectsQueryVariables
+	>
+) {
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useQuery<GetProjectsQuery, GetProjectsQueryVariables>(
+		GetProjectsDocument,
+		options
+	);
+}
+export function useGetProjectsLazyQuery(
+	baseOptions?: Apollo.LazyQueryHookOptions<
+		GetProjectsQuery,
+		GetProjectsQueryVariables
+	>
+) {
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useLazyQuery<GetProjectsQuery, GetProjectsQueryVariables>(
+		GetProjectsDocument,
+		options
+	);
+}
+export type GetProjectsQueryHookResult = ReturnType<typeof useGetProjectsQuery>;
+export type GetProjectsLazyQueryHookResult = ReturnType<
+	typeof useGetProjectsLazyQuery
+>;
+export type GetProjectsQueryResult = Apollo.QueryResult<
+	GetProjectsQuery,
+	GetProjectsQueryVariables
+>;
+export const DeleteProjectDocument = gql`
+	mutation DeleteProject($deleteProjectId: String!) {
+		deleteProject(id: $deleteProjectId)
+	}
+`;
+export type DeleteProjectMutationFn = Apollo.MutationFunction<
+	DeleteProjectMutation,
+	DeleteProjectMutationVariables
+>;
+
+/**
+ * __useDeleteProjectMutation__
+ *
+ * To run a mutation, you first call `useDeleteProjectMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteProjectMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteProjectMutation, { data, loading, error }] = useDeleteProjectMutation({
+ *   variables: {
+ *      deleteProjectId: // value for 'deleteProjectId'
+ *   },
+ * });
+ */
+export function useDeleteProjectMutation(
+	baseOptions?: Apollo.MutationHookOptions<
+		DeleteProjectMutation,
+		DeleteProjectMutationVariables
+	>
+) {
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useMutation<
+		DeleteProjectMutation,
+		DeleteProjectMutationVariables
+	>(DeleteProjectDocument, options);
+}
+export type DeleteProjectMutationHookResult = ReturnType<
+	typeof useDeleteProjectMutation
+>;
+export type DeleteProjectMutationResult =
+	Apollo.MutationResult<DeleteProjectMutation>;
+export type DeleteProjectMutationOptions = Apollo.BaseMutationOptions<
+	DeleteProjectMutation,
+	DeleteProjectMutationVariables
+>;
 export const UsersDocument = gql`
 	query Users {
 		users {
