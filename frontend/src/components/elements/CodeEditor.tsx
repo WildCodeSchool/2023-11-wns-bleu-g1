@@ -259,7 +259,9 @@ const CodeEditor = ({ project, userId }: Props) => {
 					className={`bg-black p-5 w-1/2 border-[1px] ${isError ? "border-red-600 text-red-600" : "border-white text-white"}`}
 				>
 					{isLoading && <p>Compilation en cours</p>}
-					<div>{output ? output : "Le résultat s'affichera ici …"}</div>
+					{!isLoading && (
+						<div>{output ? output : "Le résultat s'affichera ici …"}</div>
+					)}
 				</div>
 			</div>
 		</>
