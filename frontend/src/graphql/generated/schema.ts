@@ -56,10 +56,12 @@ export type Language = {
 	codes: Array<Code>;
 	id: Scalars["String"];
 	name: Scalars["String"];
+	version: Scalars["String"];
 };
 
 export type LanguageInput = {
 	name: Scalars["String"];
+	version: Scalars["String"];
 };
 
 export type Like = {
@@ -134,6 +136,7 @@ export type MutationDeleteProjectArgs = {
 
 export type MutationDeleteUserArgs = {
 	id: Scalars["String"];
+	inAdminPanel?: Scalars["Boolean"];
 };
 
 export type MutationIncrementExecutionCounterArgs = {
@@ -265,7 +268,8 @@ export type SigninInput = {
 
 export type UpdateLanguageInput = {
 	id: Scalars["String"];
-	name: Scalars["String"];
+	name?: InputMaybe<Scalars["String"]>;
+	version: Scalars["String"];
 };
 
 export type UpdatePasswordInput = {
@@ -481,7 +485,12 @@ export type GetProjectByIdQuery = {
 			__typename?: "Code";
 			id: string;
 			content: string;
-			language: { __typename?: "Language"; name: string; id: string };
+			language: {
+				__typename?: "Language";
+				name: string;
+				id: string;
+				version: string;
+			};
 		}>;
 		user: { __typename?: "User"; id: string; pseudo: string };
 		likes: Array<{
@@ -628,6 +637,16 @@ export type SignInMutation = { __typename?: "Mutation"; signin: string };
 export type LogoutMutationVariables = Exact<{ [key: string]: never }>;
 
 export type LogoutMutation = { __typename?: "Mutation"; logout: string };
+
+export type DeleteUserMutationVariables = Exact<{
+	deleteUserId: Scalars["String"];
+	inAdminPanel: Scalars["Boolean"];
+}>;
+
+export type DeleteUserMutation = {
+	__typename?: "Mutation";
+	deleteUser: boolean;
+};
 
 export type GetUserProfileQueryVariables = Exact<{ [key: string]: never }>;
 
@@ -1490,6 +1509,7 @@ export const GetProjectByIdDocument = gql`
 				language {
 					name
 					id
+					version
 				}
 			}
 			user {
@@ -2116,6 +2136,55 @@ export type LogoutMutationOptions = Apollo.BaseMutationOptions<
 	LogoutMutation,
 	LogoutMutationVariables
 >;
+export const DeleteUserDocument = gql`
+	mutation DeleteUser($deleteUserId: String!, $inAdminPanel: Boolean!) {
+		deleteUser(id: $deleteUserId, inAdminPanel: $inAdminPanel)
+	}
+`;
+export type DeleteUserMutationFn = Apollo.MutationFunction<
+	DeleteUserMutation,
+	DeleteUserMutationVariables
+>;
+
+/**
+ * __useDeleteUserMutation__
+ *
+ * To run a mutation, you first call `useDeleteUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteUserMutation, { data, loading, error }] = useDeleteUserMutation({
+ *   variables: {
+ *      deleteUserId: // value for 'deleteUserId'
+ *      inAdminPanel: // value for 'inAdminPanel'
+ *   },
+ * });
+ */
+export function useDeleteUserMutation(
+	baseOptions?: Apollo.MutationHookOptions<
+		DeleteUserMutation,
+		DeleteUserMutationVariables
+	>
+) {
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useMutation<DeleteUserMutation, DeleteUserMutationVariables>(
+		DeleteUserDocument,
+		options
+	);
+}
+export type DeleteUserMutationHookResult = ReturnType<
+	typeof useDeleteUserMutation
+>;
+export type DeleteUserMutationResult =
+	Apollo.MutationResult<DeleteUserMutation>;
+export type DeleteUserMutationOptions = Apollo.BaseMutationOptions<
+	DeleteUserMutation,
+	DeleteUserMutationVariables
+>;
 export const GetUserProfileDocument = gql`
 	query GetUserProfile {
 		getUserProfile {
@@ -2323,6 +2392,7 @@ export type DeleteUserMutationOptions = Apollo.BaseMutationOptions<
 	DeleteUserMutation,
 	DeleteUserMutationVariables
 >;
+
 export const UpdateUsernameDocument = gql`
 	mutation UpdateUsername($datas: UpdateUsernameInput!) {
 		updateUsername(datas: $datas)

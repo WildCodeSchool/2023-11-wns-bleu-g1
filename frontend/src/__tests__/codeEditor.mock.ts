@@ -12,12 +12,12 @@ export const getVisitorProfileMock = {
 	result: {
 		data: {
 			getUserProfile: {
-				id: "267fa8d4-d156-4339-947a-ae5b0ecc0482",
+				id: "38d7fd70-2fd3-4165-b9e4-cd2c8c3e2957",
 				email: "charles-rox@pasgmail.com",
 				pseudo: "ceciEstUnTest",
 				role: "visitor",
+				executionCounter: 0,
 				isPremium: false,
-				executionCounter: 1,
 			},
 		},
 	},
@@ -32,10 +32,28 @@ export const getPremiumProfileMock = {
 			getUserProfile: {
 				id: "24ccfd7e-4add-48fb-a179-0902a63f0216",
 				email: "jeSuis@premium.fr",
-				pseudo: "SurpriseMotherfucker",
+				pseudo: "Surprise",
 				role: "visitor",
+				executionCounter: 0,
+				isPremium: true,
+			},
+		},
+	},
+};
+
+export const getCanNotClickProfileMock = {
+	request: {
+		query: GetUserProfileDocument,
+	},
+	result: {
+		data: {
+			getUserProfile: {
+				id: "24ccfd7e-4add-48fb-a179-0902a63f0216",
+				email: "jeSuis@premium.fr",
+				pseudo: "Surprise",
+				role: "visitor",
+				executionCounter: 50,
 				isPremium: false,
-				executionCounter: 1,
 			},
 		},
 	},
@@ -45,27 +63,66 @@ export const getProjectByIdMock = {
 	request: {
 		query: GetProjectByIdDocument,
 		variables: {
-			getProjectId: "24ccfd7e-4add-48fb-a179-0902a63f63",
+			getProjectId: "3771abdc-4873-48f0-af1f-d6c7bc985529",
 		},
 	},
 	result: {
 		data: {
 			getProject: {
-				id: "24ccfd7e-4add-48fb-a179-0902a63f63",
-				title: "Mon super projet",
+				id: "3771abdc-4873-48f0-af1f-d6c7bc985529",
+				title: "Project 12",
 				isPublic: true,
-				createdAt: "2024-10-10Z10:00:00",
-				updatedAt: "2024-10-10Z10:00:00",
-				codes: [],
-				likes: [],
+				codes: [
+					{
+						id: "4918182c-5d9f-4914-b74d-428edd8f420b",
+						content: "console.log('Hello World from Project 12')",
+						language: {
+							id: "fdb8e87b-5826-4217-87b5-d61303171801",
+							name: "javascript",
+							version: "18.15.0",
+						},
+					},
+				],
 				user: {
-					id: "24ccfd-4add-48fb-a179-0902",
-					pseudo: "Ghost",
-					role: "Visitor",
-					email: "ghost@gmail.com",
-					executionCounter: 1,
-					isPremium: false,
+					id: "38d7fd70-2fd3-4165-b9e4-cd2c8c3e2957",
+					pseudo: "Flex Master",
 				},
+				likes: [],
+				comments: [],
+			},
+		},
+	},
+};
+
+export const getPrivateProjectByIdMock = {
+	request: {
+		query: GetProjectByIdDocument,
+		variables: {
+			getProjectId: "3771abdc-4873-48f0-af1f-d6c7bc985529",
+		},
+	},
+	result: {
+		data: {
+			getProject: {
+				id: "3771abdc-4873-48f0-af1f-d6c7bc985529",
+				title: "Project 12",
+				isPublic: false,
+				codes: [
+					{
+						id: "4918182c-5d9f-4914-b74d-428edd8f420b",
+						content: "console.log('Hello World from Project 12')",
+						language: {
+							id: "fdb8e87b-5826-4217-87b5-d61303171801",
+							name: "javascript",
+							version: "18.15.0",
+						},
+					},
+				],
+				user: {
+					id: "38d7fd70-2fd3-4165-b9e4-cd2c8c3e2957",
+					pseudo: "Flex Master",
+				},
+				likes: [],
 				comments: [],
 			},
 		},

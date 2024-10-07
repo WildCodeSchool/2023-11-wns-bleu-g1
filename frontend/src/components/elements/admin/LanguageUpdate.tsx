@@ -120,17 +120,19 @@ const LanguageUpdate = (lang: { id: string; name: string }) => {
 										</FormItem>
 									)}
 								/>
-								<AlertDialogCancel
-									className={buttonVariants({ variant: "dark" })}
-								>
-									Annuler
-								</AlertDialogCancel>
-								<AlertDialogAction
-									className={buttonVariants({ variant: "default" })}
-									type="submit"
-								>
-									Ajouter
-								</AlertDialogAction>
+								<div className="flex justify-end space-x-2">
+									<AlertDialogCancel
+										className={buttonVariants({ variant: "dark" })}
+									>
+										Annuler
+									</AlertDialogCancel>
+									<AlertDialogAction
+										className={buttonVariants({ variant: "default" })}
+										type="submit"
+									>
+										Ajouter
+									</AlertDialogAction>
+								</div>
 							</form>
 						</Form>
 					</AlertDialogDescription>

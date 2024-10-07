@@ -98,8 +98,12 @@ export default class UserResolver {
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Mutation(() => Boolean)
-	async deleteUser(@Arg("id") id: string, @Ctx() ctx: Context) {
-		return await new UserService().delete(id, ctx);
+	async deleteUser(
+		@Arg("id") id: string,
+		@Arg("inAdminPanel", { defaultValue: false }) inAdminPanel: boolean,
+		@Ctx() ctx: Context
+	) {
+		return await new UserService().delete(id, inAdminPanel, ctx);
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
