@@ -6,7 +6,6 @@ import { useGetCommentsQuery } from "@/graphql/generated/schema";
 const AdminComments = () => {
 	const { data } = useGetCommentsQuery();
 	const comments = data?.getComments || [];
-	console.log(comments);
 
 	return (
 		<>
@@ -26,7 +25,11 @@ const AdminComments = () => {
 								{comment.content}
 							</p>
 							<div className="flex gap-2">
-								<ElementDelete id={comment.id} elementType="comment" />
+								<ElementDelete
+									id={comment.id}
+									elementType="comment"
+									projectId={comment.project.id}
+								/>
 							</div>
 						</div>
 					))}

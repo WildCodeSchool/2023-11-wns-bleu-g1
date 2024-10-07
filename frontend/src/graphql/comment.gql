@@ -12,6 +12,9 @@ query GetComments {
 		content
 		createdAt
 		updatedAt
+		project {
+			id
+		}
 	}
 }
 

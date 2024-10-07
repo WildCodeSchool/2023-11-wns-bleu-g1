@@ -12,11 +12,15 @@ import {
 import { Button, buttonVariants } from "@/components/ui/button";
 import React from "react";
 import {
+	CommentDocument,
+	DeleteCommentDocument,
 	DeleteUserDocument,
 	GetCommentsDocument,
 	GetLanguagesDocument,
+	GetProjectByIdDocument,
 	GetProjectsDocument,
 	GetUserProfileDocument,
+	UpdateCommentDocument,
 	useDeleteCommentMutation,
 	useDeleteLanguageMutation,
 	useDeleteProjectMutation,
@@ -29,9 +33,11 @@ import { useToast } from "@/components/ui/use-toast";
 const ElementDelete = ({
 	id,
 	elementType,
+	projectId,
 }: {
 	id: string;
 	elementType: string;
+	projectId?: string;
 }) => {
 	const { toast } = useToast();
 
@@ -112,7 +118,15 @@ const ElementDelete = ({
 				className: "text-success",
 			});
 		},
-		refetchQueries: [GetCommentsDocument],
+		refetchQueries: [
+			GetCommentsDocument,
+			{
+				query: GetProjectByIdDocument,
+				variables: {
+					getProjectId: projectId,
+				},
+			},
+		],
 		onError: (error) => {
 			let errorMessage =
 				error?.message || "Une erreur est survenue lors de la suppression.";
@@ -140,7 +154,6 @@ const ElementDelete = ({
 			});
 		}
 		if (type === "user") {
-			console.log("delete user", id);
 			deleteUserMutation({
 				variables: {
 					deleteUserId: id,

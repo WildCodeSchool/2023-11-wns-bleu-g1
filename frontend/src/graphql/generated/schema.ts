@@ -299,6 +299,7 @@ export type GetCommentsQuery = {
 		content: string;
 		createdAt: any;
 		updatedAt: any;
+		project: { __typename?: "Project"; id: string };
 	}>;
 };
 
@@ -723,6 +724,9 @@ export const GetCommentsDocument = gql`
 			content
 			createdAt
 			updatedAt
+			project {
+				id
+			}
 		}
 	}
 `;

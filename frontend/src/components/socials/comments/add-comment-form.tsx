@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import {
+	GetCommentsDocument,
 	GetProjectByIdDocument,
 	useCommentMutation,
 } from "@/graphql/generated/schema";
@@ -47,6 +48,9 @@ export const AddCommentForm = ({ projectId }: Props) => {
 			form.reset();
 		},
 		refetchQueries: [
+			{
+				query: GetCommentsDocument,
+			},
 			{
 				query: GetProjectByIdDocument,
 				variables: {
