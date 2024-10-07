@@ -22,7 +22,7 @@ export default class CommentResolver {
 		});
 	}
 
-	// @Authorized([UserRole.ADMIN])
+	@Authorized([UserRole.ADMIN])
 	@Query(() => [Comment])
 	async getComments() {
 		return await new CommentService().getAll();
