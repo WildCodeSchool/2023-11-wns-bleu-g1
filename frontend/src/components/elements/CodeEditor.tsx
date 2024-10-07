@@ -16,7 +16,7 @@ import { executeCode } from "@/lib/executeCode";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "../ui/button";
 import { useToast } from "../ui/use-toast";
-import { BadgeCheck, Save } from "lucide-react";
+import { BadgeCheck, Download, Save } from "lucide-react";
 import {
 	HoverCard,
 	HoverCardContent,
@@ -24,6 +24,7 @@ import {
 } from "../ui/hover-card";
 import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
+import { downloadCodeAsFile } from "@/lib/utils";
 
 interface Props {
 	project: GetProjectByIdQuery["getProject"];
@@ -166,6 +167,24 @@ const CodeEditor = ({ project, userId }: Props) => {
 		});
 	};
 
+	const downloadCode = () => {
+		const sourceCode = editorRef.current && editorRef.current.getValue();
+
+		if (!sourceCode || sourceCode.length <= 1) {
+			toast({
+				title: "Le code est vide",
+				description: "Veuillez écrire du code avant de le télécharger",
+				className: "text-error",
+			});
+			return;
+		}
+
+		downloadCodeAsFile({
+			code: sourceCode,
+			language,
+		});
+	};
+
 	const handlePublicStateChange = () => {
 		toggleProjectPublicStateMutation({
 			variables: {
@@ -203,7 +222,7 @@ const CodeEditor = ({ project, userId }: Props) => {
 					)}
 				</div>
 
-				<div className="flex gap-10">
+				<div className="flex flex-wrap gap-4">
 					{count < 50 && (
 						<HoverCard>
 							<HoverCardTrigger>
@@ -238,6 +257,15 @@ const CodeEditor = ({ project, userId }: Props) => {
 							</Button>
 						</div>
 					)}
+					<Button
+						data-testid="download-btn"
+						size={"sm"}
+						className="gap-2 bg-blue-500 hover:bg-blue-500/80"
+						onClick={downloadCode}
+					>
+						<Download />
+						Télécharger
+					</Button>
 				</div>
 			</div>
 
@@ -248,10 +276,13 @@ const CodeEditor = ({ project, userId }: Props) => {
 					<Editor
 						height="75vh"
 						defaultLanguage={language}
-						defaultValue="{codes[0].content}"
 						onMount={onMount}
 						value={value}
-						onChange={(value) => setValue(value as string)}
+						onChange={(value) => {
+							if (value) {
+								setValue(value);
+							}
+						}}
 					/>
 				</div>
 
