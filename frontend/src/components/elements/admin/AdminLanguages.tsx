@@ -28,7 +28,11 @@ const AdminLanguages = () => {
 									{lang.name} {lang.version}
 								</p>
 								<div className="flex gap-2">
-									<LanguageUpdate id={lang.id} name={lang.name} version={lang.version}/>
+									<LanguageUpdate
+										id={lang.id}
+										name={lang.name}
+										version={lang.version}
+									/>
 									<ElementDelete id={lang.id} elementType="language" />
 								</div>
 							</div>

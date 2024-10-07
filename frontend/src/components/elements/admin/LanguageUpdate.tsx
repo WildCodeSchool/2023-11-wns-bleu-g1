@@ -22,7 +22,11 @@ import {
 import { Check, Cross } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
-const LanguageUpdate = (lang: { id: string; name: string; version: string }) => {
+const LanguageUpdate = (lang: {
+	id: string;
+	name: string;
+	version: string;
+}) => {
 	const { toast } = useToast();
 
 	const formSchema = z.object({
