@@ -1,9 +1,12 @@
 query GetLanguages {
-	getLanguages {
-		id
-		name
-		version
-	}
+  getLanguages {
+    id
+    name
+    version
+    codes {
+      id
+    }
+  }
 }
 
 mutation DeleteLanguage($deleteLanguageId: String!) {

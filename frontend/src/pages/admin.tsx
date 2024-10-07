@@ -6,6 +6,7 @@ import AdminLanguages from "@/components/elements/admin/AdminLanguages";
 import AdminProjects from "@/components/elements/admin/AdminProjects";
 import AdminUsers from "@/components/elements/admin/AdminUsers";
 import AdminComments from "@/components/elements/admin/AdminComments";
+import AdminOverview from "@/components/elements/admin/AdminOverview";
 
 const adminDashboard = () => {
 	return (
@@ -17,7 +18,7 @@ const adminDashboard = () => {
 					<Tabs defaultValue="overview" className="w-1/8">
 						<TabsList className="w-full justify-center bg-background-primary">
 							<TabsTrigger value="overview" className="focus:border-white">
-								<h1>Vue d&apos;ensemble</h1>
+								Vue d&apos;ensemble
 							</TabsTrigger>
 							<TabsTrigger value="languages" className="border-white">
 								Langages
@@ -33,21 +34,7 @@ const adminDashboard = () => {
 							</TabsTrigger>
 						</TabsList>
 						<TabsContent value="overview">
-							<h1>Vue d&apos;ensemble</h1>
-							<div className="grid grid-cols-2 grid-rows-2 gap-3 min-w-full min-h-full max-w-full max-h-full pt-2">
-								<Card className="border-gray-200 bg-background-primary text-white p-2">
-									<h1>Languages</h1>
-								</Card>
-								<Card className="border-gray-200 bg-background-primary text-white p-2">
-									<h1>Projet</h1>
-								</Card>
-								<Card className="border-gray-200 bg-background-primary text-white p-2">
-									<h1>Utilisateurs</h1>
-								</Card>
-								<Card className="border-gray-200 bg-background-primary text-white p-2">
-									<h1>Commentaires</h1>
-								</Card>
-							</div>
+							<AdminOverview />
 						</TabsContent>
 						<TabsContent value="languages">
 							<AdminLanguages />
