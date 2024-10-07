@@ -2,6 +2,7 @@ query GetLanguages {
 	getLanguages {
 		id
 		name
+		version
 	}
 }
 

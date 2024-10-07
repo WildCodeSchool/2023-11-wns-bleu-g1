@@ -29,12 +29,16 @@ const LanguageCreate = () => {
 		name: z.string().min(2, {
 			message: "Le nom du langage doit contenir au moins 2 caractères.",
 		}),
+		version: z.string().min(1, {
+			message: "La version du langage doit contenir au moins 1 caractère.",
+		}),
 	});
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			name: "",
+			version: "",
 		},
 	});
 
@@ -61,17 +65,18 @@ const LanguageCreate = () => {
 		},
 	});
 
-	function addLanguage(name: string) {
+	function addLanguage(name: string, version: string) {
 		addLanguageMutation({
 			variables: {
 				data: {
 					name: name,
+					version: version,
 				},
 			},
 		});
 	}
 	async function onNewLanguageSubmit(values: z.infer<typeof formSchema>) {
-		addLanguage(values.name);
+		addLanguage(values.name, values.version);
 		form.reset();
 	}
 
@@ -104,6 +109,21 @@ const LanguageCreate = () => {
 												<Input
 													className="my-2 bg-secondary"
 													placeholder="Mon nouveau langage"
+													{...field}
+												/>
+											</FormControl>
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name="version"
+									render={({ field }) => (
+										<FormItem className="space-y-4">
+											<FormControl>
+												<Input
+													className="my-2 bg-secondary"
+													placeholder="version"
 													{...field}
 												/>
 											</FormControl>

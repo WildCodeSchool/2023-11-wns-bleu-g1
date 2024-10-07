@@ -329,7 +329,12 @@ export type GetLanguagesQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetLanguagesQuery = {
 	__typename?: "Query";
-	getLanguages: Array<{ __typename?: "Language"; id: string; name: string }>;
+	getLanguages: Array<{
+		__typename?: "Language";
+		id: string;
+		name: string;
+		version: string;
+	}>;
 };
 
 export type DeleteLanguageMutationVariables = Exact<{
@@ -888,6 +893,7 @@ export const GetLanguagesDocument = gql`
 		getLanguages {
 			id
 			name
+			version
 		}
 	}
 `;
