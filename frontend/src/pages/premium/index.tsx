@@ -93,7 +93,6 @@ const PricingCard = memo(({ option, enabled, isPremium }: PricingCardProps) => (
 						</h3>
 						<Link href={`${option.link}`} className={buttonVariants()}>
 							<span className="tracking-tight">{option.btn}</span>
-							{/* {option.external && <ExternalLinkIcon className="h-4 w-4 ml-2" />} */}
 						</Link>
 					</div>
 				</CardContent>
@@ -240,11 +239,7 @@ export default function Pricing() {
 						<div className="flex justify-center">
 							<AlertDialog>
 								<AlertDialogTrigger asChild>
-									<Button
-										variant={"destructive"}
-										className="mt-4 gap-1 w-fit"
-										// onClick={unsubscribe}
-									>
+									<Button variant={"destructive"} className="mt-4 gap-1 w-fit">
 										Se désabonner
 									</Button>
 								</AlertDialogTrigger>

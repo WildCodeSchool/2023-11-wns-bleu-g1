@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useForm } from "react-hook-form";
 import {
 	useStripe,
 	useElements,
@@ -13,15 +12,8 @@ import { useUpdateUserIsPremiumMutation } from "@/graphql/generated/schema";
 import Link from "next/link";
 
 import Logo from "@/components/elements/common/Logo";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { toast } from "../ui/use-toast";
 import { BadgeCheck } from "lucide-react";
 import { ApolloError } from "@apollo/client";
@@ -30,17 +22,11 @@ const CheckoutPage = ({ amount }: { amount: number }) => {
 	const stripe = useStripe();
 	const elements = useElements();
 	elements?.update({ appearance: { theme: "night", labels: "floating" } });
-	const form = useForm();
 
-	// Use the mutation hook directly in the component
 	const [createPaymentIntent] = useCreatePaymentIntentMutation();
-	const [clientSecret, setClientSecret] = useState<string | undefined>(
-		undefined
-	);
+	const [clientSecret, setClientSecret] = useState<string | undefined>();
 	const [loading, setLoading] = useState<boolean>(false);
-	const [errorMessage, setErrorMessage] = useState<string | undefined>(
-		undefined
-	);
+	const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
 	const [updateUserIsPremiumMutation, updateUserIsPremiumMutationResult] =
 		useUpdateUserIsPremiumMutation({
