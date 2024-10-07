@@ -24,9 +24,9 @@ const CheckoutPage = ({ amount }: { amount: number }) => {
 	elements?.update({ appearance: { theme: "night", labels: "floating" } });
 
 	const [createPaymentIntent] = useCreatePaymentIntentMutation();
-	const [clientSecret, setClientSecret] = useState<string | undefined>();
+	const [clientSecret, setClientSecret] = useState<string>();
 	const [loading, setLoading] = useState<boolean>(false);
-	const [errorMessage, setErrorMessage] = useState<string | undefined>();
+	const [errorMessage, setErrorMessage] = useState<string>();
 
 	const [updateUserIsPremiumMutation, updateUserIsPremiumMutationResult] =
 		useUpdateUserIsPremiumMutation({
