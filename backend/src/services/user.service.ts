@@ -154,8 +154,6 @@ export default class UserService {
 	togglePremium = async (id: string, isPremium: boolean) => {
 		const user = await this.getBy({ where: { id } });
 
-		console.log("user", user);
-
 		user.isPremium = isPremium;
 
 		await this.userRepository.save(user);

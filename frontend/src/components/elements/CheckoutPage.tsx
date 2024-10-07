@@ -12,7 +12,7 @@ import { useCreatePaymentIntentMutation } from "@/graphql/generated/schema";
 import { useUpdateUserIsPremiumMutation } from "@/graphql/generated/schema";
 import Link from "next/link";
 
-import Logo from "@/components/elements/Logo";
+import Logo from "@/components/elements/common/Logo";
 import {
 	Card,
 	CardContent,
@@ -21,8 +21,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { toast } from "../ui/use-toast";
 import { BadgeCheck } from "lucide-react";
 import { ApolloError } from "@apollo/client";
@@ -46,10 +45,6 @@ const CheckoutPage = ({ amount }: { amount: number }) => {
 	const [updateUserIsPremiumMutation, updateUserIsPremiumMutationResult] =
 		useUpdateUserIsPremiumMutation({
 			onCompleted: () => {
-				console.log(
-					"updateUserIsPremiumResult",
-					updateUserIsPremiumMutationResult
-				);
 				toast({
 					icon: <BadgeCheck className="h-5 w-5" />,
 					title: "Vous êtes désormais Premium.",
@@ -98,11 +93,6 @@ const CheckoutPage = ({ amount }: { amount: number }) => {
 		if (!stripe || !elements) {
 			return;
 		}
-
-		// const cardElement = elements.getElement(PaymentElement);
-		// if (cardElement) {
-		//     cardElement.update({ value: JSON.stringify({ cardNumber: "4242424242424242", expDate: "12/34", cvc: "123" }) });
-		// }
 
 		const { error: submitError } = await elements.submit();
 

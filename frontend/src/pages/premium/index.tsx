@@ -1,5 +1,4 @@
-import AuthLayout from "@/components/elements/auth-layout";
-import ExternalLinkIcon from "@/components/elements/icons/external-link-arrow";
+import AuthLayout from "@/components/elements/auth/auth-layout";
 import CheckCircleIcon from "@/components/elements/icons/check-circle";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
@@ -30,7 +29,6 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { BadgeCheck } from "lucide-react";
 import { ApolloError } from "@apollo/client";
-import { cn } from "@/lib/utils";
 
 interface PricingOption {
 	name: string;
