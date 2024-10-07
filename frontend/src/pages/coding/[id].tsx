@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import PrismLoader from "@/components/prism-loader";
 import { Separator } from "@/components/ui/separator";
 import Prism from "prismjs";
-import AuthLayout from "@/components/elements/auth-layout";
+import AuthLayout from "@/components/elements/auth/auth-layout";
 import { useRouter } from "next/router";
 import {
 	useUpdateCodeMutation,
@@ -20,15 +20,19 @@ import {
 } from "@/graphql/generated/schema";
 import { BadgeCheck, Save } from "lucide-react";
 import LikeButton from "@/components/socials/like-button";
-import PageLoader from "@/components/elements/page-loader";
+import PageLoader from "@/components/elements/common/page-loader";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
+import { CommentsSection } from "@/components/socials/comments/comments-section";
+import { CommentButton } from "@/components/socials/comments/comment-button";
+import { AddCommentForm } from "@/components/socials/comments/add-comment-form";
 
 const CodingPage = () => {
 	const router = useRouter();
 	const { toast } = useToast();
 	const { id } = router.query;
+
 	const {
 		data: getUserProfileData,
 		loading: getUserProfileLoading,
@@ -335,7 +339,16 @@ const CodingPage = () => {
 
 				<Separator className="mt-3 md:mt-8 mb-3" />
 
-				<LikeButton project={project} userId={userId} />
+				{/* SOCIALS */}
+				<div className="flex items-center gap-3">
+					<LikeButton project={project} userId={userId} />
+					<CommentButton commentsLength={project.comments.length} />
+				</div>
+				<div className="max-w-3xl mx-auto">
+					<CommentsSection project={project} userId={userId} />
+					<Separator className="mt-3 md:mt-8 mb-3" />
+					<AddCommentForm projectId={project.id} />
+				</div>
 			</div>
 		</AuthLayout>
 	);

@@ -1,8 +1,8 @@
 import { useCallback, useState } from "react";
 
-import AuthLayout from "@/components/elements/auth-layout";
+import AuthLayout from "@/components/elements/auth/auth-layout";
 import { Separator } from "@/components/ui/separator";
-import ProjectsContainer from "@/components/elements/ProjectsContainer";
+import ProjectsContainer from "@/components/elements/project/ProjectsContainer";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import {

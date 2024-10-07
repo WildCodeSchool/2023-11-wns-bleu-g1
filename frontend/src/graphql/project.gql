@@ -36,6 +36,16 @@ query GetProjectById($getProjectId: String!) {
 				pseudo
 			}
 		}
+		comments {
+			id
+			content
+			user {
+				id
+				pseudo
+			}
+			createdAt
+			updatedAt
+		}
 	}
 }
 
@@ -75,4 +85,18 @@ mutation ToggleProjectPublicState($projectId: String!) {
 		isPublic
 		title
 	}
+}
+
+query GetProjects {
+	getProjects {
+		id
+		title
+		isPublic
+		createdAt
+		updatedAt
+	}
+}
+
+mutation DeleteProject($deleteProjectId: String!) {
+	deleteProject(id: $deleteProjectId)
 }

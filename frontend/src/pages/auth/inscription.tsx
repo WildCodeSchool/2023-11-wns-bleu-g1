@@ -34,7 +34,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import Logo from "@/components/elements/Logo";
+import Logo from "@/components/elements/common/Logo";
 import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
