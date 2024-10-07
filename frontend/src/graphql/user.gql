@@ -58,10 +58,6 @@ mutation UpdateUserIsPremium($isPremium: Boolean!) {
 	updateUserIsPremium(isPremium: $isPremium)
 }
 
-mutation DeleteUser($deleteUserId: String!) {
-	deleteUser(id: $deleteUserId)
-}
-
 mutation UpdateUsername($datas: UpdateUsernameInput!) {
 	updateUsername(datas: $datas)
 }
