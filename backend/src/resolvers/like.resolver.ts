@@ -27,6 +27,16 @@ export default class LikeResolver {
 	}
 
 	@Authorized([UserRole.VISITOR])
+	@Query(() => [Like])
+	async getUserLikesCount(@Ctx() { currentUser }: Context) {
+		if (!currentUser) throw new GraphQLError("you need to be logged in!");
+
+		const likes = await new LikeService().getUserLikes(currentUser.id);
+
+		return likes;
+	}
+
+	@Authorized([UserRole.VISITOR])
 	@Mutation(() => Boolean)
 	async unlike(@Ctx() { currentUser }: Context, @Arg("likeId") likeId: string) {
 		if (!currentUser) throw new GraphQLError("you need to be logged in!");
@@ -36,4 +46,6 @@ export default class LikeResolver {
 			likeId,
 		});
 	}
+
+	
 }

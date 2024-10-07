@@ -82,4 +82,11 @@ export default class ProjectResolver {
 	async toggleProjectPublicState(@Arg("id") id: string) {
 		return await new ProjectService().togglePublicState(id);
 	}
+
+	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Query(() => [Project])
+	async getProjectsCount() {
+		const projects = await this.getProjects();
+		return projects;
+	}
 }

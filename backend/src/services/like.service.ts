@@ -30,6 +30,14 @@ export default class LikeService {
 		return await this.likeRepository.find();
 	};
 
+	getUserLikes = async (userId: string) => {
+		return await this.likeRepository.find({
+			where: {
+				user: { id: userId },
+			},
+		});
+	};
+
 	unlike = async ({
 		currentUser,
 		likeId,
