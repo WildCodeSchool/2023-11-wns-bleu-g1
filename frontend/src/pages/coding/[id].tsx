@@ -1,5 +1,5 @@
 import { Separator } from "@/components/ui/separator";
-import AuthLayout from "@/components/elements/auth-layout";
+import AuthLayout from "@/components/elements/auth/auth-layout";
 import { useRouter } from "next/router";
 import {
 	useGetProjectByIdQuery,
@@ -8,7 +8,10 @@ import {
 } from "@/graphql/generated/schema";
 
 import LikeButton from "@/components/socials/like-button";
-import PageLoader from "@/components/elements/page-loader";
+import PageLoader from "@/components/elements/common/page-loader";
+import { CommentsSection } from "@/components/socials/comments/comments-section";
+import { CommentButton } from "@/components/socials/comments/comment-button";
+import { AddCommentForm } from "@/components/socials/comments/add-comment-form";
 import CodeEditor from "@/components/elements/CodeEditor";
 
 const CodingPage = () => {
@@ -52,7 +55,16 @@ const CodingPage = () => {
 
 				<Separator className="mt-3 md:mt-8 mb-3" />
 
-				<LikeButton project={project} userId={userId} />
+				{/* SOCIALS */}
+				<div className="flex items-center gap-3">
+					<LikeButton project={project} userId={userId} />
+					<CommentButton commentsLength={project.comments.length} />
+				</div>
+				<div className="max-w-3xl mx-auto">
+					<CommentsSection project={project} userId={userId} />
+					<Separator className="mt-3 md:mt-8 mb-3" />
+					<AddCommentForm projectId={project.id} />
+				</div>
 			</div>
 		</AuthLayout>
 	);

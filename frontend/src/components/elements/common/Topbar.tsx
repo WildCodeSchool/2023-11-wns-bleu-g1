@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import Logo from "@/components/elements/Logo";
+import Logo from "@/components/elements/common/Logo";
 
 type TopbarProps = {
 	isTopOfPage: boolean;

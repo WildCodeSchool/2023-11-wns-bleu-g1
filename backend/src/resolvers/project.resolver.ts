@@ -62,6 +62,7 @@ export default class ProjectResolver {
 				codes: { language: true },
 				likes: { user: true },
 				user: true,
+				comments: { user: true },
 			},
 		});
 	}
@@ -81,5 +82,11 @@ export default class ProjectResolver {
 	@Mutation(() => Project)
 	async toggleProjectPublicState(@Arg("id") id: string) {
 		return await new ProjectService().togglePublicState(id);
+	}
+
+	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Mutation(() => Boolean)
+	async deleteProject(@Arg("id") id: string) {
+		return await new ProjectService().delete(id);
 	}
 }
