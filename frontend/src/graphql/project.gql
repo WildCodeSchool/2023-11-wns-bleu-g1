@@ -23,6 +23,7 @@ query GetProjectById($getProjectId: String!) {
 			language {
 				name
 				id
+				version
 			}
 		}
 		user {

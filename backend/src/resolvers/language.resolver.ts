@@ -27,7 +27,7 @@ export default class LanguageResolver {
 	@Authorized([UserRole.ADMIN])
 	@Mutation(() => Language)
 	async createLanguage(@Arg("data", { validate: true }) data: LanguageInput) {
-		return await new LanguageService().create(data.name);
+		return await new LanguageService().create(data);
 	}
 
 	// update a language
@@ -36,9 +36,7 @@ export default class LanguageResolver {
 	async updateLanguage(
 		@Arg("data", { validate: true }) data: UpdateLanguageInput
 	) {
-		const { id, name } = data;
-
-		return await new LanguageService().update(id, name);
+		return await new LanguageService().update(data);
 	}
 
 	// delete a language

@@ -56,10 +56,12 @@ export type Language = {
 	codes: Array<Code>;
 	id: Scalars["String"];
 	name: Scalars["String"];
+	version: Scalars["String"];
 };
 
 export type LanguageInput = {
 	name: Scalars["String"];
+	version: Scalars["String"];
 };
 
 export type Like = {
@@ -249,7 +251,8 @@ export type SigninInput = {
 
 export type UpdateLanguageInput = {
 	id: Scalars["String"];
-	name: Scalars["String"];
+	name?: InputMaybe<Scalars["String"]>;
+	version: Scalars["String"];
 };
 
 export type UpdatePasswordInput = {
@@ -465,7 +468,12 @@ export type GetProjectByIdQuery = {
 			__typename?: "Code";
 			id: string;
 			content: string;
-			language: { __typename?: "Language"; name: string; id: string };
+			language: {
+				__typename?: "Language";
+				name: string;
+				id: string;
+				version: string;
+			};
 		}>;
 		user: { __typename?: "User"; id: string; pseudo: string };
 		likes: Array<{
@@ -1452,6 +1460,7 @@ export const GetProjectByIdDocument = gql`
 				language {
 					name
 					id
+					version
 				}
 			}
 			user {
