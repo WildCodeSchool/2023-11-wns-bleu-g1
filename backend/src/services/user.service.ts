@@ -104,7 +104,7 @@ export default class UserService {
 		return user.executionCounter;
 	};
 
-	delete = async (id: string, ctx: Context) => {
+	delete = async (id: string, inAdminPanel: boolean, ctx: Context) => {
 		const user = await this.userRepository.findOneBy({ id });
 
 		if (!user) {
@@ -112,7 +112,9 @@ export default class UserService {
 		}
 
 		await this.userRepository.remove(user);
-		ctx.res.clearCookie("token");
+		if (!inAdminPanel) {
+			ctx.res.clearCookie("token");
+		}
 		return true;
 	};
 

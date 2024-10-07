@@ -35,6 +35,10 @@ mutation Logout {
 	logout
 }
 
+mutation DeleteUser($deleteUserId: String!, $inAdminPanel: Boolean!) {
+	deleteUser(id: $deleteUserId, inAdminPanel: $inAdminPanel)
+}
+
 query GetUserProfile {
 	getUserProfile {
 		id
@@ -48,10 +52,6 @@ query GetUserProfile {
 
 mutation IncrementExecutionCounter($counter: ExecutionCounterInput!) {
 	incrementExecutionCounter(counter: $counter)
-}
-
-mutation DeleteUser($deleteUserId: String!) {
-	deleteUser(id: $deleteUserId)
 }
 
 mutation UpdateUsername($datas: UpdateUsernameInput!) {

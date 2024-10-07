@@ -12,10 +12,14 @@ import {
 import { Button, buttonVariants } from "@/components/ui/button";
 import React from "react";
 import {
+	DeleteUserDocument,
 	GetLanguagesDocument,
 	GetProjectsDocument,
+	GetUserProfileDocument,
 	useDeleteLanguageMutation,
 	useDeleteProjectMutation,
+	useDeleteUserMutation,
+	UsersDocument,
 } from "@/graphql/generated/schema";
 import { Check, Cross } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
@@ -28,7 +32,6 @@ const ElementDelete = ({
 	elementType: string;
 }) => {
 	const { toast } = useToast();
-	console.log("elementType: ", elementType);
 
 	const [deleteLanguageMutation] = useDeleteLanguageMutation({
 		onCompleted: () => {
@@ -76,6 +79,29 @@ const ElementDelete = ({
 		},
 	});
 
+	const [deleteUserMutation] = useDeleteUserMutation({
+		onCompleted: () => {
+			toast({
+				icon: <Check className="h-5 w-5" />,
+				title: "Utilisateur supprimé",
+				className: "text-success",
+			});
+		},
+		refetchQueries: [UsersDocument],
+		onError: (error) => {
+			let errorMessage =
+				error?.message || "Une erreur est survenue lors de la suppression.";
+			if (errorMessage.includes("violates foreign key constraint")) {
+				errorMessage = "Impossible de supprimer un utilisateur utilisé.";
+			}
+			toast({
+				icon: <Cross className="h-5 w-5" />,
+				title: errorMessage,
+				className: "text-error",
+			});
+		},
+	});
+
 	function deleteElement(id: string, type: string) {
 		if (type === "language") {
 			deleteLanguageMutation({
@@ -88,6 +114,15 @@ const ElementDelete = ({
 			deleteProjectMutation({
 				variables: {
 					deleteProjectId: id,
+				},
+			});
+		}
+		if (type === "user") {
+			console.log("delete user", id);
+			deleteUserMutation({
+				variables: {
+					deleteUserId: id,
+					inAdminPanel: true,
 				},
 			});
 		}
