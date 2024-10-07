@@ -6,7 +6,7 @@ import { Context } from "../interfaces/auth";
 import CommentService from "../services/comment.service";
 
 export default class CommentResolver {
-	@Authorized([UserRole.VISITOR])
+	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Mutation(() => Comment)
 	async comment(
 		@Ctx() { currentUser }: Context,

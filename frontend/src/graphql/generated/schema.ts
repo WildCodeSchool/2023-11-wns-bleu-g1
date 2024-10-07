@@ -308,6 +308,20 @@ export type CommentMutation = {
 	};
 };
 
+export type GetCommentsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetCommentsQuery = {
+	__typename?: "Query";
+	getComments: Array<{
+		__typename?: "Comment";
+		id: string;
+		content: string;
+		createdAt: any;
+		updatedAt: any;
+		project: { __typename?: "Project"; id: string };
+	}>;
+};
+
 export type DeleteCommentMutationVariables = Exact<{
 	commentId: Scalars["String"];
 }>;
@@ -331,7 +345,12 @@ export type GetLanguagesQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetLanguagesQuery = {
 	__typename?: "Query";
-	getLanguages: Array<{ __typename?: "Language"; id: string; name: string }>;
+	getLanguages: Array<{
+		__typename?: "Language";
+		id: string;
+		name: string;
+		version: string;
+	}>;
 };
 
 export type DeleteLanguageMutationVariables = Exact<{
@@ -749,6 +768,67 @@ export type CommentMutationOptions = Apollo.BaseMutationOptions<
 	CommentMutation,
 	CommentMutationVariables
 >;
+export const GetCommentsDocument = gql`
+	query GetComments {
+		getComments {
+			id
+			content
+			createdAt
+			updatedAt
+			project {
+				id
+			}
+		}
+	}
+`;
+
+/**
+ * __useGetCommentsQuery__
+ *
+ * To run a query within a React component, call `useGetCommentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCommentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCommentsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCommentsQuery(
+	baseOptions?: Apollo.QueryHookOptions<
+		GetCommentsQuery,
+		GetCommentsQueryVariables
+	>
+) {
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useQuery<GetCommentsQuery, GetCommentsQueryVariables>(
+		GetCommentsDocument,
+		options
+	);
+}
+export function useGetCommentsLazyQuery(
+	baseOptions?: Apollo.LazyQueryHookOptions<
+		GetCommentsQuery,
+		GetCommentsQueryVariables
+	>
+) {
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useLazyQuery<GetCommentsQuery, GetCommentsQueryVariables>(
+		GetCommentsDocument,
+		options
+	);
+}
+export type GetCommentsQueryHookResult = ReturnType<typeof useGetCommentsQuery>;
+export type GetCommentsLazyQueryHookResult = ReturnType<
+	typeof useGetCommentsLazyQuery
+>;
+export type GetCommentsQueryResult = Apollo.QueryResult<
+	GetCommentsQuery,
+	GetCommentsQueryVariables
+>;
 export const DeleteCommentDocument = gql`
 	mutation DeleteComment($commentId: String!) {
 		deleteComment(commentId: $commentId)
@@ -851,6 +931,7 @@ export const GetLanguagesDocument = gql`
 		getLanguages {
 			id
 			name
+			version
 		}
 	}
 `;
