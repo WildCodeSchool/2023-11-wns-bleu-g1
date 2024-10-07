@@ -36,6 +36,4 @@ export default class LikeResolver {
 			likeId,
 		});
 	}
-
-	
 }
