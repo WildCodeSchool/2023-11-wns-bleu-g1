@@ -144,10 +144,6 @@ export default function Pricing() {
 	const [updateUserIsPremiumMutation, updateUserIsPremiumMutationResult] =
 		useUpdateUserIsPremiumMutation({
 			onCompleted: () => {
-				console.log(
-					"updateUserIsPremiumResult",
-					updateUserIsPremiumMutationResult
-				);
 				toast({
 					icon: <BadgeCheck className="h-5 w-5" />,
 					title: "Vous n'êtes plus Premium.",
