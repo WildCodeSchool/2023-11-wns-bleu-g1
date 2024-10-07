@@ -6,6 +6,7 @@ import Language from "./entities/language";
 import Code from "./entities/code";
 import Like from "./entities/like";
 import Comment from "./entities/comment";
+import Reporting from "./entities/Reporting";
 
 const db = new DataSource({
 	type: "postgres",
@@ -14,7 +15,7 @@ const db = new DataSource({
 	database: env.DB_NAME,
 	host: env.DB_HOST,
 	port: env.DB_PORT,
-	entities: [User, Project, Language, Code, Like, Comment],
+	entities: [User, Project, Language, Code, Like, Comment, Reporting],
 	synchronize: true,
 	logging: env.NODE_ENV !== "test",
 });
