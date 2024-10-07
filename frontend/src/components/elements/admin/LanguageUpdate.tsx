@@ -22,13 +22,16 @@ import {
 import { Check, Cross } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
-const LanguageUpdate = (lang: { id: string; name: string }) => {
+const LanguageUpdate = (lang: { id: string; name: string; version: string }) => {
 	const { toast } = useToast();
 
 	const formSchema = z.object({
 		id: z.string(),
 		name: z.string().min(2, {
 			message: "Le nom du langage doit contenir au moins 2 caractères.",
+		}),
+		version: z.string().min(1, {
+			message: "La version du langage doit contenir au moins 1 caractère.",
 		}),
 	});
 
@@ -37,15 +40,17 @@ const LanguageUpdate = (lang: { id: string; name: string }) => {
 		defaultValues: {
 			id: "",
 			name: "",
+			version: "",
 		},
 	});
 
-	function updateLanguage(id: string, name: string) {
+	function updateLanguage(id: string, name: string, version: string) {
 		updateLanguageMutation({
 			variables: {
 				data: {
 					id: id,
 					name: name,
+					version: version,
 				},
 			},
 		});
@@ -75,7 +80,7 @@ const LanguageUpdate = (lang: { id: string; name: string }) => {
 	});
 
 	async function onUpdateLanguageSubmit(values: z.infer<typeof formSchema>) {
-		updateLanguage(values.id, values.name);
+		updateLanguage(values.id, values.name, values.version);
 		form.reset();
 	}
 
@@ -88,6 +93,7 @@ const LanguageUpdate = (lang: { id: string; name: string }) => {
 						onClick={() => {
 							form.setValue("id", lang.id);
 							form.setValue("name", lang.name);
+							form.setValue("version", lang.version);
 						}}
 					>
 						Modifier
@@ -114,6 +120,21 @@ const LanguageUpdate = (lang: { id: string; name: string }) => {
 												<Input
 													className="my-2 bg-secondary"
 													placeholder={lang.name}
+													{...field}
+												/>
+											</FormControl>
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name="version"
+									render={({ field }) => (
+										<FormItem className="space-y-4">
+											<FormControl>
+												<Input
+													className="my-2 bg-secondary"
+													placeholder={lang.version}
 													{...field}
 												/>
 											</FormControl>

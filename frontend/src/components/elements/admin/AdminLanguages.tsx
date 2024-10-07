@@ -25,10 +25,10 @@ const AdminLanguages = () => {
 						{languages.map((lang) => (
 							<div key={lang.id} className="flex justify-between py-1">
 								<p className="flex w-full items-center text-center">
-									{lang.name}
+									{lang.name} {lang.version}
 								</p>
 								<div className="flex gap-2">
-									<LanguageUpdate id={lang.id} name={lang.name} />
+									<LanguageUpdate id={lang.id} name={lang.name} version={lang.version}/>
 									<ElementDelete id={lang.id} elementType="language" />
 								</div>
 							</div>
