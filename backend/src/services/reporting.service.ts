@@ -52,13 +52,36 @@ export default class ReportingService {
 		return reports;
 	};
 
-	deleteReporting = async (id: string) => {
+	deleteReport = async (id: string) => {
+		const reportToDelete = await this.reportingRepository.findOneBy({ id });
+
+		if (!reportToDelete) {
+			throw new GraphQLError("Report not found");
+		}
+
+		await this.reportingRepository.remove(reportToDelete);
+
+		return true;
+	};
+
+	deleteCommentAndLinkedReport = async (id: string) => {
+		const reportings = await this.reportingRepository.find({
+			relations: { comments: true },
+		});
 		const commentAlreadyExist = await this.commentRepository.findOneBy({
 			id,
 		});
 
 		if (!commentAlreadyExist) {
-			throw new GraphQLError("Report not found");
+			throw new GraphQLError("Comment not found");
+		}
+
+		for (const report of reportings) {
+			report.comments.filter((comment) => {
+				if (comment.id === id) {
+					this.reportingRepository.remove(report);
+				}
+			});
 		}
 
 		await this.commentRepository.remove(commentAlreadyExist);

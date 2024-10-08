@@ -27,7 +27,9 @@ export default class Reporting {
 	@Field()
 	reason: string;
 
-	@ManyToMany(() => Comment, (comment) => comment.reportings)
+	@ManyToMany(() => Comment, (comment) => comment.reportings, {
+		onDelete: "CASCADE",
+	})
 	@JoinTable()
 	@Field(() => [Comment])
 	comments: Comment[];

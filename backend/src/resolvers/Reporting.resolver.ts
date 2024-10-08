@@ -29,6 +29,12 @@ export default class ReportingResolver {
 	@Authorized([UserRole.ADMIN])
 	@Mutation(() => Boolean)
 	async deleteReporting(@Arg("id") id: string) {
-		return await new ReportingService().deleteReporting(id);
+		return await new ReportingService().deleteReport(id);
+	}
+
+	@Authorized([UserRole.ADMIN])
+	@Mutation(() => Boolean)
+	async deleteCommentAndLinkedReport(@Arg("id") id: string) {
+		return await new ReportingService().deleteCommentAndLinkedReport(id);
 	}
 }
