@@ -3,6 +3,7 @@ import {
 	Column,
 	CreateDateColumn,
 	Entity,
+	ManyToMany,
 	ManyToOne,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
@@ -10,6 +11,7 @@ import {
 
 import User from "./user";
 import Project from "./project";
+import Reporting from "./Reporting";
 
 @Entity()
 @ObjectType()
@@ -37,4 +39,10 @@ export default class Comment {
 	@UpdateDateColumn()
 	@Field()
 	updatedAt: Date;
+
+	@ManyToMany(() => Reporting, (reporting) => reporting.comments, {
+		cascade: true,
+	})
+	@Field(() => [Reporting])
+	reportings: Reporting[];
 }

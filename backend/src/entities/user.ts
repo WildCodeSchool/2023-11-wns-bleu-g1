@@ -10,6 +10,7 @@ import {
 } from "typeorm";
 import Project from "./project";
 import Like from "./like";
+import Reporting from "./Reporting";
 
 export enum UserRole {
 	ADMIN = "admin",
@@ -58,6 +59,12 @@ export default class User {
 
 	@OneToMany(() => Like, (like) => like.user, { cascade: true })
 	likes: Like[];
+
+	@OneToMany(() => Reporting, (reporting) => reporting.flagger, {
+		cascade: true,
+	})
+	@Field(() => [Reporting])
+	reportings: Reporting[];
 }
 
 @InputType()
