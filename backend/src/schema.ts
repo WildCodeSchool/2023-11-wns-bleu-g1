@@ -6,6 +6,7 @@ import ProjectResolver from "./resolvers/project.resolver";
 import LanguageResolver from "./resolvers/language.resolver";
 import LikeResolver from "./resolvers/like.resolver";
 import CommentResolver from "./resolvers/comment.resolver";
+import ReportingResolver from "./resolvers/Reporting.resolver";
 
 export default buildSchemaSync({
 	resolvers: [
@@ -15,6 +16,7 @@ export default buildSchemaSync({
 		LanguageResolver,
 		LikeResolver,
 		CommentResolver,
+		ReportingResolver,
 	],
 	authChecker,
 });
