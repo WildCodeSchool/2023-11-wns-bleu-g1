@@ -3,8 +3,8 @@ import {
 	Column,
 	CreateDateColumn,
 	Entity,
-	ManyToMany,
 	ManyToOne,
+	OneToMany,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from "typeorm";
@@ -40,9 +40,7 @@ export default class Comment {
 	@Field()
 	updatedAt: Date;
 
-	@ManyToMany(() => Reporting, (reporting) => reporting.comments, {
-		cascade: true,
-	})
+	@OneToMany(() => Reporting, (reporting) => reporting.comment)
 	@Field(() => [Reporting])
 	reportings: Reporting[];
 }

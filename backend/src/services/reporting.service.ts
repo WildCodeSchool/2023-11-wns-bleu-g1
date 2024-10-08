@@ -18,10 +18,6 @@ export default class ReportingService {
 	}
 
 	create = async ({ commentId, reason }: NewReportInput, id: string) => {
-		if (!commentId || !reason || !id) {
-			throw new GraphQLError("Bad request");
-		}
-
 		const comment = await this.commentRepository.findOneByOrFail({
 			id: commentId,
 		});
@@ -31,7 +27,7 @@ export default class ReportingService {
 
 		newReport.flagger = user;
 		newReport.reason = reason;
-		newReport.comments = [comment];
+		newReport.comment = comment;
 
 		return await this.reportingRepository.save(newReport);
 	};
@@ -39,13 +35,8 @@ export default class ReportingService {
 	getAllComments = async () => {
 		const reports = await this.reportingRepository.find({
 			relations: {
-				comments: {
-					user: true,
-					project: {
-						codes: true,
-					},
-				},
 				flagger: true,
+				comment: true,
 			},
 		});
 
@@ -65,23 +56,12 @@ export default class ReportingService {
 	};
 
 	deleteCommentAndLinkedReport = async (id: string) => {
-		const reportings = await this.reportingRepository.find({
-			relations: { comments: true },
-		});
 		const commentAlreadyExist = await this.commentRepository.findOneBy({
 			id,
 		});
 
 		if (!commentAlreadyExist) {
 			throw new GraphQLError("Comment not found");
-		}
-
-		for (const report of reportings) {
-			report.comments.filter((comment) => {
-				if (comment.id === id) {
-					this.reportingRepository.remove(report);
-				}
-			});
 		}
 
 		await this.commentRepository.remove(commentAlreadyExist);

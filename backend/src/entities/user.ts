@@ -60,9 +60,7 @@ export default class User {
 	@OneToMany(() => Like, (like) => like.user, { cascade: true })
 	likes: Like[];
 
-	@OneToMany(() => Reporting, (reporting) => reporting.flagger, {
-		cascade: true,
-	})
+	@OneToMany(() => Reporting, (reporting) => reporting.flagger)
 	@Field(() => [Reporting])
 	reportings: Reporting[];
 }

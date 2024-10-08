@@ -3,8 +3,6 @@ import {
 	Column,
 	CreateDateColumn,
 	Entity,
-	JoinTable,
-	ManyToMany,
 	ManyToOne,
 	PrimaryGeneratedColumn,
 } from "typeorm";
@@ -27,12 +25,11 @@ export default class Reporting {
 	@Field()
 	reason: string;
 
-	@ManyToMany(() => Comment, (comment) => comment.reportings, {
+	@ManyToOne(() => Comment, (comment) => comment.reportings, {
 		onDelete: "CASCADE",
 	})
-	@JoinTable()
-	@Field(() => [Comment])
-	comments: Comment[];
+	@Field(() => Comment)
+	comment: Comment;
 
 	@ManyToOne(() => User, (user) => user.reportings)
 	@Field(() => User)
