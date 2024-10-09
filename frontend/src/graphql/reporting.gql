@@ -3,3 +3,22 @@ mutation CreateReporting($data: NewReportInput!) {
 		id
 	}
 }
+
+query GetAllReports {
+	getAllReports {
+		id
+		content
+		project {
+			id
+		}
+		reportings {
+			id
+		}
+	}
+}
+
+mutation DeleteCommentAndLinkedReport(
+	$deleteCommentAndLinkedReportId: String!
+) {
+	deleteCommentAndLinkedReport(id: $deleteCommentAndLinkedReportId)
+}

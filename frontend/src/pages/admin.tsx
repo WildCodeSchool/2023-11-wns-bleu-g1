@@ -6,6 +6,7 @@ import AdminLanguages from "@/components/elements/admin/AdminLanguages";
 import AdminProjects from "@/components/elements/admin/AdminProjects";
 import AdminUsers from "@/components/elements/admin/AdminUsers";
 import AdminComments from "@/components/elements/admin/AdminComments";
+import AdminReportings from "@/components/elements/admin/AdminReportings";
 
 const adminDashboard = () => {
 	return (
@@ -59,7 +60,7 @@ const adminDashboard = () => {
 							<AdminUsers />
 						</TabsContent>
 						<TabsContent value="comments">
-							<AdminComments />
+							<AdminReportings />
 						</TabsContent>
 					</Tabs>
 				</div>
