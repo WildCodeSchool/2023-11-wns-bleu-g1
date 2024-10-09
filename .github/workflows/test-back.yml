@@ -1,9 +1,9 @@
-name: 'test-back'
+name: "test-back"
 
 on:
   pull_request:
     paths:
-      - 'backend/**'
+      - "backend/**"
   workflow_call:
 
 jobs:
@@ -25,7 +25,7 @@ jobs:
 
   prettier-backend:
     name: Prettier backend
-    needs: [ linting-backend ]
+    needs: [linting-backend]
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -42,7 +42,7 @@ jobs:
 
   back-unit-test:
     name: Unit test backend
-    needs: [ prettier-backend ]
+    needs: [prettier-backend]
     runs-on: ubuntu-latest
     defaults:
       run:

@@ -84,6 +84,19 @@ export default class UserResolver {
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Mutation(() => Number)
+	async updateUserIsPremium(
+		@Arg("isPremium") isPremium: boolean,
+		@Ctx() { currentUser }: Context
+	) {
+		if (!currentUser) {
+			throw new GraphQLError("you need to be logged in!");
+		}
+
+		return await new UserService().togglePremium(currentUser.id, isPremium);
+	}
+
+	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Mutation(() => Boolean)
 	async deleteUser(
 		@Arg("id") id: string,

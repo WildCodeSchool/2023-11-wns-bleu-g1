@@ -54,6 +54,10 @@ mutation IncrementExecutionCounter($counter: ExecutionCounterInput!) {
 	incrementExecutionCounter(counter: $counter)
 }
 
+mutation UpdateUserIsPremium($isPremium: Boolean!) {
+	updateUserIsPremium(isPremium: $isPremium)
+}
+
 mutation UpdateUsername($datas: UpdateUsernameInput!) {
 	updateUsername(datas: $datas)
 }

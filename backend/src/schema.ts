@@ -4,7 +4,9 @@ import { authChecker } from "./auth";
 import CodeResolver from "./resolvers/code.resolver";
 import ProjectResolver from "./resolvers/project.resolver";
 import LanguageResolver from "./resolvers/language.resolver";
+
 import LikeResolver from "./resolvers/like.resolver";
+import PremiumResolver from "./resolvers/premium.resolver";
 import CommentResolver from "./resolvers/comment.resolver";
 
 export default buildSchemaSync({
@@ -14,6 +16,7 @@ export default buildSchemaSync({
 		ProjectResolver,
 		LanguageResolver,
 		LikeResolver,
+		PremiumResolver,
 		CommentResolver,
 	],
 	authChecker,
