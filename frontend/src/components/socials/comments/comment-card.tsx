@@ -14,6 +14,7 @@ import {
 import { elapsedTime } from "@/lib/utils";
 import { ApolloError } from "@apollo/client";
 import { BadgeCheck, CircleAlert, Ellipsis } from "lucide-react";
+import ReportButton from "../report-button";
 
 interface Props {
 	projectId: string;
@@ -90,7 +91,7 @@ export const CommentCard = ({ projectId, comment, userId }: Props) => {
 					{elapsedTime(comment.createdAt)}
 				</p>
 			</div>
-			{comment.user.id === userId && (
+			{comment.user.id === userId ? (
 				<DropdownMenu>
 					<DropdownMenuTrigger
 						disabled={deleteCommentMutationResult.loading}
@@ -102,6 +103,8 @@ export const CommentCard = ({ projectId, comment, userId }: Props) => {
 						<DropdownMenuItem onClick={deleteComment}>Retirer</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>
+			) : (
+				<ReportButton commentId={comment.id} />
 			)}
 		</div>
 	);
