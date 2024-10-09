@@ -8,6 +8,7 @@ import LanguageResolver from "./resolvers/language.resolver";
 import LikeResolver from "./resolvers/like.resolver";
 import PremiumResolver from "./resolvers/premium.resolver";
 import CommentResolver from "./resolvers/comment.resolver";
+import ReportingResolver from "./resolvers/Reporting.resolver";
 
 export default buildSchemaSync({
 	resolvers: [
@@ -18,6 +19,7 @@ export default buildSchemaSync({
 		LikeResolver,
 		PremiumResolver,
 		CommentResolver,
+		ReportingResolver,
 	],
 	authChecker,
 });

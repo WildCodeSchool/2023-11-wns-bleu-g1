@@ -4,12 +4,14 @@ import {
 	CreateDateColumn,
 	Entity,
 	ManyToOne,
+	OneToMany,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from "typeorm";
 
 import User from "./user";
 import Project from "./project";
+import Reporting from "./Reporting";
 
 @Entity()
 @ObjectType()
@@ -37,4 +39,8 @@ export default class Comment {
 	@UpdateDateColumn()
 	@Field()
 	updatedAt: Date;
+
+	@OneToMany(() => Reporting, (reporting) => reporting.comment)
+	@Field(() => [Reporting])
+	reportings: Reporting[];
 }

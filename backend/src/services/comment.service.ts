@@ -30,7 +30,9 @@ export default class CommentService {
 	};
 
 	getAll = async () => {
-		return await this.commentRepository.find({ relations: ["project"] });
+		return await this.commentRepository.find({
+			relations: ["project", "user"],
+		});
 	};
 
 	delete = async ({ user, id }: { user: User; id: string }) => {
