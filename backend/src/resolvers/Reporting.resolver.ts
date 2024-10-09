@@ -29,7 +29,7 @@ export default class ReportingResolver {
 
 	@Authorized([UserRole.ADMIN])
 	@Mutation(() => Boolean)
-	async deleteReportings(@Arg("reports") reports: string) {
+	async deleteReportings(@Arg("reports", () => [String]) reports: string[]) {
 		return await new ReportingService().deleteReport(reports);
 	}
 

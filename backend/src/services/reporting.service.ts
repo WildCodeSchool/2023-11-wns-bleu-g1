@@ -48,7 +48,7 @@ export default class ReportingService {
 		return reports;
 	};
 
-	deleteReport = async (reports: string) => {
+	deleteReport = async (reports: string[]) => {
 		for (const report of reports) {
 			const reportToDelete = await this.reportingRepository.findOneBy({
 				id: report,

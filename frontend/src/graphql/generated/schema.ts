@@ -79,7 +79,7 @@ export type Mutation = {
   deleteCommentAndLinkedReport: Scalars['Boolean'];
   deleteLanguage: Scalars['Boolean'];
   deleteProject: Scalars['Boolean'];
-  deleteReporting: Scalars['Boolean'];
+  deleteReportings: Scalars['Boolean'];
   deleteUser: Scalars['Boolean'];
   incrementExecutionCounter: Scalars['Float'];
   like: Like;
@@ -152,8 +152,8 @@ export type MutationDeleteProjectArgs = {
 };
 
 
-export type MutationDeleteReportingArgs = {
-  id: Scalars['String'];
+export type MutationDeleteReportingsArgs = {
+  reports: Array<Scalars['String']>;
 };
 
 
@@ -504,7 +504,7 @@ export type CreateReportingMutation = { __typename?: 'Mutation', createReporting
 export type GetAllReportsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllReportsQuery = { __typename?: 'Query', getAllReports: Array<{ __typename?: 'Comment', id: string, content: string, project: { __typename?: 'Project', id: string }, reportings: Array<{ __typename?: 'Reporting', id: string }> }> };
+export type GetAllReportsQuery = { __typename?: 'Query', getAllReports: Array<{ __typename?: 'Comment', id: string, content: string, reportings: Array<{ __typename?: 'Reporting', id: string, reason: string, reportedAt: any, flagger: { __typename?: 'User', id: string, pseudo: string } }>, project: { __typename?: 'Project', id: string, title: string }, user: { __typename?: 'User', pseudo: string, id: string } }> };
 
 export type DeleteCommentAndLinkedReportMutationVariables = Exact<{
   deleteCommentAndLinkedReportId: Scalars['String'];
@@ -512,6 +512,13 @@ export type DeleteCommentAndLinkedReportMutationVariables = Exact<{
 
 
 export type DeleteCommentAndLinkedReportMutation = { __typename?: 'Mutation', deleteCommentAndLinkedReport: boolean };
+
+export type DeleteReportingsMutationVariables = Exact<{
+  reports: Array<Scalars['String']> | Scalars['String'];
+}>;
+
+
+export type DeleteReportingsMutation = { __typename?: 'Mutation', deleteReportings: boolean };
 
 export type CreatePaymentIntentMutationVariables = Exact<{
   amount: Scalars['Float'];
@@ -1434,10 +1441,21 @@ export const GetAllReportsDocument = gql`
   getAllReports {
     id
     content
+    reportings {
+      id
+      reason
+      reportedAt
+      flagger {
+        id
+        pseudo
+      }
+    }
     project {
       id
+      title
     }
-    reportings {
+    user {
+      pseudo
       id
     }
   }
@@ -1501,6 +1519,37 @@ export function useDeleteCommentAndLinkedReportMutation(baseOptions?: Apollo.Mut
 export type DeleteCommentAndLinkedReportMutationHookResult = ReturnType<typeof useDeleteCommentAndLinkedReportMutation>;
 export type DeleteCommentAndLinkedReportMutationResult = Apollo.MutationResult<DeleteCommentAndLinkedReportMutation>;
 export type DeleteCommentAndLinkedReportMutationOptions = Apollo.BaseMutationOptions<DeleteCommentAndLinkedReportMutation, DeleteCommentAndLinkedReportMutationVariables>;
+export const DeleteReportingsDocument = gql`
+    mutation DeleteReportings($reports: [String!]!) {
+  deleteReportings(reports: $reports)
+}
+    `;
+export type DeleteReportingsMutationFn = Apollo.MutationFunction<DeleteReportingsMutation, DeleteReportingsMutationVariables>;
+
+/**
+ * __useDeleteReportingsMutation__
+ *
+ * To run a mutation, you first call `useDeleteReportingsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteReportingsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteReportingsMutation, { data, loading, error }] = useDeleteReportingsMutation({
+ *   variables: {
+ *      reports: // value for 'reports'
+ *   },
+ * });
+ */
+export function useDeleteReportingsMutation(baseOptions?: Apollo.MutationHookOptions<DeleteReportingsMutation, DeleteReportingsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteReportingsMutation, DeleteReportingsMutationVariables>(DeleteReportingsDocument, options);
+      }
+export type DeleteReportingsMutationHookResult = ReturnType<typeof useDeleteReportingsMutation>;
+export type DeleteReportingsMutationResult = Apollo.MutationResult<DeleteReportingsMutation>;
+export type DeleteReportingsMutationOptions = Apollo.BaseMutationOptions<DeleteReportingsMutation, DeleteReportingsMutationVariables>;
 export const CreatePaymentIntentDocument = gql`
     mutation CreatePaymentIntent($amount: Float!) {
   createPaymentIntent(amount: $amount) {

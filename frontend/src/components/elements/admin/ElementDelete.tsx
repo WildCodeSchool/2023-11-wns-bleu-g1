@@ -1,15 +1,3 @@
-import {
-	AlertDialog,
-	AlertDialogAction,
-	AlertDialogCancel,
-	AlertDialogContent,
-	AlertDialogDescription,
-	AlertDialogFooter,
-	AlertDialogHeader,
-	AlertDialogTitle,
-	AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button, buttonVariants } from "@/components/ui/button";
 import React from "react";
 import {
 	GetLanguagesDocument,
@@ -23,6 +11,7 @@ import {
 } from "@/graphql/generated/schema";
 import { Check, Cross } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import DeleteButton from "./DeleteButton";
 
 const ElementDelete = ({
 	id,
@@ -145,49 +134,20 @@ const ElementDelete = ({
 			});
 		}
 		if (type === "comment") {
-			// deleteCommentAndLinkedReport({
-			// 	variables: {
-			// 		deleteCommentAndLinkedReportId: id,
-			// 	},
-			// });
+			deleteCommentAndLinkedReport({
+				variables: {
+					deleteCommentAndLinkedReportId: id,
+				},
+			});
 		}
 	}
 
 	return (
-		<>
-			<AlertDialog>
-				<AlertDialogTrigger asChild>
-					<Button variant="destructive">Supprimer</Button>
-				</AlertDialogTrigger>
-				<AlertDialogContent>
-					<div className="flex flex-col gap-2">
-						<AlertDialogHeader>
-							<AlertDialogTitle>
-								Etes-vous sûr de vouloir supprimer cet élément?
-							</AlertDialogTitle>
-							<AlertDialogDescription>
-								Cette action est irréversible.
-							</AlertDialogDescription>
-						</AlertDialogHeader>
-						<AlertDialogFooter>
-							<AlertDialogCancel
-								className={buttonVariants({ variant: "dark" })}
-							>
-								Annuler
-							</AlertDialogCancel>
-							<AlertDialogAction
-								className={buttonVariants({
-									variant: "destructive",
-								})}
-								onClick={() => deleteElement(id, elementType)}
-							>
-								Confirmer
-							</AlertDialogAction>
-						</AlertDialogFooter>
-					</div>
-				</AlertDialogContent>
-			</AlertDialog>
-		</>
+		<DeleteButton
+			onClick={() => deleteElement(id, elementType)}
+			name="Supprimer"
+			variant="destructive"
+		/>
 	);
 };
 
