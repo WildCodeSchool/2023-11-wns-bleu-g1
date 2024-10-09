@@ -38,7 +38,7 @@ export default class Reporting {
 
 @InputType()
 export class NewReportInput {
-	@Length(2, 100)
+	@Length(10, 100)
 	@Field()
 	reason: string;
 
