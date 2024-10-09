@@ -1,3 +1,4 @@
+import { FileExtension } from "@/enums/file-extension.enum";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -29,4 +30,33 @@ export const elapsedTime = (date: Date) => {
 		default:
 			return `à l'instant`;
 	}
+};
+
+export const downloadCodeAsFile = ({
+	code,
+	language,
+}: {
+	code: string;
+	language: string;
+}) => {
+	const extension =
+		FileExtension[language.toLowerCase() as keyof typeof FileExtension];
+
+	if (!extension) {
+		console.error("Langage non supporté");
+		return;
+	}
+
+	const blob = new Blob([code], { type: "text/plain" });
+
+	const filename = `index.${extension}`;
+
+	const link = document.createElement("a");
+	link.href = URL.createObjectURL(blob);
+	link.download = filename;
+
+	document.body.appendChild(link);
+	link.click();
+
+	document.body.removeChild(link);
 };
