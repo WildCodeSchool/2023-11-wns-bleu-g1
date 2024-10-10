@@ -1,13 +1,23 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { GetUserProfileQuery } from "@/graphql/generated/schema";
+import {
+	GetUserProfileQuery,
+	useGetUserProjectsQuery,
+	useGetUserLikesQuery,
+	useGetUserCommentsQuery,
+} from "@/graphql/generated/schema";
 import React from "react";
 
 interface Props {
 	profile: GetUserProfileQuery["getUserProfile"] | null;
 }
 const UserHeadCard = ({ profile }: Props) => {
+	const projects = useGetUserProjectsQuery().data?.getUserProjects || null;
+	const likes = useGetUserLikesQuery().data?.getUserLikes || null;
+	const comments = useGetUserCommentsQuery().data?.getUserComments || null;
+
 	if (!profile) return null;
+
 	return (
 		<div className="flex flex-col sm:flex-row sm:items-center sm:justify-around gap-8 pb-8">
 			<div className="flex justify-center gap-6">
@@ -28,19 +38,19 @@ const UserHeadCard = ({ profile }: Props) => {
 				{/* @Todo : Vraies données à remplacer  */}
 				<div className="flex items-center gap-3">
 					<div className="w-12 h-12 rounded-full bg-blue-400 flex items-center justify-center text-lg text-background font-semibold">
-						58
+						{projects?.length}
 					</div>
 					<span className="text-lg">Projets</span>
 				</div>
 				<div className="flex items-center gap-3">
 					<div className="w-12 h-12 rounded-full bg-blue-400 flex items-center justify-center text-lg text-background font-semibold">
-						125
+						{likes?.length}
 					</div>
 					<span className="text-lg">Likes</span>
 				</div>
 				<div className="flex items-center gap-3">
 					<div className="w-12 h-12 rounded-full bg-blue-400 flex items-center justify-center text-lg text-background font-semibold">
-						58
+						{comments?.length}
 					</div>
 					<span className="text-lg">Commentaires</span>
 				</div>
