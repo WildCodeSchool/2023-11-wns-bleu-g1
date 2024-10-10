@@ -43,6 +43,7 @@ export type Comment = {
 	createdAt: Scalars["DateTimeISO"];
 	id: Scalars["String"];
 	project: Project;
+	reportings: Array<Reporting>;
 	updatedAt: Scalars["DateTimeISO"];
 	user: User;
 };
@@ -76,11 +77,15 @@ export type Mutation = {
 	comment: Comment;
 	createCode: Code;
 	createLanguage: Language;
-	createPaymentIntent: PaymentIntentResponse;createProject: Project;
+	createPaymentIntent: PaymentIntentResponse;
+	createProject: Project;
+	createReporting: Reporting;
 	createUser: User;
 	deleteComment: Scalars["Boolean"];
+	deleteCommentAndLinkedReport: Scalars["Boolean"];
 	deleteLanguage: Scalars["Boolean"];
 	deleteProject: Scalars["Boolean"];
+	deleteReporting: Scalars["Boolean"];
 	deleteUser: Scalars["Boolean"];
 	incrementExecutionCounter: Scalars["Float"];
 	like: Like;
@@ -90,7 +95,8 @@ export type Mutation = {
 	unlike: Scalars["Boolean"];
 	updateCode: Code;
 	updateComment: Scalars["Boolean"];
-	updateLanguage: Language;updateUserIsPremium: Scalars["Float"];
+	updateLanguage: Language;
+	updateUserIsPremium: Scalars["Float"];
 	updateUserPassword: Scalars["Boolean"];
 	updateUsername: Scalars["Boolean"];
 };
@@ -108,13 +114,16 @@ export type MutationCreateLanguageArgs = {
 	data: LanguageInput;
 };
 
-
 export type MutationCreatePaymentIntentArgs = {
 	amount: Scalars["Float"];
 };
 
 export type MutationCreateProjectArgs = {
 	data: NewProjectInput;
+};
+
+export type MutationCreateReportingArgs = {
+	data: NewReportInput;
 };
 
 export type MutationCreateUserArgs = {
@@ -125,11 +134,19 @@ export type MutationDeleteCommentArgs = {
 	commentId: Scalars["String"];
 };
 
+export type MutationDeleteCommentAndLinkedReportArgs = {
+	id: Scalars["String"];
+};
+
 export type MutationDeleteLanguageArgs = {
 	id: Scalars["String"];
 };
 
 export type MutationDeleteProjectArgs = {
+	id: Scalars["String"];
+};
+
+export type MutationDeleteReportingArgs = {
 	id: Scalars["String"];
 };
 
@@ -176,7 +193,6 @@ export type MutationUpdateUserIsPremiumArgs = {
 	isPremium: Scalars["Boolean"];
 };
 
-
 export type MutationUpdateUserPasswordArgs = {
 	datas: UpdatePasswordInput;
 };
@@ -188,6 +204,11 @@ export type MutationUpdateUsernameArgs = {
 export type NewProjectInput = {
 	isPublic?: InputMaybe<Scalars["Boolean"]>;
 	title: Scalars["String"];
+};
+
+export type NewReportInput = {
+	commentId: Scalars["String"];
+	reason: Scalars["String"];
 };
 
 export type NewUserInput = {
@@ -226,6 +247,7 @@ export type ProjectPaginationResponse = {
 
 export type Query = {
 	__typename?: "Query";
+	getAllReport: Array<Reporting>;
 	getCode: Array<Code>;
 	getCodes: Array<Code>;
 	getComments: Array<Comment>;
@@ -261,6 +283,15 @@ export type QueryGetProjectArgs = {
 	id: Scalars["String"];
 };
 
+export type Reporting = {
+	__typename?: "Reporting";
+	comment: Comment;
+	flagger: User;
+	id: Scalars["String"];
+	reason: Scalars["String"];
+	reportedAt: Scalars["DateTimeISO"];
+};
+
 export type SigninInput = {
 	email: Scalars["String"];
 	password: Scalars["String"];
@@ -290,6 +321,7 @@ export type User = {
 	id: Scalars["String"];
 	isPremium: Scalars["Boolean"];
 	pseudo: Scalars["String"];
+	reportings: Array<Reporting>;
 	role: Scalars["String"];
 };
 
@@ -587,6 +619,11 @@ export type DeleteProjectMutationVariables = Exact<{
 	deleteProjectId: Scalars["String"];
 }>;
 
+export type DeleteProjectMutation = {
+	__typename?: "Mutation";
+	deleteProject: boolean;
+};
+
 export type CreatePaymentIntentMutationVariables = Exact<{
 	amount: Scalars["Float"];
 }>;
@@ -598,9 +635,6 @@ export type CreatePaymentIntentMutation = {
 		clientSecret?: string | null;
 		error?: string | null;
 	};
-};export type DeleteProjectMutation = {
-	__typename?: "Mutation";
-	deleteProject: boolean;
 };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never }>;
