@@ -1,6 +1,6 @@
 import { Editor, OnMount } from "@monaco-editor/react";
 import Image from "next/image";
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState, useEffect } from "react";
 import { editor } from "monaco-editor";
 
 import {
@@ -25,6 +25,7 @@ import {
 import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
 import { downloadCodeAsFile } from "@/lib/utils";
+import router from "next/router";
 
 interface Props {
 	project: GetProjectByIdQuery["getProject"];
@@ -47,11 +48,12 @@ const CodeEditor = ({ project, userId }: Props) => {
 		setValue(codes[0].content);
 	}, [codes]);
 
-	const { data: counter } = useGetExecutionCounterQuery({
-		onError: (e: any) => {
-			console.error("useGetExecutionCounterQuery =>", e);
-		},
-	});
+	const { data: counter, refetch: getExecutionCounter } =
+		useGetExecutionCounterQuery({
+			onError: (e: any) => {
+				console.error("useGetExecutionCounterQuery =>", e);
+			},
+		});
 
 	const [incrementCounter] = useIncrementExecutionCounterMutation({
 		refetchQueries: [GetExecutionCounterDocument],
@@ -192,6 +194,20 @@ const CodeEditor = ({ project, userId }: Props) => {
 			},
 		});
 	};
+
+	useEffect(() => {
+		const handleRouteChange = () => {
+			getExecutionCounter();
+		};
+
+		// Add event listener to handle route change
+		router.events.on("routeChangeComplete", handleRouteChange);
+
+		// Clean up event listener on component unmount
+		return () => {
+			router.events.off("routeChangeComplete", handleRouteChange);
+		};
+	});
 
 	return (
 		<>
