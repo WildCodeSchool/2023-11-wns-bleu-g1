@@ -15,7 +15,7 @@ export default class LanguageService {
 	}
 
 	getAll = async () => {
-		return await this.languageRepository.find();
+		return await this.languageRepository.find({ relations: ["codes"] });
 	};
 
 	getby = async (request: object) => {
