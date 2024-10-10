@@ -26,6 +26,10 @@ export default class LikeService {
 		return await this.likeRepository.save(like);
 	};
 
+	getUserLikes = async (request: object = {}) => {
+		return await this.likeRepository.find(request);
+	};
+
 	getAll = async () => {
 		return await this.likeRepository.find();
 	};

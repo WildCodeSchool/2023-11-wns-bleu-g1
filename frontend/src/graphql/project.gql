@@ -98,6 +98,16 @@ query GetProjects {
 	}
 }
 
+query GetUserProjects {
+	getUserProjects {
+		id
+		title
+		isPublic
+		createdAt
+		updatedAt
+	}
+}
+
 mutation DeleteProject($deleteProjectId: String!) {
 	deleteProject(id: $deleteProjectId)
 }

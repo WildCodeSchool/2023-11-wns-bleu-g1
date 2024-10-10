@@ -46,6 +46,14 @@ export default class CommentResolver {
 		return await new CommentService().getAll();
 	}
 
+	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Query(() => [Comment])
+	async getUserComments(@Ctx() { currentUser }: Context) {
+		return await new CommentService().getUserComments({
+			user: currentUser,
+		});
+	}
+
 	@Authorized([UserRole.ADMIN, UserRole.VISITOR])
 	@Mutation(() => Boolean, {
 		description: addDescription(

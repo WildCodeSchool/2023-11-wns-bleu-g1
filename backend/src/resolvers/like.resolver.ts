@@ -44,6 +44,14 @@ export default class LikeResolver {
 		return await new LikeService().getAll();
 	}
 
+	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Query(() => [Like])
+	async getUserLikes(@Ctx() { currentUser }: Context) {
+		return await new LikeService().getUserLikes({
+			user: currentUser,
+		});
+	}
+
 	@Authorized([UserRole.VISITOR])
 	@Mutation(() => Boolean, {
 		description: addDescription(

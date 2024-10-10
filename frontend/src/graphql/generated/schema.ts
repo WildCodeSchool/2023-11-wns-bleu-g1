@@ -260,7 +260,10 @@ export type Query = {
 	getPaginateProjects: ProjectPaginationResponse;
 	getProject: Project;
 	getProjects: Array<Project>;
+	getUserComments: Array<Comment>;
+	getUserLikes: Array<Like>;
 	getUserProfile: User;
+	getUserProjects: Array<Project>;
 	users: Array<User>;
 };
 
@@ -356,6 +359,19 @@ export type GetCommentsQuery = {
 	}>;
 };
 
+export type GetUserCommentsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetUserCommentsQuery = {
+	__typename?: "Query";
+	getUserComments: Array<{
+		__typename?: "Comment";
+		id: string;
+		content: string;
+		createdAt: any;
+		updatedAt: any;
+	}>;
+};
+
 export type DeleteCommentMutationVariables = Exact<{
 	commentId: Scalars["String"];
 }>;
@@ -420,6 +436,13 @@ export type UpdateLanguageMutationVariables = Exact<{
 export type UpdateLanguageMutation = {
 	__typename?: "Mutation";
 	updateLanguage: { __typename?: "Language"; id: string; name: string };
+};
+
+export type GetUserLikesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetUserLikesQuery = {
+	__typename?: "Query";
+	getUserLikes: Array<{ __typename?: "Like"; id: string }>;
 };
 
 export type LikeMutationVariables = Exact<{
@@ -615,6 +638,20 @@ export type GetProjectsQueryVariables = Exact<{ [key: string]: never }>;
 export type GetProjectsQuery = {
 	__typename?: "Query";
 	getProjects: Array<{
+		__typename?: "Project";
+		id: string;
+		title: string;
+		isPublic: boolean;
+		createdAt: any;
+		updatedAt: any;
+	}>;
+};
+
+export type GetUserProjectsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetUserProjectsQuery = {
+	__typename?: "Query";
+	getUserProjects: Array<{
 		__typename?: "Project";
 		id: string;
 		title: string;
@@ -917,6 +954,66 @@ export type GetCommentsLazyQueryHookResult = ReturnType<
 export type GetCommentsQueryResult = Apollo.QueryResult<
 	GetCommentsQuery,
 	GetCommentsQueryVariables
+>;
+export const GetUserCommentsDocument = gql`
+	query GetUserComments {
+		getUserComments {
+			id
+			content
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
+/**
+ * __useGetUserCommentsQuery__
+ *
+ * To run a query within a React component, call `useGetUserCommentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserCommentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserCommentsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUserCommentsQuery(
+	baseOptions?: Apollo.QueryHookOptions<
+		GetUserCommentsQuery,
+		GetUserCommentsQueryVariables
+	>
+) {
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useQuery<GetUserCommentsQuery, GetUserCommentsQueryVariables>(
+		GetUserCommentsDocument,
+		options
+	);
+}
+export function useGetUserCommentsLazyQuery(
+	baseOptions?: Apollo.LazyQueryHookOptions<
+		GetUserCommentsQuery,
+		GetUserCommentsQueryVariables
+	>
+) {
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useLazyQuery<
+		GetUserCommentsQuery,
+		GetUserCommentsQueryVariables
+	>(GetUserCommentsDocument, options);
+}
+export type GetUserCommentsQueryHookResult = ReturnType<
+	typeof useGetUserCommentsQuery
+>;
+export type GetUserCommentsLazyQueryHookResult = ReturnType<
+	typeof useGetUserCommentsLazyQuery
+>;
+export type GetUserCommentsQueryResult = Apollo.QueryResult<
+	GetUserCommentsQuery,
+	GetUserCommentsQueryVariables
 >;
 export const DeleteCommentDocument = gql`
 	mutation DeleteComment($commentId: String!) {
@@ -1229,6 +1326,63 @@ export type UpdateLanguageMutationResult =
 export type UpdateLanguageMutationOptions = Apollo.BaseMutationOptions<
 	UpdateLanguageMutation,
 	UpdateLanguageMutationVariables
+>;
+export const GetUserLikesDocument = gql`
+	query GetUserLikes {
+		getUserLikes {
+			id
+		}
+	}
+`;
+
+/**
+ * __useGetUserLikesQuery__
+ *
+ * To run a query within a React component, call `useGetUserLikesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserLikesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserLikesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUserLikesQuery(
+	baseOptions?: Apollo.QueryHookOptions<
+		GetUserLikesQuery,
+		GetUserLikesQueryVariables
+	>
+) {
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useQuery<GetUserLikesQuery, GetUserLikesQueryVariables>(
+		GetUserLikesDocument,
+		options
+	);
+}
+export function useGetUserLikesLazyQuery(
+	baseOptions?: Apollo.LazyQueryHookOptions<
+		GetUserLikesQuery,
+		GetUserLikesQueryVariables
+	>
+) {
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useLazyQuery<GetUserLikesQuery, GetUserLikesQueryVariables>(
+		GetUserLikesDocument,
+		options
+	);
+}
+export type GetUserLikesQueryHookResult = ReturnType<
+	typeof useGetUserLikesQuery
+>;
+export type GetUserLikesLazyQueryHookResult = ReturnType<
+	typeof useGetUserLikesLazyQuery
+>;
+export type GetUserLikesQueryResult = Apollo.QueryResult<
+	GetUserLikesQuery,
+	GetUserLikesQueryVariables
 >;
 export const LikeDocument = gql`
 	mutation Like($projectId: String!) {
@@ -1952,6 +2106,67 @@ export type GetProjectsLazyQueryHookResult = ReturnType<
 export type GetProjectsQueryResult = Apollo.QueryResult<
 	GetProjectsQuery,
 	GetProjectsQueryVariables
+>;
+export const GetUserProjectsDocument = gql`
+	query GetUserProjects {
+		getUserProjects {
+			id
+			title
+			isPublic
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
+/**
+ * __useGetUserProjectsQuery__
+ *
+ * To run a query within a React component, call `useGetUserProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserProjectsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUserProjectsQuery(
+	baseOptions?: Apollo.QueryHookOptions<
+		GetUserProjectsQuery,
+		GetUserProjectsQueryVariables
+	>
+) {
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useQuery<GetUserProjectsQuery, GetUserProjectsQueryVariables>(
+		GetUserProjectsDocument,
+		options
+	);
+}
+export function useGetUserProjectsLazyQuery(
+	baseOptions?: Apollo.LazyQueryHookOptions<
+		GetUserProjectsQuery,
+		GetUserProjectsQueryVariables
+	>
+) {
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useLazyQuery<
+		GetUserProjectsQuery,
+		GetUserProjectsQueryVariables
+	>(GetUserProjectsDocument, options);
+}
+export type GetUserProjectsQueryHookResult = ReturnType<
+	typeof useGetUserProjectsQuery
+>;
+export type GetUserProjectsLazyQueryHookResult = ReturnType<
+	typeof useGetUserProjectsLazyQuery
+>;
+export type GetUserProjectsQueryResult = Apollo.QueryResult<
+	GetUserProjectsQuery,
+	GetUserProjectsQueryVariables
 >;
 export const DeleteProjectDocument = gql`
 	mutation DeleteProject($deleteProjectId: String!) {
