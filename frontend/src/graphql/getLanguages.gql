@@ -3,6 +3,9 @@ query GetLanguages {
 		id
 		name
 		version
+		codes {
+			id
+		}
 	}
 }
 

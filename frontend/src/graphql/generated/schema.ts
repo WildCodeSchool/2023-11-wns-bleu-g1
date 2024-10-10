@@ -43,6 +43,7 @@ export type Comment = {
 	createdAt: Scalars["DateTimeISO"];
 	id: Scalars["String"];
 	project: Project;
+	reportings: Array<Reporting>;
 	updatedAt: Scalars["DateTimeISO"];
 	user: User;
 };
@@ -78,10 +79,13 @@ export type Mutation = {
 	createLanguage: Language;
 	createPaymentIntent: PaymentIntentResponse;
 	createProject: Project;
+	createReporting: Reporting;
 	createUser: User;
 	deleteComment: Scalars["Boolean"];
+	deleteCommentAndLinkedReport: Scalars["Boolean"];
 	deleteLanguage: Scalars["Boolean"];
 	deleteProject: Scalars["Boolean"];
+	deleteReporting: Scalars["Boolean"];
 	deleteUser: Scalars["Boolean"];
 	incrementExecutionCounter: Scalars["Float"];
 	like: Like;
@@ -118,6 +122,10 @@ export type MutationCreateProjectArgs = {
 	data: NewProjectInput;
 };
 
+export type MutationCreateReportingArgs = {
+	data: NewReportInput;
+};
+
 export type MutationCreateUserArgs = {
 	data: NewUserInput;
 };
@@ -126,11 +134,19 @@ export type MutationDeleteCommentArgs = {
 	commentId: Scalars["String"];
 };
 
+export type MutationDeleteCommentAndLinkedReportArgs = {
+	id: Scalars["String"];
+};
+
 export type MutationDeleteLanguageArgs = {
 	id: Scalars["String"];
 };
 
 export type MutationDeleteProjectArgs = {
+	id: Scalars["String"];
+};
+
+export type MutationDeleteReportingArgs = {
 	id: Scalars["String"];
 };
 
@@ -190,6 +206,11 @@ export type NewProjectInput = {
 	title: Scalars["String"];
 };
 
+export type NewReportInput = {
+	commentId: Scalars["String"];
+	reason: Scalars["String"];
+};
+
 export type NewUserInput = {
 	email: Scalars["String"];
 	isPremium?: InputMaybe<Scalars["Boolean"]>;
@@ -226,6 +247,7 @@ export type ProjectPaginationResponse = {
 
 export type Query = {
 	__typename?: "Query";
+	getAllReport: Array<Reporting>;
 	getCode: Array<Code>;
 	getCodes: Array<Code>;
 	getComments: Array<Comment>;
@@ -261,6 +283,15 @@ export type QueryGetProjectArgs = {
 	id: Scalars["String"];
 };
 
+export type Reporting = {
+	__typename?: "Reporting";
+	comment: Comment;
+	flagger: User;
+	id: Scalars["String"];
+	reason: Scalars["String"];
+	reportedAt: Scalars["DateTimeISO"];
+};
+
 export type SigninInput = {
 	email: Scalars["String"];
 	password: Scalars["String"];
@@ -290,6 +321,7 @@ export type User = {
 	id: Scalars["String"];
 	isPremium: Scalars["Boolean"];
 	pseudo: Scalars["String"];
+	reportings: Array<Reporting>;
 	role: Scalars["String"];
 };
 
@@ -350,6 +382,7 @@ export type GetLanguagesQuery = {
 		id: string;
 		name: string;
 		version: string;
+		codes: Array<{ __typename?: "Code"; id: string }>;
 	}>;
 };
 
@@ -932,6 +965,9 @@ export const GetLanguagesDocument = gql`
 			id
 			name
 			version
+			codes {
+				id
+			}
 		}
 	}
 `;
