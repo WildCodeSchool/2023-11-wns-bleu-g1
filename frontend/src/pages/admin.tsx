@@ -5,8 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AdminLanguages from "@/components/elements/admin/AdminLanguages";
 import AdminProjects from "@/components/elements/admin/AdminProjects";
 import AdminUsers from "@/components/elements/admin/AdminUsers";
-import AdminComments from "@/components/elements/admin/AdminComments";
-import AdminReportings from "@/components/elements/admin/AdminReportings";
+import AdminCommentsReportings from "@/components/elements/admin/AdminCommentsReportings";
 
 const adminDashboard = () => {
 	return (
@@ -60,7 +59,7 @@ const adminDashboard = () => {
 							<AdminUsers />
 						</TabsContent>
 						<TabsContent value="comments">
-							<AdminReportings />
+							<AdminCommentsReportings />
 						</TabsContent>
 					</Tabs>
 				</div>
