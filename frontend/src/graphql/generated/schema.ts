@@ -382,6 +382,7 @@ export type GetLanguagesQuery = {
 		id: string;
 		name: string;
 		version: string;
+		codes: Array<{ __typename?: "Code"; id: string }>;
 	}>;
 };
 
@@ -1011,6 +1012,9 @@ export const GetLanguagesDocument = gql`
 			id
 			name
 			version
+			codes {
+				id
+			}
 		}
 	}
 `;
