@@ -80,7 +80,7 @@ const AdminReportings = () => {
 							}) => (
 								<div key={id} className="flex gap-2 justify-between pt-2 py-1">
 									<p className="flex w-full items-center text-center">
-										Commentaire &quot;{content.slice(0, 5)}…&quot; signalé{" "}
+										Commentaire &quot;{content.slice(0, 5)}{content.length > 5 ? "...": ""}&quot; signalé{" "}
 										{reportings.length} fois:
 									</p>
 									<div className="flex gap-3">
