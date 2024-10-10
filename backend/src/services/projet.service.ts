@@ -14,6 +14,10 @@ export default class ProjectService {
 		return await this.projectRepository.find(request);
 	};
 
+	getUserProjects = async (request: object = {}) => {
+		return await this.projectRepository.find(request);
+	};
+
 	getAllPaginate = async (
 		request: object,
 		limit: number,

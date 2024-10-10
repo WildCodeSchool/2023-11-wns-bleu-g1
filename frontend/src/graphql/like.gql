@@ -1,3 +1,9 @@
+query GetUserLikes {
+	getUserLikes {
+		id
+	}
+}
+
 mutation Like($projectId: String!) {
 	like(projectId: $projectId) {
 		id
