@@ -1,10 +1,10 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { User } from "@/graphql/generated/schema";
+import { GetUserProfileQuery } from "@/graphql/generated/schema";
 import React from "react";
 
 interface Props {
-	profile: User | null;
+	profile: GetUserProfileQuery["getUserProfile"] | null;
 }
 const UserHeadCard = ({ profile }: Props) => {
 	if (!profile) return null;

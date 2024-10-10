@@ -1,0 +1,39 @@
+mutation CreateReporting($data: NewReportInput!) {
+	createReporting(data: $data) {
+		id
+	}
+}
+
+query GetAllReports {
+	getAllReports {
+		id
+		content
+		reportings {
+			id
+			reason
+			reportedAt
+			flagger {
+				id
+				pseudo
+			}
+		}
+		project {
+			id
+			title
+		}
+		user {
+			pseudo
+			id
+		}
+	}
+}
+
+mutation DeleteCommentAndLinkedReport(
+	$deleteCommentAndLinkedReportId: String!
+) {
+	deleteCommentAndLinkedReport(id: $deleteCommentAndLinkedReportId)
+}
+
+mutation DeleteReportings($reports: [String!]!) {
+	deleteReportings(reports: $reports)
+}

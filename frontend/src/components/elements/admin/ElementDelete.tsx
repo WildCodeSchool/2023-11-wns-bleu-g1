@@ -1,43 +1,24 @@
-import {
-	AlertDialog,
-	AlertDialogAction,
-	AlertDialogCancel,
-	AlertDialogContent,
-	AlertDialogDescription,
-	AlertDialogFooter,
-	AlertDialogHeader,
-	AlertDialogTitle,
-	AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button, buttonVariants } from "@/components/ui/button";
 import React from "react";
 import {
-	CommentDocument,
-	DeleteCommentDocument,
-	DeleteUserDocument,
-	GetCommentsDocument,
 	GetLanguagesDocument,
-	GetProjectByIdDocument,
 	GetProjectsDocument,
-	GetUserProfileDocument,
-	UpdateCommentDocument,
-	useDeleteCommentMutation,
 	useDeleteLanguageMutation,
 	useDeleteProjectMutation,
 	useDeleteUserMutation,
 	UsersDocument,
+	useDeleteCommentAndLinkedReportMutation,
+	GetAllReportsDocument,
 } from "@/graphql/generated/schema";
 import { Check, Cross } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import DeleteButton from "./DeleteButton";
 
 const ElementDelete = ({
 	id,
 	elementType,
-	projectId,
 }: {
 	id: string;
 	elementType: string;
-	projectId?: string;
 }) => {
 	const { toast } = useToast();
 
@@ -110,33 +91,24 @@ const ElementDelete = ({
 		},
 	});
 
-	const [deleteCommentMutation] = useDeleteCommentMutation({
-		onCompleted: () => {
-			toast({
-				icon: <Check className="h-5 w-5" />,
-				title: "Commentaire supprimé",
-				className: "text-success",
-			});
-		},
-		refetchQueries: [
-			GetCommentsDocument,
-			{
-				query: GetProjectByIdDocument,
-				variables: {
-					getProjectId: projectId,
-				},
+	const [deleteCommentAndLinkedReport] =
+		useDeleteCommentAndLinkedReportMutation({
+			refetchQueries: [GetAllReportsDocument],
+			onCompleted: () => {
+				toast({
+					icon: <Check className="h-5 w-5" />,
+					title: "Commentaire supprimé",
+					className: "text-success",
+				});
 			},
-		],
-		onError: (error) => {
-			let errorMessage =
-				error?.message || "Une erreur est survenue lors de la suppression.";
-			toast({
-				icon: <Cross className="h-5 w-5" />,
-				title: errorMessage,
-				className: "text-error",
-			});
-		},
-	});
+			onError: (e) => {
+				toast({
+					icon: <Check className="h-5 w-5" />,
+					title: e.message,
+					className: "text-error",
+				});
+			},
+		});
 
 	function deleteElement(id: string, type: string) {
 		if (type === "language") {
@@ -162,49 +134,20 @@ const ElementDelete = ({
 			});
 		}
 		if (type === "comment") {
-			deleteCommentMutation({
+			deleteCommentAndLinkedReport({
 				variables: {
-					commentId: id,
+					deleteCommentAndLinkedReportId: id,
 				},
 			});
 		}
 	}
 
 	return (
-		<>
-			<AlertDialog>
-				<AlertDialogTrigger asChild>
-					<Button variant="destructive">Supprimer</Button>
-				</AlertDialogTrigger>
-				<AlertDialogContent>
-					<div className="flex flex-col gap-2">
-						<AlertDialogHeader>
-							<AlertDialogTitle>
-								Etes-vous sûr de vouloir supprimer cet élément?
-							</AlertDialogTitle>
-							<AlertDialogDescription>
-								Cette action est irréversible.
-							</AlertDialogDescription>
-						</AlertDialogHeader>
-						<AlertDialogFooter>
-							<AlertDialogCancel
-								className={buttonVariants({ variant: "dark" })}
-							>
-								Annuler
-							</AlertDialogCancel>
-							<AlertDialogAction
-								className={buttonVariants({
-									variant: "destructive",
-								})}
-								onClick={() => deleteElement(id, elementType)}
-							>
-								Confirmer
-							</AlertDialogAction>
-						</AlertDialogFooter>
-					</div>
-				</AlertDialogContent>
-			</AlertDialog>
-		</>
+		<DeleteButton
+			onClick={() => deleteElement(id, elementType)}
+			name="Supprimer"
+			variant="destructive"
+		/>
 	);
 };
 

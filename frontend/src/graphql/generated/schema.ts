@@ -85,7 +85,7 @@ export type Mutation = {
 	deleteCommentAndLinkedReport: Scalars["Boolean"];
 	deleteLanguage: Scalars["Boolean"];
 	deleteProject: Scalars["Boolean"];
-	deleteReporting: Scalars["Boolean"];
+	deleteReportings: Scalars["Boolean"];
 	deleteUser: Scalars["Boolean"];
 	incrementExecutionCounter: Scalars["Float"];
 	like: Like;
@@ -146,8 +146,8 @@ export type MutationDeleteProjectArgs = {
 	id: Scalars["String"];
 };
 
-export type MutationDeleteReportingArgs = {
-	id: Scalars["String"];
+export type MutationDeleteReportingsArgs = {
+	reports: Array<Scalars["String"]>;
 };
 
 export type MutationDeleteUserArgs = {
@@ -247,7 +247,7 @@ export type ProjectPaginationResponse = {
 
 export type Query = {
 	__typename?: "Query";
-	getAllReport: Array<Reporting>;
+	getAllReports: Array<Comment>;
 	getCode: Array<Code>;
 	getCodes: Array<Code>;
 	getComments: Array<Comment>;
@@ -622,6 +622,53 @@ export type DeleteProjectMutationVariables = Exact<{
 export type DeleteProjectMutation = {
 	__typename?: "Mutation";
 	deleteProject: boolean;
+};
+
+export type CreateReportingMutationVariables = Exact<{
+	data: NewReportInput;
+}>;
+
+export type CreateReportingMutation = {
+	__typename?: "Mutation";
+	createReporting: { __typename?: "Reporting"; id: string };
+};
+
+export type GetAllReportsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetAllReportsQuery = {
+	__typename?: "Query";
+	getAllReports: Array<{
+		__typename?: "Comment";
+		id: string;
+		content: string;
+		reportings: Array<{
+			__typename?: "Reporting";
+			id: string;
+			reason: string;
+			reportedAt: any;
+			flagger: { __typename?: "User"; id: string; pseudo: string };
+		}>;
+		project: { __typename?: "Project"; id: string; title: string };
+		user: { __typename?: "User"; pseudo: string; id: string };
+	}>;
+};
+
+export type DeleteCommentAndLinkedReportMutationVariables = Exact<{
+	deleteCommentAndLinkedReportId: Scalars["String"];
+}>;
+
+export type DeleteCommentAndLinkedReportMutation = {
+	__typename?: "Mutation";
+	deleteCommentAndLinkedReport: boolean;
+};
+
+export type DeleteReportingsMutationVariables = Exact<{
+	reports: Array<Scalars["String"]> | Scalars["String"];
+}>;
+
+export type DeleteReportingsMutation = {
+	__typename?: "Mutation";
+	deleteReportings: boolean;
 };
 
 export type CreatePaymentIntentMutationVariables = Exact<{
@@ -1941,6 +1988,230 @@ export type DeleteProjectMutationResult =
 export type DeleteProjectMutationOptions = Apollo.BaseMutationOptions<
 	DeleteProjectMutation,
 	DeleteProjectMutationVariables
+>;
+export const CreateReportingDocument = gql`
+	mutation CreateReporting($data: NewReportInput!) {
+		createReporting(data: $data) {
+			id
+		}
+	}
+`;
+export type CreateReportingMutationFn = Apollo.MutationFunction<
+	CreateReportingMutation,
+	CreateReportingMutationVariables
+>;
+
+/**
+ * __useCreateReportingMutation__
+ *
+ * To run a mutation, you first call `useCreateReportingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateReportingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createReportingMutation, { data, loading, error }] = useCreateReportingMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateReportingMutation(
+	baseOptions?: Apollo.MutationHookOptions<
+		CreateReportingMutation,
+		CreateReportingMutationVariables
+	>
+) {
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useMutation<
+		CreateReportingMutation,
+		CreateReportingMutationVariables
+	>(CreateReportingDocument, options);
+}
+export type CreateReportingMutationHookResult = ReturnType<
+	typeof useCreateReportingMutation
+>;
+export type CreateReportingMutationResult =
+	Apollo.MutationResult<CreateReportingMutation>;
+export type CreateReportingMutationOptions = Apollo.BaseMutationOptions<
+	CreateReportingMutation,
+	CreateReportingMutationVariables
+>;
+export const GetAllReportsDocument = gql`
+	query GetAllReports {
+		getAllReports {
+			id
+			content
+			reportings {
+				id
+				reason
+				reportedAt
+				flagger {
+					id
+					pseudo
+				}
+			}
+			project {
+				id
+				title
+			}
+			user {
+				pseudo
+				id
+			}
+		}
+	}
+`;
+
+/**
+ * __useGetAllReportsQuery__
+ *
+ * To run a query within a React component, call `useGetAllReportsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllReportsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllReportsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAllReportsQuery(
+	baseOptions?: Apollo.QueryHookOptions<
+		GetAllReportsQuery,
+		GetAllReportsQueryVariables
+	>
+) {
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useQuery<GetAllReportsQuery, GetAllReportsQueryVariables>(
+		GetAllReportsDocument,
+		options
+	);
+}
+export function useGetAllReportsLazyQuery(
+	baseOptions?: Apollo.LazyQueryHookOptions<
+		GetAllReportsQuery,
+		GetAllReportsQueryVariables
+	>
+) {
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useLazyQuery<GetAllReportsQuery, GetAllReportsQueryVariables>(
+		GetAllReportsDocument,
+		options
+	);
+}
+export type GetAllReportsQueryHookResult = ReturnType<
+	typeof useGetAllReportsQuery
+>;
+export type GetAllReportsLazyQueryHookResult = ReturnType<
+	typeof useGetAllReportsLazyQuery
+>;
+export type GetAllReportsQueryResult = Apollo.QueryResult<
+	GetAllReportsQuery,
+	GetAllReportsQueryVariables
+>;
+export const DeleteCommentAndLinkedReportDocument = gql`
+	mutation DeleteCommentAndLinkedReport(
+		$deleteCommentAndLinkedReportId: String!
+	) {
+		deleteCommentAndLinkedReport(id: $deleteCommentAndLinkedReportId)
+	}
+`;
+export type DeleteCommentAndLinkedReportMutationFn = Apollo.MutationFunction<
+	DeleteCommentAndLinkedReportMutation,
+	DeleteCommentAndLinkedReportMutationVariables
+>;
+
+/**
+ * __useDeleteCommentAndLinkedReportMutation__
+ *
+ * To run a mutation, you first call `useDeleteCommentAndLinkedReportMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCommentAndLinkedReportMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCommentAndLinkedReportMutation, { data, loading, error }] = useDeleteCommentAndLinkedReportMutation({
+ *   variables: {
+ *      deleteCommentAndLinkedReportId: // value for 'deleteCommentAndLinkedReportId'
+ *   },
+ * });
+ */
+export function useDeleteCommentAndLinkedReportMutation(
+	baseOptions?: Apollo.MutationHookOptions<
+		DeleteCommentAndLinkedReportMutation,
+		DeleteCommentAndLinkedReportMutationVariables
+	>
+) {
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useMutation<
+		DeleteCommentAndLinkedReportMutation,
+		DeleteCommentAndLinkedReportMutationVariables
+	>(DeleteCommentAndLinkedReportDocument, options);
+}
+export type DeleteCommentAndLinkedReportMutationHookResult = ReturnType<
+	typeof useDeleteCommentAndLinkedReportMutation
+>;
+export type DeleteCommentAndLinkedReportMutationResult =
+	Apollo.MutationResult<DeleteCommentAndLinkedReportMutation>;
+export type DeleteCommentAndLinkedReportMutationOptions =
+	Apollo.BaseMutationOptions<
+		DeleteCommentAndLinkedReportMutation,
+		DeleteCommentAndLinkedReportMutationVariables
+	>;
+export const DeleteReportingsDocument = gql`
+	mutation DeleteReportings($reports: [String!]!) {
+		deleteReportings(reports: $reports)
+	}
+`;
+export type DeleteReportingsMutationFn = Apollo.MutationFunction<
+	DeleteReportingsMutation,
+	DeleteReportingsMutationVariables
+>;
+
+/**
+ * __useDeleteReportingsMutation__
+ *
+ * To run a mutation, you first call `useDeleteReportingsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteReportingsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteReportingsMutation, { data, loading, error }] = useDeleteReportingsMutation({
+ *   variables: {
+ *      reports: // value for 'reports'
+ *   },
+ * });
+ */
+export function useDeleteReportingsMutation(
+	baseOptions?: Apollo.MutationHookOptions<
+		DeleteReportingsMutation,
+		DeleteReportingsMutationVariables
+	>
+) {
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useMutation<
+		DeleteReportingsMutation,
+		DeleteReportingsMutationVariables
+	>(DeleteReportingsDocument, options);
+}
+export type DeleteReportingsMutationHookResult = ReturnType<
+	typeof useDeleteReportingsMutation
+>;
+export type DeleteReportingsMutationResult =
+	Apollo.MutationResult<DeleteReportingsMutation>;
+export type DeleteReportingsMutationOptions = Apollo.BaseMutationOptions<
+	DeleteReportingsMutation,
+	DeleteReportingsMutationVariables
 >;
 export const CreatePaymentIntentDocument = gql`
 	mutation CreatePaymentIntent($amount: Float!) {
