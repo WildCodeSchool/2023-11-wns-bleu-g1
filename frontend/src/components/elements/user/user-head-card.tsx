@@ -7,7 +7,7 @@ import {
 	useGetUserCommentsCountQuery,
 } from "@/graphql/generated/schema";
 import router from "next/router";
-import React, { useEffect }  from "react";
+import React, { useEffect } from "react";
 
 interface Props {
 	profile: GetUserProfileQuery["getUserProfile"] | null;
