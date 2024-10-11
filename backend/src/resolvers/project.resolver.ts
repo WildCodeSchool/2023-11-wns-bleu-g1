@@ -92,9 +92,9 @@ export default class ProjectResolver {
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
-	@Query(() => [Project])
-	async getUserProjects(@Ctx() { currentUser }: Context) {
-		return await new ProjectService().getUserProjects({
+	@Query(() => Number)
+	async getUserProjectsCount(@Ctx() { currentUser }: Context) {
+		return await new ProjectService().getUserProjectsCount({
 			where: {
 				user: currentUser,
 			},
