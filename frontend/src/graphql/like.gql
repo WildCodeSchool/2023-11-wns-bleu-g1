@@ -1,7 +1,5 @@
-query GetUserLikes {
-	getUserLikes {
-		id
-	}
+query GetUserLikesCount {
+	getUserLikesCount
 }
 
 mutation Like($projectId: String!) {
