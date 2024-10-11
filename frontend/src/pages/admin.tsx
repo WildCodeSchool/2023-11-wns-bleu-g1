@@ -1,11 +1,10 @@
 import AuthLayout from "@/components/elements/auth/auth-layout";
 import { Separator } from "@/components/ui/separator";
-import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AdminLanguages from "@/components/elements/admin/AdminLanguages";
 import AdminProjects from "@/components/elements/admin/AdminProjects";
 import AdminUsers from "@/components/elements/admin/AdminUsers";
-import AdminComments from "@/components/elements/admin/AdminComments";
+import AdminCommentsReportings from "@/components/elements/admin/AdminCommentsReportings";
 import AdminOverview from "@/components/elements/admin/AdminOverview";
 
 const adminDashboard = () => {
@@ -46,7 +45,7 @@ const adminDashboard = () => {
 							<AdminUsers />
 						</TabsContent>
 						<TabsContent value="comments">
-							<AdminComments />
+							<AdminCommentsReportings />
 						</TabsContent>
 					</Tabs>
 				</div>

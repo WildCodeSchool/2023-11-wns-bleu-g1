@@ -33,24 +33,33 @@ export default class ReportingService {
 	};
 
 	getAllComments = async () => {
-		const reports = await this.reportingRepository.find({
+		const comments = await this.commentRepository.find({
 			relations: {
-				flagger: true,
-				comment: true,
+				reportings: {
+					flagger: true,
+				},
+				project: true,
+				user: true,
 			},
 		});
+
+		const reports = comments.filter((comment) => comment.reportings.length > 0);
 
 		return reports;
 	};
 
-	deleteReport = async (id: string) => {
-		const reportToDelete = await this.reportingRepository.findOneBy({ id });
+	deleteReport = async (reports: string[]) => {
+		for (const report of reports) {
+			const reportToDelete = await this.reportingRepository.findOneBy({
+				id: report,
+			});
 
-		if (!reportToDelete) {
-			throw new GraphQLError("Report not found");
+			if (!reportToDelete) {
+				throw new GraphQLError("Report not found");
+			}
+
+			await this.reportingRepository.remove(reportToDelete);
 		}
-
-		await this.reportingRepository.remove(reportToDelete);
 
 		return true;
 	};

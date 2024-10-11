@@ -5,11 +5,12 @@ import { Context } from "../interfaces/auth";
 import Reporting, { NewReportInput } from "../entities/Reporting";
 import ReportingService from "../services/reporting.service";
 import { UserRole } from "../entities/user";
+import Comment from "../entities/comment";
 
 export default class ReportingResolver {
 	@Authorized([UserRole.ADMIN])
-	@Query(() => [Reporting])
-	async getAllReport() {
+	@Query(() => [Comment])
+	async getAllReports() {
 		return await new ReportingService().getAllComments();
 	}
 
@@ -28,8 +29,8 @@ export default class ReportingResolver {
 
 	@Authorized([UserRole.ADMIN])
 	@Mutation(() => Boolean)
-	async deleteReporting(@Arg("id") id: string) {
-		return await new ReportingService().deleteReport(id);
+	async deleteReportings(@Arg("reports", () => [String]) reports: string[]) {
+		return await new ReportingService().deleteReport(reports);
 	}
 
 	@Authorized([UserRole.ADMIN])

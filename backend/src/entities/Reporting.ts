@@ -21,7 +21,7 @@ export default class Reporting {
 	@Field()
 	reportedAt: Date;
 
-	@Column({ length: 100 })
+	@Column({ length: 50 })
 	@Field()
 	reason: string;
 
@@ -38,7 +38,7 @@ export default class Reporting {
 
 @InputType()
 export class NewReportInput {
-	@Length(2, 100)
+	@Length(10, 50)
 	@Field()
 	reason: string;
 
