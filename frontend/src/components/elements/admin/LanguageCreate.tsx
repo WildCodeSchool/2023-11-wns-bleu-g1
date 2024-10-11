@@ -26,16 +26,22 @@ const LanguageCreate = () => {
 	const { toast } = useToast();
 
 	const formSchema = z.object({
-		name: z.string().min(2, {
-			message: "Le nom du langage doit contenir au moins 2 caractères.",
-		}).max (50, {
-			message: "Le nom du langage ne doit pas dépasser 50 caractères.",
-		}),
-		version: z.string().min(1, {
-			message: "La version du langage doit contenir au moins 1 caractère.",
-		}).max(10, {
-			message: "La version du langage ne doit pas dépasser 10 caractères.",
-		}),
+		name: z
+			.string()
+			.min(2, {
+				message: "Le nom du langage doit contenir au moins 2 caractères.",
+			})
+			.max(50, {
+				message: "Le nom du langage ne doit pas dépasser 50 caractères.",
+			}),
+		version: z
+			.string()
+			.min(1, {
+				message: "La version du langage doit contenir au moins 1 caractère.",
+			})
+			.max(10, {
+				message: "La version du langage ne doit pas dépasser 10 caractères.",
+			}),
 	});
 
 	const form = useForm<z.infer<typeof formSchema>>({
