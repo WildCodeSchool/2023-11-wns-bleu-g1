@@ -53,6 +53,8 @@ const formSchema = z.object({
 		})
 		.email({
 			message: "Adresse email invalide.",
+		}).max(100, {
+			message: "L'adresse email doit contenir au plus 100 caractères.",
 		}),
 	password: z.string().min(3, {
 		message: "Le mot de passe doit contenir au moins 3 caractères.",
