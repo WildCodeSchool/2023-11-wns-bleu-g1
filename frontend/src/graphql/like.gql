@@ -1,3 +1,7 @@
+query GetUserLikesCount {
+	getUserLikesCount
+}
+
 mutation Like($projectId: String!) {
 	like(projectId: $projectId) {
 		id

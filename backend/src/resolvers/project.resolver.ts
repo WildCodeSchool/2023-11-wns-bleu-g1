@@ -68,6 +68,17 @@ export default class ProjectResolver {
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Query(() => Number)
+	async getUserProjectsCount(@Ctx() { currentUser }: Context) {
+		return await new ProjectService().getUserProjectsCount({
+			where: {
+				user: currentUser,
+			},
+			relations: { user: true },
+		});
+	}
+
+	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Mutation(() => Project)
 	async createProject(
 		@Arg("data", { validate: true }) data: NewProjectInput,
