@@ -98,14 +98,8 @@ query GetProjects {
 	}
 }
 
-query GetUserProjects {
-	getUserProjects {
-		id
-		title
-		isPublic
-		createdAt
-		updatedAt
-	}
+query GetUserProjectsCount {
+	getUserProjectsCount
 }
 
 mutation DeleteProject($deleteProjectId: String!) {

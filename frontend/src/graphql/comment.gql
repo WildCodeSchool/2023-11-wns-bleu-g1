@@ -18,13 +18,8 @@ query GetComments {
 	}
 }
 
-query GetUserComments {
-	getUserComments {
-		id
-		content
-		createdAt
-		updatedAt
-	}
+query GetUserCommentsCount {
+	getUserCommentsCount
 }
 
 mutation DeleteComment($commentId: String!) {
