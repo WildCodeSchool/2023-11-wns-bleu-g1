@@ -84,7 +84,7 @@ export default class UserResolver {
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
-	@Mutation(() => Number)
+	@Mutation(() => Boolean)
 	async updateUserIsPremium(
 		@Arg("isPremium") isPremium: boolean,
 		@Ctx() { currentUser }: Context

@@ -104,7 +104,7 @@ const AuthHeader = () => {
 							>
 								<Link href={"/premium"}>
 									<Crown className={iconsClassName} />
-									Mon abonnement
+									{profile?.isPremium ? "Mon abonnement" : "Passer premium"}
 								</Link>
 							</DropdownMenuItem>
 							{profile?.role === "admin" ? (
