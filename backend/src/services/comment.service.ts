@@ -29,8 +29,8 @@ export default class CommentService {
 		return await this.commentRepository.save(comment);
 	};
 
-	getUserComments = async (request: object = {}) => {
-		return await this.commentRepository.find(request);
+	getUserCommentsCount = async (request: object = {}) => {
+		return await this.commentRepository.count(request);
 	};
 
 	getAll = async () => {
