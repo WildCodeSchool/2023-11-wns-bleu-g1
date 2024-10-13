@@ -77,9 +77,12 @@ const SignUpPage = () => {
 			router.push("/auth/connexion");
 		},
 		onError: (err: ApolloError) => {
-			console.error(err);
+			console.error("err: ", err);
 			if (err.message.includes("already exist")) {
 				setErrorMessage("Cette adresse email est déjà utilisée.");
+				return;
+			} else if (err.message.includes("already taken")) {
+				setErrorMessage("Ce pseudo est déjà utilisé.");
 				return;
 			}
 			setErrorMessage(defaultErrorMessage);
