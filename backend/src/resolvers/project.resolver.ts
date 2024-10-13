@@ -7,10 +7,21 @@ import ProjectService from "../services/projet.service";
 import { UserRole } from "../entities/user";
 import ProjectPaginationResponse from "../types/project-pagination-response";
 import { Equal, ILike, Not } from "typeorm";
+import {
+	addDescription,
+	TypeRequestsEnum,
+	TypeUserEnum,
+} from "../script/documentationUses";
 
 export default class ProjectResolver {
 	@Authorized([UserRole.ADMIN])
-	@Query(() => [Project])
+	@Query(() => [Project], {
+		description: addDescription(
+			TypeRequestsEnum.query,
+			"returns a list with all projects",
+			[TypeUserEnum.admin]
+		),
+	})
 	async getProjects() {
 		return await new ProjectService().getAll({
 			relations: { codes: { language: true }, user: true },
@@ -18,7 +29,13 @@ export default class ProjectResolver {
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
-	@Query(() => ProjectPaginationResponse)
+	@Query(() => ProjectPaginationResponse, {
+		description: addDescription(
+			TypeRequestsEnum.query,
+			"returns a list with all projects",
+			[TypeUserEnum.admin, TypeUserEnum.visitor]
+		),
+	})
 	async getPaginateProjects(
 		@Ctx() { currentUser }: Context,
 		@Arg("limit", { defaultValue: 12 }) limit: number,
@@ -54,7 +71,14 @@ export default class ProjectResolver {
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
-	@Query(() => Project)
+	@Query(() => Project, {
+		description: addDescription(
+			TypeRequestsEnum.query,
+			"returns a project by id",
+			[TypeUserEnum.admin, TypeUserEnum.visitor],
+			["id: (string)"]
+		),
+	})
 	async getProject(@Arg("id") id: string) {
 		return await new ProjectService().get({
 			where: { id },
@@ -68,7 +92,14 @@ export default class ProjectResolver {
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
-	@Mutation(() => Project)
+	@Mutation(() => Project, {
+		description: addDescription(
+			TypeRequestsEnum.mutation,
+			"creates a new project",
+			[TypeUserEnum.visitor],
+			["title: (string)", "isPublic: (boolean)"]
+		),
+	})
 	async createProject(
 		@Arg("data", { validate: true }) data: NewProjectInput,
 		@Ctx() { currentUser }: Context
@@ -79,13 +110,27 @@ export default class ProjectResolver {
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
-	@Mutation(() => Project)
+	@Mutation(() => Project, {
+		description: addDescription(
+			TypeRequestsEnum.mutation,
+			"updates a project",
+			[TypeUserEnum.visitor, TypeUserEnum.admin],
+			["id: (string)", "title: (string)", "isPublic: (boolean)"]
+		),
+	})
 	async toggleProjectPublicState(@Arg("id") id: string) {
 		return await new ProjectService().togglePublicState(id);
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
-	@Mutation(() => Boolean)
+	@Mutation(() => Boolean, {
+		description: addDescription(
+			TypeRequestsEnum.mutation,
+			"deletes a project",
+			[TypeUserEnum.visitor, TypeUserEnum.admin],
+			["id: (string)"]
+		),
+	})
 	async deleteProject(@Arg("id") id: string) {
 		return await new ProjectService().delete(id);
 	}

@@ -28,30 +28,30 @@ export default class User {
 	}
 
 	@PrimaryGeneratedColumn("uuid")
-	@Field()
+	@Field({ description: "The id of the user" })
 	id: string;
 
 	@Column({ enum: UserRole, default: UserRole.VISITOR })
-	@Field()
+	@Field({ description: "The role of the user" })
 	role: UserRole;
 
 	@Column()
-	@Field()
+	@Field({ description: "The email of the user" })
 	email: string;
 
 	@Column()
-	@Field()
+	@Field({ description: "The pseudo of the user" })
 	pseudo: string;
 
 	@Column()
 	hashedPassword: string;
 
 	@Column({ default: 1 })
-	@Field()
+	@Field({ description: "The number of executions of the user" })
 	executionCounter: number;
 
 	@Column({ default: false })
-	@Field()
+	@Field({ description: "Indicator of is this user premium" })
 	isPremium: boolean;
 
 	@OneToMany(() => Project, (project) => project.user, { cascade: true })
@@ -61,71 +61,74 @@ export default class User {
 	likes: Like[];
 
 	@OneToMany(() => Reporting, (reporting) => reporting.flagger)
-	@Field(() => [Reporting])
+	@Field(() => [Reporting], { description: "The reports of the user" })
 	reportings: Reporting[];
 }
 
-@InputType()
+@InputType({ description: "Fields for a new user" })
 export class NewUserInput {
 	@IsEmail()
-	@Field()
+	@Field({ description: "The email of the new user" })
 	email: string;
 
 	@Length(2, 20)
-	@Field()
+	@Field({ description: "The pseudo of the new user" })
 	pseudo: string;
 
 	@Matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/, {
 		message: "Password too weak",
 	})
-	@Field()
+	@Field({ description: "The password of the new user" })
 	password: string;
 
-	@Field({ nullable: true })
+	@Field({ nullable: true, description: "The role of the new user" })
 	role: UserRole;
 
-	@Field({ nullable: true })
+	@Field({
+		nullable: true,
+		description: "The number of executions of the new user",
+	})
 	isPremium: boolean;
 }
 
-@InputType()
+@InputType({ description: "Fields for a sign in action" })
 export class SigninInput {
 	@IsEmail()
-	@Field()
+	@Field({ description: "The email of the user" })
 	email: string;
 
-	@Field()
+	@Field({ description: "The password of the user" })
 	password: string;
 }
 
-@InputType()
+@InputType({ description: "Fields for the executionCounter" })
 export class ExecutionCounterInput {
 	@Min(1)
 	@Max(50)
-	@Field()
+	@Field({ description: "The number of executions of the user" })
 	executionCounter: number;
 }
 
-@InputType()
+@InputType({ description: "Fields for updating a user username" })
 export class UpdateUsernameInput {
-	@Field()
+	@Field({ description: "The id of the user to update" })
 	id: string;
 
-	@Field()
+	@Field({ description: "The new username of the user" })
 	newUsername: string;
 }
 
-@InputType()
+@InputType({ description: "Fields for updating a user password" })
 export class UpdatePasswordInput {
-	@Field()
+	@Field({ description: "The id of the user to update" })
 	id: string;
 
-	@Field()
+	@Field({ description: "The old password of the user" })
 	oldPassword: string;
 
 	@Matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/, {
 		message: "Password too weak",
 	})
-	@Field()
+	@Field({ description: "The new password of the user" })
 	newPassword: string;
 }
