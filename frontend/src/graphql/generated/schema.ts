@@ -55,6 +55,7 @@ export type ExecutionCounterInput = {
 export type Language = {
 	__typename?: "Language";
 	codes: Array<Code>;
+	color: Scalars["String"];
 	id: Scalars["String"];
 	name: Scalars["String"];
 	version: Scalars["String"];
@@ -382,6 +383,7 @@ export type GetLanguagesQuery = {
 		id: string;
 		name: string;
 		version: string;
+		color: string;
 		codes: Array<{ __typename?: "Code"; id: string }>;
 	}>;
 };
@@ -1012,6 +1014,7 @@ export const GetLanguagesDocument = gql`
 			id
 			name
 			version
+			color
 			codes {
 				id
 			}

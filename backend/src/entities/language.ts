@@ -19,6 +19,10 @@ export default class Language {
 	@Field({ description: "The version of the language" })
 	version: string;
 
+	@Column()
+	@Field()
+	color: string;
+
 	@OneToMany(() => Code, (code) => code.language, { cascade: true })
 	@Field(() => [Code], { description: "The codes written in this language" })
 	codes: Code[];
