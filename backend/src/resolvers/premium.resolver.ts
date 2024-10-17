@@ -1,12 +1,17 @@
-import { ObjectType, Field, Mutation, Arg } from "type-graphql";
+import { Arg, Field, Mutation, ObjectType } from "type-graphql";
 import Stripe from "stripe";
+import {
+	addDescription,
+	TypeRequestsEnum,
+	TypeUserEnum,
+} from "../script/documentationUses";
 
 @ObjectType()
 class PaymentIntentResponse {
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { nullable: true, description: "The client secret" })
 	clientSecret?: string;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { nullable: true, description: "The error message" })
 	error?: string;
 }
 
@@ -17,7 +22,14 @@ export default class PremiumResolver {
 		this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 	}
 
-	@Mutation(() => PaymentIntentResponse)
+	@Mutation(() => PaymentIntentResponse, {
+		description: addDescription(
+			TypeRequestsEnum.mutation,
+			"creates a new payment intent",
+			[TypeUserEnum.visitor, TypeUserEnum.admin],
+			["amount: (number)"]
+		),
+	})
 	async createPaymentIntent(
 		@Arg("amount") amount: number
 	): Promise<PaymentIntentResponse> {

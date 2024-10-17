@@ -17,30 +17,32 @@ import Reporting from "./Reporting";
 @ObjectType()
 export default class Comment {
 	@PrimaryGeneratedColumn("uuid")
-	@Field()
+	@Field({ description: "The id of the comment" })
 	id: string;
 
 	@Column()
-	@Field()
+	@Field({ description: "The content of the comment" })
 	content: string;
 
 	@ManyToOne(() => User, (user) => user.likes, { onDelete: "CASCADE" })
-	@Field(() => User)
+	@Field(() => User, { description: "The user who wrote the comment" })
 	user: User;
 
 	@ManyToOne(() => Project, (project) => project.likes, { onDelete: "CASCADE" })
-	@Field(() => Project)
+	@Field(() => Project, {
+		description: "The project that contains this comment",
+	})
 	project: Project;
 
 	@CreateDateColumn()
-	@Field()
+	@Field({ description: "The date of creation of the comment" })
 	createdAt: Date;
 
 	@UpdateDateColumn()
-	@Field()
+	@Field({ description: "The date of the last update of the comment" })
 	updatedAt: Date;
 
 	@OneToMany(() => Reporting, (reporting) => reporting.comment)
-	@Field(() => [Reporting])
+	@Field(() => [Reporting], { description: "The reports of the comment" })
 	reportings: Reporting[];
 }
