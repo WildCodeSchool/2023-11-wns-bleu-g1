@@ -137,7 +137,7 @@ export default class UserResolver {
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
-	@Mutation(() => Number, {
+	@Mutation(() => Boolean, {
 		description: addDescription(
 			TypeRequestsEnum.mutation,
 			"update an user to premium",
