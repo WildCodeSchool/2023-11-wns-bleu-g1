@@ -92,6 +92,24 @@ export default class ProjectResolver {
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
+	@Query(() => Number, {
+		description: addDescription(
+			TypeRequestsEnum.queryn,
+			"retrieve the number of user's projects",
+			[TypeUserEnum.admin, TypeUserEnum.visitor],
+			["currentUser: (Context)"]
+		),
+	})
+	async getUserProjectsCount(@Ctx() { currentUser }: Context) {
+		return await new ProjectService().getUserProjectsCount({
+			where: {
+				user: currentUser,
+			},
+			relations: { user: true },
+		});
+	}
+
+	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
 	@Mutation(() => Project, {
 		description: addDescription(
 			TypeRequestsEnum.mutation,
@@ -100,6 +118,7 @@ export default class ProjectResolver {
 			["title: (string)", "isPublic: (boolean)"]
 		),
 	})
+
 	async createProject(
 		@Arg("data", { validate: true }) data: NewProjectInput,
 		@Ctx() { currentUser }: Context

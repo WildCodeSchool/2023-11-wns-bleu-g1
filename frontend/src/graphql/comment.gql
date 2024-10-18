@@ -18,6 +18,10 @@ query GetComments {
 	}
 }
 
+query GetUserCommentsCount {
+	getUserCommentsCount
+}
+
 mutation DeleteComment($commentId: String!) {
 	deleteComment(commentId: $commentId)
 }

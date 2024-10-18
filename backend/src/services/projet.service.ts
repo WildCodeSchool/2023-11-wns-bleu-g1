@@ -14,6 +14,10 @@ export default class ProjectService {
 		return await this.projectRepository.find(request);
 	};
 
+	getUserProjectsCount = async (request: object = {}) => {
+		return await this.projectRepository.count(request);
+	};
+
 	getAllPaginate = async (
 		request: object,
 		limit: number,
