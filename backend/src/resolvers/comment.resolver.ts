@@ -4,10 +4,22 @@ import Comment from "../entities/comment";
 import { UserRole } from "../entities/user";
 import { Context } from "../interfaces/auth";
 import CommentService from "../services/comment.service";
+import {
+	addDescription,
+	TypeRequestsEnum,
+	TypeUserEnum,
+} from "../script/documentationUses";
 
 export default class CommentResolver {
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
-	@Mutation(() => Comment)
+	@Mutation(() => Comment, {
+		description: addDescription(
+			TypeRequestsEnum.mutation,
+			"creates a new comment",
+			[TypeUserEnum.visitor, TypeUserEnum.admin],
+			["projectId: (string)", "content: (string)"]
+		),
+	})
 	async comment(
 		@Ctx() { currentUser }: Context,
 		@Arg("projectId") projectId: string,
@@ -23,13 +35,26 @@ export default class CommentResolver {
 	}
 
 	@Authorized([UserRole.ADMIN])
-	@Query(() => [Comment])
+	@Query(() => [Comment], {
+		description: addDescription(
+			TypeRequestsEnum.query,
+			"returns a list with all comments",
+			[TypeUserEnum.admin]
+		),
+	})
 	async getComments() {
 		return await new CommentService().getAll();
 	}
 
 	@Authorized([UserRole.ADMIN, UserRole.VISITOR])
-	@Mutation(() => Boolean)
+	@Mutation(() => Boolean, {
+		description: addDescription(
+			TypeRequestsEnum.mutation,
+			"deletes a comment",
+			[TypeUserEnum.admin, TypeUserEnum.visitor],
+			["commentId: (string)"]
+		),
+	})
 	async deleteComment(
 		@Ctx() { currentUser }: Context,
 		@Arg("commentId") commentId: string
@@ -45,7 +70,14 @@ export default class CommentResolver {
 	}
 
 	@Authorized([UserRole.ADMIN, UserRole.VISITOR])
-	@Mutation(() => Boolean)
+	@Mutation(() => Boolean, {
+		description: addDescription(
+			TypeRequestsEnum.mutation,
+			"updates a comment",
+			[TypeUserEnum.admin, TypeUserEnum.visitor],
+			["commentId: (string)", "newContent: (string)"]
+		),
+	})
 	async updateComment(
 		@Ctx() { currentUser }: Context,
 		@Arg("commentId") commentId: string,

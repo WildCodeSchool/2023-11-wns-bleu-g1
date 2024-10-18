@@ -31,9 +31,14 @@ import {
 import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
-	title: z.string().min(2, {
-		message: "Le nom du projet doit contenir au moins 2 caractères.",
-	}),
+	title: z
+		.string()
+		.min(2, {
+			message: "Le nom du projet doit contenir au moins 2 caractères.",
+		})
+		.max(50, {
+			message: "Le nom de project ne doit pas dépasser 50 caractères.",
+		}),
 	language: z.string().min(2, {
 		message: "Le langage du projet doit être spécifié.",
 	}),
