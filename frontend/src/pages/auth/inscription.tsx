@@ -53,6 +53,9 @@ const formSchema = z.object({
 		})
 		.email({
 			message: "Adresse email invalide.",
+		})
+		.max(100, {
+			message: "L'adresse email doit contenir au plus 100 caractères.",
 		}),
 	password: z.string().min(3, {
 		message: "Le mot de passe doit contenir au moins 3 caractères.",
@@ -77,9 +80,12 @@ const SignUpPage = () => {
 			router.push("/auth/connexion");
 		},
 		onError: (err: ApolloError) => {
-			console.error(err);
+			console.error("err: ", err);
 			if (err.message.includes("already exist")) {
 				setErrorMessage("Cette adresse email est déjà utilisée.");
+				return;
+			} else if (err.message.includes("already taken")) {
+				setErrorMessage("Ce pseudo est déjà utilisé.");
 				return;
 			}
 			setErrorMessage(defaultErrorMessage);

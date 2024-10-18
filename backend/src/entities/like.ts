@@ -9,14 +9,14 @@ import Project from "./project";
 @Unique(["user", "project"])
 export default class Like {
 	@PrimaryGeneratedColumn("uuid")
-	@Field()
+	@Field({ description: "The id of the like" })
 	id: string;
 
 	@ManyToOne(() => User, (user) => user.likes, { onDelete: "CASCADE" })
-	@Field(() => User)
+	@Field(() => User, { description: "The user who liked the project" })
 	user: User;
 
 	@ManyToOne(() => Project, (project) => project.likes, { onDelete: "CASCADE" })
-	@Field(() => Project)
+	@Field(() => Project, { description: "The project that is liked" })
 	project: Project;
 }

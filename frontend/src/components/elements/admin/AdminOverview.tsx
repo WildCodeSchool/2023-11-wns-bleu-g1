@@ -110,21 +110,25 @@ const AdminOverview = () => {
 
 	const languagesChartData = [];
 	const languagesChartConfig: {
-		[key: string]: { label: string; color?: string };
+		[key: string]: { label: string; color: string };
 	} = {
 		languages: {
 			label: "codes",
+			color: "colors",
 		},
 	} satisfies ChartConfig;
 	for (const language of languages) {
 		languagesChartData.push({
 			name: language.name,
 			codes: language.codes.length,
+			color: language.color,
 		}),
 			(languagesChartConfig[language.name] = {
 				label: language.name,
+				color: language.color,
 			});
 	}
+	console.log("languagesChartConfig", languagesChartConfig);
 
 	const commentsChartData = [
 		{ day: "J-5", comments: getCommentsByDayOffset(5).length },
@@ -241,7 +245,12 @@ const AdminOverview = () => {
 									cursor={false}
 									content={<ChartTooltipContent hideLabel />}
 								/>
-								<Bar dataKey="codes" layout="vertical" radius={5} />
+								<Bar
+									dataKey="codes"
+									layout="vertical"
+									radius={5}
+									fill="color"
+								/>
 							</BarChart>
 						</ChartContainer>
 					</CardContent>

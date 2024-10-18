@@ -14,34 +14,34 @@ import User from "./user";
 @ObjectType()
 export default class Reporting {
 	@PrimaryGeneratedColumn("uuid")
-	@Field()
+	@Field({ description: "The id of the reporting" })
 	id: string;
 
 	@CreateDateColumn()
-	@Field()
+	@Field({ description: "The date of the reporting" })
 	reportedAt: Date;
 
 	@Column({ length: 50 })
-	@Field()
+	@Field({ description: "The reason of the reporting" })
 	reason: string;
 
 	@ManyToOne(() => Comment, (comment) => comment.reportings, {
 		onDelete: "CASCADE",
 	})
-	@Field(() => Comment)
+	@Field(() => Comment, { description: "The comment that is reported" })
 	comment: Comment;
 
 	@ManyToOne(() => User, (user) => user.reportings)
-	@Field(() => User)
+	@Field(() => User, { description: "The user who reported the comment" })
 	flagger: User;
 }
 
-@InputType()
+@InputType({ description: "Fields for a new reporting" })
 export class NewReportInput {
 	@Length(10, 50)
-	@Field()
+	@Field({ description: "The reason of the reporting" })
 	reason: string;
 
-	@Field()
+	@Field({ description: "The id of the comment that is reported" })
 	commentId: string;
 }

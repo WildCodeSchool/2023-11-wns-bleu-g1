@@ -3,6 +3,7 @@ query GetLanguages {
 		id
 		name
 		version
+		color
 		codes {
 			id
 		}

@@ -1,4 +1,4 @@
-import { DataSource } from "typeorm";
+import { DataSource, EntityMetadata } from "typeorm";
 import env from "./env";
 import User from "./entities/user";
 import Project from "./entities/project";
@@ -21,11 +21,25 @@ const db = new DataSource({
 });
 
 export async function clearDb() {
-	const entities = db.entityMetadatas;
-	const tableNames = entities
-		.map((entity) => `"${entity.tableName}"`)
-		.join(", ");
-	await db.query(`TRUNCATE ${tableNames} RESTART IDENTITY CASCADE;`);
+	const runner = db.createQueryRunner();
+
+	await runner.query("SET session_replication_role = 'replica'");
+
+	await Promise.all(
+		db.entityMetadatas.map((entity: EntityMetadata) => {
+			runner.query(`ALTER TABLE "${entity.tableName}" DISABLE TRIGGER ALL`);
+		})
+	);
+
+	await Promise.all(
+		db.entityMetadatas.map((entity: EntityMetadata) => {
+			runner.query(`DROP TABLE IF EXISTS "${entity.tableName}" CASCADE`);
+		})
+	);
+
+	await runner.query("SET session_replication_role = 'origin'");
+
+	await db.synchronize();
 }
 
 export default db;
