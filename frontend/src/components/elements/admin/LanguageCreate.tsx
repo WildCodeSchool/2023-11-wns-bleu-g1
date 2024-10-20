@@ -33,9 +33,11 @@ const LanguageCreate = () => {
 			})
 			.max(50, {
 				message: "Le nom du langage ne doit pas dépasser 50 caractères.",
-			}).max(15, {
-			message: "Le nom du langage ne doit pas contenir plus de 15 caractères.",
-		}),
+			})
+			.max(15, {
+				message:
+					"Le nom du langage ne doit pas contenir plus de 15 caractères.",
+			}),
 		version: z
 			.string()
 			.min(1, {
@@ -44,11 +46,15 @@ const LanguageCreate = () => {
 			.max(10, {
 				message: "La version du langage ne doit pas dépasser 10 caractères.",
 			}),
-		color: z.string().min(7, {
-			message: "La couleur du langage doit contenir au moins 7 caractères.",
-		}).max(7, {
-			message: "La couleur du langage ne doit pas contenir plus de 7 caractères.",
-		}),
+		color: z
+			.string()
+			.min(7, {
+				message: "La couleur du langage doit contenir au moins 7 caractères.",
+			})
+			.max(7, {
+				message:
+					"La couleur du langage ne doit pas contenir plus de 7 caractères.",
+			}),
 	});
 
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -89,7 +95,7 @@ const LanguageCreate = () => {
 				data: {
 					name: name,
 					version: version,
-					color: color
+					color: color,
 				},
 			},
 		});
@@ -148,7 +154,8 @@ const LanguageCreate = () => {
 											</FormControl>
 										</FormItem>
 									)}
-								/><FormField
+								/>
+								<FormField
 									control={form.control}
 									name="color"
 									render={({ field }) => (

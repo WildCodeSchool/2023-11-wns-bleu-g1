@@ -124,10 +124,10 @@ const AdminOverview = () => {
 			codes: language.codes.length,
 			color: language.color,
 		});
-			(languagesChartConfig[language.name] = {
-				label: language.name,
-				color: language.color,
-			});
+		languagesChartConfig[language.name] = {
+			label: language.name,
+			color: language.color,
+		};
 	}
 
 	const commentsChartData = [
@@ -245,14 +245,10 @@ const AdminOverview = () => {
 									cursor={false}
 									content={<ChartTooltipContent hideLabel />}
 								/>
-								<Bar
-								 dataKey="codes"
-								 layout="vertical"
-								 radius={5}
-								>
-								  {languagesChartData.map((entry, index) => (
-									<Cell key={`cell-${index}`} fill={entry.color} />
-								  ))}
+								<Bar dataKey="codes" layout="vertical" radius={5}>
+									{languagesChartData.map((entry, index) => (
+										<Cell key={`cell-${index}`} fill={entry.color} />
+									))}
 								</Bar>
 							</BarChart>
 						</ChartContainer>
