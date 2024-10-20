@@ -18,6 +18,8 @@ mutation CreateLanguage($data: LanguageInput!) {
 	createLanguage(data: $data) {
 		id
 		name
+		version
+		color
 	}
 }
 

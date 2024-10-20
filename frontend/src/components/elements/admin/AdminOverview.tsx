@@ -17,6 +17,7 @@ import {
 	LabelList,
 	Line,
 	LineChart,
+	Cell,
 } from "recharts";
 
 import {
@@ -122,13 +123,12 @@ const AdminOverview = () => {
 			name: language.name,
 			codes: language.codes.length,
 			color: language.color,
-		}),
-			(languagesChartConfig[language.name] = {
-				label: language.name,
-				color: language.color,
-			});
+		});
+		languagesChartConfig[language.name] = {
+			label: language.name,
+			color: language.color,
+		};
 	}
-	console.log("languagesChartConfig", languagesChartConfig);
 
 	const commentsChartData = [
 		{ day: "J-5", comments: getCommentsByDayOffset(5).length },
@@ -245,12 +245,11 @@ const AdminOverview = () => {
 									cursor={false}
 									content={<ChartTooltipContent hideLabel />}
 								/>
-								<Bar
-									dataKey="codes"
-									layout="vertical"
-									radius={5}
-									fill="color"
-								/>
+								<Bar dataKey="codes" layout="vertical" radius={5}>
+									{languagesChartData.map((entry, index) => (
+										<Cell key={`cell-${index}`} fill={entry.color} />
+									))}
+								</Bar>
 							</BarChart>
 						</ChartContainer>
 					</CardContent>
