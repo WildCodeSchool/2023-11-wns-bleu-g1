@@ -16,7 +16,7 @@ const AdminLanguages = () => {
 			</h1>
 			<div className="pt-2 w-full flex justify-center mt-5">
 				<div
-					className="flex flex-col justify-center w-1/3 border border-white rounded-xl px-3 pb-4 pt-2"
+					className="flex flex-col justify-center w-1/2 border border-white rounded-xl px-3 pb-4 pt-2"
 					id="languagesListSection"
 				>
 					<h2>Liste des languages:</h2>

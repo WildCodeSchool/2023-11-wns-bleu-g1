@@ -15,10 +15,12 @@ mutation DeleteLanguage($deleteLanguageId: String!) {
 }
 
 mutation CreateLanguage($data: LanguageInput!) {
-	createLanguage(data: $data) {
-		id
-		name
-	}
+  createLanguage(data: $data) {
+    id
+    name
+    version
+    color
+  }
 }
 
 mutation UpdateLanguage($data: UpdateLanguageInput!) {

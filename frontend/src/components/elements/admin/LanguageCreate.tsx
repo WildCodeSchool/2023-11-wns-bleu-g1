@@ -33,7 +33,9 @@ const LanguageCreate = () => {
 			})
 			.max(50, {
 				message: "Le nom du langage ne doit pas dépasser 50 caractères.",
-			}),
+			}).max(15, {
+			message: "Le nom du langage ne doit pas contenir plus de 15 caractères.",
+		}),
 		version: z
 			.string()
 			.min(1, {
@@ -42,6 +44,11 @@ const LanguageCreate = () => {
 			.max(10, {
 				message: "La version du langage ne doit pas dépasser 10 caractères.",
 			}),
+		color: z.string().min(7, {
+			message: "La couleur du langage doit contenir au moins 7 caractères.",
+		}).max(7, {
+			message: "La couleur du langage ne doit pas contenir plus de 7 caractères.",
+		}),
 	});
 
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -49,6 +56,7 @@ const LanguageCreate = () => {
 		defaultValues: {
 			name: "",
 			version: "",
+			color: "",
 		},
 	});
 
@@ -75,18 +83,19 @@ const LanguageCreate = () => {
 		},
 	});
 
-	function addLanguage(name: string, version: string) {
+	function addLanguage(name: string, version: string, color: string) {
 		addLanguageMutation({
 			variables: {
 				data: {
 					name: name,
 					version: version,
+					color: color
 				},
 			},
 		});
 	}
 	async function onNewLanguageSubmit(values: z.infer<typeof formSchema>) {
-		addLanguage(values.name, values.version);
+		addLanguage(values.name, values.version, values.color);
 		form.reset();
 	}
 
@@ -95,7 +104,7 @@ const LanguageCreate = () => {
 			<AlertDialog>
 				<AlertDialogTrigger asChild>
 					<div className="flex justify-end pt-3">
-						<Button variant="default">Ajouter un language</Button>
+						<Button variant="default">Ajouter un langage</Button>
 					</div>
 				</AlertDialogTrigger>
 				<AlertDialogContent>
@@ -133,7 +142,21 @@ const LanguageCreate = () => {
 											<FormControl>
 												<Input
 													className="my-2 bg-secondary"
-													placeholder="version"
+													placeholder="Version au format x.x.x"
+													{...field}
+												/>
+											</FormControl>
+										</FormItem>
+									)}
+								/><FormField
+									control={form.control}
+									name="color"
+									render={({ field }) => (
+										<FormItem className="space-y-4">
+											<FormControl>
+												<Input
+													className="my-2 bg-secondary"
+													placeholder="Couleur au format #000000"
 													{...field}
 												/>
 											</FormControl>

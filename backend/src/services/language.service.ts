@@ -23,7 +23,7 @@ export default class LanguageService {
 	};
 
 	create = async (data: LanguageInput) => {
-		const { name, version } = data;
+		const { name, version, color } = data;
 		const nameAlreadyTaken = await this.languageRepository.findOneBy({
 			name: ILike(name),
 		});
@@ -35,6 +35,7 @@ export default class LanguageService {
 		const newLanguage = this.languageRepository.create({
 			name,
 			version,
+			color,
 		});
 
 		return this.languageRepository.save(newLanguage);
