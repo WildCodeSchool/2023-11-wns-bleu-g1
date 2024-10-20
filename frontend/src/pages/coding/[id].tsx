@@ -20,6 +20,7 @@ const CodingPage = () => {
 
 	const {
 		data: getUserProfileData,
+		refetch: getUserProfile,
 		loading: getUserProfileLoading,
 		error: getUserProfileError,
 	} = useGetUserProfileQuery();

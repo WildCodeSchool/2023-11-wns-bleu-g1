@@ -122,13 +122,13 @@ const PricingCard = memo(({ option, enabled, isPremium }: PricingCardProps) => (
 PricingCard.displayName = "PricingCard";
 
 export default function Pricing() {
-	const { data, refetch } = useGetUserProfileQuery();
+	const { data, refetch: getUserProfile } = useGetUserProfileQuery();
 	const isPremium = data?.getUserProfile?.isPremium || false;
 	const router = useRouter();
 
 	useEffect(() => {
 		const handleRouteChange = () => {
-			refetch();
+			getUserProfile();
 		};
 
 		// Add event listener to handle route change
@@ -138,7 +138,7 @@ export default function Pricing() {
 		return () => {
 			router.events.off("routeChangeComplete", handleRouteChange);
 		};
-	}, [refetch, router.events]);
+	}, [getUserProfile, router.events]);
 
 	const [updateUserIsPremiumMutation, updateUserIsPremiumMutationResult] =
 		useUpdateUserIsPremiumMutation({
@@ -148,7 +148,7 @@ export default function Pricing() {
 					title: "Vous n'êtes plus Premium.",
 					className: "text-danger",
 				});
-				refetch();
+				getUserProfile();
 			},
 			onError: (err: ApolloError) => {
 				console.error(err);
