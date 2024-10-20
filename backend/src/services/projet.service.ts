@@ -77,4 +77,44 @@ export default class ProjectService {
 
 		return true;
 	};
+
+	getUserLikesCount = async (request: object = {}) => {
+		const userProjects: Project[] = await this.getAll({
+			where: { user: request },
+			relations: { codes: { language: true }, user: true },
+		});
+
+		let totalLikes = 0;
+		for (const project of userProjects) {
+			totalLikes += project.likes.length;
+		}
+
+		return totalLikes;
+	};
+
+	getCountOfMyProjectsLikes = async (request: object = {}) => {
+		const myProjects = await this.projectRepository.find({
+			where: { user: request },
+			relations: { likes: { user: true }, user: true },
+		});
+		let myProjectsLikesCount = 0;
+		for (const project of myProjects) {
+			myProjectsLikesCount += project.likes.length;
+		}
+
+		return myProjectsLikesCount;
+	};
+
+	getCountOfMyProjectsComments = async (request: object = {}) => {
+		const myProjects = await this.projectRepository.find({
+			where: { user: request },
+			relations: { comments: { user: true }, user: true },
+		});
+		let myProjectsCommentsCount = 0;
+		for (const project of myProjects) {
+			myProjectsCommentsCount += project.comments.length;
+		}
+
+		return myProjectsCommentsCount;
+	};
 }

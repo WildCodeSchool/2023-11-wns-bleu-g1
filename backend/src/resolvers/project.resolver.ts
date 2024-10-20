@@ -92,7 +92,14 @@ export default class ProjectResolver {
 	}
 
 	@Authorized([UserRole.VISITOR, UserRole.ADMIN])
-	@Query(() => Number)
+	@Query(() => Number, {
+		description: addDescription(
+			TypeRequestsEnum.query,
+			"retrieve the number of user's projects",
+			[TypeUserEnum.admin, TypeUserEnum.visitor],
+			["currentUser: (Context)"]
+		),
+	})
 	async getUserProjectsCount(@Ctx() { currentUser }: Context) {
 		return await new ProjectService().getUserProjectsCount({
 			where: {
@@ -144,5 +151,29 @@ export default class ProjectResolver {
 	})
 	async deleteProject(@Arg("id") id: string) {
 		return await new ProjectService().delete(id);
+	}
+
+	@Authorized([UserRole.VISITOR], [UserRole.ADMIN])
+	@Query(() => Number, {
+		description: addDescription(
+			TypeRequestsEnum.query,
+			"returns count of likes of the current user's projects",
+			[TypeUserEnum.admin, TypeUserEnum.visitor]
+		),
+	})
+	async getCountOfMyProjectsLikes(@Ctx() { currentUser }: Context) {
+		return await new ProjectService().getCountOfMyProjectsLikes(currentUser);
+	}
+
+	@Authorized([UserRole.VISITOR], [UserRole.ADMIN])
+	@Query(() => Number, {
+		description: addDescription(
+			TypeRequestsEnum.query,
+			"returns count of comments of the current user's projects",
+			[TypeUserEnum.admin, TypeUserEnum.visitor]
+		),
+	})
+	async getCountOfMyProjectsComments(@Ctx() { currentUser }: Context) {
+		return await new ProjectService().getCountOfMyProjectsComments(currentUser);
 	}
 }
