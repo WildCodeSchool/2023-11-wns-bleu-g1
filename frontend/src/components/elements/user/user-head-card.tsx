@@ -3,8 +3,8 @@ import { Badge } from "@/components/ui/badge";
 import {
 	GetUserProfileQuery,
 	useGetUserProjectsCountQuery,
-	useGetUserLikesCountQuery,
-	useGetUserCommentsCountQuery,
+	useGetCountOfMyProjectsLikesQuery,
+	useGetCountOfMyProjectsCommentsQuery,
 } from "@/graphql/generated/schema";
 import router from "next/router";
 import React, { useEffect } from "react";
@@ -14,14 +14,15 @@ interface Props {
 }
 const UserHeadCard = ({ profile }: Props) => {
 	const getUserProjectsCountQuery = useGetUserProjectsCountQuery();
-	const getUserLikesCountQuery = useGetUserLikesCountQuery();
-	const getUserCommentsCountQuery = useGetUserCommentsCountQuery();
+	const getCountOfMyProjectsLikesQuery = useGetCountOfMyProjectsLikesQuery();
+	const getCountOfMyProjectsCommentsQuery =
+		useGetCountOfMyProjectsCommentsQuery();
 
 	useEffect(() => {
 		const handleRouteChange = () => {
 			getUserProjectsCountQuery.refetch();
-			getUserLikesCountQuery.refetch();
-			getUserCommentsCountQuery.refetch();
+			getCountOfMyProjectsLikesQuery.refetch();
+			getCountOfMyProjectsCommentsQuery.refetch();
 		};
 
 		// Add event listener to handle route change
@@ -36,8 +37,10 @@ const UserHeadCard = ({ profile }: Props) => {
 	if (!profile) return null;
 
 	const projects = getUserProjectsCountQuery?.data?.getUserProjectsCount || 0;
-	const likes = getUserLikesCountQuery?.data?.getUserLikesCount || 0;
-	const comments = getUserCommentsCountQuery?.data?.getUserCommentsCount || 0;
+	const likesCount =
+		getCountOfMyProjectsLikesQuery?.data?.getCountOfMyProjectsLikes || 0;
+	const commentsCount =
+		getCountOfMyProjectsCommentsQuery?.data?.getCountOfMyProjectsComments || 0;
 
 	return (
 		<div className="flex flex-col sm:flex-row sm:items-center sm:justify-around gap-8 pb-8">
@@ -56,7 +59,6 @@ const UserHeadCard = ({ profile }: Props) => {
 				</div>
 			</div>
 			<div className="grid lg:grid-cols-3 gap-3 lg:gap-1">
-				{/* @Todo : Vraies données à remplacer  */}
 				<div className="flex items-center gap-3">
 					<div className="w-12 h-12 rounded-full bg-blue-400 flex items-center justify-center text-lg text-background font-semibold">
 						{projects}
@@ -65,13 +67,13 @@ const UserHeadCard = ({ profile }: Props) => {
 				</div>
 				<div className="flex items-center gap-3">
 					<div className="w-12 h-12 rounded-full bg-blue-400 flex items-center justify-center text-lg text-background font-semibold">
-						{likes}
+						{likesCount}
 					</div>
 					<span className="text-lg">Likes</span>
 				</div>
 				<div className="flex items-center gap-3">
 					<div className="w-12 h-12 rounded-full bg-blue-400 flex items-center justify-center text-lg text-background font-semibold">
-						{comments}
+						{commentsCount}
 					</div>
 					<span className="text-lg">Commentaires</span>
 				</div>
