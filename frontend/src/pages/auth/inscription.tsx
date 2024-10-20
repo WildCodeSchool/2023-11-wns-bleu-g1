@@ -122,7 +122,7 @@ const SignUpPage = () => {
 		},
 		{
 			classname: { KO: messageKOClassName, OK: messageOKClassName },
-			regex: !password || !/[@./#&+-_\\,;:!^(){}]/.test(password),
+			regex: !password || !/[!@#$%^&*()_+\-=\[\]{};':\\|,.<>/?]/.test(password),
 			message: "Contenir au moins un caractère spécial",
 		},
 		{
