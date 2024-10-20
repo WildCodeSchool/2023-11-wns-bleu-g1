@@ -227,73 +227,97 @@ const main = async () => {
 	const comments = [
 		{
 			content: "Comment 1",
-			project: await projectRepository.findOneBy({ title: "Public Javascript Project 1" }),
+			project: await projectRepository.findOneBy({
+				title: "Public Javascript Project 1",
+			}),
 			user: await userRepository.findOneBy({ pseudo: "Test" }),
 			createdAt: dayBefore(5),
 		},
 		{
 			content: "Comment 2",
-			project: await projectRepository.findOneBy({ title: "Public Javascript Project 1" }),
+			project: await projectRepository.findOneBy({
+				title: "Public Javascript Project 1",
+			}),
 			user: await userRepository.findOneBy({ pseudo: "Test" }),
 			createdAt: dayBefore(4),
 		},
 		{
 			content: "Comment 3",
-			project: await projectRepository.findOneBy({ title: "Public Javascript Project 2" }),
+			project: await projectRepository.findOneBy({
+				title: "Public Javascript Project 2",
+			}),
 			user: await userRepository.findOneBy({ pseudo: "Test" }),
 			createdAt: dayBefore(3),
 		},
 		{
 			content: "Comment 4",
-			project: await projectRepository.findOneBy({ title: "Public Javascript Project 2" }),
+			project: await projectRepository.findOneBy({
+				title: "Public Javascript Project 2",
+			}),
 			user: await userRepository.findOneBy({ pseudo: "Test" }),
 			createdAt: dayBefore(2),
 		},
 		{
 			content: "Comment 5",
-			project: await projectRepository.findOneBy({ title: "Public Javascript Project 2" }),
+			project: await projectRepository.findOneBy({
+				title: "Public Javascript Project 2",
+			}),
 			user: await userRepository.findOneBy({ pseudo: "Test" }),
 			createdAt: dayBefore(1),
 		},
 		{
 			content: "Comment 6",
-			project: await projectRepository.findOneBy({ title: "Public Javascript Project 2" }),
+			project: await projectRepository.findOneBy({
+				title: "Public Javascript Project 2",
+			}),
 			user: await userRepository.findOneBy({ pseudo: "Flex Master" }),
 			createdAt: dayBefore(0),
 		},
 		{
 			content: "reply 1",
-			project: await projectRepository.findOneBy({ title: "Public Javascript Project 1" }),
+			project: await projectRepository.findOneBy({
+				title: "Public Javascript Project 1",
+			}),
 			user: await userRepository.findOneBy({ pseudo: "Flex Master" }),
 			createdAt: dayBefore(1),
 		},
 		{
 			content: "reply 2",
-			project: await projectRepository.findOneBy({ title: "Public Javascript Project 1" }),
+			project: await projectRepository.findOneBy({
+				title: "Public Javascript Project 1",
+			}),
 			user: await userRepository.findOneBy({ pseudo: "Flex Master" }),
 			createdAt: dayBefore(2),
 		},
 		{
 			content: "reply 3",
-			project: await projectRepository.findOneBy({ title: "Public Javascript Project 2" }),
+			project: await projectRepository.findOneBy({
+				title: "Public Javascript Project 2",
+			}),
 			user: await userRepository.findOneBy({ pseudo: "Flex Master" }),
 			createdAt: dayBefore(1),
 		},
 		{
 			content: "reply 4",
-			project: await projectRepository.findOneBy({ title: "Public Javascript Project 2" }),
+			project: await projectRepository.findOneBy({
+				title: "Public Javascript Project 2",
+			}),
 			user: await userRepository.findOneBy({ pseudo: "Flex Master" }),
 			createdAt: dayBefore(2),
 		},
 		{
 			content: "reply 5",
-			project: await projectRepository.findOneBy({ title: "Public Javascript Project 2" }),
+			project: await projectRepository.findOneBy({
+				title: "Public Javascript Project 2",
+			}),
 			user: await userRepository.findOneBy({ pseudo: "Flex Master" }),
 			createdAt: dayBefore(1),
 		},
 		{
 			content: "reply 6",
-			project: await projectRepository.findOneBy({ title: "Public Javascript Project 2" }),
+			project: await projectRepository.findOneBy({
+				title: "Public Javascript Project 2",
+			}),
 			user: await userRepository.findOneBy({ pseudo: "Flex Master" }),
 			createdAt: dayBefore(0),
 		},
@@ -309,19 +333,27 @@ const main = async () => {
 	const like = [
 		{
 			user: await userRepository.findOneBy({ pseudo: "Test" }),
-			project: await projectRepository.findOneBy({ title: "Public Javascript Project 1" }),
+			project: await projectRepository.findOneBy({
+				title: "Public Javascript Project 1",
+			}),
 		},
 		{
 			user: await userRepository.findOneBy({ pseudo: "Test" }),
-			project: await projectRepository.findOneBy({ title: "Public Javascript Project 2" }),
+			project: await projectRepository.findOneBy({
+				title: "Public Javascript Project 2",
+			}),
 		},
 		{
 			user: await userRepository.findOneBy({ pseudo: "Flex Master" }),
-			project: await projectRepository.findOneBy({ title: "Public Javascript Project 1" }),
+			project: await projectRepository.findOneBy({
+				title: "Public Javascript Project 1",
+			}),
 		},
 		{
 			user: await userRepository.findOneBy({ pseudo: "Flex Master" }),
-			project: await projectRepository.findOneBy({ title: "Public Javascript Project 2" }),
+			project: await projectRepository.findOneBy({
+				title: "Public Javascript Project 2",
+			}),
 		},
 	];
 
