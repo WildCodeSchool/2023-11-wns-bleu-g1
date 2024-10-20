@@ -78,20 +78,6 @@ export default class ProjectService {
 		return true;
 	};
 
-	getUserLikesCount = async (request: object = {}) => {
-		const userProjects: Project[] = await this.getAll({
-			where: { user: request },
-			relations: { codes: { language: true }, user: true },
-		});
-
-		let totalLikes = 0;
-		for (const project of userProjects) {
-			totalLikes += project.likes.length;
-		}
-
-		return totalLikes;
-	};
-
 	getCountOfMyProjectsLikes = async (request: object = {}) => {
 		const myProjects = await this.projectRepository.find({
 			where: { user: request },
