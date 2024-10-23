@@ -62,6 +62,7 @@ export type Language = {
 };
 
 export type LanguageInput = {
+	color: Scalars["String"];
 	name: Scalars["String"];
 	version: Scalars["String"];
 };
@@ -403,7 +404,13 @@ export type CreateLanguageMutationVariables = Exact<{
 
 export type CreateLanguageMutation = {
 	__typename?: "Mutation";
-	createLanguage: { __typename?: "Language"; id: string; name: string };
+	createLanguage: {
+		__typename?: "Language";
+		id: string;
+		name: string;
+		version: string;
+		color: string;
+	};
 };
 
 export type UpdateLanguageMutationVariables = Exact<{
@@ -1124,6 +1131,8 @@ export const CreateLanguageDocument = gql`
 		createLanguage(data: $data) {
 			id
 			name
+			version
+			color
 		}
 	}
 `;

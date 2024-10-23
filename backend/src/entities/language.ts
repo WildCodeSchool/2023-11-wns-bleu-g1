@@ -38,6 +38,9 @@ export class LanguageInput {
 
 	@Field({ description: "The version of the language" })
 	version: string;
+
+	@Field()
+	color: string;
 }
 
 @InputType({ description: "Fields for updating a language" })
