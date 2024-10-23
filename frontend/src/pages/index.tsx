@@ -9,6 +9,9 @@ const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
 	const [isTopOfPage, setIsTopOfPage] = useState<boolean>(true);
+
+	const environment = process.env.NEXT_PUBLIC_MODE;
+
 	useEffect(() => {
 		const handleScroll = () => {
 			if (window.scrollY === 0) {
@@ -29,17 +32,23 @@ export default function Home() {
 			<div className="container mx-auto" id="landingContent">
 				<div className="pt-32 sm:flex sm:items-center sm:gap-4 px-2">
 					<div className="space-y-6 flex-1">
-						<h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl text-center sm:text-start font-bold">
+						<h1 className="flex flex-col text-4xl sm:text-5xl md:text-6xl lg:text-8xl items-center sm:text-start font-bold">
 							Wild Code{" "}
-							<span className="text-primary">Online /\/\__STAGING__/\/\</span>
+							<span className="text-primary flex items-center">Online</span>
 						</h1>
+						{environment === "developement" ? (
+							<span className="w-full justify-center flex text-xl">
+								/\/\__STAGING__/\/\
+							</span>
+						) : (
+							""
+						)}
 						<p className="text-center text-black dark:text-muted-foreground sm:text-start lg:text-lg sm:max-w-sm">
 							Créer, exécuter et partager du code avec la communauté. Avec Wild
 							Code Online, vous avez la possibilité d’intéragir avec les codes
 							des autres utilisateurs. Sauvegarder et télécharger vos fichiers
 							de code pour pouvoir les utiliser sur d’autres projets
 						</p>
-						<p>v.2024-10-02</p>
 						<div className="space-x-4 lg:space-x-8 text-center sm:text-start">
 							<Link
 								href={"/coding/codingPage"}

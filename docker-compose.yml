@@ -38,6 +38,7 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
+      - NEXT_PUBLIC_MODE=developement
     ports:
       - 3000:3000
     volumes:
