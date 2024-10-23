@@ -8,7 +8,6 @@ const JWT_PRIVATE_KEY = new TextEncoder().encode(
 
 export async function middleware(request: NextRequest) {
 	const token = request.cookies.get("token")?.value;
-	console.log("token:", token);
 	if (request.nextUrl.pathname.startsWith("/auth")) {
 		if (token) {
 			try {
@@ -21,7 +20,6 @@ export async function middleware(request: NextRequest) {
 	}
 
 	if (request.nextUrl.pathname.startsWith("/admin")) {
-		console.log("in admin");
 		if (token) {
 			try {
 				const { payload } = await jwtVerify(token, JWT_PRIVATE_KEY);
