@@ -32,7 +32,8 @@ services:
   frontend:
     platform: linux/x86_64
     environment:
-      JWT_PRIVATE_KEY: ${JWT_PRIVATE_KEY:-default}
+      - JWT_PRIVATE_KEY=${JWT_PRIVATE_KEY:-default}
+      - NEXT_PUBLIC_MODE=production
     stop_grace_period: 0s
     env_file: frontend/.env
     image: fond2laclasse/wild-code-online-frontend:latest
