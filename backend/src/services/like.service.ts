@@ -3,9 +3,11 @@ import DataSource from "../db";
 import Like from "../entities/like";
 import User from "../entities/user";
 import { GraphQLError } from "graphql";
+import Project from "../entities/project";
 
 export default class LikeService {
 	likeRepository: Repository<Like>;
+	projectRepository: Repository<Project>;
 
 	constructor() {
 		this.likeRepository = DataSource.getRepository(Like);

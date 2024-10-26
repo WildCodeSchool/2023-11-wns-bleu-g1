@@ -24,82 +24,327 @@ export type Scalars = {
 
 export type Code = {
 	__typename?: "Code";
+	/** The content of the code */
 	content: Scalars["String"];
+	/** The id of the code */
 	id: Scalars["String"];
+	/** Indicator of is this code reported */
 	isReported: Scalars["Boolean"];
+	/** The language used in the code */
 	language: Language;
+	/** The project that contains this code */
 	project: Project;
 };
 
+/** Fields for a new code */
 export type CodeInput = {
+	/** The content of the code */
 	content: Scalars["String"];
+	/** The language used in the code */
 	language?: InputMaybe<Scalars["String"]>;
+	/** The id of the project that contains this code */
 	project: Scalars["String"];
 };
 
 export type Comment = {
 	__typename?: "Comment";
+	/** The content of the comment */
 	content: Scalars["String"];
+	/** The date of creation of the comment */
 	createdAt: Scalars["DateTimeISO"];
+	/** The id of the comment */
 	id: Scalars["String"];
+	/** The project that contains this comment */
 	project: Project;
+	/** The reports of the comment */
 	reportings: Array<Reporting>;
+	/** The date of the last update of the comment */
 	updatedAt: Scalars["DateTimeISO"];
+	/** The user who wrote the comment */
 	user: User;
 };
 
+/** Fields for the executionCounter */
 export type ExecutionCounterInput = {
+	/** The number of executions of the user */
 	executionCounter: Scalars["Float"];
 };
 
 export type Language = {
 	__typename?: "Language";
+	/** The codes written in this language */
 	codes: Array<Code>;
 	color: Scalars["String"];
+	/** The id of the language */
 	id: Scalars["String"];
+	/** The name of the language */
 	name: Scalars["String"];
+	/** The version of the language */
 	version: Scalars["String"];
 };
 
+/** Fields for a new language */
 export type LanguageInput = {
 	color: Scalars["String"];
+	/** The name of the language */
 	name: Scalars["String"];
+	/** The version of the language */
 	version: Scalars["String"];
 };
 
 export type Like = {
 	__typename?: "Like";
+	/** The id of the like */
 	id: Scalars["String"];
+	/** The project that is liked */
 	project: Project;
+	/** The user who liked the project */
 	user: User;
 };
 
 export type Mutation = {
 	__typename?: "Mutation";
+	/**
+	 *
+	 *     This mutation creates a new comment.
+	 *     This mutation can only be used by visitor and admin users.
+	 *     The following fields are mandatory:
+	 *     projectId: (string)
+	 * content: (string)
+	 *
+	 */
 	comment: Comment;
+	/**
+	 *
+	 *     This mutation creates a new code.
+	 *     This mutation can only be used by visitor users.
+	 *     The following fields are mandatory:
+	 *     content: (string)
+	 * language: (string)
+	 * project: (string)
+	 *
+	 */
 	createCode: Code;
+	/**
+	 *
+	 *     This mutation creates a new language.
+	 *     This mutation can only be used by admin users.
+	 *     The following field is mandatory:
+	 *     name: (string), version: (string)
+	 *
+	 */
 	createLanguage: Language;
+	/**
+	 *
+	 *     This mutation creates a new payment intent.
+	 *     This mutation can only be used by visitor and admin users.
+	 *     The following field is mandatory:
+	 *     amount: (number)
+	 *
+	 */
 	createPaymentIntent: PaymentIntentResponse;
+	/**
+	 *
+	 *     This mutation creates a new project.
+	 *     This mutation can only be used by visitor users.
+	 *     The following fields are mandatory:
+	 *     title: (string)
+	 * isPublic: (boolean)
+	 *
+	 */
 	createProject: Project;
+	/**
+	 *
+	 *     This mutation creates a new reporting.
+	 *     This mutation can only be used by visitor users.
+	 *     The following fields are mandatory:
+	 *     commentId: (string)
+	 * reason: (string)
+	 *
+	 */
 	createReporting: Reporting;
+	/**
+	 *
+	 *     This mutation creates a new user.
+	 *     This mutation can only be used by visitor users.
+	 *     The following field is mandatory:
+	 *     pseudo: (string), email: (string), password: (string)
+	 *
+	 */
 	createUser: User;
+	/**
+	 *
+	 *     This mutation deletes a comment.
+	 *     This mutation can only be used by admin and visitor users.
+	 *     The following field is mandatory:
+	 *     commentId: (string)
+	 *
+	 */
 	deleteComment: Scalars["Boolean"];
+	/**
+	 *
+	 *     This mutation deletes a comment and its linked report.
+	 *     This mutation can only be used by admin users.
+	 *     The following field is mandatory:
+	 *     id: (string)
+	 *
+	 */
 	deleteCommentAndLinkedReport: Scalars["Boolean"];
+	/**
+	 *
+	 *     This mutation deletes a language.
+	 *     This mutation can only be used by admin users.
+	 *     The following field is mandatory:
+	 *     id: (string)
+	 *
+	 */
 	deleteLanguage: Scalars["Boolean"];
+	/**
+	 *
+	 *     This mutation deletes a project.
+	 *     This mutation can only be used by visitor and admin users.
+	 *     The following field is mandatory:
+	 *     id: (string)
+	 *
+	 */
 	deleteProject: Scalars["Boolean"];
+	/**
+	 *
+	 *     This mutation deletes a list of reports.
+	 *     This mutation can only be used by admin users.
+	 *     The following field is mandatory:
+	 *     reportIds: (string[])
+	 *
+	 */
 	deleteReportings: Scalars["Boolean"];
+	/**
+	 *
+	 *     This mutation deletes a user.
+	 *     This mutation can only be used by admin and visitor users.
+	 *     The following fields are mandatory:
+	 *     id: (string)
+	 * inAdminPanel: (boolean)
+	 * currentUser: (Context)
+	 *
+	 */
 	deleteUser: Scalars["Boolean"];
+	/**
+	 *
+	 *     This mutation increments the execution counter of the user.
+	 *     This mutation can only be used by admin and visitor users.
+	 *     The following fields are mandatory:
+	 *     counter: (ExecutionCounterInput)
+	 * currentUser: (Context)
+	 *
+	 */
 	incrementExecutionCounter: Scalars["Float"];
+	/**
+	 *
+	 *     This mutation creates a new like.
+	 *     This mutation can only be used by visitor users.
+	 *     The following field is mandatory:
+	 *     projectId: (string)
+	 *
+	 */
 	like: Like;
+	/**
+	 *
+	 *     This mutation logs out a user.
+	 *     This mutation can only be used by visitor and admin users.
+	 *     The following field is mandatory:
+	 *     currentUser: (Context)
+	 *
+	 */
 	logout: Scalars["String"];
+	/**
+	 *
+	 *     This mutation signs in a user.
+	 *     This mutation can only be used by visitor and admin users.
+	 *     The following field is mandatory:
+	 *     email: (string), password: (string)
+	 *
+	 */
 	signin: Scalars["String"];
+	/**
+	 *
+	 *     This mutation updates a project.
+	 *     This mutation can only be used by visitor and admin users.
+	 *     The following fields are mandatory:
+	 *     id: (string)
+	 * title: (string)
+	 * isPublic: (boolean)
+	 *
+	 */
 	toggleProjectPublicState: Project;
+	/**
+	 *
+	 *     This mutation unlikes a like.
+	 *     This mutation can only be used by visitor users.
+	 *     The following field is mandatory:
+	 *     likeId: (string)
+	 *
+	 */
 	unlike: Scalars["Boolean"];
+	/**
+	 *
+	 *     This mutation updates a code.
+	 *     This mutation can only be used by visitor and admin users.
+	 *     The following fields are mandatory:
+	 *     id: (string)
+	 * content: (string)
+	 *
+	 */
 	updateCode: Code;
+	/**
+	 *
+	 *     This mutation updates a comment.
+	 *     This mutation can only be used by admin and visitor users.
+	 *     The following fields are mandatory:
+	 *     commentId: (string)
+	 * newContent: (string)
+	 *
+	 */
 	updateComment: Scalars["Boolean"];
+	/**
+	 *
+	 *     This mutation updates a language.
+	 *     This mutation can only be used by admin users.
+	 *     The following fields are mandatory:
+	 *     id: (string)
+	 * name: (string)
+	 * version: (string)
+	 *
+	 */
 	updateLanguage: Language;
-	updateUserIsPremium: Scalars["Float"];
+	/**
+	 *
+	 *     This mutation update an user to premium.
+	 *     This mutation can only be used by admin and visitor users.
+	 *     The following fields are mandatory:
+	 *     isPremium: (Boolean)
+	 * currentUser: (Context)
+	 *
+	 */
+	updateUserIsPremium: Scalars["Boolean"];
+	/**
+	 *
+	 *     This mutation updates the password of the user.
+	 *     This mutation can only be used by admin and visitor users.
+	 *     The following fields are mandatory:
+	 *     currentUser: (Context)
+	 * newPassword: (string)
+	 *
+	 */
 	updateUserPassword: Scalars["Boolean"];
+	/**
+	 *
+	 *     This mutation updates the username of the user.
+	 *     This mutation can only be used by admin and visitor users.
+	 *     The following fields are mandatory:
+	 *     currentUser: (Context)
+	 * newUsername: (string)
+	 *
+	 */
 	updateUsername: Scalars["Boolean"];
 };
 
@@ -203,40 +448,63 @@ export type MutationUpdateUsernameArgs = {
 	datas: UpdateUsernameInput;
 };
 
+/** Fields for a new project */
 export type NewProjectInput = {
+	/** Indicator of is this project public */
 	isPublic?: InputMaybe<Scalars["Boolean"]>;
+	/** The title of the project */
 	title: Scalars["String"];
 };
 
+/** Fields for a new reporting */
 export type NewReportInput = {
+	/** The id of the comment that is reported */
 	commentId: Scalars["String"];
+	/** The reason of the reporting */
 	reason: Scalars["String"];
 };
 
+/** Fields for a new user */
 export type NewUserInput = {
+	/** The email of the new user */
 	email: Scalars["String"];
+	/** The number of executions of the new user */
 	isPremium?: InputMaybe<Scalars["Boolean"]>;
+	/** The password of the new user */
 	password: Scalars["String"];
+	/** The pseudo of the new user */
 	pseudo: Scalars["String"];
+	/** The role of the new user */
 	role?: InputMaybe<Scalars["String"]>;
 };
 
 export type PaymentIntentResponse = {
 	__typename?: "PaymentIntentResponse";
+	/** The client secret */
 	clientSecret?: Maybe<Scalars["String"]>;
+	/** The error message */
 	error?: Maybe<Scalars["String"]>;
 };
 
 export type Project = {
 	__typename?: "Project";
+	/** The codes of the project */
 	codes: Array<Code>;
+	/** The comments of the project */
 	comments: Array<Comment>;
+	/** The date of creation of the project */
 	createdAt: Scalars["DateTimeISO"];
+	/** The id of the project */
 	id: Scalars["String"];
+	/** Indicator of is this project public */
 	isPublic: Scalars["Boolean"];
+	/** The likes of the project */
 	likes: Array<Like>;
+	/** The title of the project */
 	title: Scalars["String"];
+	/** The date of the last update of the project */
 	updatedAt: Scalars["DateTimeISO"];
+	/** The user who created the project */
 	user: User;
 };
 
@@ -249,18 +517,79 @@ export type ProjectPaginationResponse = {
 
 export type Query = {
 	__typename?: "Query";
+	/** This query returns a list with all reports. This query can only be used by admin users. */
 	getAllReports: Array<Comment>;
+	/**
+	 *
+	 *     This query returns a list with all codes for a project.
+	 *     This query can only be used by admin and visitor users.
+	 *     The following field is mandatory:
+	 *     project: (string)
+	 *
+	 */
 	getCode: Array<Code>;
+	/** This query returns a list with all codes. This query can only be used by admin and visitor users. */
 	getCodes: Array<Code>;
+	/** This query returns a list with all comments. This query can only be used by admin users. */
 	getComments: Array<Comment>;
+	/** This query returns count of comments of the current user's projects. This query can only be used by admin and visitor users. */
+	getCountOfMyProjectsComments: Scalars["Float"];
+	/** This query returns count of likes of the current user's projects. This query can only be used by admin and visitor users. */
+	getCountOfMyProjectsLikes: Scalars["Float"];
+	/**
+	 *
+	 *     This query returns the execution counter of the user.
+	 *     This query can only be used by admin and visitor users.
+	 *     The following field is mandatory:
+	 *     currentUser: (Context)
+	 *
+	 */
 	getExecutionCounter: User;
+	/**
+	 *
+	 *     This query returns a language by id.
+	 *     This query can only be used by admin and visitor users.
+	 *     The following field is mandatory:
+	 *     id: (string)
+	 *
+	 */
 	getLanguage: Language;
+	/** This query returns a list with all languages. This query can only be used by admin and visitor users. */
 	getLanguages: Array<Language>;
+	/** This query returns a list with all likes. This query can only be used by admin users. */
 	getLikes: Array<Like>;
+	/** This query returns a list with all projects. This query can only be used by admin and visitor users. */
 	getPaginateProjects: ProjectPaginationResponse;
+	/**
+	 *
+	 *     This query returns a project by id.
+	 *     This query can only be used by admin and visitor users.
+	 *     The following field is mandatory:
+	 *     id: (string)
+	 *
+	 */
 	getProject: Project;
+	/** This query returns a list with all projects. This query can only be used by admin users. */
 	getProjects: Array<Project>;
+	/**
+	 *
+	 *     This query returns a user by id.
+	 *     This query can only be used by admin and visitor users.
+	 *     The following field is mandatory:
+	 *     currentUser: (Context)
+	 *
+	 */
 	getUserProfile: User;
+	/**
+	 *
+	 *     This query retrieve the number of user's projects.
+	 *     This query can only be used by admin and visitor users.
+	 *     The following field is mandatory:
+	 *     currentUser: (Context)
+	 *
+	 */
+	getUserProjectsCount: Scalars["Float"];
+	/** This query returns a list with all users. This query can only be used by admin users. */
 	users: Array<User>;
 };
 
@@ -287,43 +616,69 @@ export type QueryGetProjectArgs = {
 
 export type Reporting = {
 	__typename?: "Reporting";
+	/** The comment that is reported */
 	comment: Comment;
+	/** The user who reported the comment */
 	flagger: User;
+	/** The id of the reporting */
 	id: Scalars["String"];
+	/** The reason of the reporting */
 	reason: Scalars["String"];
+	/** The date of the reporting */
 	reportedAt: Scalars["DateTimeISO"];
 };
 
+/** Fields for a sign in action */
 export type SigninInput = {
+	/** The email of the user */
 	email: Scalars["String"];
+	/** The password of the user */
 	password: Scalars["String"];
 };
 
+/** Fields for updating a language */
 export type UpdateLanguageInput = {
+	/** The version of the language you want to update */
 	id: Scalars["String"];
+	/** The name of the language */
 	name?: InputMaybe<Scalars["String"]>;
+	/** The version of the language */
 	version: Scalars["String"];
 };
 
+/** Fields for updating a user password */
 export type UpdatePasswordInput = {
+	/** The id of the user to update */
 	id: Scalars["String"];
+	/** The new password of the user */
 	newPassword: Scalars["String"];
+	/** The old password of the user */
 	oldPassword: Scalars["String"];
 };
 
+/** Fields for updating a user username */
 export type UpdateUsernameInput = {
+	/** The id of the user to update */
 	id: Scalars["String"];
+	/** The new username of the user */
 	newUsername: Scalars["String"];
 };
 
 export type User = {
 	__typename?: "User";
+	/** The email of the user */
 	email: Scalars["String"];
+	/** The number of executions of the user */
 	executionCounter: Scalars["Float"];
+	/** The id of the user */
 	id: Scalars["String"];
+	/** Indicator of is this user premium */
 	isPremium: Scalars["Boolean"];
+	/** The pseudo of the user */
 	pseudo: Scalars["String"];
+	/** The reports of the user */
 	reportings: Array<Reporting>;
+	/** The role of the user */
 	role: Scalars["String"];
 };
 
@@ -624,6 +979,15 @@ export type GetProjectsQuery = {
 	}>;
 };
 
+export type GetUserProjectsCountQueryVariables = Exact<{
+	[key: string]: never;
+}>;
+
+export type GetUserProjectsCountQuery = {
+	__typename?: "Query";
+	getUserProjectsCount: number;
+};
+
 export type DeleteProjectMutationVariables = Exact<{
 	deleteProjectId: Scalars["String"];
 }>;
@@ -631,6 +995,24 @@ export type DeleteProjectMutationVariables = Exact<{
 export type DeleteProjectMutation = {
 	__typename?: "Mutation";
 	deleteProject: boolean;
+};
+
+export type GetCountOfMyProjectsLikesQueryVariables = Exact<{
+	[key: string]: never;
+}>;
+
+export type GetCountOfMyProjectsLikesQuery = {
+	__typename?: "Query";
+	getCountOfMyProjectsLikes: number;
+};
+
+export type GetCountOfMyProjectsCommentsQueryVariables = Exact<{
+	[key: string]: never;
+}>;
+
+export type GetCountOfMyProjectsCommentsQuery = {
+	__typename?: "Query";
+	getCountOfMyProjectsComments: number;
 };
 
 export type CreateReportingMutationVariables = Exact<{
@@ -786,7 +1168,7 @@ export type UpdateUserIsPremiumMutationVariables = Exact<{
 
 export type UpdateUserIsPremiumMutation = {
 	__typename?: "Mutation";
-	updateUserIsPremium: number;
+	updateUserIsPremium: boolean;
 };
 
 export type UpdateUsernameMutationVariables = Exact<{
@@ -1953,6 +2335,61 @@ export type GetProjectsQueryResult = Apollo.QueryResult<
 	GetProjectsQuery,
 	GetProjectsQueryVariables
 >;
+export const GetUserProjectsCountDocument = gql`
+	query GetUserProjectsCount {
+		getUserProjectsCount
+	}
+`;
+
+/**
+ * __useGetUserProjectsCountQuery__
+ *
+ * To run a query within a React component, call `useGetUserProjectsCountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserProjectsCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserProjectsCountQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUserProjectsCountQuery(
+	baseOptions?: Apollo.QueryHookOptions<
+		GetUserProjectsCountQuery,
+		GetUserProjectsCountQueryVariables
+	>
+) {
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useQuery<
+		GetUserProjectsCountQuery,
+		GetUserProjectsCountQueryVariables
+	>(GetUserProjectsCountDocument, options);
+}
+export function useGetUserProjectsCountLazyQuery(
+	baseOptions?: Apollo.LazyQueryHookOptions<
+		GetUserProjectsCountQuery,
+		GetUserProjectsCountQueryVariables
+	>
+) {
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useLazyQuery<
+		GetUserProjectsCountQuery,
+		GetUserProjectsCountQueryVariables
+	>(GetUserProjectsCountDocument, options);
+}
+export type GetUserProjectsCountQueryHookResult = ReturnType<
+	typeof useGetUserProjectsCountQuery
+>;
+export type GetUserProjectsCountLazyQueryHookResult = ReturnType<
+	typeof useGetUserProjectsCountLazyQuery
+>;
+export type GetUserProjectsCountQueryResult = Apollo.QueryResult<
+	GetUserProjectsCountQuery,
+	GetUserProjectsCountQueryVariables
+>;
 export const DeleteProjectDocument = gql`
 	mutation DeleteProject($deleteProjectId: String!) {
 		deleteProject(id: $deleteProjectId)
@@ -2000,6 +2437,116 @@ export type DeleteProjectMutationResult =
 export type DeleteProjectMutationOptions = Apollo.BaseMutationOptions<
 	DeleteProjectMutation,
 	DeleteProjectMutationVariables
+>;
+export const GetCountOfMyProjectsLikesDocument = gql`
+	query getCountOfMyProjectsLikes {
+		getCountOfMyProjectsLikes
+	}
+`;
+
+/**
+ * __useGetCountOfMyProjectsLikesQuery__
+ *
+ * To run a query within a React component, call `useGetCountOfMyProjectsLikesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCountOfMyProjectsLikesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCountOfMyProjectsLikesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCountOfMyProjectsLikesQuery(
+	baseOptions?: Apollo.QueryHookOptions<
+		GetCountOfMyProjectsLikesQuery,
+		GetCountOfMyProjectsLikesQueryVariables
+	>
+) {
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useQuery<
+		GetCountOfMyProjectsLikesQuery,
+		GetCountOfMyProjectsLikesQueryVariables
+	>(GetCountOfMyProjectsLikesDocument, options);
+}
+export function useGetCountOfMyProjectsLikesLazyQuery(
+	baseOptions?: Apollo.LazyQueryHookOptions<
+		GetCountOfMyProjectsLikesQuery,
+		GetCountOfMyProjectsLikesQueryVariables
+	>
+) {
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useLazyQuery<
+		GetCountOfMyProjectsLikesQuery,
+		GetCountOfMyProjectsLikesQueryVariables
+	>(GetCountOfMyProjectsLikesDocument, options);
+}
+export type GetCountOfMyProjectsLikesQueryHookResult = ReturnType<
+	typeof useGetCountOfMyProjectsLikesQuery
+>;
+export type GetCountOfMyProjectsLikesLazyQueryHookResult = ReturnType<
+	typeof useGetCountOfMyProjectsLikesLazyQuery
+>;
+export type GetCountOfMyProjectsLikesQueryResult = Apollo.QueryResult<
+	GetCountOfMyProjectsLikesQuery,
+	GetCountOfMyProjectsLikesQueryVariables
+>;
+export const GetCountOfMyProjectsCommentsDocument = gql`
+	query getCountOfMyProjectsComments {
+		getCountOfMyProjectsComments
+	}
+`;
+
+/**
+ * __useGetCountOfMyProjectsCommentsQuery__
+ *
+ * To run a query within a React component, call `useGetCountOfMyProjectsCommentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCountOfMyProjectsCommentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCountOfMyProjectsCommentsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCountOfMyProjectsCommentsQuery(
+	baseOptions?: Apollo.QueryHookOptions<
+		GetCountOfMyProjectsCommentsQuery,
+		GetCountOfMyProjectsCommentsQueryVariables
+	>
+) {
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useQuery<
+		GetCountOfMyProjectsCommentsQuery,
+		GetCountOfMyProjectsCommentsQueryVariables
+	>(GetCountOfMyProjectsCommentsDocument, options);
+}
+export function useGetCountOfMyProjectsCommentsLazyQuery(
+	baseOptions?: Apollo.LazyQueryHookOptions<
+		GetCountOfMyProjectsCommentsQuery,
+		GetCountOfMyProjectsCommentsQueryVariables
+	>
+) {
+	const options = { ...defaultOptions, ...baseOptions };
+	return Apollo.useLazyQuery<
+		GetCountOfMyProjectsCommentsQuery,
+		GetCountOfMyProjectsCommentsQueryVariables
+	>(GetCountOfMyProjectsCommentsDocument, options);
+}
+export type GetCountOfMyProjectsCommentsQueryHookResult = ReturnType<
+	typeof useGetCountOfMyProjectsCommentsQuery
+>;
+export type GetCountOfMyProjectsCommentsLazyQueryHookResult = ReturnType<
+	typeof useGetCountOfMyProjectsCommentsLazyQuery
+>;
+export type GetCountOfMyProjectsCommentsQueryResult = Apollo.QueryResult<
+	GetCountOfMyProjectsCommentsQuery,
+	GetCountOfMyProjectsCommentsQueryVariables
 >;
 export const CreateReportingDocument = gql`
 	mutation CreateReporting($data: NewReportInput!) {

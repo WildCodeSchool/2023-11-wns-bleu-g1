@@ -98,6 +98,18 @@ query GetProjects {
 	}
 }
 
+query GetUserProjectsCount {
+	getUserProjectsCount
+}
+
 mutation DeleteProject($deleteProjectId: String!) {
 	deleteProject(id: $deleteProjectId)
+}
+
+query getCountOfMyProjectsLikes {
+	getCountOfMyProjectsLikes
+}
+
+query getCountOfMyProjectsComments {
+	getCountOfMyProjectsComments
 }
