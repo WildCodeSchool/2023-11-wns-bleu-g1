@@ -4,12 +4,10 @@ import AuthLayout from "@/components/elements/auth/auth-layout";
 import PageLoader from "@/components/elements/common/page-loader";
 import ProjectsContainer from "@/components/elements/project/ProjectsContainer";
 import UserHeadCard from "@/components/elements/user/user-head-card";
-import { Button } from "@/components/ui/button";
 import { useGetUserProfileQuery } from "@/graphql/generated/schema";
-
-import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import AccountSettings from "@/components/elements/user/AccountSettings";
+import Searchbar from "@/components/elements/searchbar/Searchbar";
 
 const ProfilPage = () => {
 	const [searchbar, setSearchbar] = useState("");
@@ -21,13 +19,11 @@ const ProfilPage = () => {
 			switch (selectOption) {
 				case "project":
 					setSearchProject(value);
-					setSearchbar("");
 					break;
 
 				default:
 					setSearchProject("");
 					setSelectOption("project");
-					setSearchbar("");
 					break;
 			}
 		},
@@ -49,34 +45,12 @@ const ProfilPage = () => {
 				<h3 className="text-2xl font-semibold">Mes Projets</h3>
 			</div>
 
-			<div className="flex justify-evenly items-center gap-8">
-				<Input
-					className="bg-white h-[30px] w-[300px] rounded-xl text-black"
-					value={searchbar}
-					onChange={(e) => setSearchbar(e.currentTarget.value)}
-				/>
-
-				<div className="flex gap-5">
-					<Button
-						className="h-[25px]"
-						onClick={() => sendSearch(searchbar)}
-						disabled={!searchbar.length}
-					>
-						Rechercher
-					</Button>
-
-					<Button
-						className="h-[25px]"
-						variant={"dark"}
-						onClick={() => {
-							sendSearch("");
-							setSelectOption("project");
-						}}
-					>
-						Reset
-					</Button>
-				</div>
-			</div>
+			<Searchbar
+				setSearchbar={setSearchbar}
+				setSelectOption={setSelectOption}
+				sendSearch={sendSearch}
+				searchbar={searchbar}
+			/>
 
 			<Separator className="my-6" />
 
