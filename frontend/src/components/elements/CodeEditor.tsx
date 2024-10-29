@@ -239,7 +239,7 @@ const CodeEditor = ({ project, userId }: Props) => {
 				</div>
 
 				<div className="flex flex-wrap gap-4">
-					{count < 50 && (
+					{count < 50 ? (
 						<HoverCard>
 							<HoverCardTrigger>
 								<Button
@@ -257,6 +257,29 @@ const CodeEditor = ({ project, userId }: Props) => {
 									de limitation, passe premium!
 								</HoverCardContent>
 							)}
+						</HoverCard>
+					) : (
+						<HoverCard>
+							<HoverCardTrigger>
+								<span
+									className="flex bg-primary text-primary-foreground hover:bg-primary/90 text-sm font-medium rounded-md items-center justify-center px-3 py-2 cursor-pointer
+								"
+									onClick={() =>
+										toast({
+											icon: <BadgeCheck className="h-5 w-5" />,
+											title:
+												"Tu ne peux plus exécuter de code pour aujourd'hui, attends minuit ou passe premium !",
+											className: "text-error",
+										})
+									}
+								>
+									Executer {`(${count}/50)`}
+								</span>
+							</HoverCardTrigger>
+							<HoverCardContent>
+								Tu ne peux plus exécuter de code pour aujourd&apos;hui. Pour ne
+								plus avoir de limitation, passe premium!
+							</HoverCardContent>
 						</HoverCard>
 					)}
 
