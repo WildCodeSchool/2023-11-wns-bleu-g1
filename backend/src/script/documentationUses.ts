@@ -15,7 +15,6 @@ export function addDescription(
 ): string {
 	if (mandatories.length > 0) {
 		const mandatoryFields = mandatories.map((field) => `${field}`).join("\n");
-		console.log("mandatories", mandatoryFields);
 		return `
     This ${typeRequest} ${whatDoing}.
     This ${typeRequest} can only be used by ${typeOfUsers.join(" and ")} users.

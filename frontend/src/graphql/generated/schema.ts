@@ -774,7 +774,13 @@ export type UpdateLanguageMutationVariables = Exact<{
 
 export type UpdateLanguageMutation = {
 	__typename?: "Mutation";
-	updateLanguage: { __typename?: "Language"; id: string; name: string };
+	updateLanguage: {
+		__typename?: "Language";
+		id: string;
+		name: string;
+		version: string;
+		color: string;
+	};
 };
 
 export type LikeMutationVariables = Exact<{
@@ -1566,6 +1572,8 @@ export const UpdateLanguageDocument = gql`
 		updateLanguage(data: $data) {
 			id
 			name
+			version
+			color
 		}
 	}
 `;

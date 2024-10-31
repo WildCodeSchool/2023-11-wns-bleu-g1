@@ -26,17 +26,34 @@ const LanguageUpdate = (lang: {
 	id: string;
 	name: string;
 	version: string;
+	color: string;
 }) => {
 	const { toast } = useToast();
 
 	const formSchema = z.object({
 		id: z.string(),
-		name: z.string().min(2, {
-			message: "Le nom du langage doit contenir au moins 2 caractères.",
-		}),
-		version: z.string().min(1, {
-			message: "La version du langage doit contenir au moins 1 caractère.",
-		}),
+		name: z
+			.string()
+			.min(2, {
+				message: "Le nom du langage doit contenir au moins 2 caractères.",
+			})
+			.nullable(),
+		version: z
+			.string()
+			.min(1, {
+				message: "La version du langage doit contenir au moins 1 caractère.",
+			})
+			.nullable(),
+		color: z
+			.string()
+			.min(7, {
+				message: "La couleur du langage doit contenir au moins 7 caractères.",
+			})
+			.max(7, {
+				message:
+					"La couleur du langage ne doit pas contenir plus de 7 caractères.",
+			})
+			.nullable(),
 	});
 
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -45,20 +62,9 @@ const LanguageUpdate = (lang: {
 			id: "",
 			name: "",
 			version: "",
+			color: "",
 		},
 	});
-
-	function updateLanguage(id: string, name: string, version: string) {
-		updateLanguageMutation({
-			variables: {
-				data: {
-					id: id,
-					name: name,
-					version: version,
-				},
-			},
-		});
-	}
 
 	const [updateLanguageMutation] = useUpdateLanguageMutation({
 		onCompleted: () => {
@@ -83,8 +89,29 @@ const LanguageUpdate = (lang: {
 		},
 	});
 
+	function updateLanguage(
+		id: string,
+		name: string | null,
+		version: string | null,
+		color: string | null
+	) {
+		updateLanguageMutation({
+			variables: {
+				data: {
+					id: id,
+					name: name,
+					version: version,
+					color: color,
+				},
+			},
+		});
+	}
+
 	async function onUpdateLanguageSubmit(values: z.infer<typeof formSchema>) {
-		updateLanguage(values.id, values.name, values.version);
+		values.name = values.name === lang.name ? null : values.name;
+		values.version = values.version === lang.version ? null : values.version;
+		values.color = values.color === lang.color ? null : values.color;
+		updateLanguage(values.id, values.name, values.version, values.color);
 		form.reset();
 	}
 
@@ -98,6 +125,7 @@ const LanguageUpdate = (lang: {
 							form.setValue("id", lang.id);
 							form.setValue("name", lang.name);
 							form.setValue("version", lang.version);
+							form.setValue("color", lang.color);
 						}}
 					>
 						Modifier
@@ -139,6 +167,21 @@ const LanguageUpdate = (lang: {
 												<Input
 													className="my-2 bg-secondary"
 													placeholder={lang.version}
+													{...field}
+												/>
+											</FormControl>
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name="color"
+									render={({ field }) => (
+										<FormItem className="space-y-4">
+											<FormControl>
+												<Input
+													className="my-2 bg-secondary"
+													placeholder={lang.color}
 													{...field}
 												/>
 											</FormControl>

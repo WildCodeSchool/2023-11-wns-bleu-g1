@@ -42,7 +42,7 @@ export default class LanguageService {
 	};
 
 	update = async (data: UpdateLanguageInput) => {
-		const { id, name, version } = data;
+		const { id, name, version, color } = data;
 
 		const language = await this.languageRepository.findOneBy({ id });
 		const nameAlreadyTaken = await this.languageRepository.findOneBy({
@@ -59,6 +59,7 @@ export default class LanguageService {
 
 		language.name = name ? name : language.name;
 		language.version = version ? version : language.version;
+		language.color = color ? color : language.color;
 
 		return this.languageRepository.save(language);
 	};
