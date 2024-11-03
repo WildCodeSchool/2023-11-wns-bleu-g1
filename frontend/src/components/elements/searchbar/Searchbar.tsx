@@ -22,7 +22,10 @@ const Searchbar = ({
 				onChange={(e) => setSearchbar(e.currentTarget.value)}
 				onKeyDown={(e) => {
 					e.key === "Enter" && sendSearch(searchbar);
-					e.key === "Escape" && sendSearch("");
+					if (e.key === "Escape") {
+						sendSearch("");
+						setSearchbar("");
+					}
 				}}
 			/>
 

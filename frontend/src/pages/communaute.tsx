@@ -4,7 +4,7 @@ import AuthLayout from "@/components/elements/auth/auth-layout";
 import { Separator } from "@/components/ui/separator";
 import ProjectsContainer from "@/components/elements/project/ProjectsContainer";
 import Searchbar from "@/components/elements/searchbar/Searchbar";
-import FilterCommunityProjects from "@/components/elements/searchbar/filterCommunityProjects";
+import FilterCommunityProjects from "@/components/elements/searchbar/FilterCommunityProjects";
 
 const CommunautePage = () => {
 	const [searchbar, setSearchbar] = useState("");
