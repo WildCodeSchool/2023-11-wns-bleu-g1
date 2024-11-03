@@ -27,5 +27,7 @@ mutation UpdateLanguage($data: UpdateLanguageInput!) {
 	updateLanguage(data: $data) {
 		id
 		name
+		version
+		color
 	}
 }

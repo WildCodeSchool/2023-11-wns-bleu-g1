@@ -54,6 +54,9 @@ export class UpdateLanguageInput {
 	@Field({ description: "The version of the language you want to update" })
 	id: string;
 
-	@Field({ description: "The version of the language" })
+	@Field({ nullable: true, description: "The version of the language" })
 	version: string;
+
+	@Field({ nullable: true, description: "The color of the language" })
+	color: string;
 }

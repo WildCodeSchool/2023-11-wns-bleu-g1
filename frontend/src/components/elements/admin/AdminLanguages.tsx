@@ -32,6 +32,7 @@ const AdminLanguages = () => {
 										id={lang.id}
 										name={lang.name}
 										version={lang.version}
+										color={lang.color}
 									/>
 									<ElementDelete id={lang.id} elementType="language" />
 								</div>
